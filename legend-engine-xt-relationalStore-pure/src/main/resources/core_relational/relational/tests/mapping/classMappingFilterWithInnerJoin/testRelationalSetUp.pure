@@ -13,11 +13,11 @@
 // limitations under the License.
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
-import meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::*;
 
-Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::baseMappingWithInnerJoinInFilter
+Mapping meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::baseMappingWithInnerJoinInFilter
 (
    Person : Relational
             {
@@ -30,7 +30,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
 
 )
 
-Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::mappingWithInnerJoinInFilter
+Mapping meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::mappingWithInnerJoinInFilter
 (
 
    Person : Relational
@@ -46,7 +46,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
 
 )
 
-Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::classOwnedMappingWithInnerJoinInFilter
+Mapping meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::classOwnedMappingWithInnerJoinInFilter
 (
 
    Person : Relational
@@ -72,9 +72,9 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
 
 )
 
-Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::mappingWithMultipleClassMappings
+Mapping meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::mappingWithMultipleClassMappings
 (
-   *meta::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Person[p1] : Relational
+   *meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Person[p1] : Relational
             {
                ~filter [dbInc] (INNER) @Firm_Person | [dbInc] FirmXFilter
                 scope([dbInc])
@@ -85,7 +85,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
 
             }
    
-   meta::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Person[p2] : Relational
+   meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Person[p2] : Relational
             {
                ~filter [dbInc] (INNER) @Firm_Person2 | [dbInc] FirmXFilter
                 scope([dbInc])
@@ -96,7 +96,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
 
             }
    
-   meta::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Person[p3] : Relational
+   meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Person[p3] : Relational
             {
                ~filter [dbInc] (INNER) @Firm_Person | [dbInc] FirmBFilter
                 scope([dbInc])
@@ -107,7 +107,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
 
             }
 
-   meta::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Firm : Relational
+   meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Firm : Relational
          {
             scope([dbInc])
                 (
@@ -119,7 +119,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
          }
 )
 
-Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::testMappingEmbeddedWithInnerJoinFilter
+Mapping meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::testMappingEmbeddedWithInnerJoinFilter
 (
 
     GeographicEntityType: EnumerationMapping GE
@@ -167,7 +167,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
 
 )
 
-Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::chainedJoinsWithUnionsAndIsolation
+Mapping meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::chainedJoinsWithUnionsAndIsolation
 (
 
    *Firm : Operation
@@ -208,16 +208,16 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
    }
 )
 
-Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::inheritanceMappingWithInnerJoin
+Mapping meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::inheritanceMappingWithInnerJoin
 (
-   meta::relational::tests::model::inheritance::Person : Relational
+   meta::external::store::relational::tests::model::inheritance::Person : Relational
             {
                name : [inheritanceMappingDBWithInnerJoinFilter] Person.name,
                vehicles[map2] : [inheritanceMappingDBWithInnerJoinFilter]@PersonPersonMid > @PersonBicycle,
                roadVehicles[map2] : [inheritanceMappingDBWithInnerJoinFilter]@PersonPersonMid > @PersonBicycle
             }
 
-   meta::relational::tests::model::inheritance::Bicycle[map2] : Relational
+   meta::external::store::relational::tests::model::inheritance::Bicycle[map2] : Relational
             {
                ~filter [inheritanceMappingDBWithInnerJoinFilter] (INNER) @PersonBicycle > (INNER) @PersonPersonMid | [inheritanceMappingDBWithInnerJoinFilter] personFilter
                id : [inheritanceMappingDBWithInnerJoinFilter] Bicycle.ID,
@@ -226,7 +226,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
                person : [inheritanceMappingDBWithInnerJoinFilter] @PersonBicycle > @PersonPersonMid
             }
 
-   meta::relational::tests::model::inheritance::EngineType: EnumerationMapping engineTypeMapping
+   meta::external::store::relational::tests::model::inheritance::EngineType: EnumerationMapping engineTypeMapping
    {
       V: [1],
       U: [2],
@@ -235,21 +235,21 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
       X: [5]
    }
 
-   meta::relational::tests::model::inheritance::Vehicle : Operation
+   meta::external::store::relational::tests::model::inheritance::Vehicle : Operation
                  {
                     meta::pure::router::operations::inheritance_OperationSetImplementation_1__SetImplementation_MANY_()
                  }
 
-   meta::relational::tests::model::inheritance::RoadVehicle : Operation
+   meta::external::store::relational::tests::model::inheritance::RoadVehicle : Operation
                  {
                     meta::pure::router::operations::inheritance_OperationSetImplementation_1__SetImplementation_MANY_()
                  }
 
 )
 
-Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::milestoningmapWithInnerJoin
+Mapping meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::milestoningmapWithInnerJoin
 (
-   meta::relational::tests::milestoning::Order : Relational{
+   meta::external::store::relational::tests::milestoning::Order : Relational{
       id : [milestongingDB]OrderTable.id,
       orderDate : [milestongingDB]OrderTable.orderDate,
       product : [milestongingDB]@Order_Product,
@@ -259,7 +259,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
       ascProduct : [milestongingDB]@Order_Product
    }
 
-   meta::relational::tests::milestoning::Product : Relational
+   meta::external::store::relational::tests::milestoning::Product : Relational
    {
       ~filter [milestongingDB] (INNER) @Order_Product| [milestongingDB] stockFilter
       id : [milestongingDB]ProductTable.id,
@@ -268,7 +268,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
       exchange : [milestongingDB]@Product_Exchange,
       classification : [milestongingDB]@Product_Classification
    }
-    meta::relational::tests::milestoning::ProductClassification : Relational{
+    meta::external::store::relational::tests::milestoning::ProductClassification : Relational{
       type : [milestongingDB]ProductClassificationTable.type,
       description : [milestongingDB]ProductClassificationTable.type_description,
       system : [milestongingDB]@Classification_System,
@@ -276,12 +276,12 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
       exchangeName : [milestongingDB]@Classification_Exchange | ProductExchangeTable.name,
       product : [milestongingDB]@Product_Classification
    }
-   meta::relational::tests::milestoning::Exchange : Relational{
+   meta::external::store::relational::tests::milestoning::Exchange : Relational{
       name : [milestongingDB]ProductExchangeTable.name
    }
 )
 
-Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::mappingWithInnerJoinInFilterEdgeCases
+Mapping meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::mappingWithInnerJoinInFilterEdgeCases
 (
 
    Person : Relational
@@ -308,7 +308,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
 
 )
 
-Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::mappingWithInnerJoinInFilterEdgeCases1
+Mapping meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::mappingWithInnerJoinInFilterEdgeCases1
 (
 
    Person : Relational
@@ -332,27 +332,27 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
 )
 
 ###Mapping
-import meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::*;
-Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::MergeAliasMappingWithInnerJoinFilter
+import meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::*;
+Mapping meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::MergeAliasMappingWithInnerJoinFilter
 (
 
-    *meta::relational::tests::model::simple::Firm : Operation
+    *meta::external::store::relational::tests::model::simple::Firm : Operation
             {
                meta::pure::router::operations::union_OperationSetImplementation_1__SetImplementation_MANY_(firm_set1, firm_set2)
             }
 
-   meta::relational::tests::model::simple::Firm[firm_set1] : Relational
+   meta::external::store::relational::tests::model::simple::Firm[firm_set1] : Relational
           {
               legalName : [MergeAliasDbWithInnerJoinFilter]FirmSet1.LegalName
 
           }
 
-   meta::relational::tests::model::simple::Firm[firm_set2]  : Relational
+   meta::external::store::relational::tests::model::simple::Firm[firm_set2]  : Relational
           {
              legalName : [MergeAliasDbWithInnerJoinFilter]FirmSet2.LegalName
 
           }
-   meta::relational::tests::model::simple::Person:Relational
+   meta::external::store::relational::tests::model::simple::Person:Relational
    {
       ~filter [MergeAliasDbWithInnerJoinFilter] (INNER) @personSet_organization_Join | [MergeAliasDbWithInnerJoinFilter] myFilter
       scope([MergeAliasDbWithInnerJoinFilter])
@@ -380,7 +380,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
          )
    }
 
-   meta::relational::tests::model::simple::Organization: Relational
+   meta::external::store::relational::tests::model::simple::Organization: Relational
    {
       scope([MergeAliasDbWithInnerJoinFilter]organizationSet)
       (
@@ -389,10 +389,10 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
    }
 )
 
-Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::testViewToTableMapping
+Mapping meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::testViewToTableMapping
 (
 
-   meta::relational::tests::model::simple::Person : Relational
+   meta::external::store::relational::tests::model::simple::Person : Relational
             {
                 ~filter [testViewToTableMappingDB] (INNER) @Address_myPersonView | [testViewToTableMappingDB] addressNewYorkFilter
                 scope([testViewToTableMappingDB])
@@ -403,7 +403,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
                 )
             }
 
-    meta::relational::tests::model::simple::Firm : Relational
+    meta::external::store::relational::tests::model::simple::Firm : Relational
          {
             scope([testViewToTableMappingDB])
                 (
@@ -414,10 +414,10 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
 
 )
 
-Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::testTableToViewMapping
+Mapping meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::testTableToViewMapping
 (
 
-   meta::relational::tests::model::simple::Person : Relational
+   meta::external::store::relational::tests::model::simple::Person : Relational
             {
                ~filter [testViewToTableMappingDB] (INNER) @PersonWithPersonView | [testViewToTableMappingDB] personViewWithGroupByFilter
                 scope([testViewToTableMappingDB])
@@ -427,7 +427,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
                    firm : [testViewToTableMappingDB]  @Firm_Person
                 )
             }
-   meta::relational::tests::model::simple::Firm : Relational
+   meta::external::store::relational::tests::model::simple::Firm : Relational
          {
             scope([testViewToTableMappingDB])
                 (
@@ -438,10 +438,10 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
 
 )
 
-Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::testViewToViewMapping
+Mapping meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::testViewToViewMapping
 (
 
-   meta::relational::tests::model::simple::Person : Relational
+   meta::external::store::relational::tests::model::simple::Person : Relational
             {
                ~filter [testViewToTableMappingDB] (INNER) @myFirmView_myPersonView | [testViewToTableMappingDB] FirmCViewFilter
                 scope([testViewToTableMappingDB])
@@ -451,7 +451,7 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
                 )
             }
 
-    meta::relational::tests::model::simple::Firm : Relational
+    meta::external::store::relational::tests::model::simple::Firm : Relational
          {
             scope([testViewToTableMappingDB])
                 (
@@ -462,45 +462,45 @@ Mapping meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mappi
 )
 
 ###Relational
-Database meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::dbWithInnerJoinFilter
+Database meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::dbWithInnerJoinFilter
 (
-   include meta::relational::tests::mapping::embedded::model::store::myDB
+   include meta::external::store::relational::tests::mapping::embedded::model::store::myDB
    Filter twoHundredWestFilter(ADDRESS_LOCATION.ADDRESS_ID = '200 west')
 )
 
 ###Relational
-Database meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::unionDBWithInnerJoinFilter
+Database meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::unionDBWithInnerJoinFilter
 (
-   include meta::relational::tests::mapping::union::myDB
+   include meta::external::store::relational::tests::mapping::union::myDB
    Filter cityFilter1(AddressSet1.ID = '1')
    Filter cityFilter2(AddressSet2.ID = '2')
 )
 
 ###Relational
-Database meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::inheritanceMappingDBWithInnerJoinFilter
+Database meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::inheritanceMappingDBWithInnerJoinFilter
 (
-   include meta::relational::tests::mapping::inheritance::relational::multiJoins::myDB
+   include meta::external::store::relational::tests::mapping::inheritance::relational::multiJoins::myDB
    Filter personFilter(Person.ID = '1')
 )
 
 ###Relational
-Database meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::milestongingDB
+Database meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::milestongingDB
 (
-   include meta::relational::tests::milestoning::db
+   include meta::external::store::relational::tests::milestoning::db
    Filter stockFilter(OrderTable.prodFk = '2')
 )
 
 ###Relational
-Database meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::MergeAliasDbWithInnerJoinFilter
+Database meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::MergeAliasDbWithInnerJoinFilter
 (
-   include meta::relational::tests::mapping::merge::MergeAliasDb
+   include meta::external::store::relational::tests::mapping::merge::MergeAliasDb
    Filter myFilter(organizationSet.parentId = '1')
 )
 
 ###Relational
-Database meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::testViewToTableMappingDB
+Database meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::store::testViewToTableMappingDB
 (
-   include meta::relational::tests::dbInc
+   include meta::external::store::relational::tests::dbInc
    Table personTable1 (ID INT PRIMARY KEY, FIRSTNAME VARCHAR(200), LASTNAME VARCHAR(200), AGE INT, ADDRESSID INT, FIRMID INT, MANAGERID INT)
    View myPersonView
    (
@@ -529,28 +529,28 @@ Database meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapp
 )
 
 ###Pure
-import meta::relational::tests::mapping::union::*;
-import meta::relational::metamodel::execute::*;
+import meta::external::store::relational::tests::mapping::union::*;
+import meta::external::store::relational::metamodel::execute::*;
 
-Class meta::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Firm
+Class meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Firm
 {
    legalName : String[1];
-   employees1 : meta::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Person[*];
-   employees2 : meta::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Person[*];
-   employees3 : meta::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Person[*];
+   employees1 : meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Person[*];
+   employees2 : meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Person[*];
+   employees3 : meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Person[*];
 }
 
-Class meta::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Person
+Class meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::model::Person
 {
    firstName : String[1];
    lastName : String[1];
 }
 
-function meta::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::createTablesAndFillDb():Boolean[1]
+function meta::external::store::relational::tests::mapping::classMappingFilterWithInnerJoin::mapping::createTablesAndFillDb():Boolean[1]
 {
 
-   let connection = meta::relational::tests::testRuntime().connectionByElement(meta::relational::tests::db)->cast(@meta::relational::runtime::TestDatabaseConnection);
-   meta::relational::tests::mapping::union::createTablesAndFillDb();
+   let connection = meta::external::store::relational::tests::testRuntime().connectionByElement(meta::external::store::relational::tests::db)->cast(@meta::external::store::relational::runtime::TestDatabaseConnection);
+   meta::external::store::relational::tests::mapping::union::createTablesAndFillDb();
 
    executeInDb2('Drop table if exists PersonSet1;', $connection);
    executeInDb2('Create Table PersonSet1 (ID INT, firstName_s1 VARCHAR(200), lastName_s1 VARCHAR(200), FirmID INT, ADDRESSID INT, NICKNAME VARCHAR(200));', $connection);

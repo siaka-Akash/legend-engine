@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::model::simple::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
 import meta::pure::alloy::connections::*;
 
-function <<test.BeforePackage>> meta::relational::graphFetch::tests::simple::setup(): Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::graphFetch::tests::simple::setup(): Boolean[1]
 {
-   meta::relational::tests::createTablesAndFillDb();
+   meta::external::store::relational::tests::createTablesAndFillDb();
 }
 
-function <<test.BeforePackage>> meta::relational::graphFetch::tests::qualifier::setup(): Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::graphFetch::tests::qualifier::setup(): Boolean[1]
 {
-   meta::relational::tests::createTablesAndFillDb();
+   meta::external::store::relational::tests::createTablesAndFillDb();
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testSimpleGraphFetchWithPrimitivesOnly(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testSimpleGraphFetchWithPrimitivesOnly(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -36,8 +36,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Person.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -49,7 +49,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'}  meta::relational::graphFetch::tests::simple::testSimpleGraphFetchWithPrimitivesOnlyFilterSingleObject(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'}  meta::external::store::relational::graphFetch::tests::simple::testSimpleGraphFetchWithPrimitivesOnlyFilterSingleObject(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -58,8 +58,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'}  meta::re
       }
    }#;
    let query = {|Person.all()->filter(x | $x.age < 22)->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -69,7 +69,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'}  meta::re
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testSimpleGraphFetchWithPrimitivesOnlyFilterMultiObjects(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testSimpleGraphFetchWithPrimitivesOnlyFilterMultiObjects(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -78,8 +78,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Person.all()->filter(x | $x.age <= 22)->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -90,7 +90,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testOneComplexProperty(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testOneComplexProperty(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -102,8 +102,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Person.all()->graphFetch($tree, 2)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -119,7 +119,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testMultipleComplexProperties(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testMultipleComplexProperties(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -135,8 +135,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Person.all()->filter(x | $x.age <= 22)->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -149,7 +149,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly, test.ToFix>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testSelfJoinInGraph(): Boolean[1]
+function <<test.Test, test.AlloyOnly, test.ToFix>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testSelfJoinInGraph(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -166,8 +166,8 @@ function <<test.Test, test.AlloyOnly, test.ToFix>> {serverVersion.start='v1_19_0
       }
    }#;
    let query = {|Person.all()->filter(x | $x.age <= 22)->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -179,7 +179,7 @@ function <<test.Test, test.AlloyOnly, test.ToFix>> {serverVersion.start='v1_19_0
    );
 }
 
-function <<test.Test, test.AlloyOnly, test.ToFix>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testSortOrderAtTopPreserved(): Boolean[1]
+function <<test.Test, test.AlloyOnly, test.ToFix>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testSortOrderAtTopPreserved(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -196,8 +196,8 @@ function <<test.Test, test.AlloyOnly, test.ToFix>> {serverVersion.start='v1_19_0
       }
    }#;
    let query = {|Person.all()->filter(x | $x.age <= 22)->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -220,7 +220,7 @@ function <<test.Test, test.AlloyOnly, test.ToFix>> {serverVersion.start='v1_19_0
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testToManyComplexProperty(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testToManyComplexProperty(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -234,8 +234,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Firm.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -248,7 +248,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testMappingFilter(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testMappingFilter(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -259,8 +259,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Firm.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMappingWithFilter;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMappingWithFilter;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -270,7 +270,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testMappingFilterForProperty(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testMappingFilterForProperty(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -282,8 +282,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Person.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMappingWithFilter;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMappingWithFilter;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -299,7 +299,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testGraphFetchWithSize(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testGraphFetchWithSize(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -311,8 +311,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Person.all()->graphFetch($tree, 1)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -328,7 +328,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_20_0'} meta::relational::graphFetch::tests::simple::testRelationalGraphFetchWithAlloySerializationConfig(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_20_0'} meta::external::store::relational::graphFetch::tests::simple::testRelationalGraphFetchWithAlloySerializationConfig(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -346,21 +346,21 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_20_0'} meta::rel
    let alloyConfig = alloyConfig(true, true, true, true, '@type', true, true);
 
    let query = {|Person.all()->graphFetch($tree)->serialize($tree, $alloyConfig)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
    assertJsonStringsEqual(
-      '[{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA1MTptZXRhOjpyZWxhdGlvbmFsOjp0ZXN0czo6c2ltcGxlUmVsYXRpb25hbE1hcHBpbmdJbmM6MDAwMDAwMDA0MTptZXRhX3JlbGF0aW9uYWxfdGVzdHNfbW9kZWxfc2ltcGxlX1BlcnNvbjowMDAwMDAwMDQxOm1ldGFfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAyNTQ6eyJfdHlwZSI6IlJlbGF0aW9uYWxEYXRhYmFzZUNvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGlvblN0cmF0ZWd5Ijp7Il90eXBlIjoiaDJEZWZhdWx0In0sImRhdGFzb3VyY2VTcGVjaWZpY2F0aW9uIjp7Il90eXBlIjoiaDJMb2NhbCJ9LCJlbGVtZW50IjoibWV0YTo6cmVsYXRpb25hbDo6dGVzdHM6OmRiIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMTp7InBrJF8wIjoxfQ","value":{"firstName":"Peter","lastName":"Smith","firm":{"legalName":"Firm X","address":{"@type":"meta::relational::tests::model::simple::Address","type":"meta::relational::tests::model::simple::GeographicEntityType.CITY"},"@type":"meta::relational::tests::model::simple::Firm"},"@type":"meta::relational::tests::model::simple::Person","age":23}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA1MTptZXRhOjpyZWxhdGlvbmFsOjp0ZXN0czo6c2ltcGxlUmVsYXRpb25hbE1hcHBpbmdJbmM6MDAwMDAwMDA0MTptZXRhX3JlbGF0aW9uYWxfdGVzdHNfbW9kZWxfc2ltcGxlX1BlcnNvbjowMDAwMDAwMDQxOm1ldGFfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAyNTQ6eyJfdHlwZSI6IlJlbGF0aW9uYWxEYXRhYmFzZUNvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGlvblN0cmF0ZWd5Ijp7Il90eXBlIjoiaDJEZWZhdWx0In0sImRhdGFzb3VyY2VTcGVjaWZpY2F0aW9uIjp7Il90eXBlIjoiaDJMb2NhbCJ9LCJlbGVtZW50IjoibWV0YTo6cmVsYXRpb25hbDo6dGVzdHM6OmRiIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMTp7InBrJF8wIjoyfQ","value":{"firstName":"John","lastName":"Johnson","firm":{"legalName":"Firm X","address":{"@type":"meta::relational::tests::model::simple::Address","type":"meta::relational::tests::model::simple::GeographicEntityType.CITY"},"@type":"meta::relational::tests::model::simple::Firm"},"@type":"meta::relational::tests::model::simple::Person","age":22}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA1MTptZXRhOjpyZWxhdGlvbmFsOjp0ZXN0czo6c2ltcGxlUmVsYXRpb25hbE1hcHBpbmdJbmM6MDAwMDAwMDA0MTptZXRhX3JlbGF0aW9uYWxfdGVzdHNfbW9kZWxfc2ltcGxlX1BlcnNvbjowMDAwMDAwMDQxOm1ldGFfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAyNTQ6eyJfdHlwZSI6IlJlbGF0aW9uYWxEYXRhYmFzZUNvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGlvblN0cmF0ZWd5Ijp7Il90eXBlIjoiaDJEZWZhdWx0In0sImRhdGFzb3VyY2VTcGVjaWZpY2F0aW9uIjp7Il90eXBlIjoiaDJMb2NhbCJ9LCJlbGVtZW50IjoibWV0YTo6cmVsYXRpb25hbDo6dGVzdHM6OmRiIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMTp7InBrJF8wIjozfQ","value":{"firstName":"John","lastName":"Hill","firm":{"legalName":"Firm X","address":{"@type":"meta::relational::tests::model::simple::Address","type":"meta::relational::tests::model::simple::GeographicEntityType.CITY"},"@type":"meta::relational::tests::model::simple::Firm"},"@type":"meta::relational::tests::model::simple::Person","age":12}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA1MTptZXRhOjpyZWxhdGlvbmFsOjp0ZXN0czo6c2ltcGxlUmVsYXRpb25hbE1hcHBpbmdJbmM6MDAwMDAwMDA0MTptZXRhX3JlbGF0aW9uYWxfdGVzdHNfbW9kZWxfc2ltcGxlX1BlcnNvbjowMDAwMDAwMDQxOm1ldGFfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAyNTQ6eyJfdHlwZSI6IlJlbGF0aW9uYWxEYXRhYmFzZUNvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGlvblN0cmF0ZWd5Ijp7Il90eXBlIjoiaDJEZWZhdWx0In0sImRhdGFzb3VyY2VTcGVjaWZpY2F0aW9uIjp7Il90eXBlIjoiaDJMb2NhbCJ9LCJlbGVtZW50IjoibWV0YTo6cmVsYXRpb25hbDo6dGVzdHM6OmRiIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMTp7InBrJF8wIjo0fQ","value":{"firstName":"Anthony","lastName":"Allen","firm":{"legalName":"Firm X","address":{"@type":"meta::relational::tests::model::simple::Address","type":"meta::relational::tests::model::simple::GeographicEntityType.CITY"},"@type":"meta::relational::tests::model::simple::Firm"},"@type":"meta::relational::tests::model::simple::Person","age":22}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA1MTptZXRhOjpyZWxhdGlvbmFsOjp0ZXN0czo6c2ltcGxlUmVsYXRpb25hbE1hcHBpbmdJbmM6MDAwMDAwMDA0MTptZXRhX3JlbGF0aW9uYWxfdGVzdHNfbW9kZWxfc2ltcGxlX1BlcnNvbjowMDAwMDAwMDQxOm1ldGFfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAyNTQ6eyJfdHlwZSI6IlJlbGF0aW9uYWxEYXRhYmFzZUNvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGlvblN0cmF0ZWd5Ijp7Il90eXBlIjoiaDJEZWZhdWx0In0sImRhdGFzb3VyY2VTcGVjaWZpY2F0aW9uIjp7Il90eXBlIjoiaDJMb2NhbCJ9LCJlbGVtZW50IjoibWV0YTo6cmVsYXRpb25hbDo6dGVzdHM6OmRiIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMTp7InBrJF8wIjo1fQ","value":{"firstName":"Fabrice","lastName":"Roberts","firm":{"legalName":"Firm A","address":{"@type":"meta::relational::tests::model::simple::Address","type":"meta::relational::tests::model::simple::GeographicEntityType.CITY"},"@type":"meta::relational::tests::model::simple::Firm"},"@type":"meta::relational::tests::model::simple::Person","age":34}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA1MTptZXRhOjpyZWxhdGlvbmFsOjp0ZXN0czo6c2ltcGxlUmVsYXRpb25hbE1hcHBpbmdJbmM6MDAwMDAwMDA0MTptZXRhX3JlbGF0aW9uYWxfdGVzdHNfbW9kZWxfc2ltcGxlX1BlcnNvbjowMDAwMDAwMDQxOm1ldGFfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAyNTQ6eyJfdHlwZSI6IlJlbGF0aW9uYWxEYXRhYmFzZUNvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGlvblN0cmF0ZWd5Ijp7Il90eXBlIjoiaDJEZWZhdWx0In0sImRhdGFzb3VyY2VTcGVjaWZpY2F0aW9uIjp7Il90eXBlIjoiaDJMb2NhbCJ9LCJlbGVtZW50IjoibWV0YTo6cmVsYXRpb25hbDo6dGVzdHM6OmRiIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMTp7InBrJF8wIjo2fQ","value":{"firstName":"Oliver","lastName":"Hill","firm":{"legalName":"Firm B","address":{"@type":"meta::relational::tests::model::simple::Address","type":"meta::relational::tests::model::simple::GeographicEntityType.CITY"},"@type":"meta::relational::tests::model::simple::Firm"},"@type":"meta::relational::tests::model::simple::Person","age":32}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA1MTptZXRhOjpyZWxhdGlvbmFsOjp0ZXN0czo6c2ltcGxlUmVsYXRpb25hbE1hcHBpbmdJbmM6MDAwMDAwMDA0MTptZXRhX3JlbGF0aW9uYWxfdGVzdHNfbW9kZWxfc2ltcGxlX1BlcnNvbjowMDAwMDAwMDQxOm1ldGFfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAyNTQ6eyJfdHlwZSI6IlJlbGF0aW9uYWxEYXRhYmFzZUNvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGlvblN0cmF0ZWd5Ijp7Il90eXBlIjoiaDJEZWZhdWx0In0sImRhdGFzb3VyY2VTcGVjaWZpY2F0aW9uIjp7Il90eXBlIjoiaDJMb2NhbCJ9LCJlbGVtZW50IjoibWV0YTo6cmVsYXRpb25hbDo6dGVzdHM6OmRiIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMTp7InBrJF8wIjo3fQ","value":{"firstName":"David","lastName":"Harris","firm":{"legalName":"Firm C","address":{"@type":"meta::relational::tests::model::simple::Address","type":"meta::relational::tests::model::simple::GeographicEntityType.CITY"},"@type":"meta::relational::tests::model::simple::Firm"},"@type":"meta::relational::tests::model::simple::Person","age":35}}]',
+      '[{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2ODptZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpzaW1wbGVSZWxhdGlvbmFsTWFwcGluZ0luYzowMDAwMDAwMDU2Om1ldGFfZXh0ZXJuYWxfc3RvcmVfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAwNTY6bWV0YV9leHRlcm5hbF9zdG9yZV9yZWxhdGlvbmFsX3Rlc3RzX21vZGVsX3NpbXBsZV9QZXJzb246MDAwMDAwMDI3MTp7Il90eXBlIjoiUmVsYXRpb25hbERhdGFiYXNlQ29ubmVjdGlvbiIsImF1dGhlbnRpY2F0aW9uU3RyYXRlZ3kiOnsiX3R5cGUiOiJoMkRlZmF1bHQifSwiZGF0YXNvdXJjZVNwZWNpZmljYXRpb24iOnsiX3R5cGUiOiJoMkxvY2FsIn0sImVsZW1lbnQiOiJtZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpkYiIsInBvc3RQcm9jZXNzb3JXaXRoUGFyYW1ldGVyIjpbXSwicG9zdFByb2Nlc3NvcnMiOltdLCJ0aW1lWm9uZSI6IkdNVCIsInR5cGUiOiJIMiJ9OjAwMDAwMDAwMTE6eyJwayRfMCI6MX0","value":{"firstName":"Peter","lastName":"Smith","firm":{"legalName":"Firm X","address":{"@type":"meta::external::store::relational::tests::model::simple::Address","type":"meta::external::store::relational::tests::model::simple::GeographicEntityType.CITY"},"@type":"meta::external::store::relational::tests::model::simple::Firm"},"@type":"meta::external::store::relational::tests::model::simple::Person","age":23}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2ODptZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpzaW1wbGVSZWxhdGlvbmFsTWFwcGluZ0luYzowMDAwMDAwMDU2Om1ldGFfZXh0ZXJuYWxfc3RvcmVfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAwNTY6bWV0YV9leHRlcm5hbF9zdG9yZV9yZWxhdGlvbmFsX3Rlc3RzX21vZGVsX3NpbXBsZV9QZXJzb246MDAwMDAwMDI3MTp7Il90eXBlIjoiUmVsYXRpb25hbERhdGFiYXNlQ29ubmVjdGlvbiIsImF1dGhlbnRpY2F0aW9uU3RyYXRlZ3kiOnsiX3R5cGUiOiJoMkRlZmF1bHQifSwiZGF0YXNvdXJjZVNwZWNpZmljYXRpb24iOnsiX3R5cGUiOiJoMkxvY2FsIn0sImVsZW1lbnQiOiJtZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpkYiIsInBvc3RQcm9jZXNzb3JXaXRoUGFyYW1ldGVyIjpbXSwicG9zdFByb2Nlc3NvcnMiOltdLCJ0aW1lWm9uZSI6IkdNVCIsInR5cGUiOiJIMiJ9OjAwMDAwMDAwMTE6eyJwayRfMCI6Mn0","value":{"firstName":"John","lastName":"Johnson","firm":{"legalName":"Firm X","address":{"@type":"meta::external::store::relational::tests::model::simple::Address","type":"meta::external::store::relational::tests::model::simple::GeographicEntityType.CITY"},"@type":"meta::external::store::relational::tests::model::simple::Firm"},"@type":"meta::external::store::relational::tests::model::simple::Person","age":22}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2ODptZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpzaW1wbGVSZWxhdGlvbmFsTWFwcGluZ0luYzowMDAwMDAwMDU2Om1ldGFfZXh0ZXJuYWxfc3RvcmVfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAwNTY6bWV0YV9leHRlcm5hbF9zdG9yZV9yZWxhdGlvbmFsX3Rlc3RzX21vZGVsX3NpbXBsZV9QZXJzb246MDAwMDAwMDI3MTp7Il90eXBlIjoiUmVsYXRpb25hbERhdGFiYXNlQ29ubmVjdGlvbiIsImF1dGhlbnRpY2F0aW9uU3RyYXRlZ3kiOnsiX3R5cGUiOiJoMkRlZmF1bHQifSwiZGF0YXNvdXJjZVNwZWNpZmljYXRpb24iOnsiX3R5cGUiOiJoMkxvY2FsIn0sImVsZW1lbnQiOiJtZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpkYiIsInBvc3RQcm9jZXNzb3JXaXRoUGFyYW1ldGVyIjpbXSwicG9zdFByb2Nlc3NvcnMiOltdLCJ0aW1lWm9uZSI6IkdNVCIsInR5cGUiOiJIMiJ9OjAwMDAwMDAwMTE6eyJwayRfMCI6M30","value":{"firstName":"John","lastName":"Hill","firm":{"legalName":"Firm X","address":{"@type":"meta::external::store::relational::tests::model::simple::Address","type":"meta::external::store::relational::tests::model::simple::GeographicEntityType.CITY"},"@type":"meta::external::store::relational::tests::model::simple::Firm"},"@type":"meta::external::store::relational::tests::model::simple::Person","age":12}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2ODptZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpzaW1wbGVSZWxhdGlvbmFsTWFwcGluZ0luYzowMDAwMDAwMDU2Om1ldGFfZXh0ZXJuYWxfc3RvcmVfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAwNTY6bWV0YV9leHRlcm5hbF9zdG9yZV9yZWxhdGlvbmFsX3Rlc3RzX21vZGVsX3NpbXBsZV9QZXJzb246MDAwMDAwMDI3MTp7Il90eXBlIjoiUmVsYXRpb25hbERhdGFiYXNlQ29ubmVjdGlvbiIsImF1dGhlbnRpY2F0aW9uU3RyYXRlZ3kiOnsiX3R5cGUiOiJoMkRlZmF1bHQifSwiZGF0YXNvdXJjZVNwZWNpZmljYXRpb24iOnsiX3R5cGUiOiJoMkxvY2FsIn0sImVsZW1lbnQiOiJtZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpkYiIsInBvc3RQcm9jZXNzb3JXaXRoUGFyYW1ldGVyIjpbXSwicG9zdFByb2Nlc3NvcnMiOltdLCJ0aW1lWm9uZSI6IkdNVCIsInR5cGUiOiJIMiJ9OjAwMDAwMDAwMTE6eyJwayRfMCI6NH0","value":{"firstName":"Anthony","lastName":"Allen","firm":{"legalName":"Firm X","address":{"@type":"meta::external::store::relational::tests::model::simple::Address","type":"meta::external::store::relational::tests::model::simple::GeographicEntityType.CITY"},"@type":"meta::external::store::relational::tests::model::simple::Firm"},"@type":"meta::external::store::relational::tests::model::simple::Person","age":22}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2ODptZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpzaW1wbGVSZWxhdGlvbmFsTWFwcGluZ0luYzowMDAwMDAwMDU2Om1ldGFfZXh0ZXJuYWxfc3RvcmVfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAwNTY6bWV0YV9leHRlcm5hbF9zdG9yZV9yZWxhdGlvbmFsX3Rlc3RzX21vZGVsX3NpbXBsZV9QZXJzb246MDAwMDAwMDI3MTp7Il90eXBlIjoiUmVsYXRpb25hbERhdGFiYXNlQ29ubmVjdGlvbiIsImF1dGhlbnRpY2F0aW9uU3RyYXRlZ3kiOnsiX3R5cGUiOiJoMkRlZmF1bHQifSwiZGF0YXNvdXJjZVNwZWNpZmljYXRpb24iOnsiX3R5cGUiOiJoMkxvY2FsIn0sImVsZW1lbnQiOiJtZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpkYiIsInBvc3RQcm9jZXNzb3JXaXRoUGFyYW1ldGVyIjpbXSwicG9zdFByb2Nlc3NvcnMiOltdLCJ0aW1lWm9uZSI6IkdNVCIsInR5cGUiOiJIMiJ9OjAwMDAwMDAwMTE6eyJwayRfMCI6NX0","value":{"firstName":"Fabrice","lastName":"Roberts","firm":{"legalName":"Firm A","address":{"@type":"meta::external::store::relational::tests::model::simple::Address","type":"meta::external::store::relational::tests::model::simple::GeographicEntityType.CITY"},"@type":"meta::external::store::relational::tests::model::simple::Firm"},"@type":"meta::external::store::relational::tests::model::simple::Person","age":34}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2ODptZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpzaW1wbGVSZWxhdGlvbmFsTWFwcGluZ0luYzowMDAwMDAwMDU2Om1ldGFfZXh0ZXJuYWxfc3RvcmVfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAwNTY6bWV0YV9leHRlcm5hbF9zdG9yZV9yZWxhdGlvbmFsX3Rlc3RzX21vZGVsX3NpbXBsZV9QZXJzb246MDAwMDAwMDI3MTp7Il90eXBlIjoiUmVsYXRpb25hbERhdGFiYXNlQ29ubmVjdGlvbiIsImF1dGhlbnRpY2F0aW9uU3RyYXRlZ3kiOnsiX3R5cGUiOiJoMkRlZmF1bHQifSwiZGF0YXNvdXJjZVNwZWNpZmljYXRpb24iOnsiX3R5cGUiOiJoMkxvY2FsIn0sImVsZW1lbnQiOiJtZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpkYiIsInBvc3RQcm9jZXNzb3JXaXRoUGFyYW1ldGVyIjpbXSwicG9zdFByb2Nlc3NvcnMiOltdLCJ0aW1lWm9uZSI6IkdNVCIsInR5cGUiOiJIMiJ9OjAwMDAwMDAwMTE6eyJwayRfMCI6Nn0","value":{"firstName":"Oliver","lastName":"Hill","firm":{"legalName":"Firm B","address":{"@type":"meta::external::store::relational::tests::model::simple::Address","type":"meta::external::store::relational::tests::model::simple::GeographicEntityType.CITY"},"@type":"meta::external::store::relational::tests::model::simple::Firm"},"@type":"meta::external::store::relational::tests::model::simple::Person","age":32}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2ODptZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpzaW1wbGVSZWxhdGlvbmFsTWFwcGluZ0luYzowMDAwMDAwMDU2Om1ldGFfZXh0ZXJuYWxfc3RvcmVfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAwNTY6bWV0YV9leHRlcm5hbF9zdG9yZV9yZWxhdGlvbmFsX3Rlc3RzX21vZGVsX3NpbXBsZV9QZXJzb246MDAwMDAwMDI3MTp7Il90eXBlIjoiUmVsYXRpb25hbERhdGFiYXNlQ29ubmVjdGlvbiIsImF1dGhlbnRpY2F0aW9uU3RyYXRlZ3kiOnsiX3R5cGUiOiJoMkRlZmF1bHQifSwiZGF0YXNvdXJjZVNwZWNpZmljYXRpb24iOnsiX3R5cGUiOiJoMkxvY2FsIn0sImVsZW1lbnQiOiJtZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpkYiIsInBvc3RQcm9jZXNzb3JXaXRoUGFyYW1ldGVyIjpbXSwicG9zdFByb2Nlc3NvcnMiOltdLCJ0aW1lWm9uZSI6IkdNVCIsInR5cGUiOiJIMiJ9OjAwMDAwMDAwMTE6eyJwayRfMCI6N30","value":{"firstName":"David","lastName":"Harris","firm":{"legalName":"Firm C","address":{"@type":"meta::external::store::relational::tests::model::simple::Address","type":"meta::external::store::relational::tests::model::simple::GeographicEntityType.CITY"},"@type":"meta::external::store::relational::tests::model::simple::Firm"},"@type":"meta::external::store::relational::tests::model::simple::Person","age":35}}]',
       $result
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testObjectReferenceInUsingResultReferences(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testObjectReferenceInUsingResultReferences(): Boolean[1]
 {
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let tree1 = #{
       Person {
@@ -374,13 +374,14 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
                        ->map(x | $x->meta::json::getValue('objectReference')->cast(@meta::json::JSONString).value);
    assertSameElements(
       [
-          'ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA1MTptZXRhOjpyZWxhdGlvbmFsOjp0ZXN0czo6c2ltcGxlUmVsYXRpb25hbE1hcHBpbmdJbmM6MDAwMDAwMDA0MTptZXRhX3JlbGF0aW9uYWxfdGVzdHNfbW9kZWxfc2ltcGxlX1BlcnNvbjowMDAwMDAwMDQxOm1ldGFfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAyNTQ6eyJfdHlwZSI6IlJlbGF0aW9uYWxEYXRhYmFzZUNvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGlvblN0cmF0ZWd5Ijp7Il90eXBlIjoiaDJEZWZhdWx0In0sImRhdGFzb3VyY2VTcGVjaWZpY2F0aW9uIjp7Il90eXBlIjoiaDJMb2NhbCJ9LCJlbGVtZW50IjoibWV0YTo6cmVsYXRpb25hbDo6dGVzdHM6OmRiIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMTp7InBrJF8wIjo0fQ',
-          'ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA1MTptZXRhOjpyZWxhdGlvbmFsOjp0ZXN0czo6c2ltcGxlUmVsYXRpb25hbE1hcHBpbmdJbmM6MDAwMDAwMDA0MTptZXRhX3JlbGF0aW9uYWxfdGVzdHNfbW9kZWxfc2ltcGxlX1BlcnNvbjowMDAwMDAwMDQxOm1ldGFfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAyNTQ6eyJfdHlwZSI6IlJlbGF0aW9uYWxEYXRhYmFzZUNvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGlvblN0cmF0ZWd5Ijp7Il90eXBlIjoiaDJEZWZhdWx0In0sImRhdGFzb3VyY2VTcGVjaWZpY2F0aW9uIjp7Il90eXBlIjoiaDJMb2NhbCJ9LCJlbGVtZW50IjoibWV0YTo6cmVsYXRpb25hbDo6dGVzdHM6OmRiIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMTp7InBrJF8wIjo1fQ',
-          'ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA1MTptZXRhOjpyZWxhdGlvbmFsOjp0ZXN0czo6c2ltcGxlUmVsYXRpb25hbE1hcHBpbmdJbmM6MDAwMDAwMDA0MTptZXRhX3JlbGF0aW9uYWxfdGVzdHNfbW9kZWxfc2ltcGxlX1BlcnNvbjowMDAwMDAwMDQxOm1ldGFfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAyNTQ6eyJfdHlwZSI6IlJlbGF0aW9uYWxEYXRhYmFzZUNvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGlvblN0cmF0ZWd5Ijp7Il90eXBlIjoiaDJEZWZhdWx0In0sImRhdGFzb3VyY2VTcGVjaWZpY2F0aW9uIjp7Il90eXBlIjoiaDJMb2NhbCJ9LCJlbGVtZW50IjoibWV0YTo6cmVsYXRpb25hbDo6dGVzdHM6OmRiIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMTp7InBrJF8wIjo2fQ',
-          'ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA1MTptZXRhOjpyZWxhdGlvbmFsOjp0ZXN0czo6c2ltcGxlUmVsYXRpb25hbE1hcHBpbmdJbmM6MDAwMDAwMDA0MTptZXRhX3JlbGF0aW9uYWxfdGVzdHNfbW9kZWxfc2ltcGxlX1BlcnNvbjowMDAwMDAwMDQxOm1ldGFfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAyNTQ6eyJfdHlwZSI6IlJlbGF0aW9uYWxEYXRhYmFzZUNvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGlvblN0cmF0ZWd5Ijp7Il90eXBlIjoiaDJEZWZhdWx0In0sImRhdGFzb3VyY2VTcGVjaWZpY2F0aW9uIjp7Il90eXBlIjoiaDJMb2NhbCJ9LCJlbGVtZW50IjoibWV0YTo6cmVsYXRpb25hbDo6dGVzdHM6OmRiIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMTp7InBrJF8wIjo3fQ',
-          'ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA1MTptZXRhOjpyZWxhdGlvbmFsOjp0ZXN0czo6c2ltcGxlUmVsYXRpb25hbE1hcHBpbmdJbmM6MDAwMDAwMDA0MTptZXRhX3JlbGF0aW9uYWxfdGVzdHNfbW9kZWxfc2ltcGxlX1BlcnNvbjowMDAwMDAwMDQxOm1ldGFfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAyNTQ6eyJfdHlwZSI6IlJlbGF0aW9uYWxEYXRhYmFzZUNvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGlvblN0cmF0ZWd5Ijp7Il90eXBlIjoiaDJEZWZhdWx0In0sImRhdGFzb3VyY2VTcGVjaWZpY2F0aW9uIjp7Il90eXBlIjoiaDJMb2NhbCJ9LCJlbGVtZW50IjoibWV0YTo6cmVsYXRpb25hbDo6dGVzdHM6OmRiIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMTp7InBrJF8wIjoxfQ',
-          'ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA1MTptZXRhOjpyZWxhdGlvbmFsOjp0ZXN0czo6c2ltcGxlUmVsYXRpb25hbE1hcHBpbmdJbmM6MDAwMDAwMDA0MTptZXRhX3JlbGF0aW9uYWxfdGVzdHNfbW9kZWxfc2ltcGxlX1BlcnNvbjowMDAwMDAwMDQxOm1ldGFfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAyNTQ6eyJfdHlwZSI6IlJlbGF0aW9uYWxEYXRhYmFzZUNvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGlvblN0cmF0ZWd5Ijp7Il90eXBlIjoiaDJEZWZhdWx0In0sImRhdGFzb3VyY2VTcGVjaWZpY2F0aW9uIjp7Il90eXBlIjoiaDJMb2NhbCJ9LCJlbGVtZW50IjoibWV0YTo6cmVsYXRpb25hbDo6dGVzdHM6OmRiIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMTp7InBrJF8wIjoyfQ',
-          'ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA1MTptZXRhOjpyZWxhdGlvbmFsOjp0ZXN0czo6c2ltcGxlUmVsYXRpb25hbE1hcHBpbmdJbmM6MDAwMDAwMDA0MTptZXRhX3JlbGF0aW9uYWxfdGVzdHNfbW9kZWxfc2ltcGxlX1BlcnNvbjowMDAwMDAwMDQxOm1ldGFfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAyNTQ6eyJfdHlwZSI6IlJlbGF0aW9uYWxEYXRhYmFzZUNvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGlvblN0cmF0ZWd5Ijp7Il90eXBlIjoiaDJEZWZhdWx0In0sImRhdGFzb3VyY2VTcGVjaWZpY2F0aW9uIjp7Il90eXBlIjoiaDJMb2NhbCJ9LCJlbGVtZW50IjoibWV0YTo6cmVsYXRpb25hbDo6dGVzdHM6OmRiIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMTp7InBrJF8wIjozfQ'
+        
+          'ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2ODptZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpzaW1wbGVSZWxhdGlvbmFsTWFwcGluZ0luYzowMDAwMDAwMDU2Om1ldGFfZXh0ZXJuYWxfc3RvcmVfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAwNTY6bWV0YV9leHRlcm5hbF9zdG9yZV9yZWxhdGlvbmFsX3Rlc3RzX21vZGVsX3NpbXBsZV9QZXJzb246MDAwMDAwMDI3MTp7Il90eXBlIjoiUmVsYXRpb25hbERhdGFiYXNlQ29ubmVjdGlvbiIsImF1dGhlbnRpY2F0aW9uU3RyYXRlZ3kiOnsiX3R5cGUiOiJoMkRlZmF1bHQifSwiZGF0YXNvdXJjZVNwZWNpZmljYXRpb24iOnsiX3R5cGUiOiJoMkxvY2FsIn0sImVsZW1lbnQiOiJtZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpkYiIsInBvc3RQcm9jZXNzb3JXaXRoUGFyYW1ldGVyIjpbXSwicG9zdFByb2Nlc3NvcnMiOltdLCJ0aW1lWm9uZSI6IkdNVCIsInR5cGUiOiJIMiJ9OjAwMDAwMDAwMTE6eyJwayRfMCI6M30',
+          'ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2ODptZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpzaW1wbGVSZWxhdGlvbmFsTWFwcGluZ0luYzowMDAwMDAwMDU2Om1ldGFfZXh0ZXJuYWxfc3RvcmVfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAwNTY6bWV0YV9leHRlcm5hbF9zdG9yZV9yZWxhdGlvbmFsX3Rlc3RzX21vZGVsX3NpbXBsZV9QZXJzb246MDAwMDAwMDI3MTp7Il90eXBlIjoiUmVsYXRpb25hbERhdGFiYXNlQ29ubmVjdGlvbiIsImF1dGhlbnRpY2F0aW9uU3RyYXRlZ3kiOnsiX3R5cGUiOiJoMkRlZmF1bHQifSwiZGF0YXNvdXJjZVNwZWNpZmljYXRpb24iOnsiX3R5cGUiOiJoMkxvY2FsIn0sImVsZW1lbnQiOiJtZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpkYiIsInBvc3RQcm9jZXNzb3JXaXRoUGFyYW1ldGVyIjpbXSwicG9zdFByb2Nlc3NvcnMiOltdLCJ0aW1lWm9uZSI6IkdNVCIsInR5cGUiOiJIMiJ9OjAwMDAwMDAwMTE6eyJwayRfMCI6MX0',
+          'ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2ODptZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpzaW1wbGVSZWxhdGlvbmFsTWFwcGluZ0luYzowMDAwMDAwMDU2Om1ldGFfZXh0ZXJuYWxfc3RvcmVfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAwNTY6bWV0YV9leHRlcm5hbF9zdG9yZV9yZWxhdGlvbmFsX3Rlc3RzX21vZGVsX3NpbXBsZV9QZXJzb246MDAwMDAwMDI3MTp7Il90eXBlIjoiUmVsYXRpb25hbERhdGFiYXNlQ29ubmVjdGlvbiIsImF1dGhlbnRpY2F0aW9uU3RyYXRlZ3kiOnsiX3R5cGUiOiJoMkRlZmF1bHQifSwiZGF0YXNvdXJjZVNwZWNpZmljYXRpb24iOnsiX3R5cGUiOiJoMkxvY2FsIn0sImVsZW1lbnQiOiJtZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpkYiIsInBvc3RQcm9jZXNzb3JXaXRoUGFyYW1ldGVyIjpbXSwicG9zdFByb2Nlc3NvcnMiOltdLCJ0aW1lWm9uZSI6IkdNVCIsInR5cGUiOiJIMiJ9OjAwMDAwMDAwMTE6eyJwayRfMCI6Mn0',
+          'ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2ODptZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpzaW1wbGVSZWxhdGlvbmFsTWFwcGluZ0luYzowMDAwMDAwMDU2Om1ldGFfZXh0ZXJuYWxfc3RvcmVfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAwNTY6bWV0YV9leHRlcm5hbF9zdG9yZV9yZWxhdGlvbmFsX3Rlc3RzX21vZGVsX3NpbXBsZV9QZXJzb246MDAwMDAwMDI3MTp7Il90eXBlIjoiUmVsYXRpb25hbERhdGFiYXNlQ29ubmVjdGlvbiIsImF1dGhlbnRpY2F0aW9uU3RyYXRlZ3kiOnsiX3R5cGUiOiJoMkRlZmF1bHQifSwiZGF0YXNvdXJjZVNwZWNpZmljYXRpb24iOnsiX3R5cGUiOiJoMkxvY2FsIn0sImVsZW1lbnQiOiJtZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpkYiIsInBvc3RQcm9jZXNzb3JXaXRoUGFyYW1ldGVyIjpbXSwicG9zdFByb2Nlc3NvcnMiOltdLCJ0aW1lWm9uZSI6IkdNVCIsInR5cGUiOiJIMiJ9OjAwMDAwMDAwMTE6eyJwayRfMCI6N30',
+          'ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2ODptZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpzaW1wbGVSZWxhdGlvbmFsTWFwcGluZ0luYzowMDAwMDAwMDU2Om1ldGFfZXh0ZXJuYWxfc3RvcmVfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAwNTY6bWV0YV9leHRlcm5hbF9zdG9yZV9yZWxhdGlvbmFsX3Rlc3RzX21vZGVsX3NpbXBsZV9QZXJzb246MDAwMDAwMDI3MTp7Il90eXBlIjoiUmVsYXRpb25hbERhdGFiYXNlQ29ubmVjdGlvbiIsImF1dGhlbnRpY2F0aW9uU3RyYXRlZ3kiOnsiX3R5cGUiOiJoMkRlZmF1bHQifSwiZGF0YXNvdXJjZVNwZWNpZmljYXRpb24iOnsiX3R5cGUiOiJoMkxvY2FsIn0sImVsZW1lbnQiOiJtZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpkYiIsInBvc3RQcm9jZXNzb3JXaXRoUGFyYW1ldGVyIjpbXSwicG9zdFByb2Nlc3NvcnMiOltdLCJ0aW1lWm9uZSI6IkdNVCIsInR5cGUiOiJIMiJ9OjAwMDAwMDAwMTE6eyJwayRfMCI6NH0',
+          'ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2ODptZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpzaW1wbGVSZWxhdGlvbmFsTWFwcGluZ0luYzowMDAwMDAwMDU2Om1ldGFfZXh0ZXJuYWxfc3RvcmVfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAwNTY6bWV0YV9leHRlcm5hbF9zdG9yZV9yZWxhdGlvbmFsX3Rlc3RzX21vZGVsX3NpbXBsZV9QZXJzb246MDAwMDAwMDI3MTp7Il90eXBlIjoiUmVsYXRpb25hbERhdGFiYXNlQ29ubmVjdGlvbiIsImF1dGhlbnRpY2F0aW9uU3RyYXRlZ3kiOnsiX3R5cGUiOiJoMkRlZmF1bHQifSwiZGF0YXNvdXJjZVNwZWNpZmljYXRpb24iOnsiX3R5cGUiOiJoMkxvY2FsIn0sImVsZW1lbnQiOiJtZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpkYiIsInBvc3RQcm9jZXNzb3JXaXRoUGFyYW1ldGVyIjpbXSwicG9zdFByb2Nlc3NvcnMiOltdLCJ0aW1lWm9uZSI6IkdNVCIsInR5cGUiOiJIMiJ9OjAwMDAwMDAwMTE6eyJwayRfMCI6NX0',
+          'ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2ODptZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpzaW1wbGVSZWxhdGlvbmFsTWFwcGluZ0luYzowMDAwMDAwMDU2Om1ldGFfZXh0ZXJuYWxfc3RvcmVfcmVsYXRpb25hbF90ZXN0c19tb2RlbF9zaW1wbGVfUGVyc29uOjAwMDAwMDAwNTY6bWV0YV9leHRlcm5hbF9zdG9yZV9yZWxhdGlvbmFsX3Rlc3RzX21vZGVsX3NpbXBsZV9QZXJzb246MDAwMDAwMDI3MTp7Il90eXBlIjoiUmVsYXRpb25hbERhdGFiYXNlQ29ubmVjdGlvbiIsImF1dGhlbnRpY2F0aW9uU3RyYXRlZ3kiOnsiX3R5cGUiOiJoMkRlZmF1bHQifSwiZGF0YXNvdXJjZVNwZWNpZmljYXRpb24iOnsiX3R5cGUiOiJoMkxvY2FsIn0sImVsZW1lbnQiOiJtZXRhOjpleHRlcm5hbDo6c3RvcmU6OnJlbGF0aW9uYWw6OnRlc3RzOjpkYiIsInBvc3RQcm9jZXNzb3JXaXRoUGFyYW1ldGVyIjpbXSwicG9zdFByb2Nlc3NvcnMiOltdLCJ0aW1lWm9uZSI6IkdNVCIsInR5cGUiOiJIMiJ9OjAwMDAwMDAwMTE6eyJwayRfMCI6Nn0'
       ],
       $references
    );
@@ -407,7 +408,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testGraphFetchWithManyMultiplicityPrimitiveProperty(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testGraphFetchWithManyMultiplicityPrimitiveProperty(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -416,8 +417,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Person.all()->graphFetch($tree, 1)->serialize($tree)};
-   let mapping = meta::relational::tests::PersonOtherNamesMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::PersonOtherNamesMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -433,12 +434,12 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testGraphFetchDataTypes(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testGraphFetchDataTypes(): Boolean[1]
 {
-   meta::relational::tests::mapping::dataType::setUp();
+   meta::external::store::relational::tests::mapping::dataType::setUp();
 
    let tree = #{
-      meta::relational::tests::mapping::dataType::model::domain::DataDBTypes {
+      meta::external::store::relational::tests::mapping::dataType::model::domain::DataDBTypes {
          tinyInt,
          smallInt,
          integer,
@@ -458,9 +459,9 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
          floatAsDecimal
       }
    }#;
-   let query = {|meta::relational::tests::mapping::dataType::model::domain::DataDBTypes.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::mapping::dataType::model::mapping::testMapping;
-   let runtime = meta::relational::tests::mapping::dataType::model::store::testDataTypeMappingRuntime();
+   let query = {|meta::external::store::relational::tests::mapping::dataType::model::domain::DataDBTypes.all()->graphFetch($tree)->serialize($tree)};
+   let mapping = meta::external::store::relational::tests::mapping::dataType::model::mapping::testMapping;
+   let runtime = meta::external::store::relational::tests::mapping::dataType::model::store::testDataTypeMappingRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -472,17 +473,17 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testGraphFetchWithTableMapperPostProcessor():Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testGraphFetchWithTableMapperPostProcessor():Boolean[1]
 {
    let query = {|Firm.all()->graphFetch(#{Firm{legalName,employees{firstName}}}#)->serialize(#{Firm{legalName,employees{firstName}}}#)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
 
    let runtime = ^meta::pure::runtime::Runtime
                  (
                     connections = ^RelationalDatabaseConnection
                     (
-                       element = meta::relational::tests::db,
-                       type = meta::relational::runtime::DatabaseType.H2,
+                       element = meta::external::store::relational::tests::db,
+                       type = meta::external::store::relational::runtime::DatabaseType.H2,
                        datasourceSpecification = ^meta::pure::alloy::connections::alloy::specification::LocalH2DatasourceSpecification(),
                        authenticationStrategy = ^meta::pure::alloy::connections::alloy::authentication::TestDatabaseAuthenticationStrategy(),
                        postProcessors = ^MapperPostProcessor(mappers = ^TableNameMapper(schema = ^SchemaNameMapper(from = 'default', to = 'default'), from = 'personTable' , to = 'differentPersonTable'))
@@ -497,7 +498,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testGraphFetchWithViewRootFlat(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testGraphFetchWithViewRootFlat(): Boolean[1]
 {
    let tree = #{
       OrderPnl {
@@ -506,8 +507,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|OrderPnl.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -519,7 +520,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testGraphFetchWithViewRootNested(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testGraphFetchWithViewRootNested(): Boolean[1]
 {
    let tree = #{
       OrderPnl {
@@ -533,8 +534,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|OrderPnl.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -546,7 +547,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testGraphFetchWithViewRootNestedDeep(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testGraphFetchWithViewRootNestedDeep(): Boolean[1]
 {
    let tree = #{
       AccountPnl {
@@ -566,8 +567,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|AccountPnl.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -676,7 +677,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testGraphFetchWithViewAtChild(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testGraphFetchWithViewAtChild(): Boolean[1]
 {
    let tree = #{
       Account {
@@ -691,8 +692,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Account.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -703,7 +704,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::simple::testGraphFetchWithGroupByViewAtChild(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::simple::testGraphFetchWithGroupByViewAtChild(): Boolean[1]
 {
    let tree = #{
       Account {
@@ -714,8 +715,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Account.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -726,7 +727,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testSimpleGraphFetchWithQualifier(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testSimpleGraphFetchWithQualifier(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -735,8 +736,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Person.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -752,7 +753,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testSimpleGraphFetchWithQualifierWithParameter(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testSimpleGraphFetchWithQualifierWithParameter(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -762,8 +763,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Person.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -779,7 +780,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testSimpleGraphFetchAliasing(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testSimpleGraphFetchAliasing(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -789,8 +790,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Person.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -806,7 +807,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testNestedQualifier(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testNestedQualifier(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -821,8 +822,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Firm.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -835,7 +836,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testFilteringQualifier(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testFilteringQualifier(): Boolean[1]
 {
    let tree = #{
       Product {
@@ -844,8 +845,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Product.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -858,7 +859,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testFilteringQualifierMulti(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testFilteringQualifierMulti(): Boolean[1]
 {
    let tree = #{
       Product {
@@ -868,8 +869,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Product.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -882,7 +883,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testEnumParameter(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testEnumParameter(): Boolean[1]
 {
    let tree = #{
       Product {
@@ -893,8 +894,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Product.all()->filter(x | $x.synonyms->exists(y | $y.type == ProductSynonymType.CUSIP))->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -906,7 +907,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testSubAggregationInQualifier(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testSubAggregationInQualifier(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -919,8 +920,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Firm.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -933,7 +934,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testIsEmptyInQualifier(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testIsEmptyInQualifier(): Boolean[1]
 {
    let tree = #{
       Trade {
@@ -942,8 +943,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Trade.all()->filter(x | $x.id > 8)->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -955,7 +956,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testIsNotEmptyInQualifier(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testIsNotEmptyInQualifier(): Boolean[1]
 {
    let tree = #{
       Trade {
@@ -964,8 +965,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Trade.all()->filter(x | $x.id > 8)->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -977,7 +978,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testQualifierInsideQualifier(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testQualifierInsideQualifier(): Boolean[1]
 {
    let tree = #{
       Trade {
@@ -988,8 +989,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Trade.all()->filter(x | $x.id < 3)->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -1000,7 +1001,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testInScopeVariable(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testInScopeVariable(): Boolean[1]
 {
    let query = {|
       let var = 'Mr';
@@ -1023,8 +1024,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       );
    };
 
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -1040,7 +1041,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testInScopeVariableBoolean(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testInScopeVariableBoolean(): Boolean[1]
 {
    let query = {|
       let var = 'Mr';
@@ -1064,8 +1065,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       );
    };
 
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -1081,7 +1082,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testQualifierWithManyMultiplicityParameter_EmptyInput(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testQualifierWithManyMultiplicityParameter_EmptyInput(): Boolean[1]
 {
    let tree = #{
       Product {
@@ -1090,8 +1091,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Product.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -1101,7 +1102,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testQualifierWithManyMultiplicityParameter_OneInput(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testQualifierWithManyMultiplicityParameter_OneInput(): Boolean[1]
 {
    let tree = #{
       Product {
@@ -1115,8 +1116,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Product.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -1129,7 +1130,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::qualifier::testQualifierWithManyMultiplicityParameter_MultiInputs(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::qualifier::testQualifierWithManyMultiplicityParameter_MultiInputs(): Boolean[1]
 {
    let tree = #{
       Product {
@@ -1143,8 +1144,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Product.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -1157,7 +1158,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_21_0'} meta::relational::graphFetch::tests::simple::testSimpleGraphFetchCheckedWithPrimitivesOnly(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_21_0'} meta::external::store::relational::graphFetch::tests::simple::testSimpleGraphFetchCheckedWithPrimitivesOnly(): Boolean[1]
 {
    let tree = #{
       PersonWithConstraints {
@@ -1166,18 +1167,18 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_21_0'} meta::rel
       }
    }#;
    let query = {|PersonWithConstraints.all()->graphFetchChecked($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
    assertJsonStringsEqual(
-      '[ { "defects": [ { "id": "firstNameTest", "externalId": null, "message": "First name has to be test", "enforcementLevel": "Error", "ruleType": "ClassConstraint", "ruleDefinerPath": "meta::relational::tests::model::simple::PersonWithConstraints", "path": [] } ], "value": { "firstName": "Peter", "lastName": "Smith" } }, { "defects": [ { "id": "firstNameTest", "externalId": null, "message": "First name has to be test", "enforcementLevel": "Error", "ruleType": "ClassConstraint", "ruleDefinerPath": "meta::relational::tests::model::simple::PersonWithConstraints", "path": [] } ], "value": { "firstName": "John", "lastName": "Johnson" } }, { "defects": [ { "id": "firstNameTest", "externalId": null, "message": "First name has to be test", "enforcementLevel": "Error", "ruleType": "ClassConstraint", "ruleDefinerPath": "meta::relational::tests::model::simple::PersonWithConstraints", "path": [] } ], "value": { "firstName": "John", "lastName": "Hill" } }, { "defects": [ { "id": "firstNameTest", "externalId": null, "message": "First name has to be test", "enforcementLevel": "Error", "ruleType": "ClassConstraint", "ruleDefinerPath": "meta::relational::tests::model::simple::PersonWithConstraints", "path": [] } ], "value": { "firstName": "Anthony", "lastName": "Allen" } }, { "defects": [ { "id": "firstNameTest", "externalId": null, "message": "First name has to be test", "enforcementLevel": "Error", "ruleType": "ClassConstraint", "ruleDefinerPath": "meta::relational::tests::model::simple::PersonWithConstraints", "path": [] } ], "value": { "firstName": "Fabrice", "lastName": "Roberts" } }, { "defects": [ { "id": "firstNameTest", "externalId": null, "message": "First name has to be test", "enforcementLevel": "Error", "ruleType": "ClassConstraint", "ruleDefinerPath": "meta::relational::tests::model::simple::PersonWithConstraints", "path": [] } ], "value": { "firstName": "Oliver", "lastName": "Hill" } }, { "defects": [ { "id": "firstNameTest", "externalId": null, "message": "First name has to be test", "enforcementLevel": "Error", "ruleType": "ClassConstraint", "ruleDefinerPath": "meta::relational::tests::model::simple::PersonWithConstraints", "path": [] } ], "value": { "firstName": "David", "lastName": "Harris" } }]',
+      '[ { "defects": [ { "id": "firstNameTest", "externalId": null, "message": "First name has to be test", "enforcementLevel": "Error", "ruleType": "ClassConstraint", "ruleDefinerPath": "meta::external::store::relational::tests::model::simple::PersonWithConstraints", "path": [] } ], "value": { "firstName": "Peter", "lastName": "Smith" } }, { "defects": [ { "id": "firstNameTest", "externalId": null, "message": "First name has to be test", "enforcementLevel": "Error", "ruleType": "ClassConstraint", "ruleDefinerPath": "meta::external::store::relational::tests::model::simple::PersonWithConstraints", "path": [] } ], "value": { "firstName": "John", "lastName": "Johnson" } }, { "defects": [ { "id": "firstNameTest", "externalId": null, "message": "First name has to be test", "enforcementLevel": "Error", "ruleType": "ClassConstraint", "ruleDefinerPath": "meta::external::store::relational::tests::model::simple::PersonWithConstraints", "path": [] } ], "value": { "firstName": "John", "lastName": "Hill" } }, { "defects": [ { "id": "firstNameTest", "externalId": null, "message": "First name has to be test", "enforcementLevel": "Error", "ruleType": "ClassConstraint", "ruleDefinerPath": "meta::external::store::relational::tests::model::simple::PersonWithConstraints", "path": [] } ], "value": { "firstName": "Anthony", "lastName": "Allen" } }, { "defects": [ { "id": "firstNameTest", "externalId": null, "message": "First name has to be test", "enforcementLevel": "Error", "ruleType": "ClassConstraint", "ruleDefinerPath": "meta::external::store::relational::tests::model::simple::PersonWithConstraints", "path": [] } ], "value": { "firstName": "Fabrice", "lastName": "Roberts" } }, { "defects": [ { "id": "firstNameTest", "externalId": null, "message": "First name has to be test", "enforcementLevel": "Error", "ruleType": "ClassConstraint", "ruleDefinerPath": "meta::external::store::relational::tests::model::simple::PersonWithConstraints", "path": [] } ], "value": { "firstName": "Oliver", "lastName": "Hill" } }, { "defects": [ { "id": "firstNameTest", "externalId": null, "message": "First name has to be test", "enforcementLevel": "Error", "ruleType": "ClassConstraint", "ruleDefinerPath": "meta::external::store::relational::tests::model::simple::PersonWithConstraints", "path": [] } ], "value": { "firstName": "David", "lastName": "Harris" } }]',
       $result
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_21_0'} meta::relational::graphFetch::tests::simple::testSimpleGraphFetchCheckedWithPrimitivesOnlyNoDefects(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_21_0'} meta::external::store::relational::graphFetch::tests::simple::testSimpleGraphFetchCheckedWithPrimitivesOnlyNoDefects(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -1186,8 +1187,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_21_0'} meta::rel
       }
    }#;
    let query = {|Person.all()->graphFetchChecked($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -1197,7 +1198,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_21_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_21_0'} meta::relational::graphFetch::tests::simple::testCheckedOneComplexProperty(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_21_0'} meta::external::store::relational::graphFetch::tests::simple::testCheckedOneComplexProperty(): Boolean[1]
 {
    let tree = #{
       PersonWithConstraints {
@@ -1209,18 +1210,18 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_21_0'} meta::rel
       }
    }#;
    let query = {|PersonWithConstraints.all()->graphFetchChecked($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::simpleRelationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
    assertJsonStringsEqual(
-      '[{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"firstNameTest","ruleDefinerPath":"meta::relational::tests::model::simple::PersonWithConstraints","message":"First name has to be test"}],"value":{"firstName":"Peter","lastName":"Smith","firm":{"legalName":"Firm X"}}},{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"firstNameTest","ruleDefinerPath":"meta::relational::tests::model::simple::PersonWithConstraints","message":"First name has to be test"}],"value":{"firstName":"John","lastName":"Johnson","firm":{"legalName":"Firm X"}}},{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"firstNameTest","ruleDefinerPath":"meta::relational::tests::model::simple::PersonWithConstraints","message":"First name has to be test"}],"value":{"firstName":"John","lastName":"Hill","firm":{"legalName":"Firm X"}}},{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"firstNameTest","ruleDefinerPath":"meta::relational::tests::model::simple::PersonWithConstraints","message":"First name has to be test"}],"value":{"firstName":"Anthony","lastName":"Allen","firm":{"legalName":"Firm X"}}},{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"firstNameTest","ruleDefinerPath":"meta::relational::tests::model::simple::PersonWithConstraints","message":"First name has to be test"}],"value":{"firstName":"Fabrice","lastName":"Roberts","firm":{"legalName":"Firm A"}}},{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"firstNameTest","ruleDefinerPath":"meta::relational::tests::model::simple::PersonWithConstraints","message":"First name has to be test"}],"value":{"firstName":"Oliver","lastName":"Hill","firm":{"legalName":"Firm B"}}},{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"firstNameTest","ruleDefinerPath":"meta::relational::tests::model::simple::PersonWithConstraints","message":"First name has to be test"}],"value":{"firstName":"David","lastName":"Harris","firm":{"legalName":"Firm C"}}}]',
+      '[{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"firstNameTest","ruleDefinerPath":"meta::external::store::relational::tests::model::simple::PersonWithConstraints","message":"First name has to be test"}],"value":{"firstName":"Peter","lastName":"Smith","firm":{"legalName":"Firm X"}}},{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"firstNameTest","ruleDefinerPath":"meta::external::store::relational::tests::model::simple::PersonWithConstraints","message":"First name has to be test"}],"value":{"firstName":"John","lastName":"Johnson","firm":{"legalName":"Firm X"}}},{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"firstNameTest","ruleDefinerPath":"meta::external::store::relational::tests::model::simple::PersonWithConstraints","message":"First name has to be test"}],"value":{"firstName":"John","lastName":"Hill","firm":{"legalName":"Firm X"}}},{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"firstNameTest","ruleDefinerPath":"meta::external::store::relational::tests::model::simple::PersonWithConstraints","message":"First name has to be test"}],"value":{"firstName":"Anthony","lastName":"Allen","firm":{"legalName":"Firm X"}}},{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"firstNameTest","ruleDefinerPath":"meta::external::store::relational::tests::model::simple::PersonWithConstraints","message":"First name has to be test"}],"value":{"firstName":"Fabrice","lastName":"Roberts","firm":{"legalName":"Firm A"}}},{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"firstNameTest","ruleDefinerPath":"meta::external::store::relational::tests::model::simple::PersonWithConstraints","message":"First name has to be test"}],"value":{"firstName":"Oliver","lastName":"Hill","firm":{"legalName":"Firm B"}}},{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"firstNameTest","ruleDefinerPath":"meta::external::store::relational::tests::model::simple::PersonWithConstraints","message":"First name has to be test"}],"value":{"firstName":"David","lastName":"Harris","firm":{"legalName":"Firm C"}}}]',
       $result
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_21_0'} meta::relational::graphFetch::tests::simple::testCheckedWithCircularConstraints(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_21_0'} meta::external::store::relational::graphFetch::tests::simple::testCheckedWithCircularConstraints(): Boolean[1]
 {
   let tree = #{
     meta::pure::executionPlan::constraints::tests::Person {
@@ -1233,7 +1234,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_21_0'} meta::rel
 
   let query = {|meta::pure::executionPlan::constraints::tests::Person.all()->graphFetchChecked($tree)->serialize($tree)};
   let mapping = meta::pure::executionPlan::constraints::tests::simpleRel;
-  let runtime = meta::relational::tests::testRuntime(meta::pure::executionPlan::constraints::tests::db);
+  let runtime = meta::external::store::relational::tests::testRuntime(meta::pure::executionPlan::constraints::tests::db);
 
   let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 

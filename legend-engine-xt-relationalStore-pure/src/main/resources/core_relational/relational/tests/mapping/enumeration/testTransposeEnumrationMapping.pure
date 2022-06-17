@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::mapping::enumeration::model::mapping::*;
-import meta::relational::tests::mapping::enumeration::model::store::*;
-import meta::relational::tests::mapping::enumeration::model::domain::*;
-import meta::relational::tests::mapping::enumeration::*;
+import meta::external::store::relational::tests::mapping::enumeration::model::mapping::*;
+import meta::external::store::relational::tests::mapping::enumeration::model::store::*;
+import meta::external::store::relational::tests::mapping::enumeration::model::domain::*;
+import meta::external::store::relational::tests::mapping::enumeration::*;
 
-function <<test.ToFix>> meta::relational::tests::mapping::enumeration::testMappingWithTranspose():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::mapping::enumeration::testMappingWithTranspose():Boolean[1]
 {
  
     let result = execute(|Employee.all(), employeeTestMappingWithTransposeFunction, enumTestRuntime(), meta::pure::router::extension::defaultRelationalExtensions(),debug());
@@ -39,7 +39,7 @@ function <<test.ToFix>> meta::relational::tests::mapping::enumeration::testMappi
 
 }
 
-function <<test.ToFix>> meta::relational::tests::mapping::enumeration::testMappingTransposeFilter():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::mapping::enumeration::testMappingTransposeFilter():Boolean[1]
 {
  
    let result = execute(|Employee.all()->filter(e | $e.skills->contains(Skills.SQL)), employeeTestMappingWithTransposeFunction, enumTestRuntime(), meta::pure::router::extension::defaultRelationalExtensions(),debug());
@@ -49,7 +49,7 @@ function <<test.ToFix>> meta::relational::tests::mapping::enumeration::testMappi
 
 
 
-function <<test.ToFix>> meta::relational::tests::mapping::enumeration::testMappingTransposeProject():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::mapping::enumeration::testMappingTransposeProject():Boolean[1]
 {
  
     let result = execute(|Employee.all()->project([e|$e.name,e|$e.skills],['name','skill'])
@@ -62,9 +62,9 @@ function <<test.ToFix>> meta::relational::tests::mapping::enumeration::testMappi
 
 
 ###Mapping
-import meta::relational::tests::mapping::enumeration::model::store::*;
-import meta::relational::tests::mapping::enumeration::model::domain::*;
-Mapping meta::relational::tests::mapping::enumeration::model::mapping::employeeTestMappingWithTransposeFunction
+import meta::external::store::relational::tests::mapping::enumeration::model::store::*;
+import meta::external::store::relational::tests::mapping::enumeration::model::domain::*;
+Mapping meta::external::store::relational::tests::mapping::enumeration::model::mapping::employeeTestMappingWithTransposeFunction
 (
 
     EmployeeType: EnumerationMapping EmpTypes

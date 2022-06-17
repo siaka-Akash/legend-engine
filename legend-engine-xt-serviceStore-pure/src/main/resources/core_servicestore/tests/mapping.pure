@@ -136,7 +136,7 @@ import meta::external::store::service::tests::domain::*;
 import meta::external::shared::format::metamodel::*;
 import meta::external::store::service::metamodel::mapping::*;
 import meta::pure::mapping::xStore::*;
-import meta::pure::mapping::modelToModel::*;
+import meta::external::store::model::*;
 
 function meta::external::store::service::tests::mapping::serviceStoreMapping():Mapping[1]
 {

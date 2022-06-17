@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::csv::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::mapping::*;
-import meta::relational::runtime::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::tests::*;
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectStringLiteral():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectStringLiteral():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -36,7 +36,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectStri
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectFunctionOnStringLiteral():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectFunctionOnStringLiteral():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -54,7 +54,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectFunc
       $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectStringColumn():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectStringColumn():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -72,7 +72,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectStri
       $result->sqlRemoveFormatting());  
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectFunctionOnStringColumn():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectFunctionOnStringColumn():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -90,7 +90,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectFunc
       $result->sqlRemoveFormatting());  
 }
 
-function <<test.ToFix>> meta::relational::tests::tds::tdsProject::testProjectFunctionOnEnumColumn():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::tds::tdsProject::testProjectFunctionOnEnumColumn():Boolean[1]
 {
    let result = execute(
       |Address.all()
@@ -108,7 +108,7 @@ function <<test.ToFix>> meta::relational::tests::tds::tdsProject::testProjectFun
       $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectMultipleFunctions():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectMultipleFunctions():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -128,7 +128,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectMult
       $result->sqlRemoveFormatting());  
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectAndProjectAgain():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectAndProjectAgain():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -149,7 +149,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectAndP
       $result->sqlRemoveFormatting());  
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectOnDynaFunctionColumn():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectOnDynaFunctionColumn():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -169,7 +169,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectOnDy
       $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectOnMultiple():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectOnMultiple():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -189,7 +189,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectOnMu
       $result->sqlRemoveFormatting());  
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testDateLiteral():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testDateLiteral():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -212,7 +212,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testDateLiteral
 }
 
 // Alloy exclusion reason: 10. Tricky usage of variables
-function <<test.Test, test.ExcludeAlloy>> {test.excludePlatform = 'Java compiled'} meta::relational::tests::tds::tdsProject::testProjectWithVariables1():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> {test.excludePlatform = 'Java compiled'} meta::external::store::relational::tests::tds::tdsProject::testProjectWithVariables1():Boolean[1]
 {
    let result = execute(
       |
@@ -236,7 +236,7 @@ function <<test.Test, test.ExcludeAlloy>> {test.excludePlatform = 'Java compiled
       $result->sqlRemoveFormatting());  
 }
 
-function <<test.ToFix>> meta::relational::tests::tds::tdsProject::testProjectWithVariables2():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::tds::tdsProject::testProjectWithVariables2():Boolean[1]
 {
    let result = execute(
       |
@@ -260,7 +260,7 @@ function <<test.ToFix>> meta::relational::tests::tds::tdsProject::testProjectWit
       $result->sqlRemoveFormatting());  
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectReduceColumns():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectReduceColumns():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -278,7 +278,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectRedu
       $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testHourFunction():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testHourFunction():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -298,7 +298,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testHourFunctio
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectEnumFromOpenVariable():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectEnumFromOpenVariable():Boolean[1]
 {
    let units = extractEnumValue(DurationUnit, 'DAYS');
    
@@ -326,7 +326,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectEnum
 
 
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectWithAdjustFunction():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectWithAdjustFunction():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -350,7 +350,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectWith
 }
 
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testFilterAfterLimit():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testFilterAfterLimit():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -371,7 +371,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testFilterAfter
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testFilterAfterLimit2():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testFilterAfterLimit2():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -392,7 +392,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testFilterAfter
 }
 
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testSortAfterLimit():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testSortAfterLimit():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -415,7 +415,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testSortAfterLi
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testLimitAfterLimit():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testLimitAfterLimit():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -434,7 +434,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testLimitAfterL
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testSliceAfterLimit():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testSliceAfterLimit():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -455,7 +455,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testSliceAfterL
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testLimitAfterSlice():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testLimitAfterSlice():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -476,7 +476,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testLimitAfterS
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testDropAfterLimit():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testDropAfterLimit():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -497,7 +497,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testDropAfterLi
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testLimitAfterDrop():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testLimitAfterDrop():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -518,7 +518,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testLimitAfterD
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testTakeAfterLimit():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testTakeAfterLimit():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -539,7 +539,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testTakeAfterLi
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testLimitAfterTake():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testLimitAfterTake():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -561,7 +561,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testLimitAfterT
 }
 
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testOptionalLimit_NoValue():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testOptionalLimit_NoValue():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -581,7 +581,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testOptionalLim
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testOptionalLimit_WithValue():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testOptionalLimit_WithValue():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -602,7 +602,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testOptionalLim
 }
 
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectWithColumnSubSet ():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectWithColumnSubSet ():Boolean[1]
 {
    let result = execute(
             | Person.all()->projectWithColumnSubset( [ 
@@ -623,7 +623,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectWith
 
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectWithColumnSubSetFunctions():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectWithColumnSubSetFunctions():Boolean[1]
 {
    let result = execute(
             | Person.all()->projectWithColumnSubset( [ 
@@ -641,7 +641,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectWith
 
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectWithColumnSubSetSQLTest():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectWithColumnSubSetSQLTest():Boolean[1]
 {
    let result1 = execute(
             | Person.all()->projectWithColumnSubset( [ col(x| $x.firstName , 'first_name'  ),
@@ -745,7 +745,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectWith
 
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testGetNumber():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testGetNumber():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -765,17 +765,17 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testGetNumber()
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectWithQuotedColumnFromTableToTDS():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testProjectWithQuotedColumnFromTableToTDS():Boolean[1]
 {
-   let queryWithoutQuotes   = {|tableToTDS(meta::relational::functions::database::tableReference(meta::relational::tests::db,'default','tableWithQuotedColumns'))
+   let queryWithoutQuotes   = {|tableToTDS(meta::external::store::relational::functions::database::tableReference(meta::external::store::relational::tests::db,'default','tableWithQuotedColumns'))
                                      ->project([
                                                  col(r:TDSRow[1]|$r.getString('FIRST NAME'), 'firstName'), 
                                                  col(r:TDSRow[1]|$r.getString('1columnStartsWithNumber'), 'somecol')
                                                 ]
                               )};
    
-   let mapping = meta::relational::tests::tds::tabletds::EmptyMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::tds::tabletds::EmptyMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
    
    let resultWithoutQuotes = execute($queryWithoutQuotes, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions());
      
@@ -783,7 +783,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testProjectWith
    
    assertEquals($expectedSql, $resultWithoutQuotes->sqlRemoveFormatting());
    
-   let queryWithQuotes   = {|tableToTDS(meta::relational::functions::database::tableReference(meta::relational::tests::db,'default','tableWithQuotedColumns'))
+   let queryWithQuotes   = {|tableToTDS(meta::external::store::relational::functions::database::tableReference(meta::external::store::relational::tests::db,'default','tableWithQuotedColumns'))
                                      ->project([
                                                  col(r:TDSRow[1]|$r.getString('"FIRST NAME"'), 'firstName'), 
                                                  col(r:TDSRow[1]|$r.getString('"1columnStartsWithNumber"'), 'somecol')

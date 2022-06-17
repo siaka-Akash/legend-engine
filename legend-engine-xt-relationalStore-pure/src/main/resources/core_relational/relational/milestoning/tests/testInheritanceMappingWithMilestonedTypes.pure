@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::functions::asserts::*;
-import meta::relational::mapping::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::runtime::*;
-import meta::relational::tests::milestoning::inheritance::union::*;
-import meta::relational::tests::*;
-import meta::relational::tests::milestoning::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::tests::milestoning::inheritance::union::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::milestoning::*;
 
 
 //Alloy Exclusion Reason: Store Resolution Wrong (Cant Find Join)
-function <<test.Test , test.ExcludeAlloy>> meta::relational::tests::milestoning::inheritance::union::testLinkageBetweenUnionWithIsolatedMultiJoinSelectLHS():Boolean[1]
+function <<test.Test , test.ExcludeAlloy>> meta::external::store::relational::tests::milestoning::inheritance::union::testLinkageBetweenUnionWithIsolatedMultiJoinSelectLHS():Boolean[1]
 {
    let result = execute(|Order.all()->project([o|$o.id, o|$o.product(%2016-9-23).synonymsByType('CUSIP').createActivity.createdBy], ['orderId','productSynonymCreator']), inheritanceUnionMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals(['1,TDSNull', '2,smith', '2,smith', '2,smith', '2,smith'], $result.values->at(0).rows->map(r|$r.values->makeString(',')));
@@ -30,7 +30,7 @@ function <<test.Test , test.ExcludeAlloy>> meta::relational::tests::milestoning:
 }
 
 //Alloy Exclusion Reason: Store Resolution Wrong (Cant Find Join)
-function <<test.Test , test.ExcludeAlloy>> meta::relational::tests::milestoning::inheritance::union::testIsolationOfSubselectWithChildNodesUsingCorrelatedSubQueryStrategy():Boolean[1]
+function <<test.Test , test.ExcludeAlloy>> meta::external::store::relational::tests::milestoning::inheritance::union::testIsolationOfSubselectWithChildNodesUsingCorrelatedSubQueryStrategy():Boolean[1]
 {
    let result = execute(|Order.all()->project([o|$o.id, o|$o.product(%2016-9-23)->filter(p|($p.id==1 || $p.id==2) && $p.referenceSystem.name=='SYS1').id], ['orderId','filteredProductId']), inheritanceUnionMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals(['1,TDSNull', '2,2'], $result.values->at(0).rows->map(r|$r.values->makeString(',')));
@@ -38,7 +38,7 @@ function <<test.Test , test.ExcludeAlloy>> meta::relational::tests::milestoning:
 }
 
 //Alloy Exclusion Reason: Store Resolution Wrong (Cant Find Join)
-function <<test.Test , test.ExcludeAlloy>> meta::relational::tests::milestoning::inheritance::union::testSubSelectsWithDifferentColumnsMerge():Boolean[1]
+function <<test.Test , test.ExcludeAlloy>> meta::external::store::relational::tests::milestoning::inheritance::union::testSubSelectsWithDifferentColumnsMerge():Boolean[1]
 {
    let result = execute(|Order.all()->project([o|$o.id, o|$o.product(%2016-9-23)->filter(p|$p.id==2).id, o|$o.product(%2016-9-23)->filter(p|$p.id==2).name], ['orderId','productId','productName']), inheritanceUnionMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals(['1,TDSNull,TDSNull', '2,2,ProductName2'], $result.values->at(0).rows->map(r|$r.values->makeString(',')));
@@ -47,7 +47,7 @@ function <<test.Test , test.ExcludeAlloy>> meta::relational::tests::milestoning:
 
 
 //Alloy Exclusion Reason: Store Resolution Wrong (Cant Find Join)
-function <<test.Test , test.ExcludeAlloy>> meta::relational::tests::milestoning::inheritance::union::testRootUnionQueryWithRelationalJoinsForDataTypes():Boolean[1]
+function <<test.Test , test.ExcludeAlloy>> meta::external::store::relational::tests::milestoning::inheritance::union::testRootUnionQueryWithRelationalJoinsForDataTypes():Boolean[1]
 {
    let result = execute(|BiTemporalProduct.all(%2018-05-10, %2018-05-09)->project([p|$p.name, p|$p.type],['name', 'type']), inheritanceUnionMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals(['p1s1,STOCK', 'p2s1,STOCK', 'p3s1,STOCK', 'p10s2,notSet', 'p11s2,notSet'], $result.values->at(0).rows->map(r|$r.values->makeString(',')));
@@ -55,16 +55,16 @@ function <<test.Test , test.ExcludeAlloy>> meta::relational::tests::milestoning:
 }
 
 //Alloy Exclusion Reason: Store Resolution Wrong (Cant Find Join)
-function <<test.Test , test.ExcludeAlloy>> meta::relational::tests::milestoning::inheritance::union::testRootUnionQueryWithRelationalPropertyJoin():Boolean[1]
+function <<test.Test , test.ExcludeAlloy>> meta::external::store::relational::tests::milestoning::inheritance::union::testRootUnionQueryWithRelationalPropertyJoin():Boolean[1]
 {
    let result = execute(|BiTemporalProduct.all(%2018-05-10, %2018-05-09)->project([p|$p.name,p|$p.classification.type],['name', 'type']), inheritanceUnionMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals(['p1s1,STOCK', 'p2s1,STOCK', 'p3s1,STOCK', 'p10s2,STOCK', 'p11s2,STOCK'], $result.values->at(0).rows->map(r|$r.values->makeString(',')));
    assertSameSQL('select "unionBase"."BiTemporalProductTable_Out_From_Inclusivename_BiTemporalProductTable_Out_Thru_Inclusivename" as "name", "productclassificationtable_0".type as "type" from (select "root".from_z as "from_z_0", "root".thru_z as "thru_z_0", "root".in_z as "in_z_0", "root".out_z as "out_z_0", null as "from_z_1", null as "thru_z_1", null as "in_z_1", null as "out_z_1", "root".id as "pk_0_0", "root".name as "pk_1_0", null as "pk_0_1", null as "pk_1_1", "root".name as "BiTemporalProductTable_Out_From_Inclusivename_BiTemporalProductTable_Out_Thru_Inclusivename", "root".type as type_0, null as type_1 from BiTemporalProductTable_Out_From_Inclusive as "root" where "root".in_z < \'2018-05-10\' and "root".out_z >= \'2018-05-10\' and "root".from_z <= \'2018-05-09\' and "root".thru_z > \'2018-05-09\' UNION ALL select null as "from_z_0", null as "thru_z_0", null as "in_z_0", null as "out_z_0", "root".from_z as "from_z_1", "root".thru_z as "thru_z_1", "root".in_z as "in_z_1", "root".out_z as "out_z_1", null as "pk_0_0", null as "pk_1_0", "root".id as "pk_0_1", "root".name as "pk_1_1", "root".name as "BiTemporalProductTable_Out_From_Inclusivename_BiTemporalProductTable_Out_Thru_Inclusivename", null as type_0, "root".type as type_1 from BiTemporalProductTable_Out_Thru_Inclusive as "root" where "root".in_z < \'2018-05-10\' and "root".out_z >= \'2018-05-10\' and "root".from_z < \'2018-05-09\' and "root".thru_z >= \'2018-05-09\') as "unionBase" left outer join ProductClassificationTable as "productclassificationtable_0" on (("unionBase".type_0 = "productclassificationtable_0".type or "unionBase".type_1 = "productclassificationtable_0".type) and "productclassificationtable_0".from_z <= \'2018-05-09\' and "productclassificationtable_0".thru_z > \'2018-05-09\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.BeforePackage>> meta::relational::tests::milestoning::inheritance::union::createTablesAndFillDb():Any[0..1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::milestoning::inheritance::union::createTablesAndFillDb():Any[0..1]
 {
-  let runtime = meta::relational::tests::milestoning::initDatabase();
+  let runtime = meta::external::store::relational::tests::milestoning::initDatabase();
    
   let connection = $runtime.connections->at(0)->cast(@TestDatabaseConnection);
   
@@ -93,19 +93,19 @@ function <<test.BeforePackage>> meta::relational::tests::milestoning::inheritanc
 
 ###Mapping
 
-import meta::relational::tests::milestoning::inheritance::union::*;
-import meta::relational::tests::*;
-import meta::relational::tests::milestoning::*;
+import meta::external::store::relational::tests::milestoning::inheritance::union::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::milestoning::*;
 
-Mapping meta::relational::tests::milestoning::inheritance::union::inheritanceUnionMapping
+Mapping meta::external::store::relational::tests::milestoning::inheritance::union::inheritanceUnionMapping
 (
-   meta::relational::tests::milestoning::Order : Relational{
+   meta::external::store::relational::tests::milestoning::Order : Relational{
       ~mainTable [inheritanceUnionDB]OrderTable
       id : [inheritanceUnionDB]OrderTable.id,
       product : [inheritanceUnionDB]@Order_OrderProductIntermediate > (INNER) @OrderProductIntermediate_Product
    } 
 
-   meta::relational::tests::milestoning::Product : Relational{
+   meta::external::store::relational::tests::milestoning::Product : Relational{
       ~mainTable [inheritanceUnionDB]ProductTable     
       id : [inheritanceUnionDB]ProductTable.id, 
       name : [inheritanceUnionDB]ProductTable.name, 
@@ -120,7 +120,7 @@ Mapping meta::relational::tests::milestoning::inheritance::union::inheritanceUni
       meta::pure::router::operations::union_OperationSetImplementation_1__SetImplementation_MANY_(cusip,isin);
    }
 
-   meta::relational::tests::milestoning::ProductSynonym[cusip] : Relational{
+   meta::external::store::relational::tests::milestoning::ProductSynonym[cusip] : Relational{
       scope([inheritanceUnionDB]ProductSynonymTable)
       (
          synonym : synonym,
@@ -129,7 +129,7 @@ Mapping meta::relational::tests::milestoning::inheritance::union::inheritanceUni
       )     
    }  
    
-   meta::relational::tests::milestoning::ProductSynonym[isin] : Relational{
+   meta::external::store::relational::tests::milestoning::ProductSynonym[isin] : Relational{
      scope([inheritanceUnionDB]ProductSynonymTable)
       (
          synonym : synonym,
@@ -138,7 +138,7 @@ Mapping meta::relational::tests::milestoning::inheritance::union::inheritanceUni
       )  
    }
    
-   meta::relational::tests::milestoning::System : Relational{
+   meta::external::store::relational::tests::milestoning::System : Relational{
       name : [inheritanceUnionDB]SystemTable.name
    }
    
@@ -163,7 +163,7 @@ Mapping meta::relational::tests::milestoning::inheritance::union::inheritanceUni
       classification : [inheritanceUnionDB]@BiTemporalProductTable_Out_Thru_Inclusive_Classification
    }
       
-    meta::relational::tests::milestoning::ProductClassification : Relational{
+    meta::external::store::relational::tests::milestoning::ProductClassification : Relational{
       type : [inheritanceUnionDB]ProductClassificationTable.type
    }     
 )
@@ -172,9 +172,9 @@ Mapping meta::relational::tests::milestoning::inheritance::union::inheritanceUni
 
 ###Relational
 
-Database meta::relational::tests::milestoning::inheritance::union::inheritanceUnionDB
+Database meta::external::store::relational::tests::milestoning::inheritance::union::inheritanceUnionDB
 (
-   include meta::relational::tests::milestoning::db
+   include meta::external::store::relational::tests::milestoning::db
    
    Table orderProductIntermediate(orderId INT PRIMARY KEY, prodId INT PRIMARY KEY)
    Table productSynonymIntermediate(prodId INT PRIMARY KEY, synProdId INT PRIMARY KEY)

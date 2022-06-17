@@ -70,7 +70,7 @@
               {
                 "_type": "var",
                 "name": "src",
-                "class": "meta::pure::mapping::modelToModel::test::shared::src::_S_Person",
+                "class": "meta::external::store::model::test::shared::src::_S_Person",
                 "multiplicity": {
                   "lowerBound": 1,
                   "upperBound": 1
@@ -81,7 +81,7 @@
           "source": "meta_pure_mapping_modelToModel_test_shared_dest_Person",
           "target": "",
           "property": {
-            "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person",
+            "class": "meta::external::store::model::test::shared::dest::Person",
             "property": "firstName"
           }
         },
@@ -182,7 +182,7 @@
               {
                 "_type": "var",
                 "name": "src",
-                "class": "meta::pure::mapping::modelToModel::test::shared::src::_S_Person",
+                "class": "meta::external::store::model::test::shared::src::_S_Person",
                 "multiplicity": {
                   "lowerBound": 1,
                   "upperBound": 1
@@ -193,13 +193,13 @@
           "source": "meta_pure_mapping_modelToModel_test_shared_dest_Person",
           "target": "",
           "property": {
-            "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person",
+            "class": "meta::external::store::model::test::shared::dest::Person",
             "property": "lastName"
           }
         }
       ],
-      "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person",
-      "srcClass": "meta::pure::mapping::modelToModel::test::shared::src::_S_Person"
+      "class": "meta::external::store::model::test::shared::dest::Person",
+      "srcClass": "meta::external::store::model::test::shared::src::_S_Person"
     },
     {
       "id": "meta_pure_mapping_modelToModel_test_shared_dest_Product2Simple",
@@ -226,7 +226,7 @@
               {
                 "_type": "var",
                 "name": "src",
-                "class": "meta::pure::mapping::modelToModel::test::shared::src::_Product2",
+                "class": "meta::external::store::model::test::shared::src::_Product2",
                 "multiplicity": {
                   "lowerBound": 1,
                   "upperBound": 1
@@ -237,7 +237,7 @@
           "source": "meta_pure_mapping_modelToModel_test_shared_dest_Product2Simple",
           "target": "",
           "property": {
-            "class": "meta::pure::mapping::modelToModel::test::shared::dest::Product2Simple",
+            "class": "meta::external::store::model::test::shared::dest::Product2Simple",
             "property": "name"
           }
         },
@@ -261,7 +261,7 @@
               {
                 "_type": "var",
                 "name": "src",
-                "class": "meta::pure::mapping::modelToModel::test::shared::src::_Product2",
+                "class": "meta::external::store::model::test::shared::src::_Product2",
                 "multiplicity": {
                   "lowerBound": 1,
                   "upperBound": 1
@@ -272,15 +272,15 @@
           "source": "meta_pure_mapping_modelToModel_test_shared_dest_Product2Simple",
           "target": "",
           "property": {
-            "class": "meta::pure::mapping::modelToModel::test::shared::dest::Product2Simple",
+            "class": "meta::external::store::model::test::shared::dest::Product2Simple",
             "property": "region"
           }
         }
       ],
-      "class": "meta::pure::mapping::modelToModel::test::shared::dest::Product2Simple",
-      "srcClass": "meta::pure::mapping::modelToModel::test::shared::src::_Product2"
+      "class": "meta::external::store::model::test::shared::dest::Product2Simple",
+      "srcClass": "meta::external::store::model::test::shared::src::_Product2"
     }
   ],
   "name": "simpleModelMapping",
-  "package": "meta::pure::mapping::modelToModel::test::simple"
+  "package": "meta::external::store::model::test::simple"
 }

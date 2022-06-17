@@ -12,47 +12,47 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::milestoning::*;
+import meta::external::store::relational::milestoning::*;
 import meta::pure::router::extension::*;
-import meta::relational::metamodel::datatype::*;
+import meta::external::store::relational::metamodel::datatype::*;
 import meta::pure::executionPlan::engine::java::*;
 import meta::pure::graphFetch::execution::*;
 import meta::pure::milestoning::*;
 import meta::alloy::service::metamodel::*;
 import meta::pure::runtime::*;
 import meta::pure::mapping::*;
-import meta::relational::mapping::*;
-import meta::relational::testDataGeneration::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
-import meta::relational::metamodel::join::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::metamodel::operation::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::testDataGeneration::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::metamodel::operation::*;
 import meta::pure::lineage::scanRelations::*;
-import meta::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
 
 
-Class meta::relational::testDataGeneration::TableRowIdentifiers
+Class meta::external::store::relational::testDataGeneration::TableRowIdentifiers
 {
    table : Table[1];
    rowIdentifiers : RowIdentifier[*]; // Identifier of one row (can be the primary key) in the table.
 }
 
-Class meta::relational::testDataGeneration::RowIdentifier
+Class meta::external::store::relational::testDataGeneration::RowIdentifier
 {
    columnValuePairs : Pair<String, Any>[*]; // Column name and the value
 }
 
 
-Class meta::relational::testDataGeneration::TestDataGenResult
+Class meta::external::store::relational::testDataGeneration::TestDataGenResult
 {
    dataCsvString : String[1];
    relationTree : RelationTree[1];
    sqls : String[*];
 }
 
-Class meta::relational::testDataGeneration::TestDataGenerationConfig
+Class meta::external::store::relational::testDataGeneration::TestDataGenerationConfig
 {
    generateWithDefaultPKs: Boolean[1];
    hashStrings: Boolean[1];
@@ -60,19 +60,19 @@ Class meta::relational::testDataGeneration::TestDataGenerationConfig
    temporalMilestoningDates: TemporalMilestoningDates[0..1];
 }
 
-Class meta::relational::testDataGeneration::TemporalMilestoningDates
+Class meta::external::store::relational::testDataGeneration::TemporalMilestoningDates
 {
    businessDate: Date[0..1];
    processingDate: Date[0..1];
    snapshotDate: Date[0..1];
 }
 
-function meta::relational::testDataGeneration::createTableRowIdentifiers(database: Database[1], schema: String[1], table: String[1], identifiers: RowIdentifier[*]):TableRowIdentifiers[1]
+function meta::external::store::relational::testDataGeneration::createTableRowIdentifiers(database: Database[1], schema: String[1], table: String[1], identifiers: RowIdentifier[*]):TableRowIdentifiers[1]
 {
    createTableRowIdentifiers(getTable($database, $schema, $table), $identifiers);
 }
 
-function meta::relational::testDataGeneration::createTableRowIdentifiers(table: Table[1], identifiers: RowIdentifier[*]):TableRowIdentifiers[1]
+function meta::external::store::relational::testDataGeneration::createTableRowIdentifiers(table: Table[1], identifiers: RowIdentifier[*]):TableRowIdentifiers[1]
 {
    $identifiers->map({i | 
       $i.columnValuePairs->map({cv | 
@@ -83,110 +83,110 @@ function meta::relational::testDataGeneration::createTableRowIdentifiers(table: 
    ^TableRowIdentifiers(table = $table, rowIdentifiers = $identifiers);
 }
 
-function meta::relational::testDataGeneration::getTable(database: Database[1], schema: String[1], table: String[1]):Table[1]
+function meta::external::store::relational::testDataGeneration::getTable(database: Database[1], schema: String[1], table: String[1]):Table[1]
 {
    $database.schema($schema)->toOne().table($table)->toOne()
 }
 
-function meta::relational::testDataGeneration::createRowIdentifier(columnNames: String[*], columnValues: Any[*]):RowIdentifier[1]
+function meta::external::store::relational::testDataGeneration::createRowIdentifier(columnNames: String[*], columnValues: Any[*]):RowIdentifier[1]
 {
    assert($columnNames->size() == $columnValues->size(), 'Column Names and Values should be lists of same size');
    ^RowIdentifier(columnValuePairs = $columnNames->zip($columnValues));
 }
 
-function meta::relational::testDataGeneration::createTemporalMilestoningDates(businessDate: Date[0..1], processingDate: Date[0..1], snapshotDate: Date[0..1]):TemporalMilestoningDates[1]
+function meta::external::store::relational::testDataGeneration::createTemporalMilestoningDates(businessDate: Date[0..1], processingDate: Date[0..1], snapshotDate: Date[0..1]):TemporalMilestoningDates[1]
 {
    ^TemporalMilestoningDates(businessDate = $businessDate, processingDate = $processingDate, snapshotDate = $snapshotDate);
 }
 
-function meta::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], rowIdentifiers: TableRowIdentifiers[*], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], rowIdentifiers: TableRowIdentifiers[*], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestData($func, $mapping, $runtime, [], $rowIdentifiers, $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], rowIdentifiers: TableRowIdentifiers[*], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], rowIdentifiers: TableRowIdentifiers[*], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestData($func, $mapping, $runtime, $parameters, ^ExecutionContext(), $rowIdentifiers, $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestData($func, $mapping, $runtime, [], $rowIdentifiers, $hashStrings, $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestData($func, $mapping, $runtime, $parameters, ^ExecutionContext(), $rowIdentifiers, $hashStrings, $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestData($func, $mapping, $runtime, [], $exeCtx, $rowIdentifiers, $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestData($func, $mapping, $runtime, $parameters, $exeCtx, ^TestDataGenerationConfig(rowIdentifiers=$rowIdentifiers,  generateWithDefaultPKs=false, hashStrings=false), $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestData($func, $mapping, $runtime, [], $exeCtx, $rowIdentifiers, $hashStrings, $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestData($func, $mapping, $runtime, $parameters, $exeCtx, ^TestDataGenerationConfig(rowIdentifiers=$rowIdentifiers,  generateWithDefaultPKs=false, hashStrings=$hashStrings), $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], temporalMilestoningDates: TemporalMilestoningDates[0..1], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], temporalMilestoningDates: TemporalMilestoningDates[0..1], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestData($func, $mapping, $runtime, [], $exeCtx, $rowIdentifiers, $hashStrings, $temporalMilestoningDates, $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], temporalMilestoningDates: TemporalMilestoningDates[0..1], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], temporalMilestoningDates: TemporalMilestoningDates[0..1], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestData($func, $mapping, $runtime, $parameters, $exeCtx, ^TestDataGenerationConfig(rowIdentifiers=$rowIdentifiers,  generateWithDefaultPKs=false, hashStrings=$hashStrings, temporalMilestoningDates=$temporalMilestoningDates), $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestDataWithDefaultPKs(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestDataWithDefaultPKs(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestDataWithDefaultPKs($func, $mapping, $runtime, [], $exeCtx, $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestDataWithDefaultPKs(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], exeCtx: ExecutionContext[1], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestDataWithDefaultPKs(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], exeCtx: ExecutionContext[1], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestData($func, $mapping, $runtime, $parameters, $exeCtx, ^TestDataGenerationConfig(rowIdentifiers=[],  generateWithDefaultPKs=true, hashStrings=false), $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestDataWithDefaultPKs(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], hashStrings: Boolean[1], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestDataWithDefaultPKs(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], hashStrings: Boolean[1], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestDataWithDefaultPKs($func, $mapping, $runtime, [], $exeCtx, $hashStrings, $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestDataWithDefaultPKs(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], exeCtx: ExecutionContext[1], hashStrings: Boolean[1], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestDataWithDefaultPKs(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], exeCtx: ExecutionContext[1], hashStrings: Boolean[1], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestData($func, $mapping, $runtime, $parameters, $exeCtx, ^TestDataGenerationConfig(rowIdentifiers=[],  generateWithDefaultPKs=true, hashStrings=$hashStrings), $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestDataWithDefaultPKs(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], hashStrings: Boolean[1], temporalMilestoningDates: TemporalMilestoningDates[0..1], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestDataWithDefaultPKs(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], hashStrings: Boolean[1], temporalMilestoningDates: TemporalMilestoningDates[0..1], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestDataWithDefaultPKs($func, $mapping, $runtime, [], $exeCtx, $hashStrings, $temporalMilestoningDates, $extensions);
 }
 
-function meta::relational::testDataGeneration::generateTestDataWithDefaultPKs(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], exeCtx: ExecutionContext[1], hashStrings: Boolean[1], temporalMilestoningDates: TemporalMilestoningDates[0..1], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestDataWithDefaultPKs(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], exeCtx: ExecutionContext[1], hashStrings: Boolean[1], temporalMilestoningDates: TemporalMilestoningDates[0..1], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    generateTestData($func, $mapping, $runtime, $parameters, $exeCtx, ^TestDataGenerationConfig(rowIdentifiers=[],  generateWithDefaultPKs=true, hashStrings=$hashStrings, temporalMilestoningDates=$temporalMilestoningDates), $extensions);
 }
    
-function meta::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], exeCtx: ExecutionContext[1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):TestDataGenResult[1]
+function meta::external::store::relational::testDataGeneration::generateTestData(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], parameters:Any[*], exeCtx: ExecutionContext[1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):TestDataGenResult[1]
 {
    let newVars = $func->generateParametersNameValuePair($parameters);
    let relationTree = if($func->functionReturnType().rawType->toOne()->_subTypeOf(TabularDataSet), | scanRelations($func, $mapping, $runtime, $newVars, $extensions),| scanRelations($func, $mapping, $extensions));
    let dbConnection = $runtime.connections->filter(c|$c->instanceOf(DatabaseConnection))->toOne()->cast(@DatabaseConnection);
    let relationColumnMap = $relationTree->generateRelationColumnMap(^Map<NamedRelation, List<Column>>());
 
-   let generationResult = meta::relational::testDataGeneration::generateTestDataStartingFromRoot($relationTree, $runtime, $exeCtx, $dbConnection, $relationColumnMap, $config, $extensions);
+   let generationResult = meta::external::store::relational::testDataGeneration::generateTestDataStartingFromRoot($relationTree, $runtime, $exeCtx, $dbConnection, $relationColumnMap, $config, $extensions);
    let sqls = $generationResult.second.values;
    let pairs = $generationResult.first.values->filter(x | $x.first->instanceOf(Table));
 
@@ -211,7 +211,7 @@ function meta::relational::testDataGeneration::generateTestData(func:FunctionDef
    );
 }
 
-function meta::relational::testDataGeneration::generateSeedDataString(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], parameters: Any[*], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::testDataGeneration::generateSeedDataString(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], parameters: Any[*], extensions:RouterExtension[*]):String[1]
 {  
    let newVars = $func->generateParametersNameValuePair($parameters);
    let relationTree = if($func->functionReturnType().rawType->toOne()->_subTypeOf(TabularDataSet), | scanRelations($func, $mapping, $runtime, $newVars, $extensions),| scanRelations($func, $mapping, $extensions));
@@ -223,20 +223,20 @@ function meta::relational::testDataGeneration::generateSeedDataString(func:Funct
    let seedGenerationFunction = $func->generateSeedDataGenerationFunction($mainTable, $newVars);
    let result = execute($seedGenerationFunction, $mapping, $runtime, $extensions);
    
-   '\nmeta::relational::testDataGeneration::createTableRowIdentifiers('+$mainTable.schema.database->elementToPath()+', \''+$mainTable.schema.name->toOne()+'\', \''+$mainTable.name+'\', '+
-   '[\n'+$result.values->at(0).rows->map(r|'       meta::relational::testDataGeneration::createRowIdentifier(['+$mainTable.primaryKey->map(c|$c.name)->map(c|'\''+$c+'\'')->joinStrings(',')+'], ['+$r.values->map(c|$c->toRepresentation())->makeString(',')+'])')->sort()->joinStrings(',\n')+'\n  ])\n';
+   '\nmeta::external::store::relational::testDataGeneration::createTableRowIdentifiers('+$mainTable.schema.database->elementToPath()+', \''+$mainTable.schema.name->toOne()+'\', \''+$mainTable.name+'\', '+
+   '[\n'+$result.values->at(0).rows->map(r|'       meta::external::store::relational::testDataGeneration::createRowIdentifier(['+$mainTable.primaryKey->map(c|$c.name)->map(c|'\''+$c+'\'')->joinStrings(',')+'], ['+$r.values->map(c|$c->toRepresentation())->makeString(',')+'])')->sort()->joinStrings(',\n')+'\n  ])\n';
 }
 
-function meta::relational::testDataGeneration::generateParametersNameValuePair(func: FunctionDefinition<Any>[1], parameters: Any[*]):Pair<String, List<Any>>[*]
+function meta::external::store::relational::testDataGeneration::generateParametersNameValuePair(func: FunctionDefinition<Any>[1], parameters: Any[*]):Pair<String, List<Any>>[*]
 {
    let params = $func->functionType().parameters->evaluateAndDeactivate();
    assertEquals($params->size(), $parameters->size(), | 'Missing some values/Extra values provided for parameters ['+$params.name->joinStrings(', ')+']');
    let newVars = $params->size()->range()->map(i | pair($params->at($i).name, list(if($params->at($i).genericType.rawType->toOne()->_subTypeOf(Date) && $parameters->at($i)->instanceOf(String), | $parameters->at($i)->cast(@String)->parseDate(), | $parameters->at($i)))));
 }
 
-function <<access.protected>> meta::relational::testDataGeneration::generateSeedDataGenerationFunction(func: FunctionDefinition<Any>[1], mainRelation: NamedRelation[1], newVars: Pair<String, List<Any>>[*]):LambdaFunction<{->RelationData[1]}>[1]
+function <<access.protected>> meta::external::store::relational::testDataGeneration::generateSeedDataGenerationFunction(func: FunctionDefinition<Any>[1], mainRelation: NamedRelation[1], newVars: Pair<String, List<Any>>[*]):LambdaFunction<{->RelationData[1]}>[1]
 {
-   let expressionSequence = $func.expressionSequence->evaluateAndDeactivate()->map(x | $x->meta::relational::validation::functions::resolveVars($func->openVariableValues()->putAll($newVars)));
+   let expressionSequence = $func.expressionSequence->evaluateAndDeactivate()->map(x | $x->meta::external::store::relational::validation::functions::resolveVars($func->openVariableValues()->putAll($newVars)));
    
    let exprSize = $expressionSequence->size();
    let lastExpression = $expressionSequence->last()->toOne();
@@ -254,9 +254,9 @@ function <<access.protected>> meta::relational::testDataGeneration::generateSeed
 
    let wrappedLast = ^SimpleFunctionExpression
                       (
-                         func = meta::relational::functions::columnProjectionsFromRoot_Any_MANY__NamedRelation_1__String_MANY__Boolean_$0_1$__Integer_$0_1$__RelationData_1_,
+                         func = meta::external::store::relational::functions::columnProjectionsFromRoot_Any_MANY__NamedRelation_1__String_MANY__Boolean_$0_1$__Integer_$0_1$__RelationData_1_,
                          multiplicity = PureOne,
-                         genericType = ^GenericType(rawType = meta::relational::metamodel::RelationData),
+                         genericType = ^GenericType(rawType = meta::external::store::relational::metamodel::RelationData),
                          parametersValues = [
                             $lastExpressionWithSerializeRemoved,
                             ^InstanceValue(genericType=^GenericType(rawType=Table), multiplicity=PureOne, values=$updatedMainTable),
@@ -270,14 +270,14 @@ function <<access.protected>> meta::relational::testDataGeneration::generateSeed
    ^LambdaFunction<{->RelationData[1]}>(expressionSequence=$expressionSequence->take($exprSize - 1)->concatenate($wrappedLast)->toOneMany());
 }
 
-function meta::relational::testDataGeneration::generateTestDataStartingFromRoot(relationTree: RelationTree[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], relationColumnMap: Map<NamedRelation, List<Column>>[1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):Pair<List<Pair<NamedRelation, ResultSet>>, List<String>>[*]
+function meta::external::store::relational::testDataGeneration::generateTestDataStartingFromRoot(relationTree: RelationTree[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], relationColumnMap: Map<NamedRelation, List<Column>>[1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):Pair<List<Pair<NamedRelation, ResultSet>>, List<String>>[*]
 {
    assert($relationTree.root == true, 'Should start with a table tree starting from a \'root\'');
    let childrenTrees = $relationTree.children;
 
    $childrenTrees->map({tree |
       if($tree.isView(),
-         |  let nestedResult = meta::relational::testDataGeneration::generateTestDataForNestedViewTree($tree, $runtime, $exeCtx, $dbConnection, $relationColumnMap, $config, $extensions);
+         |  let nestedResult = meta::external::store::relational::testDataGeneration::generateTestDataForNestedViewTree($tree, $runtime, $exeCtx, $dbConnection, $relationColumnMap, $config, $extensions);
             let viewResult = $nestedResult.first.values->at(0);
             let childResults = $tree->generateTestDataStartingFromNode($viewResult.second, $runtime, $exeCtx, $dbConnection, $relationColumnMap, $config, $extensions);
 
@@ -298,13 +298,13 @@ function meta::relational::testDataGeneration::generateTestDataStartingFromRoot(
                ),
                filteringOperation = $pks->map({onePk |
                   let columnValues = $onePk.columnValuePairs;
-                  $columnValues->map(cv | ^DynaFunction(name = 'equal', parameters=[^TableAliasColumn(alias=$rootAlias, column=$table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()), ^Literal(value=parseDateIfRequired($cv.second, $table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()))]))->meta::relational::functions::pureToSqlQuery::andFilters($extensions);
-               })->meta::relational::functions::pureToSqlQuery::orFilters($extensions)
+                  $columnValues->map(cv | ^DynaFunction(name = 'equal', parameters=[^TableAliasColumn(alias=$rootAlias, column=$table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()), ^Literal(value=parseDateIfRequired($cv.second, $table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()))]))->meta::external::store::relational::functions::pureToSqlQuery::andFilters($extensions);
+               })->meta::external::store::relational::functions::pureToSqlQuery::orFilters($extensions)
             );
-            let milestoningFilter = meta::relational::testDataGeneration::getMilestoningFilter($table, $rootAlias, $config, $extensions);
+            let milestoningFilter = meta::external::store::relational::testDataGeneration::getMilestoningFilter($table, $rootAlias, $config, $extensions);
             let rootSelect = if($milestoningFilter->isEmpty(),
                                 | $rootSelect_PreMilestoning,
-                                | ^$rootSelect_PreMilestoning(filteringOperation = $rootSelect_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::relational::functions::pureToSqlQuery::andFilters($extensions))
+                                | ^$rootSelect_PreMilestoning(filteringOperation = $rootSelect_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::external::store::relational::functions::pureToSqlQuery::andFilters($extensions))
                              );
 
             let rootSql = postProcessQuery($exeCtx, $rootSelect, $runtime, ^Database(name='default'), $extensions).query->sqlQueryToStringPretty($dbConnection.type, $dbConnection.timeZone, $dbConnection.quoteIdentifiers, $extensions);
@@ -317,7 +317,7 @@ function meta::relational::testDataGeneration::generateTestDataStartingFromRoot(
    });
 }
 
-function meta::relational::testDataGeneration::generateTestDataForNestedViewTree(relationTree: RelationTree[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], relationColumnMap: Map<NamedRelation, List<Column>>[1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):Pair<List<Pair<NamedRelation, ResultSet>>, List<String>>[*]
+function meta::external::store::relational::testDataGeneration::generateTestDataForNestedViewTree(relationTree: RelationTree[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], relationColumnMap: Map<NamedRelation, List<Column>>[1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):Pair<List<Pair<NamedRelation, ResultSet>>, List<String>>[*]
 {
    let view = $relationTree.view;
    let mainRelation = $view.mainRelation;
@@ -336,13 +336,13 @@ function meta::relational::testDataGeneration::generateTestDataForNestedViewTree
             ),
             filteringOperation = $pks->map({onePk |
                let columnValues = $onePk.columnValuePairs;
-               $columnValues->map(cv | ^DynaFunction(name = 'equal', parameters=[^TableAliasColumn(alias=$rootAlias, column=$table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()), ^Literal(value=parseDateIfRequired($cv.second, $table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()))]))->meta::relational::functions::pureToSqlQuery::andFilters($extensions);
-            })->meta::relational::functions::pureToSqlQuery::orFilters($extensions)
+               $columnValues->map(cv | ^DynaFunction(name = 'equal', parameters=[^TableAliasColumn(alias=$rootAlias, column=$table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()), ^Literal(value=parseDateIfRequired($cv.second, $table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()))]))->meta::external::store::relational::functions::pureToSqlQuery::andFilters($extensions);
+            })->meta::external::store::relational::functions::pureToSqlQuery::orFilters($extensions)
          );
-         let milestoningFilter = meta::relational::testDataGeneration::getMilestoningFilter($table, $rootAlias, $config, $extensions);
+         let milestoningFilter = meta::external::store::relational::testDataGeneration::getMilestoningFilter($table, $rootAlias, $config, $extensions);
          let rootSelect = if($milestoningFilter->isEmpty(),
                              | $rootSelect_PreMilestoning,
-                             | ^$rootSelect_PreMilestoning(filteringOperation = $rootSelect_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::relational::functions::pureToSqlQuery::andFilters($extensions))
+                             | ^$rootSelect_PreMilestoning(filteringOperation = $rootSelect_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::external::store::relational::functions::pureToSqlQuery::andFilters($extensions))
                           );
 
          let rootSql = postProcessQuery($exeCtx, $rootSelect, $runtime, ^Database(name='default'), $extensions).query->sqlQueryToStringPretty($dbConnection.type, $dbConnection.timeZone, $dbConnection.quoteIdentifiers, $extensions);
@@ -356,7 +356,7 @@ function meta::relational::testDataGeneration::generateTestDataForNestedViewTree
       },
 
       {v : View[1] |
-         let nestedResult = meta::relational::testDataGeneration::generateTestDataForNestedViewTree($relationTree.nestedViewTree.children->toOne(), $runtime, $exeCtx, $dbConnection, $relationColumnMap, $config, $extensions);
+         let nestedResult = meta::external::store::relational::testDataGeneration::generateTestDataForNestedViewTree($relationTree.nestedViewTree.children->toOne(), $runtime, $exeCtx, $dbConnection, $relationColumnMap, $config, $extensions);
          let viewResult = $nestedResult.first.values->at(0);
          let childResults = $relationTree.nestedViewTree.children->toOne()->generateTestDataStartingFromNode($viewResult.second, $runtime, $exeCtx, $dbConnection, $relationColumnMap, $config, $extensions);
 
@@ -370,7 +370,7 @@ function meta::relational::testDataGeneration::generateTestDataForNestedViewTree
    $tableResults->size()->range()->map({id |
       let tr = $tableResults->at($id);
       let tempName = 'testDataGen_Temp_' + $tr.first.name->toOne() + '_' + $id->toString();
-      createTempTable($tempName, $tr.first.columns->cast(@Column), meta::relational::testDataGeneration::createTempTableStatement(), true, $dbConnection);
+      createTempTable($tempName, $tr.first.columns->cast(@Column), meta::external::store::relational::testDataGeneration::createTempTableStatement(), true, $dbConnection);
       if($tr.second.rows->isNotEmpty(),
          |let insert = insertIntoTempTableStatement()->eval($tempName, $tr.second.columnNames, $tr.second.rows->toOneMany(), $dbConnection.type);
           executeInDb($insert, $dbConnection);,
@@ -383,9 +383,9 @@ function meta::relational::testDataGeneration::generateTestDataForNestedViewTree
       pair($tr.first->cast(@Table), ^Table(name=$tempName, schema=^Schema(name='default', database=^Database(name='default')), temporaryTable=true));
    });
 
-   let pure2SqlState = meta::relational::functions::pureToSqlQuery::defaultState(^Mapping(), ^Map<String, List<Any>>());
-   let viewQuery = meta::relational::functions::pureToSqlQuery::processRelationalMappingSpecification($relationTree.view, [], '', true, -1, true, [], $pure2SqlState, noDebug(), $extensions);
-   let viewQueryReprocessed = $viewQuery.select->meta::relational::postProcessor::fixTables($oldToNew)->cast(@SelectSQLQuery);
+   let pure2SqlState = meta::external::store::relational::functions::pureToSqlQuery::defaultState(^Mapping(), ^Map<String, List<Any>>());
+   let viewQuery = meta::external::store::relational::functions::pureToSqlQuery::processRelationalMappingSpecification($relationTree.view, [], '', true, -1, true, [], $pure2SqlState, noDebug(), $extensions);
+   let viewQueryReprocessed = $viewQuery.select->meta::external::store::relational::postProcessor::fixTables($oldToNew)->cast(@SelectSQLQuery);
    let viewSql = postProcessQuery($exeCtx, $viewQueryReprocessed, $runtime, ^Database(name='default'), $extensions).query->sqlQueryToStringPretty($dbConnection.type, $dbConnection.timeZone, $dbConnection.quoteIdentifiers, $extensions);
    let viewResult = executeInDb($viewSql, $dbConnection);
 
@@ -398,7 +398,7 @@ function meta::relational::testDataGeneration::generateTestDataForNestedViewTree
    pair(list(pair($relationTree.view, $viewResult)->concatenate($initialResults.first.values)), list($initialResults.second.values->concatenate($viewSql)));
 }
 
-function meta::relational::testDataGeneration::generateTestDataStartingFromNode(relationTree: RelationTree[1], nodeResult: ResultSet[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], relationColumnMap: Map<NamedRelation, List<Column>>[1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):Pair<List<Pair<NamedRelation, ResultSet>>, List<String>>[*]
+function meta::external::store::relational::testDataGeneration::generateTestDataStartingFromNode(relationTree: RelationTree[1], nodeResult: ResultSet[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], relationColumnMap: Map<NamedRelation, List<Column>>[1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):Pair<List<Pair<NamedRelation, ResultSet>>, List<String>>[*]
 {
    let root = $relationTree.relation->cast(@NamedRelation)->toOne();
    let newPairs = $relationTree.children->map({child |
@@ -418,7 +418,7 @@ function meta::relational::testDataGeneration::generateTestDataStartingFromNode(
          |  let childTable = $child.table->toOne();
 
             let tempName = 'testDataGen_Temp_' + $root.name;
-            createTempTable($tempName, if($root->instanceOf(Table), | $root.columns->cast(@Column), | $root.columns->cast(@Column)->map(x | ^$x(type = $root->cast(@View).columnMappings->filter(cm|$cm.columnName==$x.name)->toOne().relationalOperationElement->meta::relational::functions::typeInference::inferRelationalType()->toOne()))), meta::relational::testDataGeneration::createTempTableStatement(), true, $dbConnection);
+            createTempTable($tempName, if($root->instanceOf(Table), | $root.columns->cast(@Column), | $root.columns->cast(@Column)->map(x | ^$x(type = $root->cast(@View).columnMappings->filter(cm|$cm.columnName==$x.name)->toOne().relationalOperationElement->meta::external::store::relational::functions::typeInference::inferRelationalType()->toOne()))), meta::external::store::relational::testDataGeneration::createTempTableStatement(), true, $dbConnection);
             if($nodeResult.rows->isNotEmpty(),
                | let insert = insertIntoTempTableStatement()->eval($tempName, $nodeResult.columnNames, $nodeResult.rows->toOneMany(), $dbConnection.type);
                  executeInDb($insert, $dbConnection);,
@@ -439,14 +439,14 @@ function meta::relational::testDataGeneration::generateTestDataStartingFromNode(
                      joinName = 'gen_join',
                      joinType = JoinType.INNER,
                      database = ^Database(name='default'),
-                     join = ^Join(name='gen_join', operation=$join.operation->meta::relational::functions::pureToSqlQuery::reprocessAliases([^meta::relational::functions::pureToSqlQuery::OldAliasToNewAlias(first=$root.name, second=$mainAlias)])->cast(@Operation))
+                     join = ^Join(name='gen_join', operation=$join.operation->meta::external::store::relational::functions::pureToSqlQuery::reprocessAliases([^meta::external::store::relational::functions::pureToSqlQuery::OldAliasToNewAlias(first=$root.name, second=$mainAlias)])->cast(@Operation))
                   )
                )
             );
-            let milestoningFilter = meta::relational::testDataGeneration::getMilestoningFilter($childTable, $relatedAlias, $config, $extensions);
+            let milestoningFilter = meta::external::store::relational::testDataGeneration::getMilestoningFilter($childTable, $relatedAlias, $config, $extensions);
             let childSQL = if($milestoningFilter->isEmpty(),
                               | $childSQL_PreMilestoning,
-                              | ^$childSQL_PreMilestoning(filteringOperation = $childSQL_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::relational::functions::pureToSqlQuery::andFilters($extensions))
+                              | ^$childSQL_PreMilestoning(filteringOperation = $childSQL_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::external::store::relational::functions::pureToSqlQuery::andFilters($extensions))
                            );
                                               
             let childSQLQueryProcessed = postProcessQuery($exeCtx, $childSQL, $runtime, ^Database(name='default'), $extensions).query->sqlQueryToStringPretty($dbConnection.type, $dbConnection.timeZone, $dbConnection.quoteIdentifiers, $extensions);
@@ -460,7 +460,7 @@ function meta::relational::testDataGeneration::generateTestDataStartingFromNode(
    });
 }
 
-function <<access.protected>> meta::relational::testDataGeneration::getRowIdentifiersForTable(rowIdentifiers: TableRowIdentifiers[*], table: Table[1], generateWithDefaultPKs: Boolean[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], isViewRoot: Boolean[1], view: View[0..1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):RowIdentifier[*]
+function <<access.protected>> meta::external::store::relational::testDataGeneration::getRowIdentifiersForTable(rowIdentifiers: TableRowIdentifiers[*], table: Table[1], generateWithDefaultPKs: Boolean[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], isViewRoot: Boolean[1], view: View[0..1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):RowIdentifier[*]
 {
    let tablePk = $rowIdentifiers->filter(t | $t.table == $table);
    if($tablePk->size() == 1,
@@ -476,20 +476,20 @@ function <<access.protected>> meta::relational::testDataGeneration::getRowIdenti
               alias = $mainAlias
            )
         );
-        let milestoningFilter = meta::relational::testDataGeneration::getMilestoningFilter($table, $mainAlias, $config, $extensions);
+        let milestoningFilter = meta::external::store::relational::testDataGeneration::getMilestoningFilter($table, $mainAlias, $config, $extensions);
         let childSQL = if($milestoningFilter->isEmpty(),
                           | $childSQL_PreMilestoning,
-                          | ^$childSQL_PreMilestoning(filteringOperation = $childSQL_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::relational::functions::pureToSqlQuery::andFilters($extensions))
+                          | ^$childSQL_PreMilestoning(filteringOperation = $childSQL_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::external::store::relational::functions::pureToSqlQuery::andFilters($extensions))
                        );
 
         let childSQLQueryProcessed = postProcessQuery($exeCtx, $childSQL, $runtime, ^Database(name='default'), $extensions).query->sqlQueryToStringPretty($dbConnection.type, $dbConnection.timeZone, $dbConnection.quoteIdentifiers, $extensions);
         let childResult = executeInDb($childSQLQueryProcessed, $dbConnection);
 
-        let sampleCode =  '  meta::relational::testDataGeneration::createTableRowIdentifiers('+$table.schema.database->elementToPath()+', \''+$table.schema.name->toOne()+'\', \''+$table.name+'\', '+
-                          '[\n'+$childResult.rows->map(r|'       meta::relational::testDataGeneration::createRowIdentifier(['+$table.primaryKey->map(c|$c.name)->map(c|'\''+$c+'\'')->joinStrings(',')+'], ['+$r.values->map(c|$c->toRepresentation())->makeString(',')+'])')->joinStrings(',\n')+'\n  ])\n';
+        let sampleCode =  '  meta::external::store::relational::testDataGeneration::createTableRowIdentifiers('+$table.schema.database->elementToPath()+', \''+$table.schema.name->toOne()+'\', \''+$table.name+'\', '+
+                          '[\n'+$childResult.rows->map(r|'       meta::external::store::relational::testDataGeneration::createRowIdentifier(['+$table.primaryKey->map(c|$c.name)->map(c|'\''+$c+'\'')->joinStrings(',')+'], ['+$r.values->map(c|$c->toRepresentation())->makeString(',')+'])')->joinStrings(',\n')+'\n  ])\n';
 
         assert($generateWithDefaultPKs,
-               | 'Row Identifers should be provided for the root table' + if($isViewRoot,|' of the view (' + $view->toOne().name + ')',|'') + ': ' + $table.schema.database->elementToPath()+'.'+$table->getQualifiedTableName()+' ['+$table.primaryKey->map(c|$c.name+':'+$c.type->meta::relational::metamodel::datatype::dataTypeToSqlText())->joinStrings(',')+']\n'+
+               | 'Row Identifers should be provided for the root table' + if($isViewRoot,|' of the view (' + $view->toOne().name + ')',|'') + ': ' + $table.schema.database->elementToPath()+'.'+$table->getQualifiedTableName()+' ['+$table.primaryKey->map(c|$c.name+':'+$c.type->meta::external::store::relational::metamodel::datatype::dataTypeToSqlText())->joinStrings(',')+']\n'+
                  'Example:\n' + $sampleCode;);
 
         let cs = $sampleCode->compileValueSpecification();
@@ -498,19 +498,19 @@ function <<access.protected>> meta::relational::testDataGeneration::getRowIdenti
    );
 }
 
-function <<access.protected>> meta::relational::testDataGeneration::getRowIdentifiersForChildViewRoot(rowIdentifiers: TableRowIdentifiers[*], root: NamedRelation[1], nodeResult: ResultSet[1], join:Join[1], generateWithDefaultPKs: Boolean[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], view: View[1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):RowIdentifier[*]
+function <<access.protected>> meta::external::store::relational::testDataGeneration::getRowIdentifiersForChildViewRoot(rowIdentifiers: TableRowIdentifiers[*], root: NamedRelation[1], nodeResult: ResultSet[1], join:Join[1], generateWithDefaultPKs: Boolean[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], view: View[1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):RowIdentifier[*]
 {
    let viewMainTable = $view->findMainTableForView();
    let tempName = 'testDataGen_Temp_' + $root.name;
-   createTempTable($tempName, if($root->instanceOf(Table), | $root.columns->cast(@Column), | $root.columns->cast(@Column)->map(x | ^$x(type = $root->cast(@View).columnMappings->filter(cm|$cm.columnName==$x.name)->toOne().relationalOperationElement->meta::relational::functions::typeInference::inferRelationalType()->toOne()))), meta::relational::testDataGeneration::createTempTableStatement(), true, $dbConnection);
+   createTempTable($tempName, if($root->instanceOf(Table), | $root.columns->cast(@Column), | $root.columns->cast(@Column)->map(x | ^$x(type = $root->cast(@View).columnMappings->filter(cm|$cm.columnName==$x.name)->toOne().relationalOperationElement->meta::external::store::relational::functions::typeInference::inferRelationalType()->toOne()))), meta::external::store::relational::testDataGeneration::createTempTableStatement(), true, $dbConnection);
    if($nodeResult.rows->isNotEmpty(),
       | let insert = insertIntoTempTableStatement()->eval($tempName, $nodeResult.columnNames, $nodeResult.rows->toOneMany(), $dbConnection.type);
         executeInDb($insert, $dbConnection);,
       | []
    );
    let mainAlias = ^TableAlias(name = 'main', relationalElement=^Table(name=$tempName, columns=$root.columns, temporaryTable=true, schema=^Schema(name='default', database=^Database(name='default'))));
-   let pure2SqlState = meta::relational::functions::pureToSqlQuery::defaultState(^Mapping(), ^Map<String, List<Any>>());
-   let viewQuery = meta::relational::functions::pureToSqlQuery::processRelationalMappingSpecification($view, [], '', true, -1, true, [], $pure2SqlState, noDebug(), $extensions).select;
+   let pure2SqlState = meta::external::store::relational::functions::pureToSqlQuery::defaultState(^Mapping(), ^Map<String, List<Any>>());
+   let viewQuery = meta::external::store::relational::functions::pureToSqlQuery::processRelationalMappingSpecification($view, [], '', true, -1, true, [], $pure2SqlState, noDebug(), $extensions).select;
    let viewQueryWithPKs = $viewQuery->recursiveAddPksWithMilestoning($viewMainTable, $config, $extensions);
    let relatedAlias = ^TableAlias(name = $view.name, relationalElement=$viewQueryWithPKs);
 
@@ -525,7 +525,7 @@ function <<access.protected>> meta::relational::testDataGeneration::getRowIdenti
             joinName = 'gen_join',
             joinType = JoinType.INNER,
             database = ^Database(name='default'),
-            join = ^Join(name='gen_join', operation=$join.operation->meta::relational::functions::pureToSqlQuery::reprocessAliases([^meta::relational::functions::pureToSqlQuery::OldAliasToNewAlias(first=$root.name, second=$mainAlias)])->cast(@Operation))
+            join = ^Join(name='gen_join', operation=$join.operation->meta::external::store::relational::functions::pureToSqlQuery::reprocessAliases([^meta::external::store::relational::functions::pureToSqlQuery::OldAliasToNewAlias(first=$root.name, second=$mainAlias)])->cast(@Operation))
          )
       )
    );
@@ -533,11 +533,11 @@ function <<access.protected>> meta::relational::testDataGeneration::getRowIdenti
    let childResult = executeInDb($childSQLQueryProcessed, $dbConnection);
    dropTempTable($tempName, $dbConnection);
 
-   let sampleCode =  '  meta::relational::testDataGeneration::createTableRowIdentifiers('+$viewMainTable.schema.database->elementToPath()+', \''+$viewMainTable.schema.name->toOne()+'\', \''+$viewMainTable.name+'\', '+
-                     '[\n'+$childResult.rows->map(r|'       meta::relational::testDataGeneration::createRowIdentifier(['+$viewMainTable.primaryKey->map(c|$c.name)->map(c|'\''+$c+'\'')->joinStrings(',')+'], ['+$r.values->map(c|$c->toRepresentation())->makeString(',')+'])')->joinStrings(',\n')+'\n  ])\n';
+   let sampleCode =  '  meta::external::store::relational::testDataGeneration::createTableRowIdentifiers('+$viewMainTable.schema.database->elementToPath()+', \''+$viewMainTable.schema.name->toOne()+'\', \''+$viewMainTable.name+'\', '+
+                     '[\n'+$childResult.rows->map(r|'       meta::external::store::relational::testDataGeneration::createRowIdentifier(['+$viewMainTable.primaryKey->map(c|$c.name)->map(c|'\''+$c+'\'')->joinStrings(',')+'], ['+$r.values->map(c|$c->toRepresentation())->makeString(',')+'])')->joinStrings(',\n')+'\n  ])\n';
 
    assert($generateWithDefaultPKs,
-               | 'Row Identifers should be provided for the root table of the view (' + $view->toOne().name + '): ' + $viewMainTable.schema.database->elementToPath()+'.'+$viewMainTable->getQualifiedTableName()+' ['+$viewMainTable.primaryKey->map(c|$c.name+':'+$c.type->meta::relational::metamodel::datatype::dataTypeToSqlText())->joinStrings(',')+']\n'+
+               | 'Row Identifers should be provided for the root table of the view (' + $view->toOne().name + '): ' + $viewMainTable.schema.database->elementToPath()+'.'+$viewMainTable->getQualifiedTableName()+' ['+$viewMainTable.primaryKey->map(c|$c.name+':'+$c.type->meta::external::store::relational::metamodel::datatype::dataTypeToSqlText())->joinStrings(',')+']\n'+
                  'Example:\n' + $sampleCode;);
 
    let cs = $sampleCode->compileValueSpecification();
@@ -545,7 +545,7 @@ function <<access.protected>> meta::relational::testDataGeneration::getRowIdenti
    $cs.result->toOne()->reactivate()->cast(@TableRowIdentifiers)->toOne().rowIdentifiers;
 }
 
-function <<access.protected>> meta::relational::testDataGeneration::generateRelationColumnMap(t: RelationTree[1], current: Map<NamedRelation, List<Column>>[1]):Map<NamedRelation, List<Column>>[1]
+function <<access.protected>> meta::external::store::relational::testDataGeneration::generateRelationColumnMap(t: RelationTree[1], current: Map<NamedRelation, List<Column>>[1]):Map<NamedRelation, List<Column>>[1]
 {
    let mapWithCurrent = if($t.relation->isNotEmpty(),
       | if($current->keys()->contains($t.relation->toOne()),
@@ -562,7 +562,7 @@ function <<access.protected>> meta::relational::testDataGeneration::generateRela
    $t.children->concatenate($t.nestedViewTree)->fold({child, aggregate | $child->generateRelationColumnMap($aggregate)}, $mapWithCurrent);
 }
 
-function <<access.protected>> meta::relational::testDataGeneration::findMainTableForView(v: View[1]):Table[1]
+function <<access.protected>> meta::external::store::relational::testDataGeneration::findMainTableForView(v: View[1]):Table[1]
 {
    $v.mainRelation->match([
       t: Table[1] | $t,
@@ -570,7 +570,7 @@ function <<access.protected>> meta::relational::testDataGeneration::findMainTabl
    ])
 }
 
-function <<access.protected>> meta::relational::testDataGeneration::recursiveAddPksWithMilestoning(selectSQL: SelectSQLQuery[1], mainTable: Table[1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):SelectSQLQuery[1]
+function <<access.protected>> meta::external::store::relational::testDataGeneration::recursiveAddPksWithMilestoning(selectSQL: SelectSQLQuery[1], mainTable: Table[1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):SelectSQLQuery[1]
 {
    let rootData = $selectSQL.data->toOne();
    let rootAlias = $rootData.alias;
@@ -581,10 +581,10 @@ function <<access.protected>> meta::relational::testDataGeneration::recursiveAdd
                     let select_PreMilestoning = ^$selectSQL(columns = $selectSQL.columns->concatenate($mainTable.primaryKey->map(k | ^Alias(relationalElement = ^TableAliasColumn(alias = $rootAlias, column = $k), name = 'root_pk_gen_' + $k.name))),
                                                             groupBy = if($selectSQL.groupBy->isEmpty(), | [], | $selectSQL.groupBy->concatenate($mainTable.primaryKey->map(k | ^TableAliasColumn(alias = $rootAlias, column = $k)))));
 
-                    let milestoningFilter = meta::relational::testDataGeneration::getMilestoningFilter($t, $rootAlias, $config, $extensions);
+                    let milestoningFilter = meta::external::store::relational::testDataGeneration::getMilestoningFilter($t, $rootAlias, $config, $extensions);
                     let select = if($milestoningFilter->isEmpty(),
                                     | $select_PreMilestoning,
-                                    | ^$select_PreMilestoning(filteringOperation = $select_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::relational::functions::pureToSqlQuery::andFilters($extensions))
+                                    | ^$select_PreMilestoning(filteringOperation = $select_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::external::store::relational::functions::pureToSqlQuery::andFilters($extensions))
                     );,
       s: SelectSQLQuery[1] | ^$selectSQL(columns = $selectSQL.columns->concatenate($mainTable.primaryKey->map(k | ^Alias(relationalElement = ^TableAliasColumn(alias = $rootAlias, column = ^$k(name = 'root_pk_gen_' + $k.name)), name = 'root_pk_gen_' + $k.name))),
                                          groupBy = if($selectSQL.groupBy->isEmpty(), | [], | $selectSQL.groupBy->concatenate($mainTable.primaryKey->map(k | ^TableAliasColumn(alias = $rootAlias, column = ^$k(name = 'root_pk_gen_' + $k.name))))),
@@ -592,12 +592,12 @@ function <<access.protected>> meta::relational::testDataGeneration::recursiveAdd
    ]);
 }
 
-function <<access.protected>> meta::relational::testDataGeneration::getQualifiedTableName(t: Table[1]):String[1]
+function <<access.protected>> meta::external::store::relational::testDataGeneration::getQualifiedTableName(t: Table[1]):String[1]
 {
   if($t.schema.name == 'default', | '', | $t.schema.name + '.') + $t.name->toOne()
 }
 
-function <<access.private>> meta::relational::testDataGeneration::getColumnSortedResultSet(data: ResultSet[1]):ResultSet[1]
+function <<access.private>> meta::external::store::relational::testDataGeneration::getColumnSortedResultSet(data: ResultSet[1]):ResultSet[1]
 {
    let columns = $data.columnNames;
    let sortedColumns = $columns->sort();
@@ -608,19 +608,19 @@ function <<access.private>> meta::relational::testDataGeneration::getColumnSorte
    );
 }
 
-function <<access.private>> meta::relational::testDataGeneration::getResultCSV(data: ResultSet[1]):String[1]
+function <<access.private>> meta::external::store::relational::testDataGeneration::getResultCSV(data: ResultSet[1]):String[1]
 {
    $data.columnNames->joinStrings(',') + '\n' +
-   $data.rows->map(r | $r.values->map(v |$v->meta::csv::toCSVString()->replace('\'',' ')->replace(',',';'))->joinStrings(',')->replace('\n', ' '))->joinStrings('', '\n', '\n')->replace('SQLNull', '---null---')->replace('\n','\n');
+   $data.rows->map(r | $r.values->map(v |$v->meta::external::store::relational::tests::csv::toCSVString()->replace('\'',' ')->replace(',',';'))->joinStrings(',')->replace('\n', ' '))->joinStrings('', '\n', '\n')->replace('SQLNull', '---null---')->replace('\n','\n');
 }
 
-function <<access.private>> meta::relational::testDataGeneration::getResultCSVWithStringHashing(data: ResultSet[1]):String[1]
+function <<access.private>> meta::external::store::relational::testDataGeneration::getResultCSVWithStringHashing(data: ResultSet[1]):String[1]
 {
    $data.columnNames->joinStrings(',') + '\n' +
-   $data.rows->map(r | $r.values->hashStrings()->map(v |$v->meta::csv::toCSVString()->replace('\'',' ')->replace(',',';'))->joinStrings(',')->replace('\n', ' '))->joinStrings('', '\n', '\n')->replace('SQLNull', '---null---')->replace('\n','\n');
+   $data.rows->map(r | $r.values->hashStrings()->map(v |$v->meta::external::store::relational::tests::csv::toCSVString()->replace('\'',' ')->replace(',',';'))->joinStrings(',')->replace('\n', ' '))->joinStrings('', '\n', '\n')->replace('SQLNull', '---null---')->replace('\n','\n');
 }
 
-function meta::relational::testDataGeneration::hashStrings(values: Any[*]):Any[*]
+function meta::external::store::relational::testDataGeneration::hashStrings(values: Any[*]):Any[*]
 {
    $values->map({val |
       $val->match([
@@ -630,7 +630,7 @@ function meta::relational::testDataGeneration::hashStrings(values: Any[*]):Any[*
    })
 }
 
-function  meta::relational::testDataGeneration::hashString(s: String[1]):String[1]
+function  meta::external::store::relational::testDataGeneration::hashString(s: String[1]):String[1]
 {
    let strLength = $s->length();
    let sha256 = $s->meta::pure::functions::hash::hash(meta::pure::functions::hash::HashType.SHA256)->substring(0, 5);
@@ -639,7 +639,7 @@ function  meta::relational::testDataGeneration::hashString(s: String[1]):String[
    floor($div)->range()->map(i | $sha256)->joinStrings() + $sha256->substring($shaLength - ($strLength-(floor($div)*$shaLength)), $shaLength);
 }
 
-function <<access.private>> meta::relational::testDataGeneration::convertValuesToCsv(values: Any[*]):String[1]
+function <<access.private>> meta::external::store::relational::testDataGeneration::convertValuesToCsv(values: Any[*]):String[1]
 {
    let stringToken = $values->map(any | $any->match([
       s:String[1] | '\'' + $s->replace('\'', '\'\'') + '\'';,
@@ -651,12 +651,12 @@ function <<access.private>> meta::relational::testDataGeneration::convertValuesT
    ]))->joinStrings(',');
 }
 
-function <<access.private>> meta::relational::testDataGeneration::createTempTableStatement() : meta::pure::metamodel::function::Function<{String[1], Column[*], DatabaseType[1]->String[1]}>[1]
+function <<access.private>> meta::external::store::relational::testDataGeneration::createTempTableStatement() : meta::pure::metamodel::function::Function<{String[1], Column[*], DatabaseType[1]->String[1]}>[1]
 {
    {ttName:String[1], cols: Column[*], dbType: DatabaseType[1]|
       let colsAsString = $cols->map({c |
-         let sqlType    = meta::relational::metamodel::datatype::dataTypeToSqlText($c.type);
-         let nullSuffix = if ([DatabaseType.Sybase, DatabaseType.SybaseIQ]->contains($dbType) && $c.type->instanceOf(meta::relational::metamodel::datatype::Bit),
+         let sqlType    = meta::external::store::relational::metamodel::datatype::dataTypeToSqlText($c.type);
+         let nullSuffix = if ([DatabaseType.Sybase, DatabaseType.SybaseIQ]->contains($dbType) && $c.type->instanceOf(meta::external::store::relational::metamodel::datatype::Bit),
                               | ' NULL',
                               | ''
                           );
@@ -673,7 +673,7 @@ function <<access.private>> meta::relational::testDataGeneration::createTempTabl
    }
 }
 
-function <<access.private>> meta::relational::testDataGeneration::insertIntoTempTableStatement() : meta::pure::metamodel::function::Function<{String[1], String[*], Row[1..*], DatabaseType[1]->String[1]}>[1]
+function <<access.private>> meta::external::store::relational::testDataGeneration::insertIntoTempTableStatement() : meta::pure::metamodel::function::Function<{String[1], String[*], Row[1..*], DatabaseType[1]->String[1]}>[1]
 {
   {ttName:String[1], cols: String[*], rows: Row[*], dbType: DatabaseType[1]|
 
@@ -682,18 +682,18 @@ function <<access.private>> meta::relational::testDataGeneration::insertIntoTemp
   }
 }
 
-function <<access.protected>> meta::relational::testDataGeneration::addQuotesIfNoQuotes(aliasName:String[1]):String[1]
+function <<access.protected>> meta::external::store::relational::testDataGeneration::addQuotesIfNoQuotes(aliasName:String[1]):String[1]
 {
    if($aliasName->startsWith('"'), | $aliasName, | '"'+$aliasName+'"');
 }
 
-function <<access.protected>> meta::relational::testDataGeneration::parseDateIfRequired(value:Any[1], c:Column[1]):Any[1]
+function <<access.protected>> meta::external::store::relational::testDataGeneration::parseDateIfRequired(value:Any[1], c:Column[1]):Any[1]
 {
-   if(($c.type->instanceOf(meta::relational::metamodel::datatype::Date) || $c.type->instanceOf(meta::relational::metamodel::datatype::Timestamp)) && $value->instanceOf(String),|parseDate($value->cast(@String)),|$value)
+   if(($c.type->instanceOf(meta::external::store::relational::metamodel::datatype::Date) || $c.type->instanceOf(meta::external::store::relational::metamodel::datatype::Timestamp)) && $value->instanceOf(String),|parseDate($value->cast(@String)),|$value)
 }
 
 
-function meta::relational::testDataGeneration::getMilestoningFilter(table: Table[1], alias: TableAlias[1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):RelationalOperationElement[0..1]
+function meta::external::store::relational::testDataGeneration::getMilestoningFilter(table: Table[1], alias: TableAlias[1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):RelationalOperationElement[0..1]
 {
    if($config.temporalMilestoningDates->isEmpty(),
       | [],
@@ -708,12 +708,12 @@ function meta::relational::testDataGeneration::getMilestoningFilter(table: Table
 
         let milestoningStrategyAndContext = if($tableMilestoning->size() == 1,
                                                | $tableMilestoning->toOne()->match([
-                                                    bus  : BusinessMilestoning[1]   | pair($businessTemporalStrategy, ^meta::relational::milestoning::TemporalMilestoningContext(businessDate = ^Literal(value = $extractDate->eval($table->cast(@Table), 'BusinessMilestoning', 'businessDate', $config.temporalMilestoningDates.businessDate)), currentMilestoningStrategy = $businessTemporalStrategy)),
-                                                    proc : ProcessingMilestoning[1] | pair($processingTemporalStrategy, ^meta::relational::milestoning::TemporalMilestoningContext(processingDate = ^Literal(value = $extractDate->eval($table->cast(@Table), 'ProcessingMilestoning', 'processingDate', $config.temporalMilestoningDates.processingDate)), currentMilestoningStrategy = $processingTemporalStrategy)),
-                                                    snap : BusinessSnapshotMilestoning[1] | pair($businessTemporalStrategy, ^meta::relational::milestoning::TemporalMilestoningContext(businessDate = ^Literal(value = $extractDate->eval($table->cast(@Table), 'BusinessSnapshotMilestoning', 'snapshotDate', $config.temporalMilestoningDates.snapshotDate)), currentMilestoningStrategy = $businessTemporalStrategy))
+                                                    bus  : BusinessMilestoning[1]   | pair($businessTemporalStrategy, ^meta::external::store::relational::milestoning::TemporalMilestoningContext(businessDate = ^Literal(value = $extractDate->eval($table->cast(@Table), 'BusinessMilestoning', 'businessDate', $config.temporalMilestoningDates.businessDate)), currentMilestoningStrategy = $businessTemporalStrategy)),
+                                                    proc : ProcessingMilestoning[1] | pair($processingTemporalStrategy, ^meta::external::store::relational::milestoning::TemporalMilestoningContext(processingDate = ^Literal(value = $extractDate->eval($table->cast(@Table), 'ProcessingMilestoning', 'processingDate', $config.temporalMilestoningDates.processingDate)), currentMilestoningStrategy = $processingTemporalStrategy)),
+                                                    snap : BusinessSnapshotMilestoning[1] | pair($businessTemporalStrategy, ^meta::external::store::relational::milestoning::TemporalMilestoningContext(businessDate = ^Literal(value = $extractDate->eval($table->cast(@Table), 'BusinessSnapshotMilestoning', 'snapshotDate', $config.temporalMilestoningDates.snapshotDate)), currentMilestoningStrategy = $businessTemporalStrategy))
                                                  ]),
                                                | if($tableMilestoning->size() == 2 && $tableMilestoning->exists(s | $s->instanceOf(BusinessMilestoning)) && $tableMilestoning->exists(s | $s->instanceOf(ProcessingMilestoning)),
-                                                    | pair($biTemporalStrategy, ^meta::relational::milestoning::TemporalMilestoningContext(businessDate = ^Literal(value = $extractDate->eval($table->cast(@Table), 'BusinessMilestoning', 'businessDate', $config.temporalMilestoningDates.businessDate)), processingDate = ^Literal(value = $extractDate->eval($table->cast(@Table), 'ProcessingMilestoning', 'processingDate', $config.temporalMilestoningDates.processingDate)), currentMilestoningStrategy = $biTemporalStrategy)),
+                                                    | pair($biTemporalStrategy, ^meta::external::store::relational::milestoning::TemporalMilestoningContext(businessDate = ^Literal(value = $extractDate->eval($table->cast(@Table), 'BusinessMilestoning', 'businessDate', $config.temporalMilestoningDates.businessDate)), processingDate = ^Literal(value = $extractDate->eval($table->cast(@Table), 'ProcessingMilestoning', 'processingDate', $config.temporalMilestoningDates.processingDate)), currentMilestoningStrategy = $biTemporalStrategy)),
                                                     | []
                                                  );
                                             );
@@ -722,7 +722,7 @@ function meta::relational::testDataGeneration::getMilestoningFilter(table: Table
            | let strategy = $milestoningStrategyAndContext->toOne().first;
              let context = $milestoningStrategyAndContext->toOne().second;
              let select = ^SelectSQLQuery(data = ^RootJoinTreeNode(alias = $alias));
-             meta::relational::milestoning::getAllMilestonedTableFilter($strategy, $select, $context, ^Map<String, List<Any>>(), $extensions)->eval($alias);
+             meta::external::store::relational::milestoning::getAllMilestonedTableFilter($strategy, $select, $context, ^Map<String, List<Any>>(), $extensions)->eval($alias);
         );
    )
 }
@@ -737,21 +737,21 @@ import meta::pure::graphFetch::execution::*;
 import meta::alloy::service::metamodel::*;
 import meta::pure::runtime::*;
 import meta::pure::mapping::*;
-import meta::pure::store::*;
-import meta::relational::mapping::*;
-import meta::relational::testDataGeneration::*;
-import meta::relational::testDataGeneration::executionPlan::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
-import meta::relational::translation::*;
-import meta::relational::metamodel::join::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::metamodel::operation::*;
+import meta::pure::store::metamodel::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::testDataGeneration::*;
+import meta::external::store::relational::testDataGeneration::executionPlan::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::translation::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::metamodel::operation::*;
 import meta::pure::lineage::scanRelations::*;
-import meta::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
 
-function meta::relational::testDataGeneration::executionPlan::planSeedDataGeneration(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], parameters: Any[*], extensions:RouterExtension[*]):ExecutionPlan[1]
+function meta::external::store::relational::testDataGeneration::executionPlan::planSeedDataGeneration(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], parameters: Any[*], extensions:RouterExtension[*]):ExecutionPlan[1]
 {
    let newVars = $func->generateParametersNameValuePair($parameters);
    
@@ -765,17 +765,17 @@ function meta::relational::testDataGeneration::executionPlan::planSeedDataGenera
    executionPlan($seedGenerationFunction, $mapping, $runtime, $extensions);
 }
 
-function meta::relational::testDataGeneration::executionPlan::planTestDataGeneration(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], extensions:RouterExtension[*]):ExecutionPlan[1]
+function meta::external::store::relational::testDataGeneration::executionPlan::planTestDataGeneration(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], extensions:RouterExtension[*]):ExecutionPlan[1]
 {
    planTestDataGeneration($func, $mapping, $runtime, $exeCtx, $rowIdentifiers, $hashStrings, [], $extensions);
 }
 
-function meta::relational::testDataGeneration::executionPlan::planTestDataGeneration(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], temporalMilestoningDates: TemporalMilestoningDates[0..1], extensions:RouterExtension[*]):ExecutionPlan[1]
+function meta::external::store::relational::testDataGeneration::executionPlan::planTestDataGeneration(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], temporalMilestoningDates: TemporalMilestoningDates[0..1], extensions:RouterExtension[*]):ExecutionPlan[1]
 {
    planTestDataGeneration($func, $mapping, $runtime, $exeCtx, $rowIdentifiers, $hashStrings, $temporalMilestoningDates, [], $extensions);
 }
 
-function meta::relational::testDataGeneration::executionPlan::planTestDataGeneration(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], temporalMilestoningDates: TemporalMilestoningDates[0..1], parameters:Any[*], extensions:RouterExtension[*]):ExecutionPlan[1]
+function meta::external::store::relational::testDataGeneration::executionPlan::planTestDataGeneration(func:FunctionDefinition<Any>[1], mapping:Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], rowIdentifiers: TableRowIdentifiers[*], hashStrings: Boolean[1], temporalMilestoningDates: TemporalMilestoningDates[0..1], parameters:Any[*], extensions:RouterExtension[*]):ExecutionPlan[1]
 {
    let newVars = $func->generateParametersNameValuePair($parameters);
    let relationTree = if($func->functionReturnType().rawType->toOne()->_subTypeOf(TabularDataSet), | scanRelations($func, $mapping, $runtime, $newVars, $extensions),| scanRelations($func, $mapping, $extensions));
@@ -784,7 +784,7 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
 
    let relationColumnMap = $relationTree->generateRelationColumnMap(^Map<NamedRelation, List<Column>>());
 
-   let node = meta::relational::testDataGeneration::executionPlan::planTestDataGeneration($relationTree, $runtime, $exeCtx, $updatedDbConnection, $relationColumnMap, [], ^TestDataGenerationConfig(rowIdentifiers=$rowIdentifiers,  generateWithDefaultPKs=false, hashStrings=$hashStrings, temporalMilestoningDates=$temporalMilestoningDates), $extensions);
+   let node = meta::external::store::relational::testDataGeneration::executionPlan::planTestDataGeneration($relationTree, $runtime, $exeCtx, $updatedDbConnection, $relationColumnMap, [], ^TestDataGenerationConfig(rowIdentifiers=$rowIdentifiers,  generateWithDefaultPKs=false, hashStrings=$hashStrings, temporalMilestoningDates=$temporalMilestoningDates), $extensions);
    ^ExecutionPlan
    (
       func = $func,
@@ -797,7 +797,7 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
    );
 }
 
-function meta::relational::testDataGeneration::executionPlan::planTestDataGeneration(relationTree: RelationTree[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], relationColumnMap: Map<NamedRelation, List<Column>>[1], indices: String[*], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):ExecutionNode[1]
+function meta::external::store::relational::testDataGeneration::executionPlan::planTestDataGeneration(relationTree: RelationTree[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], relationColumnMap: Map<NamedRelation, List<Column>>[1], indices: String[*], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):ExecutionNode[1]
 {
    assert($relationTree.root == true, 'Should start with a relation tree starting from a \'root\'');
    let childrenTrees = $relationTree.children;
@@ -806,7 +806,7 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
       let currentIndices = $indices->add('c' + $i->toString());
       let tree = $childrenTrees->at($i);
       if($tree.isView(),
-         |  let nestedNodes = meta::relational::testDataGeneration::executionPlan::planTestDataGenerationForNestedViewTree($tree, $runtime, $exeCtx, $dbConnection, $relationColumnMap, $currentIndices, true, [], $config, $extensions);
+         |  let nestedNodes = meta::external::store::relational::testDataGeneration::executionPlan::planTestDataGenerationForNestedViewTree($tree, $runtime, $exeCtx, $dbConnection, $relationColumnMap, $currentIndices, true, [], $config, $extensions);
             if($nestedNodes->exists(x | $x->instanceOf(ErrorExecutionNode)),
                | $nestedNodes,
                | let viewResultVarName = 'res_' + $currentIndices->map(x | $x->toString())->joinStrings('_');
@@ -832,13 +832,13 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
                      ),
                      filteringOperation = $pks->map({onePk |
                         let columnValues = $onePk.columnValuePairs;
-                        $columnValues->map(cv | ^DynaFunction(name = 'equal', parameters=[^TableAliasColumn(alias=$rootAlias, column=$table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()), ^Literal(value=parseDateIfRequired($cv.second, $table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()))]))->meta::relational::functions::pureToSqlQuery::andFilters($extensions);
-                     })->meta::relational::functions::pureToSqlQuery::orFilters($extensions)
+                        $columnValues->map(cv | ^DynaFunction(name = 'equal', parameters=[^TableAliasColumn(alias=$rootAlias, column=$table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()), ^Literal(value=parseDateIfRequired($cv.second, $table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()))]))->meta::external::store::relational::functions::pureToSqlQuery::andFilters($extensions);
+                     })->meta::external::store::relational::functions::pureToSqlQuery::orFilters($extensions)
                   );
-                  let milestoningFilter = meta::relational::testDataGeneration::getMilestoningFilter($table, $rootAlias, $config, $extensions);
+                  let milestoningFilter = meta::external::store::relational::testDataGeneration::getMilestoningFilter($table, $rootAlias, $config, $extensions);
                   let rootSelect = if($milestoningFilter->isEmpty(),
                                       | $rootSelect_PreMilestoning,
-                                      | ^$rootSelect_PreMilestoning(filteringOperation = $rootSelect_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::relational::functions::pureToSqlQuery::andFilters($extensions))
+                                      | ^$rootSelect_PreMilestoning(filteringOperation = $rootSelect_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::external::store::relational::functions::pureToSqlQuery::andFilters($extensions))
                                    );
 
                   let runtime = ^Runtime(connections=$dbConnection);
@@ -853,7 +853,7 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
                                        relationType = $relationDataQuery.relation->instanceOf(View)->if(|RelationType.VIEW,|RelationType.TABLE),
                                        schemaName = $relationDataQuery.relation->match([t:Table[1]|$t.schema,v:View[1]|$v.schema])->cast(@Schema).name,
                                        database = $relationDataQuery.relation->match([t:Table[1]|$t.schema,v:View[1]|$v.schema])->cast(@Schema).database->elementToPath(),
-                                       columns = $relationDataQuery.columns->cast(@Alias)->map(x | ^Column(name = $x.name, type=$x.relationalElement->meta::relational::functions::typeInference::inferRelationalType(^TranslationContext(dbType=$dbConnection.type))->toOne())),
+                                       columns = $relationDataQuery.columns->cast(@Alias)->map(x | ^Column(name = $x.name, type=$x.relationalElement->meta::external::store::relational::functions::typeInference::inferRelationalType(^TranslationContext(dbType=$dbConnection.type))->toOne())),
                                        type = RelationData
                                     );
                   let relationalNode = ^RelationalRelationDataInstantiationExecutionNode(executionNodes = generateSQLExecutionNode($relationDataQuery, $dbConnection, $extensions), resultType = $resultType, resultSizeRange = ZeroMany);
@@ -883,7 +883,7 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
    );
 }
 
-function meta::relational::testDataGeneration::executionPlan::planTestDataGenerationStartingFromNode(relationTree: RelationTree[1], nodeResPlaceHolder: String[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], relationColumnMap: Map<NamedRelation, List<Column>>[1], indices: String[*], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):ExecutionNode[*]
+function meta::external::store::relational::testDataGeneration::executionPlan::planTestDataGenerationStartingFromNode(relationTree: RelationTree[1], nodeResPlaceHolder: String[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], relationColumnMap: Map<NamedRelation, List<Column>>[1], indices: String[*], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):ExecutionNode[*]
 {
    let root = $relationTree.relation->cast(@NamedRelation)->toOne();
    let newPairs = $relationTree.children->size()->range()->map({i |
@@ -892,7 +892,7 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
       let join = $child.join->toOne();
       if($child.isView(),
          |
-           let nestedNodes = meta::relational::testDataGeneration::executionPlan::planTestDataGenerationForNestedViewTree($child, $runtime, $exeCtx, $dbConnection, $relationColumnMap, $currentIndices, false, $nodeResPlaceHolder, $config, $extensions);
+           let nestedNodes = meta::external::store::relational::testDataGeneration::executionPlan::planTestDataGenerationForNestedViewTree($child, $runtime, $exeCtx, $dbConnection, $relationColumnMap, $currentIndices, false, $nodeResPlaceHolder, $config, $extensions);
            if($nestedNodes->exists(x | $x->instanceOf(ErrorExecutionNode)),
               | $nestedNodes,
               | let viewResultVarName = 'res_' + $currentIndices->map(x | $x->toString())->joinStrings('_');
@@ -902,7 +902,7 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
 
          |
             let childTable = $child.table->toOne();
-            let varPlaceHolder = ^meta::relational::functions::pureToSqlQuery::metamodel::VarSetPlaceHolder(varName=$nodeResPlaceHolder);
+            let varPlaceHolder = ^meta::external::store::relational::functions::pureToSqlQuery::metamodel::VarSetPlaceHolder(varName=$nodeResPlaceHolder);
             let rootSel = ^SelectSQLQuery(data=^RootJoinTreeNode(alias = ^TableAlias(name = 'root', relationalElement = $varPlaceHolder)));
             let mainAlias = ^TableAlias(name = 'root', relationalElement = $rootSel);
             let relatedAlias = ^TableAlias(name = if($childTable == $root, | 't_', | '') + $childTable.name, relationalElement=$childTable);
@@ -920,14 +920,14 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
                      joinName = 'gen_join',
                      joinType = JoinType.INNER,
                      database = ^Database(name='default'),
-                     join = ^Join(name='gen_join', operation=$join.operation->meta::relational::functions::pureToSqlQuery::reprocessAliases([^meta::relational::functions::pureToSqlQuery::OldAliasToNewAlias(first=$root.name, second=$mainAlias)])->quoteVarPlaceHolderTableAliasColumnsIfNotQuouted()->cast(@Operation))
+                     join = ^Join(name='gen_join', operation=$join.operation->meta::external::store::relational::functions::pureToSqlQuery::reprocessAliases([^meta::external::store::relational::functions::pureToSqlQuery::OldAliasToNewAlias(first=$root.name, second=$mainAlias)])->quoteVarPlaceHolderTableAliasColumnsIfNotQuouted()->cast(@Operation))
                   )
                )
             );
-            let milestoningFilter = meta::relational::testDataGeneration::getMilestoningFilter($childTable, $relatedAlias, $config, $extensions);
+            let milestoningFilter = meta::external::store::relational::testDataGeneration::getMilestoningFilter($childTable, $relatedAlias, $config, $extensions);
             let childSQL = if($milestoningFilter->isEmpty(),
                               | $childSQL_PreMilestoning,
-                              | ^$childSQL_PreMilestoning(filteringOperation = $childSQL_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::relational::functions::pureToSqlQuery::andFilters($extensions))
+                              | ^$childSQL_PreMilestoning(filteringOperation = $childSQL_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::external::store::relational::functions::pureToSqlQuery::andFilters($extensions))
                            );
 
             let runtime = ^Runtime(connections=$dbConnection);
@@ -940,7 +940,7 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
                                  relationType = $relationDataQuery.relation->instanceOf(View)->if(|RelationType.VIEW,|RelationType.TABLE),
                                  schemaName = $relationDataQuery.relation->match([t:Table[1]|$t.schema,v:View[1]|$v.schema])->cast(@Schema).name,
                                  database = $relationDataQuery.relation->match([t:Table[1]|$t.schema,v:View[1]|$v.schema])->cast(@Schema).database->elementToPath(),
-                                 columns = $relationDataQuery.columns->cast(@Alias)->map(x | ^Column(name = $x.name, type=$x.relationalElement->meta::relational::functions::typeInference::inferRelationalType(^TranslationContext(dbType=$dbConnection.type))->toOne())),
+                                 columns = $relationDataQuery.columns->cast(@Alias)->map(x | ^Column(name = $x.name, type=$x.relationalElement->meta::external::store::relational::functions::typeInference::inferRelationalType(^TranslationContext(dbType=$dbConnection.type))->toOne())),
                                  type = RelationData
                               );
             let relationalNode = ^RelationalRelationDataInstantiationExecutionNode(executionNodes = generateSQLExecutionNode($relationDataQuery, $dbConnection, $extensions), resultType = $resultType, resultSizeRange = ZeroMany);
@@ -964,7 +964,7 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
    });
 }
 
-function meta::relational::testDataGeneration::executionPlan::planTestDataGenerationForNestedViewTree(relationTree: RelationTree[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], relationColumnMap: Map<NamedRelation, List<Column>>[1], indices: String[*], root: Boolean[1], parentResPlaceHolder: String[0..1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):ExecutionNode[*]
+function meta::external::store::relational::testDataGeneration::executionPlan::planTestDataGenerationForNestedViewTree(relationTree: RelationTree[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], relationColumnMap: Map<NamedRelation, List<Column>>[1], indices: String[*], root: Boolean[1], parentResPlaceHolder: String[0..1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):ExecutionNode[*]
 {
    let view = $relationTree.view;
    let mainRelation = $view.mainRelation;
@@ -997,12 +997,12 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
                            ),
                            filteringOperation = $pks->map({onePk |
                               let columnValues = $onePk.columnValuePairs;
-                              $columnValues->map(cv | ^DynaFunction(name = 'equal', parameters=[^TableAliasColumn(alias=$rootAlias, column=$table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()), ^Literal(value=parseDateIfRequired($cv.second, $table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()))]))->meta::relational::functions::pureToSqlQuery::andFilters($extensions);
-                           })->meta::relational::functions::pureToSqlQuery::orFilters($extensions)
+                              $columnValues->map(cv | ^DynaFunction(name = 'equal', parameters=[^TableAliasColumn(alias=$rootAlias, column=$table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()), ^Literal(value=parseDateIfRequired($cv.second, $table.columns->cast(@Column)->filter(x|$x.name==$cv.first)->toOne()))]))->meta::external::store::relational::functions::pureToSqlQuery::andFilters($extensions);
+                           })->meta::external::store::relational::functions::pureToSqlQuery::orFilters($extensions)
                         );,
-                      | let mainAlias = ^TableAlias(name = 'main', relationalElement=^SelectSQLQuery(data=^RootJoinTreeNode(alias=^TableAlias(name='root', relationalElement=^meta::relational::functions::pureToSqlQuery::metamodel::VarSetPlaceHolder(varName=$parentResPlaceHolder->toOne())))));
-                        let pure2SqlState = meta::relational::functions::pureToSqlQuery::defaultState(^Mapping(), ^Map<String, List<Any>>());
-                        let viewQuery = meta::relational::functions::pureToSqlQuery::processRelationalMappingSpecification($view, [], '', true, -1, true, [], $pure2SqlState, noDebug(), $extensions).select;
+                      | let mainAlias = ^TableAlias(name = 'main', relationalElement=^SelectSQLQuery(data=^RootJoinTreeNode(alias=^TableAlias(name='root', relationalElement=^meta::external::store::relational::functions::pureToSqlQuery::metamodel::VarSetPlaceHolder(varName=$parentResPlaceHolder->toOne())))));
+                        let pure2SqlState = meta::external::store::relational::functions::pureToSqlQuery::defaultState(^Mapping(), ^Map<String, List<Any>>());
+                        let viewQuery = meta::external::store::relational::functions::pureToSqlQuery::processRelationalMappingSpecification($view, [], '', true, -1, true, [], $pure2SqlState, noDebug(), $extensions).select;
                         let viewQueryWithPKs = $viewQuery->recursiveAddPksWithMilestoning($table, $config, $extensions);
                         let relatedAlias = ^TableAlias(name = $view.name, relationalElement=$viewQueryWithPKs);
                         
@@ -1017,7 +1017,7 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
                                  joinName = 'gen_join',
                                  joinType = JoinType.INNER,
                                  database = ^Database(name='default'),
-                                 join = ^Join(name='gen_join', operation=$relationTree.join->toOne().operation->meta::relational::functions::pureToSqlQuery::reprocessAliases([^meta::relational::functions::pureToSqlQuery::OldAliasToNewAlias(first=$relationTree.join->toOne().otherTable($relationTree.relation->toOne()).name->toOne(), second=$mainAlias),^meta::relational::functions::pureToSqlQuery::OldAliasToNewAlias(first=$relationTree.relation.name->toOne(), second=$relatedAlias)])->quoteVarPlaceHolderTableAliasColumnsIfNotQuouted()->cast(@Operation))
+                                 join = ^Join(name='gen_join', operation=$relationTree.join->toOne().operation->meta::external::store::relational::functions::pureToSqlQuery::reprocessAliases([^meta::external::store::relational::functions::pureToSqlQuery::OldAliasToNewAlias(first=$relationTree.join->toOne().otherTable($relationTree.relation->toOne()).name->toOne(), second=$mainAlias),^meta::external::store::relational::functions::pureToSqlQuery::OldAliasToNewAlias(first=$relationTree.relation.name->toOne(), second=$relatedAlias)])->quoteVarPlaceHolderTableAliasColumnsIfNotQuouted()->cast(@Operation))
                               )
                            )
                         );
@@ -1039,16 +1039,16 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
                                  database = ^Database(name='default'),
                                  join = ^Join(
                                     name = 'gen_join', 
-                                    operation = $table.primaryKey->map(pk | ^DynaFunction(name = 'equal', parameters=[^TableAliasColumn(alias=$driverAlias, column=$pk), ^TableAliasColumn(alias=$rootAlias, column=$pk)]))->meta::relational::functions::pureToSqlQuery::andFilters($extensions)->toOne()->cast(@Operation)
+                                    operation = $table.primaryKey->map(pk | ^DynaFunction(name = 'equal', parameters=[^TableAliasColumn(alias=$driverAlias, column=$pk), ^TableAliasColumn(alias=$rootAlias, column=$pk)]))->meta::external::store::relational::functions::pureToSqlQuery::andFilters($extensions)->toOne()->cast(@Operation)
                               )
                            ))
                         );
                   );
 
-               let milestoningFilter = meta::relational::testDataGeneration::getMilestoningFilter($table, $rootAlias, $config, $extensions);
+               let milestoningFilter = meta::external::store::relational::testDataGeneration::getMilestoningFilter($table, $rootAlias, $config, $extensions);
                let rootSelect = if($milestoningFilter->isEmpty(),
                                    | $rootSelect_PreMilestoning,
-                                   | ^$rootSelect_PreMilestoning(filteringOperation = $rootSelect_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::relational::functions::pureToSqlQuery::andFilters($extensions))
+                                   | ^$rootSelect_PreMilestoning(filteringOperation = $rootSelect_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::external::store::relational::functions::pureToSqlQuery::andFilters($extensions))
                                 );
 
                let runtime = ^Runtime(connections=$dbConnection);
@@ -1062,7 +1062,7 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
                                     relationType = $relationDataQuery.relation->instanceOf(View)->if(|RelationType.VIEW,|RelationType.TABLE),
                                     schemaName = $relationDataQuery.relation->match([t:Table[1]|$t.schema,v:View[1]|$v.schema])->cast(@Schema).name,
                                     database = $relationDataQuery.relation->match([t:Table[1]|$t.schema,v:View[1]|$v.schema])->cast(@Schema).database->elementToPath(),
-                                    columns = $relationDataQuery.columns->cast(@Alias)->map(x | ^Column(name = $x.name, type=$x.relationalElement->meta::relational::functions::typeInference::inferRelationalType($translationContext)->toOne())),
+                                    columns = $relationDataQuery.columns->cast(@Alias)->map(x | ^Column(name = $x.name, type=$x.relationalElement->meta::external::store::relational::functions::typeInference::inferRelationalType($translationContext)->toOne())),
                                     type = RelationData
                                  );
                let relationalNode = ^RelationalRelationDataInstantiationExecutionNode(executionNodes = generateSQLExecutionNode($relationDataQuery, $dbConnection, $extensions), resultType = $resultType, resultSizeRange = ZeroMany);
@@ -1087,7 +1087,7 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
       },
 
       {v : View[1] |
-         let nestedNodes = meta::relational::testDataGeneration::executionPlan::planTestDataGenerationForNestedViewTree($relationTree.nestedViewTree.children->toOne(), $runtime, $exeCtx, $dbConnection,  $relationColumnMap, $currentIndices, $root, $parentResPlaceHolder, $config, $extensions);
+         let nestedNodes = meta::external::store::relational::testDataGeneration::executionPlan::planTestDataGenerationForNestedViewTree($relationTree.nestedViewTree.children->toOne(), $runtime, $exeCtx, $dbConnection,  $relationColumnMap, $currentIndices, $root, $parentResPlaceHolder, $config, $extensions);
          if($nestedNodes->exists(x | $x->instanceOf(ErrorExecutionNode)),
             | $nestedNodes,
             | let viewResultVarName = 'res_' + $currentIndices->map(x | $x->toString())->joinStrings('_');
@@ -1100,13 +1100,13 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
    if($initialNodes->exists(x | $x->instanceOf(ErrorExecutionNode)),
       |  $initialNodes,
       |  let tableOldToNew = $initialNodes->filter(x | $x->instanceOf(AllocationExecutionNode) && $x->cast(@AllocationExecutionNode).resultType->instanceOf(RelationResultType))->cast(@AllocationExecutionNode)
-                            ->filter(x | $x.resultType->cast(@RelationResultType).relationType == RelationType.TABLE)->map(x | pair(^RelationPointer(name=$x.resultType->cast(@RelationResultType).relationName, schemaName=$x.resultType->cast(@RelationResultType).schemaName, database=$x.resultType->cast(@RelationResultType).database), ^SelectSQLQuery(data=^RootJoinTreeNode(alias=^TableAlias(name='root', relationalElement=^meta::relational::functions::pureToSqlQuery::metamodel::VarSetPlaceHolder(varName=$x.varName))))));
-         let pure2SqlState = meta::relational::functions::pureToSqlQuery::defaultState(^Mapping(), ^Map<String, List<Any>>());
-         let viewQuery = meta::relational::functions::pureToSqlQuery::processRelationalMappingSpecification($relationTree.view, [], '', true, -1, true, [], $pure2SqlState, noDebug(), $extensions);
+                            ->filter(x | $x.resultType->cast(@RelationResultType).relationType == RelationType.TABLE)->map(x | pair(^RelationPointer(name=$x.resultType->cast(@RelationResultType).relationName, schemaName=$x.resultType->cast(@RelationResultType).schemaName, database=$x.resultType->cast(@RelationResultType).database), ^SelectSQLQuery(data=^RootJoinTreeNode(alias=^TableAlias(name='root', relationalElement=^meta::external::store::relational::functions::pureToSqlQuery::metamodel::VarSetPlaceHolder(varName=$x.varName))))));
+         let pure2SqlState = meta::external::store::relational::functions::pureToSqlQuery::defaultState(^Mapping(), ^Map<String, List<Any>>());
+         let viewQuery = meta::external::store::relational::functions::pureToSqlQuery::processRelationalMappingSpecification($relationTree.view, [], '', true, -1, true, [], $pure2SqlState, noDebug(), $extensions);
          let viewQueryReprocessed = $viewQuery.select->fixRelations($tableOldToNew)->quoteVarPlaceHolderTableAliasColumnsIfNotQuouted()->cast(@SelectSQLQuery);
          let viewRelationDataQuery = ^RelationDataSelectSqlQuery(
             relation = $relationTree.view,
-            columnSubset = $relationTree.view.columnMappings->map(x | ^Column(name = $x.columnName->addQuotesIfNoQuotes(), type = $x.relationalOperationElement->meta::relational::functions::typeInference::inferRelationalType($translationContext)->toOne())),
+            columnSubset = $relationTree.view.columnMappings->map(x | ^Column(name = $x.columnName->addQuotesIfNoQuotes(), type = $x.relationalOperationElement->meta::external::store::relational::functions::typeInference::inferRelationalType($translationContext)->toOne())),
             columns = $viewQueryReprocessed.columns->cast(@Alias)->map(x | ^$x(name = $x.name->addQuotesIfNoQuotes())),
             distinct = $viewQueryReprocessed.distinct,
             data = $viewQueryReprocessed.data,
@@ -1128,11 +1128,11 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
                               relationType = $relationDataQuery.relation->instanceOf(View)->if(|RelationType.VIEW,|RelationType.TABLE),
                               schemaName = $relationDataQuery.relation->match([t:Table[1]|$t.schema,v:View[1]|$v.schema])->cast(@Schema).name,
                               database = $relationDataQuery.relation->match([t:Table[1]|$t.schema,v:View[1]|$v.schema])->cast(@Schema).database->elementToPath(),
-                              columns = $relationDataQuery.columns->cast(@Alias)->map(x | ^Column(name = $x.name, type=$x.relationalElement->meta::relational::functions::typeInference::inferRelationalType($translationContext)->toOne())),
+                              columns = $relationDataQuery.columns->cast(@Alias)->map(x | ^Column(name = $x.name, type=$x.relationalElement->meta::external::store::relational::functions::typeInference::inferRelationalType($translationContext)->toOne())),
                               type = RelationData
                            );
          let sqlExecutionNode = generateSQLExecutionNode($relationDataQuery, $dbConnection, $extensions)->cast(@SQLExecutionNode);
-         let relationalNode = ^RelationalRelationDataInstantiationExecutionNode(executionNodes = ^$sqlExecutionNode(resultColumns = $relationDataQuery->match([sel:SelectSQLQuery[1] | $sel.columns->map(c| ^SQLResultColumn(label = $c->cast(@Alias).name, dataType = $c->meta::relational::functions::typeInference::inferRelationalType($translationContext)->toOne())), a:Any[1] | []])), resultType = $resultType, resultSizeRange = ZeroMany);
+         let relationalNode = ^RelationalRelationDataInstantiationExecutionNode(executionNodes = ^$sqlExecutionNode(resultColumns = $relationDataQuery->match([sel:SelectSQLQuery[1] | $sel.columns->map(c| ^SQLResultColumn(label = $c->cast(@Alias).name, dataType = $c->meta::external::store::relational::functions::typeInference::inferRelationalType($translationContext)->toOne())), a:Any[1] | []])), resultType = $resultType, resultSizeRange = ZeroMany);
 
          let nodes = $postProcessResult.executionNodes->concatenate($relationalNode)->concatenate($postProcessResult.postExecutionNodes);
          let finalNode = if($nodes->size() > 1,
@@ -1151,7 +1151,7 @@ function meta::relational::testDataGeneration::executionPlan::planTestDataGenera
    );
 }
 
-function <<access.protected>> meta::relational::testDataGeneration::executionPlan::planRowIdentifierExtractionForTable(rowIdentifiers: TableRowIdentifiers[*], table: Table[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], isViewRoot: Boolean[1], view: View[0..1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):Pair<List<RowIdentifier>, List<ExecutionNode>>[1]
+function <<access.protected>> meta::external::store::relational::testDataGeneration::executionPlan::planRowIdentifierExtractionForTable(rowIdentifiers: TableRowIdentifiers[*], table: Table[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], dbConnection: DatabaseConnection[1], isViewRoot: Boolean[1], view: View[0..1], config: TestDataGenerationConfig[1], extensions:RouterExtension[*]):Pair<List<RowIdentifier>, List<ExecutionNode>>[1]
 {
    let tablePk = $rowIdentifiers->filter(t | $t.table == $table);
    if($tablePk->size() == 1,
@@ -1169,10 +1169,10 @@ function <<access.protected>> meta::relational::testDataGeneration::executionPla
               alias = $mainAlias
            )
         );
-        let milestoningFilter = meta::relational::testDataGeneration::getMilestoningFilter($table, $mainAlias, $config, $extensions);
+        let milestoningFilter = meta::external::store::relational::testDataGeneration::getMilestoningFilter($table, $mainAlias, $config, $extensions);
         let childSQL = if($milestoningFilter->isEmpty(),
                           | $childSQL_PreMilestoning,
-                          | ^$childSQL_PreMilestoning(filteringOperation = $childSQL_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::relational::functions::pureToSqlQuery::andFilters($extensions))
+                          | ^$childSQL_PreMilestoning(filteringOperation = $childSQL_PreMilestoning.filteringOperation->concatenate($milestoningFilter)->meta::external::store::relational::functions::pureToSqlQuery::andFilters($extensions))
                        );
          
         let runtime = ^Runtime(connections=$dbConnection);
@@ -1185,7 +1185,7 @@ function <<access.protected>> meta::relational::testDataGeneration::executionPla
                              relationType = $relationDataQuery.relation->instanceOf(View)->if(|RelationType.VIEW,|RelationType.TABLE),
                              schemaName = $relationDataQuery.relation->match([t:Table[1]|$t.schema,v:View[1]|$v.schema])->cast(@Schema).name,
                              database = $relationDataQuery.relation->match([t:Table[1]|$t.schema,v:View[1]|$v.schema])->cast(@Schema).database->elementToPath(),
-                             columns = $relationDataQuery.columns->cast(@Alias)->map(x | ^Column(name = $x.name, type=$x.relationalElement->meta::relational::functions::typeInference::inferRelationalType(^TranslationContext(dbType=$dbConnection.type))->toOne())),
+                             columns = $relationDataQuery.columns->cast(@Alias)->map(x | ^Column(name = $x.name, type=$x.relationalElement->meta::external::store::relational::functions::typeInference::inferRelationalType(^TranslationContext(dbType=$dbConnection.type))->toOne())),
                              type = RelationData
                           );
         let relationalNode = ^RelationalRelationDataInstantiationExecutionNode(executionNodes = generateSQLExecutionNode($relationDataQuery, $dbConnection, $extensions), resultType = $resultType, resultSizeRange = ZeroMany);
@@ -1196,7 +1196,7 @@ function <<access.protected>> meta::relational::testDataGeneration::executionPla
                         );
         let errorNode = ^ErrorExecutionNode
                          (
-                            message = 'Row Identifers should be provided for the root table' + if($isViewRoot,|' of the view (' + $view->toOne().name + ')',|'') + ': ' + $table.schema.database->elementToPath()+'.'+$table->getQualifiedTableName()+' ['+$table.primaryKey->map(c|$c.name+':'+$c.type->meta::relational::metamodel::datatype::dataTypeToSqlText())->joinStrings(',')+']\n',
+                            message = 'Row Identifers should be provided for the root table' + if($isViewRoot,|' of the view (' + $view->toOne().name + ')',|'') + ': ' + $table.schema.database->elementToPath()+'.'+$table->getQualifiedTableName()+' ['+$table.primaryKey->map(c|$c.name+':'+$c.type->meta::external::store::relational::metamodel::datatype::dataTypeToSqlText())->joinStrings(',')+']\n',
                             resultType = ^ResultType(type=Any),
                             executionNodes = $finalNode
                          );
@@ -1204,14 +1204,14 @@ function <<access.protected>> meta::relational::testDataGeneration::executionPla
    );
 }
 
-Class <<access.private>> meta::relational::testDataGeneration::executionPlan::RelationPointer
+Class <<access.private>> meta::external::store::relational::testDataGeneration::executionPlan::RelationPointer
 {
    name: String[1];
    schemaName: String[1];
    database: String[1];
 }
 
-function <<access.private>> meta::relational::testDataGeneration::executionPlan::fixRelations(relationalOperationElement:RelationalOperationElement[1], oldToNewPairs:Pair<RelationPointer, Relation>[*]):RelationalOperationElement[1]
+function <<access.private>> meta::external::store::relational::testDataGeneration::executionPlan::fixRelations(relationalOperationElement:RelationalOperationElement[1], oldToNewPairs:Pair<RelationPointer, Relation>[*]):RelationalOperationElement[1]
 {
    $relationalOperationElement->match([
                     u:Union[1] | ^$u(queries = $u.queries->map(q|$q->fixRelations($oldToNewPairs))->cast(@SelectSQLQuery)),
@@ -1223,7 +1223,7 @@ function <<access.private>> meta::relational::testDataGeneration::executionPlan:
                                                          havingOperation = $s.havingOperation->map(h | $h->fixRelations($oldToNewPairs)),
                                                          orderBy = $s.orderBy->map(o | ^$o(column = $o.column->fixRelations($oldToNewPairs)))
                                                       );
-                                          if(!$newS.leftSideOfFilter->isEmpty(),| ^$newS(leftSideOfFilter=$s.leftSideOfFilter->toOne()->meta::relational::functions::pureToSqlQuery::findOneNode($s.data->toOne(), $newS.data->toOne())),|$newS);,
+                                          if(!$newS.leftSideOfFilter->isEmpty(),| ^$newS(leftSideOfFilter=$s.leftSideOfFilter->toOne()->meta::external::store::relational::functions::pureToSqlQuery::findOneNode($s.data->toOne(), $newS.data->toOne())),|$newS);,
                     v:ViewSelectSQLQuery[1] | ^$v(selectSQLQuery=$v.selectSQLQuery->fixRelations($oldToNewPairs)->cast(@SelectSQLQuery)),
                     a:Alias[1] | ^$a(relationalElement=$a.relationalElement->fixRelations($oldToNewPairs)),
                     t:NamedRelation[1] | let found = $oldToNewPairs->filter(o | $o.first.database == $t->match([v:View[1]|$v.schema, t:Table[1]|$t.schema])->cast(@Schema).database->elementToPath() && $o.first.schemaName == $t->match([v:View[1]|$v.schema, t:Table[1]|$t.schema])->cast(@Schema).name && $o.first.name == $t.name); if ($found->isEmpty(), | $t, | $found->toOne().second);,
@@ -1240,7 +1240,7 @@ function <<access.private>> meta::relational::testDataGeneration::executionPlan:
                   ]);
 }
 
-function <<access.private>> meta::relational::testDataGeneration::executionPlan::replaceRelationsInJoin(r:RelationalTreeNode[1], oldToNewPairs:Pair<RelationPointer, Relation>[*]):RelationalTreeNode[1]
+function <<access.private>> meta::external::store::relational::testDataGeneration::executionPlan::replaceRelationsInJoin(r:RelationalTreeNode[1], oldToNewPairs:Pair<RelationPointer, Relation>[*]):RelationalTreeNode[1]
 {
    $r->match([
 		j: JoinTreeNode[1] | let join = $j.join;
@@ -1258,7 +1258,7 @@ function <<access.private>> meta::relational::testDataGeneration::executionPlan:
    ])
 }
 
-function <<access.private>> meta::relational::testDataGeneration::executionPlan::quoteVarPlaceHolderTableAliasColumnsIfNotQuouted(relationalOperationElement:RelationalOperationElement[1]):RelationalOperationElement[1]
+function <<access.private>> meta::external::store::relational::testDataGeneration::executionPlan::quoteVarPlaceHolderTableAliasColumnsIfNotQuouted(relationalOperationElement:RelationalOperationElement[1]):RelationalOperationElement[1]
 {
    $relationalOperationElement->match([
                     u:Union[1] | ^$u(queries = $u.queries->map(q|$q->quoteVarPlaceHolderTableAliasColumnsIfNotQuouted())->cast(@SelectSQLQuery)),
@@ -1270,13 +1270,13 @@ function <<access.private>> meta::relational::testDataGeneration::executionPlan:
                                                          havingOperation = $s.havingOperation->map(h | $h->quoteVarPlaceHolderTableAliasColumnsIfNotQuouted()),
                                                          orderBy = $s.orderBy->map(o | ^$o(column = $o.column->quoteVarPlaceHolderTableAliasColumnsIfNotQuouted()))
                                                       );
-                                          if(!$newS.leftSideOfFilter->isEmpty(),| ^$newS(leftSideOfFilter=$s.leftSideOfFilter->toOne()->meta::relational::functions::pureToSqlQuery::findOneNode($s.data->toOne(), $newS.data->toOne())),|$newS);,
+                                          if(!$newS.leftSideOfFilter->isEmpty(),| ^$newS(leftSideOfFilter=$s.leftSideOfFilter->toOne()->meta::external::store::relational::functions::pureToSqlQuery::findOneNode($s.data->toOne(), $newS.data->toOne())),|$newS);,
                     v:ViewSelectSQLQuery[1] | ^$v(selectSQLQuery=$v.selectSQLQuery->quoteVarPlaceHolderTableAliasColumnsIfNotQuouted()->cast(@SelectSQLQuery)),
                     a:Alias[1] | ^$a(relationalElement=$a.relationalElement->quoteVarPlaceHolderTableAliasColumnsIfNotQuouted()),
                     t:NamedRelation[1] | $t,
                     u:UnaryOperation[1] | ^$u(nested=quoteVarPlaceHolderTableAliasColumnsIfNotQuouted($u.nested)),
                     b:BinaryOperation[1] | ^$b(left=quoteVarPlaceHolderTableAliasColumnsIfNotQuouted($b.left), right=quoteVarPlaceHolderTableAliasColumnsIfNotQuouted($b.right)),
-                    c:TableAliasColumn[1] | if($c.alias.relationalElement->toOne()->instanceOf(SelectSQLQuery) && $c.alias.relationalElement->toOne()->cast(@SelectSQLQuery).data.alias.relationalElement->toOne()->instanceOf(meta::relational::functions::pureToSqlQuery::metamodel::VarSetPlaceHolder),|let col = $c.column; ^$c(column = ^$col(name = $col.name->addQuotesIfNoQuotes()));,|$c),
+                    c:TableAliasColumn[1] | if($c.alias.relationalElement->toOne()->instanceOf(SelectSQLQuery) && $c.alias.relationalElement->toOne()->cast(@SelectSQLQuery).data.alias.relationalElement->toOne()->instanceOf(meta::external::store::relational::functions::pureToSqlQuery::metamodel::VarSetPlaceHolder),|let col = $c.column; ^$c(column = ^$col(name = $col.name->addQuotesIfNoQuotes()));,|$c),
                     va:VariableArityOperation[1] | ^$va(args=$va.args->map(e | $e->quoteVarPlaceHolderTableAliasColumnsIfNotQuouted())),
                     d:DynaFunction[1] | ^$d(parameters=$d.parameters->map(p | $p->quoteVarPlaceHolderTableAliasColumnsIfNotQuouted())),
                     j:JoinStrings[1] | ^$j(strings=$j.strings->map(v | $v->quoteVarPlaceHolderTableAliasColumnsIfNotQuouted()),
@@ -1287,7 +1287,7 @@ function <<access.private>> meta::relational::testDataGeneration::executionPlan:
                   ]);
 }
 
-function <<access.private>> meta::relational::testDataGeneration::executionPlan::quoteVarPlaceHolderTableAliasColumnsIfNotQuouted(r:RelationalTreeNode[1]):RelationalTreeNode[1]
+function <<access.private>> meta::external::store::relational::testDataGeneration::executionPlan::quoteVarPlaceHolderTableAliasColumnsIfNotQuouted(r:RelationalTreeNode[1]):RelationalTreeNode[1]
 {
 	$r->match([
 		j: JoinTreeNode[1] | let join = $j.join;

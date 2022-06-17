@@ -13,12 +13,12 @@
 // limitations under the License.
 
 import meta::pure::metamodel::treepath::*;
-import meta::pure::store::platform::metamodel::*;
+import meta::external::store::platform::metamodel::*;
 import meta::pure::router::store::embedded::*;
 import meta::pure::router::clustering::*;
 import meta::pure::deepfetch::builder::*;
 import meta::pure::mapping::*;
-import meta::pure::store::*;
+import meta::pure::store::metamodel::*;
 
 Class meta::pure::deepfetch::builder::DeepFetchTreeNode extends TreeNode
 {

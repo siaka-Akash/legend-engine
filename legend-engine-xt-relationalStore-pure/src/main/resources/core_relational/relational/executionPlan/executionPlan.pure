@@ -13,8 +13,8 @@
 // limitations under the License.
 
 import meta::pure::executionPlan::*;
-import meta::relational::runtime::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::mapping::*;
 
 Class meta::pure::executionPlan::RelationResultType extends ResultType
 {
@@ -22,7 +22,7 @@ Class meta::pure::executionPlan::RelationResultType extends ResultType
    relationType : RelationType[1];
    schemaName : String[1];
    database : String[1];
-   columns : meta::relational::metamodel::Column[*];
+   columns : meta::external::store::relational::metamodel::Column[*];
 }
 
 Enum meta::pure::executionPlan::RelationType
@@ -31,20 +31,20 @@ Enum meta::pure::executionPlan::RelationType
    VIEW
 }
 
-Class meta::relational::mapping::SQLResultColumn
+Class meta::external::store::relational::mapping::SQLResultColumn
 {
    label : String[1];
-   dataType : meta::relational::metamodel::datatype::DataType[0..1];
+   dataType : meta::external::store::relational::metamodel::datatype::DataType[0..1];
 }
 
-Class meta::relational::mapping::TempTableColumnMetaData
+Class meta::external::store::relational::mapping::TempTableColumnMetaData
 {
    column                   : SQLResultColumn[1];
    identifierForGetter      : String[0..1];
    parametersForGetter      : Map<String, Any>[0..1];
 }
 
-Class meta::relational::mapping::SQLExecutionNode extends ExecutionNode
+Class meta::external::store::relational::mapping::SQLExecutionNode extends ExecutionNode
 {
    sqlQuery : String[1];
    onConnectionCloseCommitQuery : String[0..1];
@@ -53,31 +53,31 @@ Class meta::relational::mapping::SQLExecutionNode extends ExecutionNode
    connection: DatabaseConnection[1];
 }
 
-Class meta::relational::mapping::RelationalInstantiationExecutionNode extends ExecutionNode
+Class meta::external::store::relational::mapping::RelationalInstantiationExecutionNode extends ExecutionNode
 {
 }
 
-Class meta::relational::mapping::RelationalTdsInstantiationExecutionNode extends RelationalInstantiationExecutionNode
+Class meta::external::store::relational::mapping::RelationalTdsInstantiationExecutionNode extends RelationalInstantiationExecutionNode
 [tdsResultType:$this.resultType->instanceOf(TDSResultType)]
 {
 }
 
-Class meta::relational::mapping::RelationalClassInstantiationExecutionNode extends RelationalInstantiationExecutionNode
+Class meta::external::store::relational::mapping::RelationalClassInstantiationExecutionNode extends RelationalInstantiationExecutionNode
 [classResultType:$this.resultType->instanceOf(ClassResultType)]
 {
 }
 
-Class meta::relational::mapping::RelationalRelationDataInstantiationExecutionNode extends RelationalInstantiationExecutionNode
+Class meta::external::store::relational::mapping::RelationalRelationDataInstantiationExecutionNode extends RelationalInstantiationExecutionNode
 [relationResultType:$this.resultType->instanceOf(RelationResultType)]
 {
 }
 
-Class meta::relational::mapping::RelationalDataTypeInstantiationExecutionNode extends RelationalInstantiationExecutionNode
+Class meta::external::store::relational::mapping::RelationalDataTypeInstantiationExecutionNode extends RelationalInstantiationExecutionNode
 [dataTypeResultType:$this.resultType->instanceOf(DataTypeResultType)]
 {
 }
 
-Class meta::relational::mapping::CreateAndPopulateTempTableExecutionNode extends ExecutionNode
+Class meta::external::store::relational::mapping::CreateAndPopulateTempTableExecutionNode extends ExecutionNode
 {
    inputVarNames            : String[*];
    tempTableName            : String[1];

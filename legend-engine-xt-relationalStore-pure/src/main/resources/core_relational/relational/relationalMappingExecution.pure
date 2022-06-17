@@ -13,66 +13,39 @@
 // limitations under the License.
 
 import meta::pure::executionPlan::connection::*;
-import meta::relational::translation::*;
-import meta::relational::functions::typeInference::*;
+import meta::external::store::relational::translation::*;
+import meta::external::store::relational::functions::typeInference::*;
 import meta::pure::deepfetch::execution::*;
 import meta::pure::router::extension::*;
-import meta::relational::functions::reportDelta::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::functions::reportDelta::*;
+import meta::external::store::relational::mapping::*;
 import meta::pure::milestoning::*;
 import meta::pure::executionPlan::*;
-import meta::relational::functions::*;
-import meta::pure::router::systemMapping::*;
+import meta::external::store::relational::functions::*;
+import meta::pure::store::contract::*;
 import meta::pure::router::execution::*;
 import meta::pure::mapping::*;
-import meta::relational::functions::pureToSqlQuery::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::mapping::*;
-import meta::relational::metamodel::*;
-import meta::relational::metamodel::datatype::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::metamodel::join::*;
-import meta::relational::metamodel::relation::*;
+import meta::external::store::relational::functions::pureToSqlQuery::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::metamodel::datatype::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::metamodel::relation::*;
 import meta::pure::metamodel::path::*;
 import meta::pure::runtime::*;
-import meta::relational::runtime::*;
-import meta::relational::milestoning::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::milestoning::*;
 import meta::pure::router::routing::*;
+import meta::external::store::relational::contract::*;
 
-
-// Execution Plan
-function meta::relational::mapping::planExecution(sq:meta::pure::mapping::StoreQuery[1], ext:RoutedValueSpecification[0..1], m:Mapping[0..1], runtime:Runtime[0..1], exeCtx:ExecutionContext[1], extensions:RouterExtension[*], debug:DebugContext[1]):ExecutionNode[1]
-{
-   let store = $sq.store->cast(@Database);
-   let fe = $sq.fe->evaluateAndDeactivate();
-   if($fe.func->in([meta::pure::graphFetch::execution::graphFetchFunctions()]),
-      |
-        // Graph Fetch Flow
-        $sq->meta::pure::graphFetch::executionPlan::planGraphFetchExecution($ext, $m->toOne(), $runtime->toOne(), $exeCtx, $extensions, $debug);,
-
-      |
-        // Normal Flow
-       let connections = $runtime.connections->filter(c | $c->instanceOf(DatabaseConnection));
-       let storeRuntime = if($connections->size() <= 1,
-                             | $runtime->toOne(),
-                             | let oldRuntime = $runtime->toOne();
-                               let dbConn = $oldRuntime->connectionByElement($store)->cast(@DatabaseConnection);
-                               ^$oldRuntime(connections = $dbConn);
-                          );
-
-      let queryExeCtx = if($exeCtx->instanceOf(RelationalExecutionContext),|$exeCtx,|[])->cast(@RelationalExecutionContext);
-      let originalQuery = $sq.fe->toSQLQuery($m->toOne(), $sq.inScopeVars, $queryExeCtx, $debug, $extensions);
-      $originalQuery->postProcessSQLQuery($store, $ext, $m->toOne(), $storeRuntime, $exeCtx, $extensions)
-                    ->generateExecutionNodeForPostProcessedResult($sq, $store, $ext, $m->toOne(), $storeRuntime, $exeCtx, $debug, $extensions);
-   );
-}
-
-function meta::relational::mapping::generateExecutionNodeForPostProcessedResult(postProcessorResult:PostProcessorResult[1], sq:meta::pure::mapping::StoreQuery[1], store:Database[1], ext:RoutedValueSpecification[0..1], m:Mapping[1], runtime:Runtime[1], exeCtx:ExecutionContext[1], debug:DebugContext[1], extensions:RouterExtension[*]):ExecutionNode[1]
+function meta::external::store::relational::mapping::generateExecutionNodeForPostProcessedResult(postProcessorResult:PostProcessorResult[1], sq:meta::pure::mapping::StoreQuery[1], store:Database[1], ext:RoutedValueSpecification[0..1], m:Mapping[1], runtime:Runtime[1], exeCtx:ExecutionContext[1], debug:DebugContext[1], extensions:RouterExtension[*]):ExecutionNode[1]
 {
    generateExecutionNodeForPostProcessedResult($postProcessorResult, $sq, $store, $ext, $m, $runtime, $exeCtx, $debug, true, $extensions)
 }
 
-function meta::relational::mapping::generateExecutionNodeForPostProcessedResult(postProcessorResult:PostProcessorResult[1], sq:meta::pure::mapping::StoreQuery[1], store:Database[1], ext:RoutedValueSpecification[0..1], m:Mapping[1], runtime:Runtime[1], exeCtx:ExecutionContext[1], debug:DebugContext[1], wrapInInstantiationNode: Boolean[1], extensions:RouterExtension[*]):ExecutionNode[1]
+function meta::external::store::relational::mapping::generateExecutionNodeForPostProcessedResult(postProcessorResult:PostProcessorResult[1], sq:meta::pure::mapping::StoreQuery[1], store:Database[1], ext:RoutedValueSpecification[0..1], m:Mapping[1], runtime:Runtime[1], exeCtx:ExecutionContext[1], debug:DebugContext[1], wrapInInstantiationNode: Boolean[1], extensions:RouterExtension[*]):ExecutionNode[1]
 {
    let sqlNode = generateSQLExecutionNode($postProcessorResult.query, $runtime->toOne()->connectionByElement($store)->cast(@DatabaseConnection), $extensions);
    let relationalNode =  if($wrapInInstantiationNode, | generateInstantiationExecutionNode($sq, $ext, $postProcessorResult.query, $sqlNode, $m), | $sqlNode);
@@ -85,7 +58,7 @@ function meta::relational::mapping::generateExecutionNodeForPostProcessedResult(
    );
 }
 
-function meta::relational::mapping::generateInstantiationExecutionNode(sq:meta::pure::mapping::StoreQuery[1], ext:RoutedValueSpecification[0..1], query:SQLQuery[1], node:ExecutionNode[1], m:Mapping[1]):ExecutionNode[1]
+function meta::external::store::relational::mapping::generateInstantiationExecutionNode(sq:meta::pure::mapping::StoreQuery[1], ext:RoutedValueSpecification[0..1], query:SQLQuery[1], node:ExecutionNode[1], m:Mapping[1]):ExecutionNode[1]
 {
    let possibleClass = $sq.fe.genericType.rawType->toOne();
    let class = if ($possibleClass == Any, | let getAllClass = findMainClassInGetAllExpression($sq.fe); if($getAllClass->isEmpty(), | $possibleClass, | $getAllClass);, | $possibleClass );
@@ -146,17 +119,17 @@ function meta::relational::mapping::generateInstantiationExecutionNode(sq:meta::
    ]);
 }
 
-function <<access.private>> meta::relational::mapping::getRelationalTypeFromRelationalPropertyMapping(r:RelationalPropertyMapping[0..1], propertyName:String[1]):meta::relational::metamodel::datatype::DataType[0..1]
+function <<access.private>> meta::external::store::relational::mapping::getRelationalTypeFromRelationalPropertyMapping(r:RelationalPropertyMapping[0..1], propertyName:String[1]):meta::external::store::relational::metamodel::datatype::DataType[0..1]
 {
 
    if($r->isEmpty(),
       | [] //TO FIX: support all existing tests  before introducing a fail  fail( 'Unsupported plan execution - check that you are setting Path Types - no type found for column '+$propertyName  );,
      ,| $r->toOne().relationalOperationElement->inferRelationalType(false);
-     )->cast(@meta::relational::metamodel::datatype::DataType);
+     )->cast(@meta::external::store::relational::metamodel::datatype::DataType);
 
 }
 
-function meta::relational::mapping::generateSQLExecutionNode(query:SQLQuery[1], connection:DatabaseConnection[1], extensions:RouterExtension[*]):ExecutionNode[1]
+function meta::external::store::relational::mapping::generateSQLExecutionNode(query:SQLQuery[1], connection:DatabaseConnection[1], extensions:RouterExtension[*]):ExecutionNode[1]
 {
    let sql = sqlQueryToString($query, $connection.type, $connection.timeZone, $connection.quoteIdentifiers, $extensions);
 
@@ -165,45 +138,45 @@ function meta::relational::mapping::generateSQLExecutionNode(query:SQLQuery[1], 
       sqlQuery = $sql,
       resultColumns = $query->match([sel:SelectSQLQuery[1] | $sel.columns->map(c| ^SQLResultColumn(label = $c->columnLabel($connection, $extensions), dataType = $c->getRelationalTypeFromRelationalOperationElement()->translateCoreTypeToDbSpecificType(^TranslationContext(dbType = $connection.type)))), a:Any[1] | []]),
       resultType = ^ResultType(type = Any),
-      connection = $connection->meta::relational::mapping::updateConnection($extensions)->cast(@DatabaseConnection),
+      connection = $connection->meta::external::store::relational::mapping::updateConnection($extensions)->cast(@DatabaseConnection),
       supportFunctions = relationalPlanSupportFunctions($connection)
    );
 
 }
 
-function meta::relational::mapping::updateConnection(conn:Connection[1], extensions:RouterExtension[*]):Connection[1]
+function meta::external::store::relational::mapping::updateConnection(conn:Connection[1], extensions:RouterExtension[*]):Connection[1]
 {
    $conn->match($extensions->map(e|$e.moduleExtension('relational')->cast(@RelationalExtension).relational_plan_updateConnection)->concatenate([
       c:DatabaseConnection[1] | $c 
    ])->toOneMany())
 }
 
-function <<access.private>> meta::relational::mapping::columnLabel(v:RelationalOperationElement[1], connection: DatabaseConnection[1], extensions:RouterExtension[*]):String[1]
+function <<access.private>> meta::external::store::relational::mapping::columnLabel(v:RelationalOperationElement[1], connection: DatabaseConnection[1], extensions:RouterExtension[*]):String[1]
 {
    $v->match(
       [
          a:Alias[1] | if($a.name->startsWith('"'), |'"%s"'->format($a.name->replace('"', '')), |$a.name),
-         r:RelationalOperationElement[1] | $r->meta::relational::functions::sqlQueryToString::processOperation($connection.type, $extensions)
+         r:RelationalOperationElement[1] | $r->meta::external::store::relational::functions::sqlQueryToString::processOperation($connection.type, $extensions)
       ]
    )
 }
 
-function <<access.private>> meta::relational::mapping::getRelationalTypeFromRelationalOperationElement(r:RelationalOperationElement[1]):meta::relational::metamodel::datatype::DataType[0..1]
+function <<access.private>> meta::external::store::relational::mapping::getRelationalTypeFromRelationalOperationElement(r:RelationalOperationElement[1]):meta::external::store::relational::metamodel::datatype::DataType[0..1]
 {
    $r->match([
       t:TableAliasColumn[1] | $t.column.type,
       a:Alias[1] | $a.relationalElement->getRelationalTypeFromRelationalOperationElement(),
       c:Column[1] | $c.type,
       a:Any[1] | []// TOFIX - support all possible Types  fail($a->type().name ->toOne() + ' is not supported in planExecution yet')
-   ])->cast(@meta::relational::metamodel::datatype::DataType);
+   ])->cast(@meta::external::store::relational::metamodel::datatype::DataType);
 }
 
-function meta::relational::mapping::relationalPlanSupportFunctions(c:DatabaseConnection[1]):String[*]
+function meta::external::store::relational::mapping::relationalPlanSupportFunctions(c:DatabaseConnection[1]):String[*]
 {
    if($c.timeZone->isNotEmpty() && !meta::pure::functions::date::systemDefaultTimeZones()->contains($c.timeZone->toOne()),|utcToTimeZoneSupportFunction(),|[])->concatenate(collectionRenderFunction())->concatenate(collectionSizeFunction())->concatenate(optionalVarPlaceHolderOperationSelectorFunction())->concatenate(varPlaceHolderToStringFunction());
 }
 
-function meta::relational::mapping::varPlaceHolderToStringFunction():String[*]
+function meta::external::store::relational::mapping::varPlaceHolderToStringFunction():String[*]
 {
    '<#function varPlaceHolderToString optionalParameter prefix suffix defaultValue>' +
          '<#if optionalParameter?is_enumerable && !optionalParameter?has_content>'+               
@@ -213,7 +186,7 @@ function meta::relational::mapping::varPlaceHolderToStringFunction():String[*]
    '</#function>';
 }
 
-function meta::relational::mapping::optionalVarPlaceHolderOperationSelectorFunction():String[1]
+function meta::external::store::relational::mapping::optionalVarPlaceHolderOperationSelectorFunction():String[1]
 {
    '<#function optionalVarPlaceHolderOperationSelector optionalParameter trueClause falseClause>'+
         '<#if optionalParameter?has_content || optionalParameter?is_string>'+
@@ -223,12 +196,12 @@ function meta::relational::mapping::optionalVarPlaceHolderOperationSelectorFunct
    '</#function>';   
 }
 
-function meta::relational::mapping::collectionSizeFunction():String[1]
+function meta::external::store::relational::mapping::collectionSizeFunction():String[1]
 {
    '<#function collectionSize collection> <#return collection?size?c> </#function>';
 }
 
-function meta::relational::mapping::collectionRenderFunction():String[1]
+function meta::external::store::relational::mapping::collectionRenderFunction():String[1]
 {
    '<#function renderCollection collection separator prefix suffix defaultValue>'+
         '<#if collection?size == 0>' +
@@ -238,7 +211,7 @@ function meta::relational::mapping::collectionRenderFunction():String[1]
    '</#function>';
 }
 
-function meta::relational::mapping::utcToTimeZoneSupportFunction():String[1]
+function meta::external::store::relational::mapping::utcToTimeZoneSupportFunction():String[1]
 {
    '<#function GMTtoTZ tz paramDate><#return (tz+" "+paramDate)?date.@alloyDate></#function>'+
    '<#function renderCollectionWithTz collection timeZone separator prefix suffix defaultValue>'+
@@ -250,13 +223,7 @@ function meta::relational::mapping::utcToTimeZoneSupportFunction():String[1]
    '</#function>';
 }
 
-// Execution flow
-function meta::relational::mapping::execution(sq:meta::pure::mapping::StoreQuery[1], ext:RoutedValueSpecification[0..1], m:Mapping[1], runtime:Runtime[1], exeCtx:ExecutionContext[1], extensions:RouterExtension[*], debug:DebugContext[1]):Result<Any|*>[1]
-{
-   execution($sq.store->cast(@Database), $sq.fe, $ext, $m, $runtime, $sq.inScopeVars, $exeCtx, $extensions, $debug);
-}
-
-function meta::relational::mapping::execution(store: Database[1], f:FunctionExpression[1], ext:RoutedValueSpecification[0..1], m:Mapping[1], runtime:Runtime[1], inScopeVars:Map<String, List<Any>>[1], exeCtx:ExecutionContext[1], extensions:meta::pure::router::extension::RouterExtension[*], debug:DebugContext[1]):Result<Any|*>[1]
+function meta::external::store::relational::mapping::execution(store: Database[1], f:FunctionExpression[1], ext:RoutedValueSpecification[0..1], m:Mapping[1], runtime:Runtime[1], inScopeVars:Map<String, List<Any>>[1], exeCtx:ExecutionContext[1], extensions:meta::pure::router::extension::RouterExtension[*], debug:DebugContext[1]):Result<Any|*>[1]
 {
    let toSqlQueryStart = now();
 
@@ -280,7 +247,7 @@ function meta::relational::mapping::execution(store: Database[1], f:FunctionExpr
    let sqlQueryToStringStart = now();
    let sql = if($relationalExecutionContext.insertDriverTablePkInTempTable->isEmpty(),
                 |sqlQueryToStringPretty($postProcessorResult.query, $connection.type, $connection.timeZone, $connection.quoteIdentifiers, $extensions),
-                |meta::relational::functions::toDDL::buildInsertSQLQueryResultIntoTable
+                |meta::external::store::relational::functions::toDDL::buildInsertSQLQueryResultIntoTable
                                                     (
                                                        $relationalExecutionContext.insertDriverTablePkInTempTable->toOne(),
                                                        $postProcessorResult.query->cast(@SelectSQLQuery),
@@ -305,7 +272,7 @@ function meta::relational::mapping::execution(store: Database[1], f:FunctionExpr
 
 }
 
-function meta::relational::mapping::executeQuery(sql:String[1], query:SQLQuery[0..1], paths: Pair<String, PathInformation>[*], connection : DatabaseConnection[1], runtime: Runtime[1], class:Type[0..1], ext:RoutedValueSpecification[0..1], m: Mapping[1], sqlGenerationTimeInNanoSecond:Integer[0..1], g_queryTimeOutInSeconds: Integer[0..1], exeCtx:ExecutionContext[1], extensions: RouterExtension[*], debug:DebugContext[1]):Result<Any|*>[1]
+function meta::external::store::relational::mapping::executeQuery(sql:String[1], query:SQLQuery[0..1], paths: Pair<String, PathInformation>[*], connection : DatabaseConnection[1], runtime: Runtime[1], class:Type[0..1], ext:RoutedValueSpecification[0..1], m: Mapping[1], sqlGenerationTimeInNanoSecond:Integer[0..1], g_queryTimeOutInSeconds: Integer[0..1], exeCtx:ExecutionContext[1], extensions: RouterExtension[*], debug:DebugContext[1]):Result<Any|*>[1]
 {
    print(if(!$debug.debug, |'', | $debug.space+'>Execute SQL: '+$sql+'\n'));
 
@@ -348,7 +315,7 @@ function meta::relational::mapping::executeQuery(sql:String[1], query:SQLQuery[0
    );
 }
 
-function meta::relational::mapping::buildExecutionResultInTDS(sql:String[1], res:ResultSet[1], paths: Pair<String, PathInformation>[*], sqlGenerationTimeInNanoSecond:Integer[0..1]):Result<TabularDataSet|1>[1]
+function meta::external::store::relational::mapping::buildExecutionResultInTDS(sql:String[1], res:ResultSet[1], paths: Pair<String, PathInformation>[*], sqlGenerationTimeInNanoSecond:Integer[0..1]):Result<TabularDataSet|1>[1]
 {
    let propertyMappings = $res.columnNames->map(c| let matchedPath = $paths->filter(p|$p.first->toLower() == $c->toLower());
                                                                     if ($matchedPath->isEmpty(),
@@ -395,7 +362,7 @@ function meta::relational::mapping::buildExecutionResultInTDS(sql:String[1], res
    );
 }
 
-function meta::relational::mapping::buildExecutionResultInRelationData(sql:String[1], query:SQLQuery[0..1], res:ResultSet[1], paths: Pair<String, PathInformation>[*], sqlGenerationTimeInNanoSecond:Integer[0..1]):Result<RelationData|1>[1]
+function meta::external::store::relational::mapping::buildExecutionResultInRelationData(sql:String[1], query:SQLQuery[0..1], res:ResultSet[1], paths: Pair<String, PathInformation>[*], sqlGenerationTimeInNanoSecond:Integer[0..1]):Result<RelationData|1>[1]
 {
    let tdsNull = ^TDSNull();
    let relationDataQuery = $query->toOne()->cast(@RelationDataSelectSqlQuery);
@@ -422,7 +389,7 @@ function meta::relational::mapping::buildExecutionResultInRelationData(sql:Strin
    );
 }
 
-function meta::relational::mapping::buildClasses(setImplementations:RelationalInstanceSetImplementation[*], res:ResultSet[1], mapping:Mapping[1], connection:Connection[1], runtime: Runtime[1], propLookUpIndices:Integer[*], exeCtx:ExecutionContext[1], extensions: RouterExtension[*], debug:DebugContext[1]):Any[*]
+function meta::external::store::relational::mapping::buildClasses(setImplementations:RelationalInstanceSetImplementation[*], res:ResultSet[1], mapping:Mapping[1], connection:Connection[1], runtime: Runtime[1], propLookUpIndices:Integer[*], exeCtx:ExecutionContext[1], extensions: RouterExtension[*], debug:DebugContext[1]):Any[*]
 {
    let builders =  buildBuilders($setImplementations, $res, $mapping, $connection, $runtime, [], $exeCtx, $extensions, $debug);
    $res.rows->map(r|let buildInder = if ($setImplementations->size() == 1,|$builders->at(0),
@@ -432,7 +399,7 @@ function meta::relational::mapping::buildClasses(setImplementations:RelationalIn
                );
 }
 
-function meta::relational::mapping::buildBuilders(setImplementations:RelationalInstanceSetImplementation[*], res:ResultSet[1], mapping:Mapping[1], connection:Connection[1], runtime: Runtime[1], overridePropLookUpIndices:Integer[*], exeCtx:ExecutionContext[1], extensions: RouterExtension[*], debug:DebugContext[1]):BuilderInfo[*]
+function meta::external::store::relational::mapping::buildBuilders(setImplementations:RelationalInstanceSetImplementation[*], res:ResultSet[1], mapping:Mapping[1], connection:Connection[1], runtime: Runtime[1], overridePropLookUpIndices:Integer[*], exeCtx:ExecutionContext[1], extensions: RouterExtension[*], debug:DebugContext[1]):BuilderInfo[*]
 {
    let builders = $setImplementations->removeDuplicates()
                                      ->fold({setImplementation,a|
@@ -485,7 +452,7 @@ function meta::relational::mapping::buildBuilders(setImplementations:RelationalI
                                                                                          (
                                                                                             runtime = $runtime,
                                                                                             mapping = $mapping,
-                                                                                            systemMapping = relationalSystemMapping(),
+                                                                                            systemMapping = relationalStoreContract(),
                                                                                             setImplementation = $setImplementation,
                                                                                             exeCtx = $exeCtx,
                                                                                             debug = $debug,
@@ -497,7 +464,7 @@ function meta::relational::mapping::buildBuilders(setImplementations:RelationalI
                                            }, pair(if($setImplementations->size()==1,|0,|1), ^List<BuilderInfo>())).second.values;
 }
 
-function meta::relational::mapping::buildClass(buildInder:BuilderInfo[1], r:Row[1], mapping:Mapping[1], connection:Connection[1], runtime: Runtime[1], exeCtx:ExecutionContext[1]):Any[1]
+function meta::external::store::relational::mapping::buildClass(buildInder:BuilderInfo[1], r:Row[1], mapping:Mapping[1], connection:Connection[1], runtime: Runtime[1], exeCtx:ExecutionContext[1]):Any[1]
 {
    let keyExpressions = $buildInder.indices->map( i | let value = $r.values->at($buildInder.propLookUpIndices->at($i));
                                                            ^KeyValue(
@@ -522,13 +489,7 @@ function meta::relational::mapping::buildClass(buildInder:BuilderInfo[1], r:Row[
                              );
 }
 
-// Lazy Execution of property
-function meta::relational::mapping::getterOverrideMapped(o:Any[1], propertyMapping:PropertyMapping[1]):Any[*]
-{
-   $o->processProperty($propertyMapping.property);
-}
-
-Class meta::relational::mapping::BuilderInfo
+Class meta::external::store::relational::mapping::BuilderInfo
 {
    class : Class<Any>[1];
    keys : String[*];
@@ -541,12 +502,12 @@ Class meta::relational::mapping::BuilderInfo
    static : StaticMappingInstanceData[1];
 }
 
-Enum meta::relational::mapping::BuildMethod
+Enum meta::external::store::relational::mapping::BuildMethod
 {
    TypeQuery
 }
 
-Class meta::relational::mapping::KeyInformation extends MappingInstanceData
+Class meta::external::store::relational::mapping::KeyInformation extends MappingInstanceData
 {
    pk : Any[*];
    sourceConnection : Connection[1];
@@ -554,7 +515,7 @@ Class meta::relational::mapping::KeyInformation extends MappingInstanceData
    buildMethod : BuildMethod[1];
 }
 
-function meta::relational::mapping::processProperty(o:Any[1], property:Property<Nil,Any|*>[1]):Any[*]
+function meta::external::store::relational::mapping::processProperty(o:Any[1], property:Property<Nil,Any|*>[1]):Any[*]
 {
    if ($property.name == 'classifierGenericType' || $property->functionReturnType().rawType->toOne()->instanceOf(meta::pure::metamodel::type::DataType)
         ,| $property->rawEvalProperty($o);
@@ -587,7 +548,7 @@ function meta::relational::mapping::processProperty(o:Any[1], property:Property<
       );
 }
 
-function meta::relational::mapping::generatePropertySql(setImplementation: RelationalInstanceSetImplementation[1], property:Property<Nil,Any|*>[1], joinType:JoinType[1], propertyPkFilterValues: Any[*], mapping:Mapping[1], runtime: Runtime[1], db:Database[0..1], exeCtx:ExecutionContext[1], extensions:RouterExtension[*]):Pair<RelationalInstanceSetImplementation, SQLQuery>[1]
+function meta::external::store::relational::mapping::generatePropertySql(setImplementation: RelationalInstanceSetImplementation[1], property:Property<Nil,Any|*>[1], joinType:JoinType[1], propertyPkFilterValues: Any[*], mapping:Mapping[1], runtime: Runtime[1], db:Database[0..1], exeCtx:ExecutionContext[1], extensions:RouterExtension[*]):Pair<RelationalInstanceSetImplementation, SQLQuery>[1]
 {
    let state = ^State(inScopeVars = ^Map<String,List<Any>>(), mapping=$mapping, supportedFunctions=getSupportedFunctions(), inProject=false, inFilter=false, filterChainDepth= 0, inProjectFunctions=false,  processingProjectionThread = false, shouldIsolate=false, contextBasedSupportedFunctions=getContextBasedSupportedFunctions());
 
@@ -679,7 +640,7 @@ function meta::relational::mapping::generatePropertySql(setImplementation: Relat
 
 }
 
-function meta::relational::mapping::getPropertyTargetSetImplementation(sourceSetImplementation: RelationalInstanceSetImplementation[1], property:AbstractProperty<Any>[1], mapping:Mapping[1]):RelationalInstanceSetImplementation[1]
+function meta::external::store::relational::mapping::getPropertyTargetSetImplementation(sourceSetImplementation: RelationalInstanceSetImplementation[1], property:AbstractProperty<Any>[1], mapping:Mapping[1]):RelationalInstanceSetImplementation[1]
 {
    let propertySetImplementation = $sourceSetImplementation.propertyMappingsByPropertyName($property.name->toOne());
    let propertyReturnTypeClass = $property->functionReturnType()->genericTypeClass();
@@ -690,28 +651,4 @@ function meta::relational::mapping::getPropertyTargetSetImplementation(sourceSet
 										  assertSize($classMappings, 1, 'Expected 1 class mapping for %s, found %d', [$propertyReturnTypeClass.name->toOne(), $classMappings->size()]);
 										  $classMappings->toOne()->cast(@RelationalInstanceSetImplementation);
    ]);
-}
-
-// Functions supported by relational execution
-function meta::relational::mapping::supports(f:FunctionExpression[1]):Boolean[1]
-{
-      !meta::relational::functions::pureToSqlQuery::findSupportedFunction(
-                        $f,
-                        meta::relational::functions::pureToSqlQuery::getSupportedFunctions(),
-                        meta::relational::functions::pureToSqlQuery::getContextBasedSupportedFunctions()
-                    )->isEmpty()
-      //These are here because the router does not go deep enough, should remove
-      || [
-            meta::pure::functions::math::sum_Float_MANY__Float_1_,
-            meta::pure::functions::math::sum_Integer_MANY__Integer_1_,
-            meta::pure::functions::math::sum_Number_MANY__Number_1_
-         ]->contains($f.func);
-}
-
-function meta::relational::mapping::supportsStream(f:FunctionExpression[1]):Boolean[1]
-{
-  [
-      meta::pure::functions::collection::in_Any_1__Any_MANY__Boolean_1_,
-      meta::pure::functions::collection::in_Any_$0_1$__Any_MANY__Boolean_1_
-  ]->contains($f.func); 
 }

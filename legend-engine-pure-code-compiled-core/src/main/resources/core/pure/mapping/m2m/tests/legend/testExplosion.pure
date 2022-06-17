@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
+import meta::external::store::model::test::shared::dest::*;
 import meta::json::*;
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::*;
 import meta::pure::runtime::*;
-import meta::pure::mapping::modelToModel::test::alloy::explosion::*;
+import meta::external::store::model::test::alloy::explosion::*;
 import meta::pure::graphFetch::execution::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 {  meta::pure::executionPlan::profiles::serverVersion.start='v1_19_0' }
-meta::pure::mapping::modelToModel::test::alloy::explosion::testBasicExplosion():Any[*]
+meta::external::store::model::test::alloy::explosion::testBasicExplosion():Any[*]
 {
    let tree = #{FirmEmployee {firmName, fullName} }#;
 
@@ -43,7 +43,7 @@ meta::pure::mapping::modelToModel::test::alloy::explosion::testBasicExplosion():
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 {  meta::pure::executionPlan::profiles::serverVersion.start='v1_19_0' }
-meta::pure::mapping::modelToModel::test::alloy::explosion::testMultiplePropertyExplosion():Any[*]
+meta::external::store::model::test::alloy::explosion::testMultiplePropertyExplosion():Any[*]
 {
    let tree = #{FirmEmployee {firmName, fullName, streetAddress} }#;
 
@@ -64,7 +64,7 @@ meta::pure::mapping::modelToModel::test::alloy::explosion::testMultiplePropertyE
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 {  meta::pure::executionPlan::profiles::serverVersion.start='v1_19_0' }
-meta::pure::mapping::modelToModel::test::alloy::explosion::testTargetConstraintsViolatedWithExplosion():Boolean[1]
+meta::external::store::model::test::alloy::explosion::testTargetConstraintsViolatedWithExplosion():Boolean[1]
 {
    let tree = #{FirmEmployeeWithConstraint {firmName, fullName} }#;
 
@@ -80,7 +80,7 @@ meta::pure::mapping::modelToModel::test::alloy::explosion::testTargetConstraints
       []
    );
 
-   assert(jsonEquivalent('[{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"hasLongName","ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::explosion::FirmEmployeeWithConstraint","message":"Constraint :[hasLongName] violated in the Class FirmEmployeeWithConstraint"}],"source":{"defects":[],"source":{"number":1,"record":"{\\"name\\":\\"Anonymous Company\\",\\"simpleEmployees\\":[{\\"fullName\\":\\"PersonA\\"},{\\"fullName\\":\\"PersonB\\"}]}"},"value":{"name":"Anonymous Company","simpleEmployees":[{"fullName":"PersonA"},{"fullName":"PersonB"}]}},"value":{"fullName":"PersonA","firmName":"Anonymous Company"}},{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"hasLongName","ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::explosion::FirmEmployeeWithConstraint","message":"Constraint :[hasLongName] violated in the Class FirmEmployeeWithConstraint"}],"source":{"defects":[],"source":{"number":1,"record":"{\\"name\\":\\"Anonymous Company\\",\\"simpleEmployees\\":[{\\"fullName\\":\\"PersonA\\"},{\\"fullName\\":\\"PersonB\\"}]}"},"value":{"name":"Anonymous Company","simpleEmployees":[{"fullName":"PersonA"},{"fullName":"PersonB"}]}},"value":{"fullName":"PersonB","firmName":"Anonymous Company"}}]'->parseJSON(), $result.values->toOne()->parseJSON()));
+   assert(jsonEquivalent('[{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"hasLongName","ruleDefinerPath":"meta::external::store::model::test::alloy::explosion::FirmEmployeeWithConstraint","message":"Constraint :[hasLongName] violated in the Class FirmEmployeeWithConstraint"}],"source":{"defects":[],"source":{"number":1,"record":"{\\"name\\":\\"Anonymous Company\\",\\"simpleEmployees\\":[{\\"fullName\\":\\"PersonA\\"},{\\"fullName\\":\\"PersonB\\"}]}"},"value":{"name":"Anonymous Company","simpleEmployees":[{"fullName":"PersonA"},{"fullName":"PersonB"}]}},"value":{"fullName":"PersonA","firmName":"Anonymous Company"}},{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"hasLongName","ruleDefinerPath":"meta::external::store::model::test::alloy::explosion::FirmEmployeeWithConstraint","message":"Constraint :[hasLongName] violated in the Class FirmEmployeeWithConstraint"}],"source":{"defects":[],"source":{"number":1,"record":"{\\"name\\":\\"Anonymous Company\\",\\"simpleEmployees\\":[{\\"fullName\\":\\"PersonA\\"},{\\"fullName\\":\\"PersonB\\"}]}"},"value":{"name":"Anonymous Company","simpleEmployees":[{"fullName":"PersonA"},{"fullName":"PersonB"}]}},"value":{"fullName":"PersonB","firmName":"Anonymous Company"}}]'->parseJSON(), $result.values->toOne()->parseJSON()));
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly, meta::pure::executionPlan::engine::java::roadmap::feature.M2MBasics>>
@@ -89,7 +89,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch and serialize.',
    doc.doc='Then:  the mapping is applied and the result of the mapping is serialized.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::explosion::testMappingWithSetsUsingAndNotUsingExplosion(): Boolean[1]
+meta::external::store::model::test::alloy::explosion::testMappingWithSetsUsingAndNotUsingExplosion(): Boolean[1]
 {
    let tree = #{Person {firstName,lastName} }#;
 
@@ -113,7 +113,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch and serialize. GraphFetch tree demonstrates usage of explosion at a property level.',
    doc.doc='Then:  the mapping is applied and the result of the mapping is serialized.'
 }
-meta::pure::mapping::modelToModel::test::alloy::explosion::testExplosionAtPropertyLevel(): Boolean[1]
+meta::external::store::model::test::alloy::explosion::testExplosionAtPropertyLevel(): Boolean[1]
 {
    let tree = #{TargetFirm {name,firmEmployees{firmName, fullName, streetAddress, dateOfBirth}} }#;
 
@@ -137,7 +137,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch and serialize.',
    doc.doc='Then:  the mapping is applied and the result of the mapping is serialized.'
 }
-meta::pure::mapping::modelToModel::test::alloy::explosion::testMappingWithExplosionAtPropertyLevel(): Boolean[1]
+meta::external::store::model::test::alloy::explosion::testMappingWithExplosionAtPropertyLevel(): Boolean[1]
 {
    let tree = #{TargetFirm {name,firmEmployees{firmName}} }#;
 
@@ -161,7 +161,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch and serialize.',
    doc.doc='Then:  the mapping is applied and the result of the mapping is serialized.'
 }
-meta::pure::mapping::modelToModel::test::alloy::explosion::testExplosionAtPropertyLevelNotUsingAllProperties(): Boolean[1]
+meta::external::store::model::test::alloy::explosion::testExplosionAtPropertyLevelNotUsingAllProperties(): Boolean[1]
 {
    let tree = #{TargetFirm {name,firmEmployees{firmName, fullName}} }#;
 
@@ -185,7 +185,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch and serialize. GraphFetch tree demonstrates usage of explosion at a property level.',
    doc.doc='Then:  the mapping is applied and the result of the mapping is serialized.'
 }
-meta::pure::mapping::modelToModel::test::alloy::explosion::testExplosionAtPropertyLevelWithNullResult(): Boolean[1]
+meta::external::store::model::test::alloy::explosion::testExplosionAtPropertyLevelWithNullResult(): Boolean[1]
 {
    let tree = #{TargetFirm {name,firmEmployees{firmName, fullName, streetAddress, dateOfBirth}} }#;
 
@@ -203,7 +203,7 @@ meta::pure::mapping::modelToModel::test::alloy::explosion::testExplosionAtProper
    assert(jsonEquivalent('{"name": "Anonymous Company","firmEmployees": [{"firmName": "Anonymous Company","fullName": "PersonA","streetAddress": "first","dateOfBirth": null},{"firmName": "Anonymous Company","fullName": "PersonB","streetAddress": null,"dateOfBirth": "2020-11-10"}]}'->parseJSON(), $result.values->toOne()->parseJSON()));
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::explosion::FirmEmployeeWithConstraint
+Class meta::external::store::model::test::alloy::explosion::FirmEmployeeWithConstraint
 [  hasLongName: $this.fullName->size() > 4 ]
 {
    firmName : String[1];
@@ -211,19 +211,19 @@ Class meta::pure::mapping::modelToModel::test::alloy::explosion::FirmEmployeeWit
    streetAddress: String[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::explosion::TargetFirm
+Class meta::external::store::model::test::alloy::explosion::TargetFirm
 {
     name: String[1];
-    firmEmployees: meta::pure::mapping::modelToModel::test::shared::dest::FirmEmployee[*];
+    firmEmployees: meta::external::store::model::test::shared::dest::FirmEmployee[*];
 }
 
 ###Mapping
 
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::alloy::explosion::*;
-import meta::pure::mapping::modelToModel::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::alloy::explosion::*;
+import meta::external::store::model::test::shared::src::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::explosion::basicExplosionMapping
+Mapping meta::external::store::model::test::alloy::explosion::basicExplosionMapping
 (
    FirmEmployee : Pure
             {
@@ -233,7 +233,7 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::explosion::basicExplosio
             }
 )
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::explosion::multipleExplosionMapping
+Mapping meta::external::store::model::test::alloy::explosion::multipleExplosionMapping
 (
    FirmEmployee : Pure
             {
@@ -244,7 +244,7 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::explosion::multipleExplo
             }
 )
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::explosion::explosionWithConstraintMapping
+Mapping meta::external::store::model::test::alloy::explosion::explosionWithConstraintMapping
 (
   FirmEmployeeWithConstraint : Pure
             {
@@ -254,7 +254,7 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::explosion::explosionWith
             }
 )
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::explosion::mappingWithSetsUsingAndNotUsingExplosion
+Mapping meta::external::store::model::test::alloy::explosion::mappingWithSetsUsingAndNotUsingExplosion
 (
   Person : Pure
             {

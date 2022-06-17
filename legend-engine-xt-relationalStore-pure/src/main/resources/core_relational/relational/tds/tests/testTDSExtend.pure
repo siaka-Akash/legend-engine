@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::model::simple::*;
 import meta::pure::executionPlan::toString::*;
 import meta::pure::executionPlan::*;
-import meta::relational::mapping::*;
-import meta::relational::runtime::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::tests::*;
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testStringLiteral():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testStringLiteral():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -37,7 +37,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsExtend::testStringLitera
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testFunctionOnVariable():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testFunctionOnVariable():Boolean[1]
 {
    let plan = executionPlan({ var:String[1]| Person.all()->project(p|$p.firstName,'firstName')
                                                            ->extend(^BasicColumnSpecification<TDSRow>(func={r:TDSRow[1]|$var}, name='var'))}, simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -45,7 +45,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsExtend::testFunctionOnVa
    assertEquals('Sequence (   type = TDS[(firstName, String, VARCHAR(200), ""), (var, String, "", "")]   (     FunctionParametersValidationNode     (       functionParameters = [var:String[1]]     )     Relational     (       type = TDS[(firstName, String, VARCHAR(200), ""), (var, String, "", "")]       resultColumns = [("firstName", VARCHAR(200)), ("var", "")]       sql = select "root".FIRSTNAME as "firstName", \'${var}\' as "var" from personTable as "root"       connection = TestDatabaseConnection(type = "H2")     )   ) ) ', $plan->planToString(meta::pure::router::extension::defaultRelationalExtensions())->replace('\n',' '));   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testFunctionOnStringLiteral():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testFunctionOnStringLiteral():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -63,7 +63,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsExtend::testFunctionOnSt
       $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testStringColumn():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testStringColumn():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -81,7 +81,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsExtend::testStringColumn
       $result->sqlRemoveFormatting());  
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testFunctionOnStringColumn():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testFunctionOnStringColumn():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -99,7 +99,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsExtend::testFunctionOnSt
       $result->sqlRemoveFormatting());  
 }
 
-function <<test.ToFix>> meta::relational::tests::tds::tdsExtend::testFunctionOnEnumColumn():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::tds::tdsExtend::testFunctionOnEnumColumn():Boolean[1]
 {
    let result = execute(
       |Address.all()
@@ -117,7 +117,7 @@ function <<test.ToFix>> meta::relational::tests::tds::tdsExtend::testFunctionOnE
       $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testMultipleFunctions():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testMultipleFunctions():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -136,7 +136,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsExtend::testMultipleFunc
       $result->sqlRemoveFormatting());  
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testExtendAndExtendAgain():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testExtendAndExtendAgain():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -155,7 +155,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsExtend::testExtendAndExt
       $result->sqlRemoveFormatting());  
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testExtendOnDynaFunctionColumn():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testExtendOnDynaFunctionColumn():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -173,7 +173,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsExtend::testExtendOnDyna
       $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testExtendOnMultiple():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testExtendOnMultiple():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -191,7 +191,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsExtend::testExtendOnMult
       $result->sqlRemoveFormatting());  
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testDateLiteral():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testDateLiteral():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -212,7 +212,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsExtend::testDateLiteral(
 }
 
 // Alloy exclusion reason: 10. Tricky usage of variables
-function <<test.Test, test.ExcludeAlloy>> {test.excludePlatform = 'Java compiled'} meta::relational::tests::tds::tdsExtend::testExtendWithVariables1():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> {test.excludePlatform = 'Java compiled'} meta::external::store::relational::tests::tds::tdsExtend::testExtendWithVariables1():Boolean[1]
 {
    let result = execute(
       |
@@ -234,7 +234,7 @@ function <<test.Test, test.ExcludeAlloy>> {test.excludePlatform = 'Java compiled
       $result->sqlRemoveFormatting());  
 }
 
-function <<test.ToFix>> meta::relational::tests::tds::tdsExtend::testExtendWithVariables2():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::tds::tdsExtend::testExtendWithVariables2():Boolean[1]
 {
    let result = execute(
       |
@@ -256,7 +256,7 @@ function <<test.ToFix>> meta::relational::tests::tds::tdsExtend::testExtendWithV
       $result->sqlRemoveFormatting());  
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testNull():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testNull():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -277,29 +277,29 @@ function <<test.Test>> meta::relational::tests::tds::tdsExtend::testNull():Boole
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testStringConcatSQLGeneration():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testStringConcatSQLGeneration():Boolean[1]
 {
-   let func = {|meta::relational::tests::model::simple::Person.all()
-	      ->project([col({p:meta::relational::tests::model::simple::Person[1]|$p.firstName}, 'firstName'),
-                     col({p:meta::relational::tests::model::simple::Person[1]|$p.lastName}, 'lastName'),
-                     col({p:meta::relational::tests::model::simple::Person[1]|$p.age}, 'age')])
+   let func = {|meta::external::store::relational::tests::model::simple::Person.all()
+	      ->project([col({p:meta::external::store::relational::tests::model::simple::Person[1]|$p.firstName}, 'firstName'),
+                     col({p:meta::external::store::relational::tests::model::simple::Person[1]|$p.lastName}, 'lastName'),
+                     col({p:meta::external::store::relational::tests::model::simple::Person[1]|$p.age}, 'age')])
 	      ->extend(col({row:TDSRow[1]|$row.getString('firstName') + $row.getString('lastName')}, 'exprString3'))};
    
-   let mapping = meta::relational::tests::simpleRelationalMapping;
+   let mapping = meta::external::store::relational::tests::simpleRelationalMapping;
    
-   let sqlResultH2 = meta::relational::functions::sqlstring::toSQLString($func, $mapping, meta::relational::runtime::DatabaseType.H2, meta::pure::router::extension::defaultRelationalExtensions());
+   let sqlResultH2 = meta::external::store::relational::functions::sqlstring::toSQLString($func, $mapping, meta::external::store::relational::runtime::DatabaseType.H2, meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals($sqlResultH2, 'select "root".FIRSTNAME as "firstName", "root".LASTNAME as "lastName", "root".AGE as "age", concat("root".FIRSTNAME, "root".LASTNAME) as "exprString3" from personTable as "root"');
  
-   let sqlResultSybaseIQ = meta::relational::functions::sqlstring::toSQLString($func, $mapping, meta::relational::runtime::DatabaseType.SybaseIQ, meta::pure::router::extension::defaultRelationalExtensions());
+   let sqlResultSybaseIQ = meta::external::store::relational::functions::sqlstring::toSQLString($func, $mapping, meta::external::store::relational::runtime::DatabaseType.SybaseIQ, meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals($sqlResultSybaseIQ, 'select "root".FIRSTNAME as "firstName", "root".LASTNAME as "lastName", "root".AGE as "age", "root".FIRSTNAME+"root".LASTNAME as "exprString3" from personTable as "root"');  
    
-   let sqlResultDB2 = meta::relational::functions::sqlstring::toSQLString($func, $mapping, meta::relational::runtime::DatabaseType.DB2, meta::pure::router::extension::defaultRelationalExtensions());
+   let sqlResultDB2 = meta::external::store::relational::functions::sqlstring::toSQLString($func, $mapping, meta::external::store::relational::runtime::DatabaseType.DB2, meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals($sqlResultDB2, 'select "root".FIRSTNAME as "firstName", "root".LASTNAME as "lastName", "root".AGE as "age", ("root".FIRSTNAME concat "root".LASTNAME) as "exprString3" from personTable as "root"'
 );
 }
 
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testIfWithEmptyExtension():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testIfWithEmptyExtension():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -314,9 +314,9 @@ function <<test.Test>> meta::relational::tests::tds::tdsExtend::testIfWithEmptyE
       $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testExtendWithQuotedColumnWithTableToTDS():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testExtendWithQuotedColumnWithTableToTDS():Boolean[1]
 {
-   let queryWithoutQuotes   = {|tableToTDS(meta::relational::functions::database::tableReference(meta::relational::tests::db,'default','tableWithQuotedColumns'))
+   let queryWithoutQuotes   = {|tableToTDS(meta::external::store::relational::functions::database::tableReference(meta::external::store::relational::tests::db,'default','tableWithQuotedColumns'))
                    ->project([
                                col({r:TDSRow[1]|$r.getString('FIRST NAME')}, 'FIRST NAME'),
                                col({r:TDSRow[1]|$r.getString('LAST NAME')}, 'LAST NAME'),
@@ -327,12 +327,12 @@ function <<test.Test>> meta::relational::tests::tds::tdsExtend::testExtendWithQu
                                col({r:TDSRow[1]|$r.getString('1columnStartsWithNumber')+'_hello'}, 'numbercol_again')
                             ])};
    
-   let mapping = meta::relational::tests::tds::tabletds::EmptyMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::tds::tabletds::EmptyMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
    
    let resultWithoutQuotes = execute($queryWithoutQuotes, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions());
    
-   let queryWithQuotes   = {|tableToTDS(meta::relational::functions::database::tableReference(meta::relational::tests::db,'default','tableWithQuotedColumns'))
+   let queryWithQuotes   = {|tableToTDS(meta::external::store::relational::functions::database::tableReference(meta::external::store::relational::tests::db,'default','tableWithQuotedColumns'))
       ->project([
                                col({r:TDSRow[1]|$r.getString('FIRST NAME')}, 'FIRST NAME'),
                                col({r:TDSRow[1]|$r.getString('LAST NAME')}, 'LAST NAME'),
@@ -355,7 +355,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsExtend::testExtendWithQu
    assertEquals($expectedSql, $resultWithQuotes->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsExtend::testExtendsWithInClause():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsExtend::testExtendsWithInClause():Boolean[1]
 {
    let result = execute(
       |Person.all()

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-function <<test.BeforePackage>> meta::relational::tests::tds::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::tds::setUp():Boolean[1]
 {
-    meta::relational::tests::createTablesAndFillDb();
+    meta::external::store::relational::tests::createTablesAndFillDb();
 }

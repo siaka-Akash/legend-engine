@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::metamodel::join::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::mapping::*;
-import meta::relational::runtime::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::tests::*;
 
-function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testProjectAllColumns_Single():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsRestrict::testProjectAllColumns_Single():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -36,7 +36,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testProjectAll
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testProjectAllColumns_Mulitple():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsRestrict::testProjectAllColumns_Mulitple():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -55,7 +55,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testProjectAll
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testLowerProjectColsEliminated():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsRestrict::testLowerProjectColsEliminated():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -76,7 +76,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testLowerProje
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testLowerProjectColsNotEliminatedWithDistinct():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsRestrict::testLowerProjectColsNotEliminatedWithDistinct():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -99,7 +99,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testLowerProje
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testLowerProjectColsNotEliminatedWithSort():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsRestrict::testLowerProjectColsNotEliminatedWithSort():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -122,7 +122,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testLowerProje
 }
 
 
-function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testRestrictOnGroupByEleminatesUncessaryAggs():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsRestrict::testRestrictOnGroupByEleminatesUncessaryAggs():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -147,7 +147,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testRestrictOn
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testRestrictOnGroupByEleminatesUnnecessaryAggsWithDistinct():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsRestrict::testRestrictOnGroupByEleminatesUnnecessaryAggsWithDistinct():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -179,7 +179,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testRestrictOn
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testRestrictOnGroupByColumn_SubSetOfGroupByColumns():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsRestrict::testRestrictOnGroupByColumn_SubSetOfGroupByColumns():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -211,7 +211,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testRestrictOn
 }
 
 
-function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testRestrictOnGroupByColumn_DropAllAggColumns():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsRestrict::testRestrictOnGroupByColumn_DropAllAggColumns():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -243,7 +243,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testRestrictOn
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testRestrictHandlesQueryPathsCorrectlyOnRename():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsRestrict::testRestrictHandlesQueryPathsCorrectlyOnRename():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -263,18 +263,18 @@ function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testRestrictHa
       $result.values.rows->map(r|$r.values->makeString('|'))->makeString(','));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testRestrictWithPostProcessor():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsRestrict::testRestrictWithPostProcessor():Boolean[1]
 {
    let runtime = testRuntime();
    let conn = $runtime.connections->at(0)->cast(@TestDatabaseConnection);
-   let runtimeWithPostProcessor = ^$runtime(connections = ^$conn(sqlQueryPostProcessors= [{query:meta::relational::metamodel::relation::SelectSQLQuery[1] | $query->meta::relational::postProcessor::postprocess({rel | $rel}) }]));
+   let runtimeWithPostProcessor = ^$runtime(connections = ^$conn(sqlQueryPostProcessors= [{query:meta::external::store::relational::metamodel::relation::SelectSQLQuery[1] | $query->meta::external::store::relational::postProcessor::postprocess({rel | $rel}) }]));
    let result = execute(|Person.all()->project([col(p|$p.firstName,'firstName'), col(p|'Hello','Hello')])->sort([asc('Hello'), asc('firstName')])->restrict(['firstName']), simpleRelationalMapping, $runtimeWithPostProcessor, meta::pure::router::extension::defaultRelationalExtensions());
    
    assertEquals('select "persontable_0"."firstName" as "firstName" from (select "root".FIRSTNAME as "firstName", \'Hello\' as "Hello" from personTable as "root" order by "Hello","firstName") as "persontable_0"', $result->sqlRemoveFormatting());
 }
 
 
-function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testRestrictAfterMultiColumnGroupByFollowedByRename():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsRestrict::testRestrictAfterMultiColumnGroupByFollowedByRename():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -292,7 +292,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testRestrictAf
       $result.values.rows->map(r|$r.values->makeString('|'))->makeString(','));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsRestrict::testRestrictAfterConcatenate():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsRestrict::testRestrictAfterConcatenate():Boolean[1]
 {
    let result = execute(
       |Person.all()

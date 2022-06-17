@@ -16,19 +16,19 @@ import meta::pure::executionPlan::*;
 import meta::protocols::pure::vX_X_X::metamodel::valueSpecification::application::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::mapping::*;
-import meta::pure::mapping::modelToModel::test::shared::*;
-import meta::pure::mapping::modelToModel::test::simple::*;
-import meta::pure::mapping::modelToModel::test::primitives::*;
-import meta::pure::mapping::modelToModel::test::filter::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::shared::*;
+import meta::external::store::model::test::simple::*;
+import meta::external::store::model::test::primitives::*;
+import meta::external::store::model::test::filter::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::*;
 import meta::pure::runtime::*;
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::pmcd::models::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::pmcd::models::*;
 
 // Simple ------------------
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::simple::testSimple():Any[*]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::simple::testSimple():Any[*]
 {
     let res = execute(
             |Person.all(),
@@ -48,7 +48,7 @@ function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::
    testSimpleAsserts($res);
 }
 
-function meta::pure::mapping::modelToModel::test::simple::testSimpleAsserts(res:Result<Person|*>[1]):Boolean[1]
+function meta::external::store::model::test::simple::testSimpleAsserts(res:Result<Person|*>[1]):Boolean[1]
 {
    assertEquals(['Doe', 'XE', 'Yo'], $res.values.lastName);
 }
@@ -56,7 +56,7 @@ function meta::pure::mapping::modelToModel::test::simple::testSimpleAsserts(res:
 
 // Simple Filter ------------------
 
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::simple::testSimpleFilter():Any[*]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::simple::testSimpleFilter():Any[*]
 {
     let res = execute(
             |Person.all()->filter(p|$p.lastName == 'Yo'),
@@ -76,7 +76,7 @@ function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::
    testSimpleFilterAsserts($res);
 }
 
-function meta::pure::mapping::modelToModel::test::simple::testSimpleFilterAsserts(res:Result<Person|*>[1]):Boolean[1]
+function meta::external::store::model::test::simple::testSimpleFilterAsserts(res:Result<Person|*>[1]):Boolean[1]
 {
    assertEquals(['Yo'], $res.values.lastName);
 }
@@ -85,7 +85,7 @@ function meta::pure::mapping::modelToModel::test::simple::testSimpleFilterAssert
 
 // SimpleAssociation ---------------------
 
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::simple::testSimpleAssociation():Any[*]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::simple::testSimpleAssociation():Any[*]
 {
     let res = execute(
             |Firm.all(),
@@ -103,7 +103,7 @@ function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::
    testSimpleAssociationAsserts($res);
 }
 
-function meta::pure::mapping::modelToModel::test::simple::testSimpleAssociationAsserts(res:Result<Firm|*>[1]):Boolean[1]
+function meta::external::store::model::test::simple::testSimpleAssociationAsserts(res:Result<Firm|*>[1]):Boolean[1]
 {
    let f = $res.values->toOne();
    assertEquals('A', $f.legalName);
@@ -114,7 +114,7 @@ function meta::pure::mapping::modelToModel::test::simple::testSimpleAssociationA
 
 // SimpleProject ---------------------
 
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::simple::testSimpleProjectAsso():Any[*]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::simple::testSimpleProjectAsso():Any[*]
 {
     let res = execute(
             |Firm.all()->project([f|$f.legalName, f|$f.employees.lastName], ['legalName','lastName']),
@@ -134,7 +134,7 @@ function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::
 
 
 
-function meta::pure::mapping::modelToModel::test::simple::testSimpleProjectAssoAsserts(res:Result<TabularDataSet|1>[1]):Boolean[1]
+function meta::external::store::model::test::simple::testSimpleProjectAssoAsserts(res:Result<TabularDataSet|1>[1]):Boolean[1]
 {
    let tds = $res.values->at(0);
    let rows = $tds.rows->sortBy(r|$r.getString('lastName'));
@@ -147,11 +147,11 @@ function meta::pure::mapping::modelToModel::test::simple::testSimpleProjectAssoA
 
 
 
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::simple::testSimpleProject():Any[*]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::simple::testSimpleProject():Any[*]
 {
     let res = execute(
             |Person.all()->project([p|$p.firstName, p|$p.lastName], ['firstName','lastName']),
-            meta::pure::mapping::modelToModel::test::simple::simpleModelMapping,
+            meta::external::store::model::test::simple::simpleModelMapping,
             ^Runtime(connections = [
                                        ^ModelConnection(element = ^ModelStore(), instances= newMap(
                                                                                                       pair(_S_Person, list([
@@ -169,7 +169,7 @@ function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::
    testSimpleProjectAsserts($res);
 }
 
-function meta::pure::mapping::modelToModel::test::simple::testSimpleProjectAsserts(res:Result<TabularDataSet|1>[1]):Boolean[1]
+function meta::external::store::model::test::simple::testSimpleProjectAsserts(res:Result<TabularDataSet|1>[1]):Boolean[1]
 {
    let tds = $res.values->at(0);
    let rows = $tds.rows->sortBy(r|$r.getString('lastName'));
@@ -179,22 +179,22 @@ function meta::pure::mapping::modelToModel::test::simple::testSimpleProjectAsser
    assertEquals('Yo', $rows->at(2).getString('lastName'));
 }
 
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::simple::testPropertyMappingWithFunctions(): Boolean[1]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::simple::testPropertyMappingWithFunctions(): Boolean[1]
 {
-   let theMapping = meta::pure::mapping::modelToModel::test::createInstances::createInstancesModelMappingOneMany;
+   let theMapping = meta::external::store::model::test::createInstances::createInstancesModelMappingOneMany;
    let extensions = meta::pure::router::extension::defaultExtensions();
    let domainElements = $theMapping->map(m|$m->meta::protocols::pure::vX_X_X::transformation::fromPureGraph::mapping::transformMapping($extensions));
    let transform = $domainElements.classMappings->cast(@meta::protocols::pure::vX_X_X::metamodel::mapping::modelToModel::PureInstanceClassMapping).propertyMappings->map(m | $m.transform.body); 
    assertEmpty($transform->filter(t | $t->instanceOf(UnknownAppliedFunction)));
-   assert($transform->map(t | $t->cast(@AppliedFunction).function)->contains('meta::pure::mapping::modelToModel::test::createInstances::getFullName'), 'meta::pure::mapping::modelToModel::test::createInstances::createInstancesModelMappingOneMany');
+   assert($transform->map(t | $t->cast(@AppliedFunction).function)->contains('meta::external::store::model::test::createInstances::getFullName'), 'meta::external::store::model::test::createInstances::createInstancesModelMappingOneMany');
 }
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMappingO
+Mapping meta::external::store::model::test::simple::simpleModelMappingO
 (
    Person : Pure
             {
@@ -206,11 +206,11 @@ Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMappingO
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMappingOConstant
+Mapping meta::external::store::model::test::simple::simpleModelMappingOConstant
 (
    Person : Pure
             {
@@ -222,11 +222,11 @@ Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMappingOCons
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping
+Mapping meta::external::store::model::test::simple::simpleModelMapping
 (
    Person : Pure
             {
@@ -253,15 +253,15 @@ Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMappingWithSubType
+Mapping meta::external::store::model::test::simple::simpleModelMappingWithSubType
 (
-   meta::pure::mapping::modelToModel::test::shared::dest::Firm : Pure
+   meta::external::store::model::test::shared::dest::Firm : Pure
             {
-               ~src meta::pure::mapping::modelToModel::test::shared::src::_S_Firm
+               ~src meta::external::store::model::test::shared::src::_S_Firm
                
                legalName        : $src.name,
                employees[A]     : $src.employees->filter(e | $e->instanceOf(_S_PersonA))->cast(@_S_PersonA)
@@ -277,15 +277,15 @@ Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMappingWithS
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMappingWithSubTypeWithNestedAssociation
+Mapping meta::external::store::model::test::simple::simpleModelMappingWithSubTypeWithNestedAssociation
 (
-   meta::pure::mapping::modelToModel::test::shared::dest::Firm : Pure
+   meta::external::store::model::test::shared::dest::Firm : Pure
             {
-               ~src meta::pure::mapping::modelToModel::test::shared::src::_S_Firm
+               ~src meta::external::store::model::test::shared::src::_S_Firm
                
                legalName        : $src.name,
                employees[A]     : $src.employees->filter(e | $e->instanceOf(_S_PersonA))->cast(@_S_PersonA)
@@ -303,11 +303,11 @@ Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMappingWithS
 
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMappingWithAssociation
+Mapping meta::external::store::model::test::simple::simpleModelMappingWithAssociation
 (
    Person : Pure
             {
@@ -325,7 +325,7 @@ Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMappingWithA
 
 )
 
-Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMappingWithMultipleClassMappings
+Mapping meta::external::store::model::test::simple::simpleModelMappingWithMultipleClassMappings
 (
    *Person : Pure
             {
@@ -351,11 +351,11 @@ Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMappingWithM
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::simple::ModelMappingWithJoinToExtendedProperty
+Mapping meta::external::store::model::test::simple::ModelMappingWithJoinToExtendedProperty
 (
    Trade : Pure
             {
@@ -377,11 +377,11 @@ Mapping meta::pure::mapping::modelToModel::test::simple::ModelMappingWithJoinToE
 
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::crossStore::crossStoreModelMappingWithLocalMappingProperty
+Mapping meta::external::store::model::test::crossStore::crossStoreModelMappingWithLocalMappingProperty
 (
    _SimplePerson[person_Set] : Pure
    {
@@ -396,14 +396,14 @@ Mapping meta::pure::mapping::modelToModel::test::crossStore::crossStoreModelMapp
       name : $src.legalName
    }
    
-   meta::pure::mapping::modelToModel::test::shared::src::_SimpleFirm_SimplePerson: XStore
+   meta::external::store::model::test::shared::src::_SimpleFirm_SimplePerson: XStore
    {
       simpleEmployees[firm_set, person_Set] : $this.name == $that.firmName,
       firm[person_Set, firm_set]            : $that.name == $this.firmName
    }
 )
 
-Mapping meta::pure::mapping::modelToModel::test::crossStore::crossStoreModelMapping
+Mapping meta::external::store::model::test::crossStore::crossStoreModelMapping
 (
    _SimplePerson[person_Set] : Pure
    {
@@ -417,7 +417,7 @@ Mapping meta::pure::mapping::modelToModel::test::crossStore::crossStoreModelMapp
       name : $src.legalName
    }
    
-   meta::pure::mapping::modelToModel::test::shared::src::_SimpleFirm_SimplePerson: XStore
+   meta::external::store::model::test::shared::src::_SimpleFirm_SimplePerson: XStore
    {
       simpleEmployees[firm_set, person_Set] : $this.name == $that.fullName,
       firm[person_Set, firm_set]            : $that.name == $this.fullName

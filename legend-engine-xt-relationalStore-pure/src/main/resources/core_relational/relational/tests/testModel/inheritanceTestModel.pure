@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::model::inheritance::*;
+import meta::external::store::relational::tests::model::inheritance::*;
 
-Class meta::relational::tests::model::inheritance::Vehicle
+Class meta::external::store::relational::tests::model::inheritance::Vehicle
 {
    id : Integer[1];
    description: String[1];
@@ -27,101 +27,101 @@ Class meta::relational::tests::model::inheritance::Vehicle
 
 }
 
-Class meta::relational::tests::model::inheritance::Plane extends Vehicle
+Class meta::external::store::relational::tests::model::inheritance::Plane extends Vehicle
 {
 
 }
 
-Class meta::relational::tests::model::inheritance::RoadVehicle extends Vehicle
+Class meta::external::store::relational::tests::model::inheritance::RoadVehicle extends Vehicle
 {
    wheelCount : Integer[1];
 }
 
-Class meta::relational::tests::model::inheritance::Bicycle extends RoadVehicle
+Class meta::external::store::relational::tests::model::inheritance::Bicycle extends RoadVehicle
 {
 
 }
 
-Class meta::relational::tests::model::inheritance::Fuel
+Class meta::external::store::relational::tests::model::inheritance::Fuel
 {
    description: String[1];
 }
 
-Class meta::relational::tests::model::inheritance::Gasoline extends Fuel
+Class meta::external::store::relational::tests::model::inheritance::Gasoline extends Fuel
 {
    octaneLevel : Integer[1];
    combustionCharacteristics : CombustionCharacteristics[1];
 }
 
-Class meta::relational::tests::model::inheritance::Unleaded extends Gasoline
+Class meta::external::store::relational::tests::model::inheritance::Unleaded extends Gasoline
 {
 }
 
-Class meta::relational::tests::model::inheritance::CombustionCharacteristics
+Class meta::external::store::relational::tests::model::inheritance::CombustionCharacteristics
 {
    idealCompression : Integer[1];
 }
 
-Enum meta::relational::tests::model::inheritance::EngineType
+Enum meta::external::store::relational::tests::model::inheritance::EngineType
 {
    V, U, H, W, X
 }
 
-Class meta::relational::tests::model::inheritance::Car extends RoadVehicle
+Class meta::external::store::relational::tests::model::inheritance::Car extends RoadVehicle
 {
    engineType : EngineType[1];
 }
 
-Class meta::relational::tests::model::inheritance::VehicleOwner
+Class meta::external::store::relational::tests::model::inheritance::VehicleOwner
 {
    vehicles : Vehicle[*];
    name : String[1];
 }
 
-Class meta::relational::tests::model::inheritance::Person extends VehicleOwner
+Class meta::external::store::relational::tests::model::inheritance::Person extends VehicleOwner
 {
    name : String[1];
 }
 
-Class meta::relational::tests::model::inheritance::Airline extends VehicleOwner
+Class meta::external::store::relational::tests::model::inheritance::Airline extends VehicleOwner
 {
    planes : Plane[*];
 }
 
-Class meta::relational::tests::model::inheritance::RacingCar extends Car
+Class meta::external::store::relational::tests::model::inheritance::RacingCar extends Car
 {
 }
 
-Class meta::relational::tests::model::inheritance::Company
+Class meta::external::store::relational::tests::model::inheritance::Company
 {
    name: String[1];
 }
 
-Association meta::relational::tests::model::inheritance::RacingCarSponsor
+Association meta::external::store::relational::tests::model::inheritance::RacingCarSponsor
 {
    racingCar:RacingCar[1];
    sponsor:Company[0..1];
 }
 
-Association meta::relational::tests::model::inheritance::Driver
+Association meta::external::store::relational::tests::model::inheritance::Driver
 {
    person : Person[1];
    roadVehicles : RoadVehicle[*];
 }
 
-Association meta::relational::tests::model::inheritance::Cyclist
+Association meta::external::store::relational::tests::model::inheritance::Cyclist
 {
    person : Person[1];
    bicycles : Bicycle[*];
 }
 
-Association meta::relational::tests::model::inheritance::CarDriver
+Association meta::external::store::relational::tests::model::inheritance::CarDriver
 {
    person : Person[1];
    cars : Car[*];
 }
 
-Association meta::relational::tests::model::inheritance::VehicleOwnerVehicle
+Association meta::external::store::relational::tests::model::inheritance::VehicleOwnerVehicle
 {
    ownedVehicles : Vehicle[*];
    ownedVehiclesWithEmptyDescription()

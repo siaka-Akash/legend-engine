@@ -339,10 +339,10 @@ import meta::pure::executionPlan::toString::*;
 import meta::pure::executionPlan::*;
 import meta::pure::graphFetch::execution::*;
 import meta::pure::graphFetch::tests::XStore::inMemoryAndRelational::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::functions::toDDL::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::functions::toDDL::*;
 import meta::pure::graphFetcha::tests::XStore::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::runtime::*;
 
 function <<test.BeforePackage>> meta::pure::graphFetch::tests::XStore::inMemoryAndRelational::createTablesInDb():Boolean[1]
 {
@@ -393,7 +393,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::pur
    }#;
    let query = {|Trade.all()->graphFetch($tree)->serialize($tree)};
    let mapping = meta::pure::graphFetch::tests::XStore::inMemoryAndRelational::crossMapping1;
-   let runtime = meta::relational::tests::testRuntime();
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
    
@@ -420,7 +420,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::pur
    }#;
    let query = {|Trade.all()->graphFetch($tree)->serialize($tree)};
    let mapping = meta::pure::graphFetch::tests::XStore::inMemoryAndRelational::crossMapping1;
-   let runtime = meta::relational::tests::testRuntime();
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
    
@@ -452,7 +452,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::pur
    }#;
    let query = {|Trade.all()->graphFetch($tree)->serialize($tree)};
    let mapping = meta::pure::graphFetch::tests::XStore::inMemoryAndRelational::crossMapping1;
-   let runtime = meta::relational::tests::testRuntime();
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
    
@@ -493,7 +493,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::pur
    }#;
    let query = {|Trade.all()->graphFetch($tree)->serialize($tree)};
    let mapping = meta::pure::graphFetch::tests::XStore::inMemoryAndRelational::crossMapping1;
-   let runtime = meta::relational::tests::testRuntime();
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
    
@@ -559,7 +559,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::pur
    }#;
    let query = {|Trade.all()->graphFetch($tree)->serialize($tree)};
    let mapping = meta::pure::graphFetch::tests::XStore::inMemoryAndRelational::crossMapping1;
-   let runtime = meta::relational::tests::testRuntime();
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
    
@@ -634,7 +634,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::pur
    }#;
    let query = {|Trade.all()->graphFetch($tree)->serialize($tree)};
    let mapping = meta::pure::graphFetch::tests::XStore::inMemoryAndRelational::crossMapping1;
-   let runtime = meta::relational::tests::testRuntime();
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
    
@@ -712,7 +712,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::pur
    }#;
    let query = {|Trade.all()->graphFetch($tree)->serialize($tree)};
    let mapping = meta::pure::graphFetch::tests::XStore::inMemoryAndRelational::crossMapping1;
-   let runtime = meta::relational::tests::testRuntime();
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
    
@@ -761,7 +761,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::pur
    }#;
    let query = {|Trade.all()->graphFetch($tree)->serialize($tree)};
    let mapping = meta::pure::graphFetch::tests::XStore::inMemoryAndRelational::crossMapping2;
-   let runtime = meta::relational::tests::testRuntime();
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
    
@@ -796,9 +796,9 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::pur
       }
    }#;
    
-   let jsonConnection = ^meta::pure::mapping::modelToModel::JsonModelConnection
+   let jsonConnection = ^meta::external::store::model::JsonModelConnection
                          (
-                            element = ^meta::pure::mapping::modelToModel::ModelStore(), 
+                            element = ^meta::external::store::model::ModelStore(),
                             class   = S_Trade, 
                             url     = 'data:application/json,'+
                                       '{"s_tradeId": 1, "s_tradeDetails": "30:100", "s_traderDetails": "abc:F_Name_1:L_Name_1"}'+
@@ -806,7 +806,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::pur
                                       '{"s_tradeId": 3, "s_tradeDetails": "30:300", "s_traderDetails": "xyz:F_Name_2:L_Name_2"}'+
                                       '{"s_tradeId": 4, "s_tradeDetails": "31:400", "s_traderDetails": "xyz:F_Name_2:L_Name_2"}'
                          );
-   let dbRuntime = meta::relational::tests::testRuntime();
+   let dbRuntime = meta::external::store::relational::tests::testRuntime();
    
    let query = {|Trade.all()->graphFetch($tree)->serialize($tree)};
    let mapping = meta::pure::graphFetch::tests::XStore::inMemoryAndRelational::crossMapping3;
@@ -863,9 +863,9 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::pur
       }
    }#;
    
-   let jsonConnection = ^meta::pure::mapping::modelToModel::JsonModelConnection
+   let jsonConnection = ^meta::external::store::model::JsonModelConnection
                          (
-                            element = ^meta::pure::mapping::modelToModel::ModelStore(), 
+                            element = ^meta::external::store::model::ModelStore(),
                             class   = S_Trade, 
                             url     = 'data:application/json,'+
                                       '{"s_tradeId": 1, "s_tradeDetails": "30:100", "s_traderDetails": "abc:F_Name_1:L_Name_1"}'+
@@ -873,7 +873,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::pur
                                       '{"s_tradeId": 3, "s_tradeDetails": "30:300", "s_traderDetails": "xyz:F_Name_2:L_Name_2"}'+
                                       '{"s_tradeId": 4, "s_tradeDetails": "31:400", "s_traderDetails": "xyz:F_Name_2:L_Name_2"}'
                          );
-   let dbRuntime = meta::relational::tests::testRuntime();
+   let dbRuntime = meta::external::store::relational::tests::testRuntime();
    
    let query = {|T_Trade.all()->graphFetch($tree)->serialize($tree)};
    let mapping = meta::pure::graphFetch::tests::XStore::inMemoryAndRelational::crossMapping4;
@@ -925,9 +925,9 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::pur
       }
    }#;
    
-   let jsonConnection = ^meta::pure::mapping::modelToModel::JsonModelConnection
+   let jsonConnection = ^meta::external::store::model::JsonModelConnection
                          (
-                            element = ^meta::pure::mapping::modelToModel::ModelStore(), 
+                            element = ^meta::external::store::model::ModelStore(),
                             class   = S_TradesWrapper, 
                             url     = 'data:application/json,'+
                                       '{"s_trades" : [{"s_tradeId": 1, "s_tradeDetails": "30:100", "s_traderDetails": "abc:F_Name_1:L_Name_1"},'+
@@ -935,7 +935,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::pur
                                                      '{"s_tradeId": 3, "s_tradeDetails": "30:300", "s_traderDetails": "xyz:F_Name_2:L_Name_2"},'+
                                                      '{"s_tradeId": 4, "s_tradeDetails": "31:400", "s_traderDetails": "xyz:F_Name_2:L_Name_2"}]}'
                          );
-   let dbRuntime = meta::relational::tests::testRuntime();
+   let dbRuntime = meta::external::store::relational::tests::testRuntime();
    
    let query = {|T_Trade.all()->graphFetch($tree)->serialize($tree)};
    let mapping = meta::pure::graphFetch::tests::XStore::inMemoryAndRelational::crossMapping5;

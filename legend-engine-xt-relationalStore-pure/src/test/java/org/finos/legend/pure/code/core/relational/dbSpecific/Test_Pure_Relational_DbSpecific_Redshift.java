@@ -25,7 +25,7 @@ public class Test_Pure_Relational_DbSpecific_Redshift
     {
         CompiledExecutionSupport executionSupport = PureTestBuilderHelper.getClassLoaderExecutionSupport();
         TestSuite suite = new TestSuite();
-        suite.addTest(PureTestBuilderHelper.buildSuite(TestCollection.collectTests("meta::relational::tests::dbSpecificTests::redshift", executionSupport.getProcessorSupport(), fn -> PureTestBuilderHelper.generatePureTestCollection(fn, executionSupport), ci -> PureTestBuilderHelper.satisfiesConditions(ci, executionSupport.getProcessorSupport())), executionSupport));
+        suite.addTest(PureTestBuilderHelper.buildSuite(TestCollection.collectTests("meta::external::store::relational::tests::dbSpecificTests::redshift", executionSupport.getProcessorSupport(), fn -> PureTestBuilderHelper.generatePureTestCollection(fn, executionSupport), ci -> PureTestBuilderHelper.satisfiesConditions(ci, executionSupport.getProcessorSupport())), executionSupport));
         return suite;
     }
 }

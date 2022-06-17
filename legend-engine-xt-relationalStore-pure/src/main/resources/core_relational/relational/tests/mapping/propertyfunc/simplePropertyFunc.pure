@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::mapping::*;
-import meta::relational::tests::mapping::propertyfunc::model::domain::*;
-import meta::relational::tests::mapping::propertyfunc::model::store::*;
-import meta::relational::tests::mapping::propertyfunc::model::mapping::*;
-import meta::relational::runtime::*;
-import meta::relational::runtime::authentication::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::mapping::propertyfunc::model::domain::*;
+import meta::external::store::relational::tests::mapping::propertyfunc::model::store::*;
+import meta::external::store::relational::tests::mapping::propertyfunc::model::mapping::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::runtime::authentication::*;
 import meta::pure::profiles::*;
 import meta::pure::runtime::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::tests::mapping::propertyfunc::model::store::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::tests::mapping::propertyfunc::model::store::*;
 
 
-function <<test.Test>> meta::relational::tests::mapping::propertyfunc::simple::testSimplePropertyFuncProject():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::propertyfunc::simple::testSimplePropertyFuncProject():Boolean[1]
 {
-   let result = execute(|Person.all()->project([#/Person/firstName#, #/Person/lastName#, #/Person/fullName#]), meta::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
+   let result = execute(|Person.all()->project([#/Person/firstName#, #/Person/lastName#, #/Person/fullName#]), meta::external::store::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    let tds = $result.values->at(0);
    assertEquals(6, $tds.rows->size());
    assertEquals(['Peter', 'Smith', 'Smith, Peter'], $tds.rows->at(0).values);
@@ -38,17 +38,17 @@ function <<test.Test>> meta::relational::tests::mapping::propertyfunc::simple::t
    assertEquals('select substring("root".FULLNAME, 0, position(\',\', "root".FULLNAME)-1) as "firstName", substring("root".FULLNAME, (position(\',\', "root".FULLNAME) + 2)) as "lastName", concat(substring("root".FULLNAME, (position(\',\', "root".FULLNAME) + 2)), \', \', substring("root".FULLNAME, 0, position(\',\', "root".FULLNAME)-1)) as "fullName" from personTable as "root"', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::mapping::propertyfunc::simple::testSimplePropertyFuncQuery():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::propertyfunc::simple::testSimplePropertyFuncQuery():Boolean[1]
 {
-   let result = execute(|Person.all()->filter(p|$p.firstName == 'John'), meta::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
+   let result = execute(|Person.all()->filter(p|$p.firstName == 'John'), meta::external::store::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    let res = $result.values->at(0);
    assertEquals('John',$res.firstName);
    assertEquals('Johnson',$res.lastName);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::propertyfunc::simple::testSimplePropertyFuncGetAll():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::propertyfunc::simple::testSimplePropertyFuncGetAll():Boolean[1]
 {
-   let result = execute(|Person.all(), meta::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
+   let result = execute(|Person.all(), meta::external::store::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    let res = $result.values;
    assertEquals(6, $res->size());
    assertEquals(['Peter', 'Smith'], [$res->at(0).firstName, $res->at(0).lastName]);
@@ -61,9 +61,9 @@ function <<test.Test>> meta::relational::tests::mapping::propertyfunc::simple::t
 }
 
 
-function <<test.Test>> meta::relational::tests::mapping::propertyfunc::withjoin::testSimplePropertyFuncProjectWithJoin():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::propertyfunc::withjoin::testSimplePropertyFuncProjectWithJoin():Boolean[1]
 {
-   let result = execute(|Person.all()->project([#/Person/firstName#, #/Person/lastName#, #/Person/fullName#]), meta::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMappingWithJoin, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
+   let result = execute(|Person.all()->project([#/Person/firstName#, #/Person/lastName#, #/Person/fullName#]), meta::external::store::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMappingWithJoin, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    let tds = $result.values->at(0);
    assertEquals(6, $tds.rows->size());
    assertEquals(['Peter', 'Smith_p1', 'Smith_p1, Peter'], $tds.rows->at(0).values);
@@ -75,17 +75,17 @@ function <<test.Test>> meta::relational::tests::mapping::propertyfunc::withjoin:
    assertEquals('select substring("root".FULLNAME, 0, position(\',\', concat("root".FULLNAME, "persontableextension_0".FULLNAME_PART2))-1) as "firstName", substring(concat("root".FULLNAME, "persontableextension_0".FULLNAME_PART2), (position(\',\', concat("root".FULLNAME, "persontableextension_0".FULLNAME_PART2)) + 2)) as "lastName", concat(substring(concat("root".FULLNAME, "persontableextension_0".FULLNAME_PART2), (position(\',\', concat("root".FULLNAME, "persontableextension_0".FULLNAME_PART2)) + 2)), \', \', substring("root".FULLNAME, 0, position(\',\', concat("root".FULLNAME, "persontableextension_0".FULLNAME_PART2))-1)) as "fullName" from personTable as "root" left outer join personTableExtension as "persontableextension_0" on ("root".ID = "persontableextension_0".ID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::mapping::propertyfunc::withjoin::testSimplePropertyFuncQueryWithJoin():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::propertyfunc::withjoin::testSimplePropertyFuncQueryWithJoin():Boolean[1]
 {
-   let result = execute(|Person.all()->filter(p|$p.lastName == 'Roberts_p4'), meta::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMappingWithJoin, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
+   let result = execute(|Person.all()->filter(p|$p.lastName == 'Roberts_p4'), meta::external::store::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMappingWithJoin, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    let res = $result.values;
    assertEquals(['Fabrice', 'Roberts_p4', 'Roberts_p4, Fabrice'], [$res->at(0).firstName, $res->at(0).lastName, $res->at(0).fullName]);
    assertEquals('select "root".ID as "pk_0", substring("root".FULLNAME, 0, position(\',\', concat("root".FULLNAME, "persontableextension_0".FULLNAME_PART2))-1) as "firstName", "root".FULLNAME as "displayName", substring(concat("root".FULLNAME, "persontableextension_0".FULLNAME_PART2), (position(\',\', concat("root".FULLNAME, "persontableextension_0".FULLNAME_PART2)) + 2)) as "lastName" from personTable as "root" left outer join personTableExtension as "persontableextension_0" on ("root".ID = "persontableextension_0".ID) where substring(concat("root".FULLNAME, "persontableextension_0".FULLNAME_PART2), (position(\',\', concat("root".FULLNAME, "persontableextension_0".FULLNAME_PART2)) + 2)) = \'Roberts_p4\'', $result->sqlRemoveFormatting());
 } 
 
-function <<test.Test>> meta::relational::tests::mapping::propertyfunc::withjoin::testSimplePropertyFuncGetAllWithJoin():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::propertyfunc::withjoin::testSimplePropertyFuncGetAllWithJoin():Boolean[1]
 {
-   let result = execute(|Person.all(), meta::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMappingWithJoin, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
+   let result = execute(|Person.all(), meta::external::store::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMappingWithJoin, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    let res = $result.values;
    assertEquals(['Peter', 'Smith_p1', 'Smith_p1, Peter'], [$res->at(0).firstName, $res->at(0).lastName, $res->at(0).fullName]);
    assertEquals(['John', 'Johnson_p2', 'Johnson_p2, John'], [$res->at(1).firstName, $res->at(1).lastName, $res->at(1).fullName]);
@@ -96,22 +96,22 @@ function <<test.Test>> meta::relational::tests::mapping::propertyfunc::withjoin:
 }
 
 
-function <<test.BeforePackage>> meta::relational::tests::mapping::propertyfunc::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::mapping::propertyfunc::setUp():Boolean[1]
 {
     createTablesAndFillDb();
     true;
 }
 
 
-function meta::relational::tests::mapping::propertyfunc::model::store::testDataTypeMappingRuntime():Runtime[1]
+function meta::external::store::relational::tests::mapping::propertyfunc::model::store::testDataTypeMappingRuntime():Runtime[1]
 {
-   meta::relational::tests::testRuntime(myDB);
+   meta::external::store::relational::tests::testRuntime(myDB);
 }
 
 
 
 
-function meta::relational::tests::mapping::propertyfunc::model::store::createTablesAndFillDb():Boolean[1]
+function meta::external::store::relational::tests::mapping::propertyfunc::model::store::createTablesAndFillDb():Boolean[1]
 {
    let connection = testDataTypeMappingRuntime().connectionByElement(myDB)->cast(@TestDatabaseConnection);
 
@@ -137,7 +137,7 @@ function meta::relational::tests::mapping::propertyfunc::model::store::createTab
 
 
 
-Class meta::relational::tests::mapping::propertyfunc::model::domain::Person
+Class meta::external::store::relational::tests::mapping::propertyfunc::model::domain::Person
 {
     fullName(){$this.lastName+', '+$this.firstName}:String[1];
     firstName : String[1];
@@ -148,7 +148,7 @@ Class meta::relational::tests::mapping::propertyfunc::model::domain::Person
 
 ###Relational
 
-Database meta::relational::tests::mapping::propertyfunc::model::store::myDB
+Database meta::external::store::relational::tests::mapping::propertyfunc::model::store::myDB
 (
     Table personTable (ID INT PRIMARY KEY, FULLNAME VARCHAR(200))
     Table personTableExtension (ID INT PRIMARY KEY, FULLNAME_PART2 VARCHAR(200))
@@ -156,10 +156,10 @@ Database meta::relational::tests::mapping::propertyfunc::model::store::myDB
 )
 
 ###Mapping
-import meta::relational::tests::mapping::propertyfunc::model::domain::*;
-import meta::relational::tests::mapping::propertyfunc::model::store::*;
+import meta::external::store::relational::tests::mapping::propertyfunc::model::domain::*;
+import meta::external::store::relational::tests::mapping::propertyfunc::model::store::*;
 
-Mapping meta::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMapping
+Mapping meta::external::store::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMapping
 (
    Person : Relational
             {
@@ -175,10 +175,10 @@ Mapping meta::relational::tests::mapping::propertyfunc::model::mapping::Property
 
 
 ###Mapping
-import meta::relational::tests::mapping::propertyfunc::model::domain::*;
-import meta::relational::tests::mapping::propertyfunc::model::store::*;
+import meta::external::store::relational::tests::mapping::propertyfunc::model::domain::*;
+import meta::external::store::relational::tests::mapping::propertyfunc::model::store::*;
 
-Mapping meta::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMappingWithJoin
+Mapping meta::external::store::relational::tests::mapping::propertyfunc::model::mapping::PropertyfuncMappingWithJoin
 (
    Person : Relational
             {

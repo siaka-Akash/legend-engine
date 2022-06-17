@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::validation::complex::*;
+import meta::external::store::relational::validation::complex::*;
 
-Class meta::relational::validation::complex::LegalEntity
+Class meta::external::store::relational::validation::complex::LegalEntity
 [
    constraint1
    (
@@ -33,7 +33,7 @@ Class meta::relational::validation::complex::LegalEntity
    address: Address[1];
 }
 
-Class meta::relational::validation::complex::Firm
+Class meta::external::store::relational::validation::complex::Firm
 [
    constraint1
    (
@@ -82,36 +82,36 @@ Class meta::relational::validation::complex::Firm
    addresses : Address[*];
 }
 
-Class meta::relational::validation::complex::Person
+Class meta::external::store::relational::validation::complex::Person
 {
    name : String[1];
    age : Integer[1];
    addresses : Address[*];
 }
 
-Class meta::relational::validation::complex::Address
+Class meta::external::store::relational::validation::complex::Address
 {
    location: Location[1];
    locationStreet: String[1];
    addressId: String[1];
 }
 
-Class meta::relational::validation::complex::Location
+Class meta::external::store::relational::validation::complex::Location
 {
    street: String[1];
    locality: String[1];
 }
 
-Association meta::relational::validation::complex::Employment
+Association meta::external::store::relational::validation::complex::Employment
 {
    employees : Person[*];
    firm : Firm[1];
 }
 
 ###Mapping
-import meta::relational::validation::complex::*;
+import meta::external::store::relational::validation::complex::*;
 
-Mapping meta::relational::validation::complex::validationComplexMappingWithInnerJoins
+Mapping meta::external::store::relational::validation::complex::validationComplexMappingWithInnerJoins
 (
    LegalEntity : Relational
    {
@@ -150,7 +150,7 @@ Mapping meta::relational::validation::complex::validationComplexMappingWithInner
    }
 )
 
-Mapping meta::relational::validation::complex::validationComplexMapping
+Mapping meta::external::store::relational::validation::complex::validationComplexMapping
 (
    LegalEntity : Relational
    {
@@ -186,7 +186,7 @@ Mapping meta::relational::validation::complex::validationComplexMapping
    }
 )
 
-Mapping meta::relational::validation::complex::validationComplexMapping2
+Mapping meta::external::store::relational::validation::complex::validationComplexMapping2
 (
    Firm : Relational
    {
@@ -204,7 +204,7 @@ Mapping meta::relational::validation::complex::validationComplexMapping2
 
 
 ###Relational
-Database meta::relational::validation::complex::db
+Database meta::external::store::relational::validation::complex::db
 (
    Table legalEntityTable (ID INT PRIMARY KEY, FIRMID INT, LEGALENTITYADDRESSID INT)
    Table firmTable (ID INT PRIMARY KEY, LEGALNAME VARCHAR(200), ADDRESSID INT)
@@ -226,15 +226,15 @@ Database meta::relational::validation::complex::db
 )
 
 ###Pure
-import meta::relational::validation::complex::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::runtime::*;
-import meta::csv::*;
-import meta::relational::validation::*;
-import meta::relational::metamodel::*;
+import meta::external::store::relational::validation::complex::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::validation::*;
+import meta::external::store::relational::metamodel::*;
 import meta::pure::runtime::*;
 
-function <<test.BeforePackage>> meta::relational::validation::complex::createTablesInDb():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::validation::complex::createTablesInDb():Boolean[1]
 {
    let runtime    = getRuntime();
    let connection = $runtime.connections->at(0)->cast(@DatabaseConnection);
@@ -308,12 +308,12 @@ function <<test.BeforePackage>> meta::relational::validation::complex::createTab
    true;
 }
 
-function meta::relational::validation::complex::getRuntime():Runtime[1]
+function meta::external::store::relational::validation::complex::getRuntime():Runtime[1]
 {
-   meta::relational::tests::testRuntime(^Database());
+   meta::external::store::relational::tests::testRuntime(^Database());
 }
 
-function <<test.Test>> meta::relational::validation::complex::validateComplexValidation1():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::complex::validateComplexValidation1():Boolean[1]
 {
 
    let validationResult = validate({|LegalEntity.all()},
@@ -329,7 +329,7 @@ function <<test.Test>> meta::relational::validation::complex::validateComplexVal
                 'constraint1,Error,,1\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::complex::validateComplexValidation2():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::complex::validateComplexValidation2():Boolean[1]
 {
 
    let validationResult = validate({|LegalEntity.all()},
@@ -342,7 +342,7 @@ function <<test.Test>> meta::relational::validation::complex::validateComplexVal
                 'constraint2,Error,,3\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::complex::validateComplexValidation3():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::complex::validateComplexValidation3():Boolean[1]
 {
 
    let validationResult = validate({|Firm.all()},
@@ -363,7 +363,7 @@ function <<test.Test>> meta::relational::validation::complex::validateComplexVal
                 'constraint1,Error,,12,Anthony\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::complex::validateComplexValidation4():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::complex::validateComplexValidation4():Boolean[1]
 {
 
    let validationResult = validate({|Firm.all()},
@@ -375,7 +375,7 @@ function <<test.Test>> meta::relational::validation::complex::validateComplexVal
                 'constraint2,Error,,4\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::complex::validateComplexValidation5():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::complex::validateComplexValidation5():Boolean[1]
 {
 
    let validationResult = validate({|Firm.all()},
@@ -387,7 +387,7 @@ function <<test.Test>> meta::relational::validation::complex::validateComplexVal
                 'constraint3,Error,,4\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::complex::validateComplexValidation6():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::complex::validateComplexValidation6():Boolean[1]
 {
 
    let validationResult = validate({|Firm.all()},
@@ -399,7 +399,7 @@ function <<test.Test>> meta::relational::validation::complex::validateComplexVal
                 'constraint4,Error,,2\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::complex::validateComplexValidation7():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::complex::validateComplexValidation7():Boolean[1]
 {
 
    let validationResult = validate({|Firm.all()},
@@ -412,7 +412,7 @@ function <<test.Test>> meta::relational::validation::complex::validateComplexVal
                 'constraint5,Error,,1\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::complex::validateComplexValidation8():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::complex::validateComplexValidation8():Boolean[1]
 {
 
    let validationResult = validate({|Firm.all()},
@@ -425,7 +425,7 @@ function <<test.Test>> meta::relational::validation::complex::validateComplexVal
                 'constraint6,Error,,4\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::complex::validateComplexValidation9():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::complex::validateComplexValidation9():Boolean[1]
 {
 
    let validationResult = validate({|Firm.all()},
@@ -439,7 +439,7 @@ function <<test.Test>> meta::relational::validation::complex::validateComplexVal
                 'constraint7,Error,,4\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::complex::validateComplexValidation10():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::complex::validateComplexValidation10():Boolean[1]
 {
 
    let validationResult = validate({|Firm.all()},

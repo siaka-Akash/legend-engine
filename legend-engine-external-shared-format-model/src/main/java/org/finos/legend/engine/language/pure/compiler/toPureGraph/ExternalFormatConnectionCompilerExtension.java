@@ -30,7 +30,7 @@ import org.finos.legend.pure.generated.Root_meta_external_shared_format_executio
 import org.finos.legend.pure.generated.Root_meta_external_shared_format_executionPlan_ExternalFormatConnection_Impl;
 import org.finos.legend.pure.generated.Root_meta_external_shared_format_executionPlan_ExternalSource;
 import org.finos.legend.pure.generated.Root_meta_external_shared_format_executionPlan_UrlStreamExternalSource_Impl;
-import org.finos.legend.pure.m3.coreinstance.meta.pure.store.Store;
+import org.finos.legend.pure.m3.coreinstance.meta.pure.store.metamodel.Store;
 
 import java.util.Collections;
 import java.util.List;

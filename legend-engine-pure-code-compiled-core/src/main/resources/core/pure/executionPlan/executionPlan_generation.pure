@@ -170,8 +170,8 @@ function <<access.private>> meta::pure::executionPlan::addFunctionParametersVali
 function <<access.private>> meta::pure::executionPlan::findParamsSupportedForStreamInput(routedFunction:FunctionDefinition<Any>[1]):String[*]
 {
    let vars = $routedFunction.expressionSequence->evaluateAndDeactivate()->cast(@ClusteredValueSpecification)->map(cvs| let clusterVal                     = $cvs.val->deepByPassRouterInfo()->cast(@ValueSpecification);
-                                                                                                                        let varsSupportedForStreamInput    = $clusterVal->findParamsForStreamInput($cvs.store->elementToPath(), $cvs.s.supportsStream, true, false);
-                                                                                                                        let varsNotSupportedForStreamInput = $clusterVal->findParamsForStreamInput($cvs.store->elementToPath(), $cvs.s.supportsStream, false, false);
+                                                                                                                        let varsSupportedForStreamInput    = $clusterVal->findParamsForStreamInput($cvs.store->elementToPath(), $cvs.s.supportsStream->toOne(), true, false);
+                                                                                                                        let varsNotSupportedForStreamInput = $clusterVal->findParamsForStreamInput($cvs.store->elementToPath(), $cvs.s.supportsStream->toOne(), false, false);
                                                                                                                         pair(^List<Pair<String, String>>(values=$varsSupportedForStreamInput), ^List<Pair<String, String>>(values=$varsNotSupportedForStreamInput)););
    let allVarsSupportedForStreamInput = $vars.first.values;
    let allVarsNotSupportedForStreamInput = $vars.second.values;
@@ -191,7 +191,7 @@ function <<access.private>> meta::pure::executionPlan::findParamsForStreamInput(
                                                          t : Type[1] | [];,
                                                          a:Any[1] | [];]););,
                ve:VariableExpression[1] | if(($isSupportedForStream && $getSupportedParams) || (!$isSupportedForStream && !$getSupportedParams), | pair($ve.name, $storePath), |[]);,
-               cvs:ClusteredValueSpecification[1] | $cvs.val->findParamsForStreamInput($cvs.store->elementToPath(), $cvs.s.supportsStream, $getSupportedParams, false),
+               cvs:ClusteredValueSpecification[1] | $cvs.val->findParamsForStreamInput($cvs.store->elementToPath(), $cvs.s.supportsStream->toOne(), $getSupportedParams, false),
                vs:ValueSpecification[1] | [];
              ]
           );
@@ -248,7 +248,7 @@ function meta::pure::executionPlan::plan(cluster:ClusteredValueSpecification[1],
             ]);
 
             let query = ^meta::pure::mapping::StoreQuery(store=$cluster.store, fe=$fe, inScopeVars=$inScopeVars, advancedRouting=$advancedRouting);
-            let res = $cluster.s.planExecution->eval($query, $cluster.val->match([r:RoutedValueSpecification[1]|$r, a:Any[*]|[]])->cast(@RoutedValueSpecification), $cluster.mapping, $rt, if ($cluster.exeCtx->isEmpty(), | $context, | $cluster.exeCtx->toOne()), $extensions, $debugContext);
+            let res = $cluster.s.planExecution->toOne()->eval($query, $cluster.val->match([r:RoutedValueSpecification[1]|$r, a:Any[*]|[]])->cast(@RoutedValueSpecification), $cluster.mapping, $rt, if ($cluster.exeCtx->isEmpty(), | $context, | $cluster.exeCtx->toOne()), $extensions, $debugContext);
             ^$res(fromCluster=$cluster);
     );
 }

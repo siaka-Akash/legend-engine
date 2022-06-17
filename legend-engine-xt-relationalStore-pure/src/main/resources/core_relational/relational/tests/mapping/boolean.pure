@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::mapping::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
 import meta::pure::profiles::*;
 
-function <<test.BeforePackage>> meta::relational::tests::mapping::boolean::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::mapping::boolean::setUp():Boolean[1]
 {
-    meta::relational::tests::createTablesAndFillDb();
+    meta::external::store::relational::tests::createTablesAndFillDb();
     true;
 }
 
-function <<test.Test>> meta::relational::tests::mapping::boolean::testGet():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::boolean::testGet():Boolean[1]
 {
    let result = execute(|Interaction.all(), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 14);
@@ -31,13 +31,13 @@ function <<test.Test>> meta::relational::tests::mapping::boolean::testGet():Bool
    assert($result.values->at(0).active);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::boolean::testQuery():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::boolean::testQuery():Boolean[1]
 {
    let result = execute(|Interaction.all()->filter(i|$i.active == true), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 8);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::boolean::testProject():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::boolean::testProject():Boolean[1]
 {
    let result = execute(|Interaction.all()->project([#/Interaction/time#, #/Interaction/active#]), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 14);

@@ -19,7 +19,7 @@ import org.finos.legend.engine.language.pure.compiler.test.TestCompilationFromGr
 import org.finos.legend.engine.language.pure.compiler.toPureGraph.PureModel;
 import org.finos.legend.engine.protocol.pure.v1.model.context.PureModelContextData;
 import org.finos.legend.pure.generated.Root_meta_external_shared_format_binding_Binding;
-import org.finos.legend.pure.generated.Root_meta_pure_mapping_modelToModel_JsonModelConnection;
+import org.finos.legend.pure.generated.Root_meta_external_store_model_JsonModelConnection;
 import org.finos.legend.pure.generated.Root_meta_pure_persistence_metamodel_trigger_Trigger;
 import org.finos.legend.pure.generated.Root_meta_pure_persistence_metamodel_persister_Persister;
 import org.finos.legend.pure.generated.Root_meta_pure_persistence_metamodel_notifier_Notifier;
@@ -1113,7 +1113,7 @@ public class TestPersistenceCompilationFromGrammar extends TestCompilationFromGr
         // connection
         Connection connection = relationalSink._connection();
         assertNotNull(connection);
-        assertTrue(connection instanceof Root_meta_pure_mapping_modelToModel_JsonModelConnection);
+        assertTrue(connection instanceof Root_meta_external_store_model_JsonModelConnection);
 
         // ingest mode
         Root_meta_pure_persistence_metamodel_persister_ingestmode_IngestMode ingestMode = batchPersister._ingestMode();
@@ -1371,7 +1371,7 @@ public class TestPersistenceCompilationFromGrammar extends TestCompilationFromGr
         // connection
         Connection connection = objectStorageSink._connection();
         assertNotNull(connection);
-        assertTrue(connection instanceof Root_meta_pure_mapping_modelToModel_JsonModelConnection);
+        assertTrue(connection instanceof Root_meta_external_store_model_JsonModelConnection);
 
         // ingest mode
         Root_meta_pure_persistence_metamodel_persister_ingestmode_IngestMode ingestMode = batchPersister._ingestMode();

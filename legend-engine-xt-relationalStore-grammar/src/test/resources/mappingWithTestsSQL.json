@@ -8,7 +8,7 @@
       "enumerationMappings": [],
       "includedMappings": [],
       "name": "simpleModelMapping",
-      "package": "meta::pure::mapping::modelToModel::test::simple",
+      "package": "meta::external::store::model::test::simple",
       "sourceInformation": {
         "endColumn": 1,
         "endLine": 16,
@@ -66,7 +66,7 @@
                             "sourceInformation": {
                               "endColumn": 35,
                               "endLine": 8,
-                              "sourceId": "meta::pure::mapping::modelToModel::test::simple::simpleModelMapping",
+                              "sourceId": "meta::external::store::model::test::simple::simpleModelMapping",
                               "startColumn": 15,
                               "startLine": 8
                             }
@@ -75,7 +75,7 @@
                         "sourceInformation": {
                           "endColumn": 41,
                           "endLine": 8,
-                          "sourceId": "meta::pure::mapping::modelToModel::test::simple::simpleModelMapping",
+                          "sourceId": "meta::external::store::model::test::simple::simpleModelMapping",
                           "startColumn": 36,
                           "startLine": 8
                         }
@@ -86,7 +86,7 @@
                         "sourceInformation": {
                           "endColumn": 84,
                           "endLine": 8,
-                          "sourceId": "meta::pure::mapping::modelToModel::test::simple::simpleModelMapping",
+                          "sourceId": "meta::external::store::model::test::simple::simpleModelMapping",
                           "startColumn": 64,
                           "startLine": 8
                         },
@@ -98,7 +98,7 @@
                             "sourceInformation": {
                               "endColumn": 89,
                               "endLine": 8,
-                              "sourceId": "meta::pure::mapping::modelToModel::test::simple::simpleModelMapping",
+                              "sourceId": "meta::external::store::model::test::simple::simpleModelMapping",
                               "startColumn": 86,
                               "startLine": 8
                             },
@@ -110,7 +110,7 @@
                     "sourceInformation": {
                       "endColumn": 60,
                       "endLine": 8,
-                      "sourceId": "meta::pure::mapping::modelToModel::test::simple::simpleModelMapping",
+                      "sourceId": "meta::external::store::model::test::simple::simpleModelMapping",
                       "startColumn": 44,
                       "startLine": 8
                     }
@@ -121,7 +121,7 @@
                     "sourceInformation": {
                       "endColumn": 128,
                       "endLine": 8,
-                      "sourceId": "meta::pure::mapping::modelToModel::test::simple::simpleModelMapping",
+                      "sourceId": "meta::external::store::model::test::simple::simpleModelMapping",
                       "startColumn": 108,
                       "startLine": 8
                     },
@@ -133,7 +133,7 @@
                         "sourceInformation": {
                           "endColumn": 133,
                           "endLine": 8,
-                          "sourceId": "meta::pure::mapping::modelToModel::test::simple::simpleModelMapping",
+                          "sourceId": "meta::external::store::model::test::simple::simpleModelMapping",
                           "startColumn": 130,
                           "startLine": 8
                         },
@@ -145,7 +145,7 @@
                 "sourceInformation": {
                   "endColumn": 104,
                   "endLine": 8,
-                  "sourceId": "meta::pure::mapping::modelToModel::test::simple::simpleModelMapping",
+                  "sourceId": "meta::external::store::model::test::simple::simpleModelMapping",
                   "startColumn": 96,
                   "startLine": 8
                 }
@@ -155,7 +155,7 @@
             "sourceInformation": {
               "endColumn": 137,
               "endLine": 8,
-              "sourceId": "meta::pure::mapping::modelToModel::test::simple::simpleModelMapping",
+              "sourceId": "meta::external::store::model::test::simple::simpleModelMapping",
               "startColumn": 14,
               "startLine": 8
             }
@@ -191,7 +191,7 @@
         {
           "_type": "importAware",
           "elements": [
-            "meta::pure::mapping::modelToModel::test::simple::simpleModelMapping"
+            "meta::external::store::model::test::simple::simpleModelMapping"
           ],
           "imports": [],
           "parserName": "Mapping",

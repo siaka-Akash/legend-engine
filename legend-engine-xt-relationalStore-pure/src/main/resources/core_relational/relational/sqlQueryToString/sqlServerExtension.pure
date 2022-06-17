@@ -1,18 +1,18 @@
-import meta::relational::functions::sqlQueryToString::sqlServer::*;
-import meta::relational::functions::sqlQueryToString::default::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::functions::sqlQueryToString::sqlServer::*;
+import meta::external::store::relational::functions::sqlQueryToString::default::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::router::extension::*;
 
-function <<db.ExtensionLoader>> meta::relational::functions::sqlQueryToString::sqlServer::dbExtensionLoaderForSqlServer():DbExtensionLoader[1]
+function <<db.ExtensionLoader>> meta::external::store::relational::functions::sqlQueryToString::sqlServer::dbExtensionLoaderForSqlServer():DbExtensionLoader[1]
 {
   ^DbExtensionLoader(dbType = DatabaseType.SqlServer, loader = createDbExtensionForSqlServer__DbExtension_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sqlServer::createDbExtensionForSqlServer():DbExtension[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sqlServer::createDbExtensionForSqlServer():DbExtension[1]
 {
    let reservedWords = defaultReservedWords();
    let literalProcessors = getDefaultLiteralProcessors();
@@ -32,7 +32,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::sqlSe
    );
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sqlServer::getDynaFunctionToSqlForSqlServer(): DynaFunctionToSql[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sqlServer::getDynaFunctionToSqlForSqlServer(): DynaFunctionToSql[*]
 {
   let allStates = allGenerationStates();
 
@@ -74,7 +74,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::sqlSe
   ];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sqlServer::processJoinStringsOperationForSqlServer(js:JoinStrings[1], sgc:SqlGenerationContext[1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sqlServer::processJoinStringsOperationForSqlServer(js:JoinStrings[1], sgc:SqlGenerationContext[1]): String[1]
 {
    processJoinStringsOperation($js, $sgc, [], {strs, sep| $strs->joinStrings(if('\'\'' == $sep, |'+', |'+' + $sep + '+'))});
 }

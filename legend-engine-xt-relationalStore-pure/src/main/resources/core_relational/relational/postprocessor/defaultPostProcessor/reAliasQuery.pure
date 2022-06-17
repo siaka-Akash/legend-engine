@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::functions::pureToSqlQuery::*;
-import meta::relational::functions::pureToSqlQuery::metamodel::*;
+import meta::external::store::relational::functions::pureToSqlQuery::*;
+import meta::external::store::relational::functions::pureToSqlQuery::metamodel::*;
 import meta::pure::router::extension::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::postProcessor::reAlias::*;
-import meta::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::postProcessor::reAlias::*;
+import meta::external::store::relational::metamodel::relation::*;
 import meta::pure::mapping::*;
-import meta::relational::metamodel::*;
-import meta::relational::metamodel::join::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::metamodel::join::*;
 
-function meta::relational::postProcessor::reAlias::replaceAliasName(query:SelectSQLQuery[1], extensions:RouterExtension[*]):Result<SelectSQLQuery|1>[1]
+function meta::external::store::relational::postProcessor::reAlias::replaceAliasName(query:SelectSQLQuery[1], extensions:RouterExtension[*]):Result<SelectSQLQuery|1>[1]
 {
    let tableNamesCaseSensitive = $query->cast(@SelectSQLQuery)->traverse();
    let tableNames = $tableNamesCaseSensitive->map(x| pair($x.first->toLower(), $x.second)); //switch all tableNamesTolowerCase
@@ -35,12 +35,12 @@ function meta::relational::postProcessor::reAlias::replaceAliasName(query:Select
                                                           $aliases->zip($newTableNames);
                                                 );
    let newNameMap = newMap($keyValuePairs)->putAll([pair('root','root'),pair('unionBase','unionBase'),pair('subselect','subselect')]);
-   let preResult = $query-> meta::relational::postProcessor::reAlias::transformAliasName($newNameMap);
+   let preResult = $query-> meta::external::store::relational::postProcessor::reAlias::transformAliasName($newNameMap);
    let result = $preResult->cast(@SelectSQLQuery);
    ^Result<SelectSQLQuery|1>(values= $result);
 }
 
-function <<access.private>> meta::relational::postProcessor::reAlias::traverse(q:RelationalTreeNode[*]): Pair<String,String>[*]
+function <<access.private>> meta::external::store::relational::postProcessor::reAlias::traverse(q:RelationalTreeNode[*]): Pair<String,String>[*]
 {
     $q->map(a| let alias      = $a.alias;
                let relElement = $alias.relationalElement;
@@ -59,7 +59,7 @@ function <<access.private>> meta::relational::postProcessor::reAlias::traverse(q
            );
 }
 
-function <<access.private>> meta::relational::postProcessor::reAlias::traverse(q:RelationalOperationElement[*]): Pair<String,String>[*]
+function <<access.private>> meta::external::store::relational::postProcessor::reAlias::traverse(q:RelationalOperationElement[*]): Pair<String,String>[*]
 {
    $q->map(r| $r->match([
                      v:VarSetPlaceHolder[1]  | pair($v.varName,$v.varName),
@@ -93,7 +93,7 @@ function <<access.private>> meta::relational::postProcessor::reAlias::traverse(q
          )
 }
 
-function <<access.private>> meta::relational::postProcessor::reAlias::transformAliasName(r:RelationalTreeNode[1], m:Map<String,String>[1], parentAlias:TableAlias[0..1]):RelationalTreeNode[1]
+function <<access.private>> meta::external::store::relational::postProcessor::reAlias::transformAliasName(r:RelationalTreeNode[1], m:Map<String,String>[1], parentAlias:TableAlias[0..1]):RelationalTreeNode[1]
 {
    $r->match([j:JoinTreeNode[1] | let join = $j.join;
                                   let alias = $j.alias->transformAliasName($m)->cast(@TableAlias);
@@ -115,7 +115,7 @@ function <<access.private>> meta::relational::postProcessor::reAlias::transformA
               ])
 }
 
-function <<access.private>> meta::relational::postProcessor::reAlias::transformAliasName(r:RelationalOperationElement[1], m:Map<String,String>[1]):RelationalOperationElement[1]
+function <<access.private>> meta::external::store::relational::postProcessor::reAlias::transformAliasName(r:RelationalOperationElement[1], m:Map<String,String>[1]):RelationalOperationElement[1]
 {
    $r->match([
                s:SelectSQLQuery[1] |let transformedData = if($s.data->isEmpty(), | [], |$s.data->toOne()->transformAliasName($m, []));
@@ -145,7 +145,7 @@ function <<access.private>> meta::relational::postProcessor::reAlias::transformA
                                                     filteringOperation= $transformedFilteringOp);
       
                                     if(!$newS.leftSideOfFilter->isEmpty()
-                                       ,| ^$newS(leftSideOfFilter=$s.leftSideOfFilter->toOne()->meta::relational::functions::pureToSqlQuery::findOneNode($s.data->toOne(), $newS.data->toOne()));
+                                       ,| ^$newS(leftSideOfFilter=$s.leftSideOfFilter->toOne()->meta::external::store::relational::functions::pureToSqlQuery::findOneNode($s.data->toOne(), $newS.data->toOne()));
                                        ,| $newS);,
 
                 v:ViewSelectSQLQuery[1] | $v.selectSQLQuery->transformAliasName($m);,
@@ -187,10 +187,10 @@ function <<access.private>> meta::relational::postProcessor::reAlias::transformA
       
                 wc:WindowColumn[1] |let transformedWindow = $wc.window->transformAliasName($m);
                                     let transformedFunc = $wc.func->transformAliasName($m);
-                                    ^$wc(window = $transformedWindow->cast(@meta::relational::metamodel::Window),
+                                    ^$wc(window = $transformedWindow->cast(@meta::external::store::relational::metamodel::Window),
                                          func=$transformedFunc->cast(@DynaFunction));,
       
-                w:meta::relational::metamodel::Window[1]|let transformedPartition = $w.partition->map(w | $w->transformAliasName($m));
+                w:meta::external::store::relational::metamodel::Window[1]|let transformedPartition = $w.partition->map(w | $w->transformAliasName($m));
                                                          let transformedSort = $w.sortBy->map(s | $s->transformAliasName($m));
                                                          ^$w(partition=$transformedPartition,
                                                              sortBy=$transformedSort);,

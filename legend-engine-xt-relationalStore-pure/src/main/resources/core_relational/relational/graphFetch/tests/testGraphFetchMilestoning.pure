@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::milestoning::*;
+import meta::external::store::relational::tests::milestoning::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
 
-function <<test.BeforePackage>> meta::relational::graphFetch::tests::milestoning::setup(): Any[*]
+function <<test.BeforePackage>> meta::external::store::relational::graphFetch::tests::milestoning::setup(): Any[*]
 {
-   meta::relational::tests::milestoning::initDatabase();
+   meta::external::store::relational::tests::milestoning::initDatabase();
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::milestoning::testMilestonedClassAtRoot(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::milestoning::testMilestonedClassAtRoot(): Boolean[1]
 {
    let tree = #{
       Product {
@@ -32,8 +32,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Product.all(%2015-10-16)->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::milestoning::milestoningmap;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::milestoningmap;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -44,7 +44,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::milestoning::testMilestonedClassAtRootQualifierWithBD(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::milestoning::testMilestonedClassAtRootQualifierWithBD(): Boolean[1]
 {
    let tree = #{
       Product {
@@ -55,8 +55,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Product.all(%2015-10-16)->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::milestoning::milestoningmap;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::milestoningmap;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -67,7 +67,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::milestoning::testMilestonedProperty(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::milestoning::testMilestonedProperty(): Boolean[1]
 {
    let tree = #{
       Order {
@@ -80,8 +80,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Order.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::milestoning::milestoningmap;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::milestoningmap;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -93,7 +93,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
 }
 
 // How to resolve %latest in serialize?
-function <<test.Test, test.AlloyOnly, test.ToFix>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::milestoning::testMilestonedPropertyWithLatest(): Boolean[1]
+function <<test.Test, test.AlloyOnly, test.ToFix>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::milestoning::testMilestonedPropertyWithLatest(): Boolean[1]
 {
    let tree = #{
       Order {
@@ -106,8 +106,8 @@ function <<test.Test, test.AlloyOnly, test.ToFix>> {serverVersion.start='v1_19_0
       }
    }#;
    let query = {|Order.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::milestoning::milestoningmap;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::milestoningmap;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -118,7 +118,7 @@ function <<test.Test, test.AlloyOnly, test.ToFix>> {serverVersion.start='v1_19_0
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::milestoning::testMilestonedRootWithFilter(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::milestoning::testMilestonedRootWithFilter(): Boolean[1]
 {
    let tree = #{
       StockProduct {
@@ -127,8 +127,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|StockProduct.all(%2015-10-16)->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::milestoning::milestoningmap;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::milestoningmap;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -138,7 +138,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::milestoning::testMultiLevelMilestoning(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::milestoning::testMultiLevelMilestoning(): Boolean[1]
 {
    let query = {|
       let bd =  %2017-6-9;
@@ -185,8 +185,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
          }
       }#);
    };
-   let mapping = meta::relational::tests::milestoning::milestoningmap;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::milestoningmap;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -197,7 +197,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::milestoning::testDateTimeInQuery(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::milestoning::testDateTimeInQuery(): Boolean[1]
 {
    let query = {|
       Order.all()->graphFetch(#{
@@ -233,8 +233,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
          }
       }#);
    };
-   let mapping = meta::relational::tests::milestoning::milestoningmap;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::milestoningmap;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -245,7 +245,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::milestoning::testBiTemporalRoot(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::milestoning::testBiTemporalRoot(): Boolean[1]
 {
    let query = {|
       BiTemporalProduct.all(%2017-6-10, %2017-6-9)->graphFetch(#{
@@ -263,8 +263,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
          }
       }#);
    };
-   let mapping = meta::relational::tests::milestoning::milestoningmap;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::milestoningmap;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -274,7 +274,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::milestoning::testBiTemporalProperty(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::milestoning::testBiTemporalProperty(): Boolean[1]
 {
    let query = {|
       let pd = %2017-6-11;
@@ -304,8 +304,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
          }
       }#);
    };
-   let mapping = meta::relational::tests::milestoning::milestoningmap;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::milestoningmap;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -315,7 +315,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::milestoning::testSnapshotMilestoning(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::milestoning::testSnapshotMilestoning(): Boolean[1]
 {
    let query = {|
       let bd = %2015-08-26;
@@ -337,8 +337,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
          }
       }#);
    };
-   let mapping = meta::relational::tests::milestoning::businessSnapshotMilestoningMap;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::businessSnapshotMilestoningMap;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -348,7 +348,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::milestoning::testInnerJoinIsolationAtRoot(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::milestoning::testInnerJoinIsolationAtRoot(): Boolean[1]
 {
    let query = {|
       let bd = %2015-10-16;
@@ -366,8 +366,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
          }
       }#);
    };
-   let mapping = meta::relational::tests::milestoning::propagationMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::propagationMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -377,7 +377,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::milestoning::testInnerJoinIsolationAtChild(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::milestoning::testInnerJoinIsolationAtChild(): Boolean[1]
 {
    let query = {|
       let bd = %2015-10-16;
@@ -401,8 +401,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
          }
       }#);
    };
-   let mapping = meta::relational::tests::milestoning::propagationMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::propagationMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 

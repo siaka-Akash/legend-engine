@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::model::simple::*;
-import meta::relational::graphFetch::tests::chain::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::graphFetch::tests::chain::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
 import meta::pure::alloy::connections::*;
 
-function <<test.BeforePackage>> meta::relational::graphFetch::tests::chain::setup(): Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::graphFetch::tests::chain::setup(): Boolean[1]
 {
-   meta::relational::tests::createTablesAndFillDb();
+   meta::external::store::relational::tests::createTablesAndFillDb();
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::chain::testRelationalChainExecutionFlat(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::chain::testRelationalChainExecutionFlat(): Boolean[1]
 {
    let tree = #{
       Target_Firm {
@@ -34,12 +34,12 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    
    let query = {|Target_Firm.all()->graphFetch($tree)->serialize($tree)};
    let mapping = M2M_Mapping;
-   let modelChainConnection = ^meta::pure::mapping::modelToModel::ModelChainConnection(
-      element = ^meta::pure::mapping::modelToModel::ModelStore(),
-      mappings = [meta::relational::tests::simpleRelationalMapping]
+   let modelChainConnection = ^meta::external::store::model::ModelChainConnection(
+      element = ^meta::external::store::model::ModelStore(),
+      mappings = [meta::external::store::relational::tests::simpleRelationalMapping]
    );
    let runtime = ^meta::pure::runtime::Runtime(
-      connections = meta::relational::tests::testRuntime().connections->concatenate($modelChainConnection)
+      connections = meta::external::store::relational::tests::testRuntime().connections->concatenate($modelChainConnection)
    );
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
@@ -55,7 +55,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::chain::testRelationalChainExecutionNested(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::chain::testRelationalChainExecutionNested(): Boolean[1]
 {
    let tree = #{
       Target_Firm {
@@ -70,12 +70,12 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    
    let query = {|Target_Firm.all()->graphFetch($tree)->serialize($tree)};
    let mapping = M2M_Mapping;
-   let modelChainConnection = ^meta::pure::mapping::modelToModel::ModelChainConnection(
-      element = ^meta::pure::mapping::modelToModel::ModelStore(),
-      mappings = [meta::relational::tests::simpleRelationalMapping]
+   let modelChainConnection = ^meta::external::store::model::ModelChainConnection(
+      element = ^meta::external::store::model::ModelStore(),
+      mappings = [meta::external::store::relational::tests::simpleRelationalMapping]
    );
    let runtime = ^meta::pure::runtime::Runtime(
-      connections = meta::relational::tests::testRuntime().connections->concatenate($modelChainConnection)
+      connections = meta::external::store::relational::tests::testRuntime().connections->concatenate($modelChainConnection)
    );
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
@@ -139,7 +139,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::chain::testRelationalChainExecutionWithFilter(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::chain::testRelationalChainExecutionWithFilter(): Boolean[1]
 {
    let tree = #{
       Target_Firm {
@@ -150,12 +150,12 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    
    let query = {|Target_Firm.all()->filter(x | $x.firmName == 'FIRM X')->graphFetch($tree)->serialize($tree)};
    let mapping = M2M_Mapping;
-   let modelChainConnection = ^meta::pure::mapping::modelToModel::ModelChainConnection(
-      element = ^meta::pure::mapping::modelToModel::ModelStore(),
-      mappings = [meta::relational::tests::simpleRelationalMapping]
+   let modelChainConnection = ^meta::external::store::model::ModelChainConnection(
+      element = ^meta::external::store::model::ModelStore(),
+      mappings = [meta::external::store::relational::tests::simpleRelationalMapping]
    );
    let runtime = ^meta::pure::runtime::Runtime(
-      connections = meta::relational::tests::testRuntime().connections->concatenate($modelChainConnection)
+      connections = meta::external::store::relational::tests::testRuntime().connections->concatenate($modelChainConnection)
    );
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
@@ -163,7 +163,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    assertJsonStringsEqual('{"firmName":"FIRM X","employeeCount":4}', $result);
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::chain::testRelationalChainExecutionWithInScopeVariableFilter(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::chain::testRelationalChainExecutionWithInScopeVariableFilter(): Boolean[1]
 {
    let tree = #{
       Target_Firm {
@@ -177,12 +177,12 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       Target_Firm.all()->filter(x | $x.firmName == $name)->graphFetch($tree)->serialize($tree);
    };
    let mapping = M2M_Mapping;
-   let modelChainConnection = ^meta::pure::mapping::modelToModel::ModelChainConnection(
-      element = ^meta::pure::mapping::modelToModel::ModelStore(),
-      mappings = [meta::relational::tests::simpleRelationalMapping]
+   let modelChainConnection = ^meta::external::store::model::ModelChainConnection(
+      element = ^meta::external::store::model::ModelStore(),
+      mappings = [meta::external::store::relational::tests::simpleRelationalMapping]
    );
    let runtime = ^meta::pure::runtime::Runtime(
-      connections = meta::relational::tests::testRuntime().connections->concatenate($modelChainConnection)
+      connections = meta::external::store::relational::tests::testRuntime().connections->concatenate($modelChainConnection)
    );
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
@@ -191,26 +191,26 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
 }
 
 ###Pure
-import meta::relational::graphFetch::tests::chain::*;
+import meta::external::store::relational::graphFetch::tests::chain::*;
 
-Class meta::relational::graphFetch::tests::chain::Target_Firm
+Class meta::external::store::relational::graphFetch::tests::chain::Target_Firm
 {
    firmName      : String[1];
    employeeCount : Integer[1];
    employees     : Target_Person[*];
 }
 
-Class meta::relational::graphFetch::tests::chain::Target_Person
+Class meta::external::store::relational::graphFetch::tests::chain::Target_Person
 {
    fullName : String[1];
    managers : String[0..1]; 
 }
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::graphFetch::tests::chain::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::graphFetch::tests::chain::*;
 
-Mapping meta::relational::graphFetch::tests::chain::M2M_Mapping
+Mapping meta::external::store::relational::graphFetch::tests::chain::M2M_Mapping
 (
    Target_Firm : Pure {
       ~src Firm

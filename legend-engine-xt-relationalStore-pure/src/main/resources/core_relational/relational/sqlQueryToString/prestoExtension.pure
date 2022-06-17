@@ -1,18 +1,18 @@
-import meta::relational::functions::sqlQueryToString::presto::*;
-import meta::relational::functions::sqlQueryToString::default::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::functions::sqlQueryToString::presto::*;
+import meta::external::store::relational::functions::sqlQueryToString::default::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::router::extension::*;
 
-function <<db.ExtensionLoader>> meta::relational::functions::sqlQueryToString::presto::dbExtensionLoaderForPresto():DbExtensionLoader[1]
+function <<db.ExtensionLoader>> meta::external::store::relational::functions::sqlQueryToString::presto::dbExtensionLoaderForPresto():DbExtensionLoader[1]
 {
   ^DbExtensionLoader(dbType = DatabaseType.Presto, loader = createDbExtensionForPresto__DbExtension_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::presto::createDbExtensionForPresto():DbExtension[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::presto::createDbExtensionForPresto():DbExtension[1]
 {
    let reservedWords = defaultReservedWords();
    let literalProcessors = getDefaultLiteralProcessors()->putAll(getLiteralProcessorsForPresto());
@@ -33,7 +33,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::prest
    );
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::presto::getLiteralProcessorsForPresto():Map<Type,LiteralProcessor>[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::presto::getLiteralProcessorsForPresto():Map<Type,LiteralProcessor>[1]
 {
    newMap([
       pair(StrictDate,     ^LiteralProcessor(format = 'Date(\'%s\')',      transform = {d:StrictDate[1], dbTimeZone:String[0..1] | $d->convertDateToSqlString($dbTimeZone)})),
@@ -43,7 +43,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::prest
    ])
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::presto::getDynaFunctionToSqlForPresto(): DynaFunctionToSql[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::presto::getDynaFunctionToSqlForPresto(): DynaFunctionToSql[*]
 {
   let allStates = allGenerationStates();
 
@@ -98,12 +98,12 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::prest
   ];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::presto::processSelectSQLQueryForPresto(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::presto::processSelectSQLQueryForPresto(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
 {
    $s->processSelectSQLQueryForPresto($sgc.dbConfig, $sgc.format, $sgc.config, $isSubSelect, $sgc.extensions);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::presto::processSelectSQLQueryForPresto(s:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::presto::processSelectSQLQueryForPresto(s:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
 {
   let opStr = if($s.filteringOperation->isEmpty(), |'', |$s.filteringOperation->map(s|$s->processOperation($dbConfig, $format->indent(), ^$config(callingFromFilter = true), $extensions))->filter(s|$s != '')->joinStrings(' <||> '));
   let havingStr = if($s.havingOperation->isEmpty(), |'', |$s.havingOperation->map(s|$s->processOperation($dbConfig, $format->indent(), $config, $extensions))->filter(s|$s != '')->joinStrings(' <||> '));
@@ -118,12 +118,12 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::prest
   + processLimit($s, $format, processTakeDefault_SelectSQLQuery_1__Format_1__String_1_, processSliceOrDropForPresto_SelectSQLQuery_1__Format_1__Any_1__String_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::presto::schemaNameToIdentifierForPresto(schemaName: String[1], dbConfig: DbConfig[1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::presto::schemaNameToIdentifierForPresto(schemaName: String[1], dbConfig: DbConfig[1]): String[1]
 {
    $schemaName->replace('$', '.');
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::presto::convertToDatePresto(params:String[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::presto::convertToDatePresto(params:String[*]):String[1]
 {
    assert( 2 - $params->size()  >= 0,'Incorrect number of parameters for convertDate: convertDate(column,[dateformat])');
    assert($params->size()==1 || dateFormatsPresto()->contains($params->at(1)->replace('\'', '')) , | $params->at(1) +' not supported ');
@@ -131,33 +131,33 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::prest
    'date( date_parse('+$params->at(0)+','+$dateFormat +') )';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::presto::dateFormatsPresto():String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::presto::dateFormatsPresto():String[*]
 {
    ['YYYY-MM-DD', 'MMMYYYY', 'YYYYMMDD'];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::presto::convertToDateTimePresto(params:String[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::presto::convertToDateTimePresto(params:String[*]):String[1]
 {
    $params->convertDateTimeFunctionHasCorrectParams();
    let dateTimeFormat = if( $params->size() == 1,|'\'%Y-%m-%d %H:%i:%s\'',| $params->at(1););
    'date_parse('+$params->at(0)+','+$dateTimeFormat +')';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::presto::processDateDiffDurationUnitForPresto(durationUnit:String[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::presto::processDateDiffDurationUnitForPresto(durationUnit:String[1]):String[1]
 {
    let durationEnumNames = [DurationUnit.YEARS,DurationUnit.MONTHS,DurationUnit.WEEKS,DurationUnit.DAYS,DurationUnit.HOURS,DurationUnit.MINUTES,DurationUnit.SECONDS,DurationUnit.MILLISECONDS]->map(e|$e->toString());
    let durationDbNames = ['\'year\'', '\'month\'', '\'week\'', '\'day\'', '\'hour\'', '\'minute\'', '\'second\'', '\'millisecond\''];
    $durationEnumNames->zip($durationDbNames)->filter(h | $h.first == $durationUnit).second->toOne();
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::presto::formatMostRecentPresto(p:String[1..2], defaultDay:String[1]):String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::presto::formatMostRecentPresto(p:String[1..2], defaultDay:String[1]):String[*]
 {
    let day = $p->last()->toOne()->mapToDBDayOfWeekNumberPresto()->toString();
    let current = if ($p->size() == 2, | $p->first()->toOne(), | $defaultDay);
    [$day, $current, $day, $current, $day, $current, $current];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::presto::mapToDBDayOfWeekNumberPresto(day:String[1]):Integer[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::presto::mapToDBDayOfWeekNumberPresto(day:String[1]):Integer[1]
 {
    [
       pair(DayOfWeek.Monday->toString(), 1),
@@ -170,7 +170,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::prest
    ]->filter(p | $p.first == $day).second->toOne();
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::presto::processSliceOrDropForPresto(s:SelectSQLQuery[1], format:Format[1], size:Any[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::presto::processSliceOrDropForPresto(s:SelectSQLQuery[1], format:Format[1], size:Any[1]):String[1]
 {
    if ($s.fromRow->isNotEmpty(),
        | if ($size == -1,

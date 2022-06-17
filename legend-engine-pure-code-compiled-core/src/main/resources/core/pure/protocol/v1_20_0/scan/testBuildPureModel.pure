@@ -14,22 +14,22 @@
 
 import meta::pure::mapping::*;
 import meta::protocols::pure::v1_20_0::transformation::fromPureGraph::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::mapping::*;
 
 function <<test.Test>> meta::protocols::pure::v1_20_0::transformation::fromPureGraph::tests::testGetAllElementsFromMapping():Boolean[1]
 {
-  let result = meta::pure::mapping::modelToModel::test::alloy::qualifiedProperties::dataToBookWithFunction->getAllElementsFromMapping(meta::pure::router::extension::defaultExtensions());
+  let result = meta::external::store::model::test::alloy::qualifiedProperties::dataToBookWithFunction->getAllElementsFromMapping(meta::pure::router::extension::defaultExtensions());
    
-  let expected = ['meta::pure::mapping::modelToModel::test::alloy::qualifiedProperties::dataToBookWithFunction', 
-                  'meta::pure::mapping::modelToModel::test::alloy::qualifiedProperties::printBook__String_1_', 
-                  'meta::pure::mapping::modelToModel::test::alloy::qualifiedProperties::BookWithFunction', 
-                  'meta::pure::mapping::modelToModel::test::alloy::qualifiedProperties::BookData', 
-                  'meta::pure::mapping::modelToModel::test::alloy::qualifiedProperties::BookDataIdentifier', 
-                  'meta::pure::mapping::modelToModel::test::alloy::qualifiedProperties::BookIdentifier', 
-                  'meta::pure::mapping::modelToModel::test::alloy::qualifiedProperties::Book', 
-                  'meta::pure::mapping::modelToModel::test::alloy::qualifiedProperties::BookIdentifierType', 
-                  'meta::pure::mapping::modelToModel::test::alloy::qualifiedProperties::BookData_BookDataIdentifier', 
-                  'meta::pure::mapping::modelToModel::test::alloy::qualifiedProperties::Book_BookIdentifier'];
+  let expected = ['meta::external::store::model::test::alloy::qualifiedProperties::dataToBookWithFunction',
+                  'meta::external::store::model::test::alloy::qualifiedProperties::printBook__String_1_',
+                  'meta::external::store::model::test::alloy::qualifiedProperties::BookWithFunction',
+                  'meta::external::store::model::test::alloy::qualifiedProperties::BookData',
+                  'meta::external::store::model::test::alloy::qualifiedProperties::BookDataIdentifier',
+                  'meta::external::store::model::test::alloy::qualifiedProperties::BookIdentifier',
+                  'meta::external::store::model::test::alloy::qualifiedProperties::Book',
+                  'meta::external::store::model::test::alloy::qualifiedProperties::BookIdentifierType',
+                  'meta::external::store::model::test::alloy::qualifiedProperties::BookData_BookDataIdentifier',
+                  'meta::external::store::model::test::alloy::qualifiedProperties::Book_BookIdentifier'];
 
   let actual = $result->map(x | $x->toRepresentation());
   
@@ -50,7 +50,7 @@ function <<test.Test>> meta::protocols::pure::v1_20_0::transformation::fromPureG
 
 function <<test.Test>> meta::protocols::pure::v1_20_0::transformation::fromPureGraph::tests::testSplitCodeIntoLines():Boolean[1]
 {
-  let string = 'Mapping meta::pure::mapping::modelToModel::test::filter::filterMapping\n(\nPerson : Pure\n{\n~src _Person\n\nlastName : $src.fullName\n}\n\nFirm : Puren\n{\n~src _Firm\nlegalName : $src.name,\nemployees : $src.employees\n}\n)';
+  let string = 'Mapping meta::external::store::model::test::filter::filterMapping\n(\nPerson : Pure\n{\n~src _Person\n\nlastName : $src.fullName\n}\n\nFirm : Puren\n{\n~src _Firm\nlegalName : $src.name,\nemployees : $src.employees\n}\n)';
   let actual = splitCodeIntoLines($string);
 
   //check if result contains all expected lines of pure code (empty lines included!)

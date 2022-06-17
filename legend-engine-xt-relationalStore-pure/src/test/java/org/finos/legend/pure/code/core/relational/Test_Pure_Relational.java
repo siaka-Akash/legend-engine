@@ -25,8 +25,8 @@ public class Test_Pure_Relational
     {
         CompiledExecutionSupport executionSupport = PureTestBuilderHelper.getClassLoaderExecutionSupport();
         TestSuite suite = new TestSuite();
-        //NOTE- we are not collecting parameterized test collection in meta::relational here
-        suite.addTest(PureTestBuilderHelper.buildSuite(TestCollection.collectTests("meta::relational", executionSupport.getProcessorSupport(), ci -> PureTestBuilderHelper.satisfiesConditions(ci, executionSupport.getProcessorSupport())), executionSupport));
+        //NOTE- we are not collecting parameterized test collection in meta::external::store::relational here
+        suite.addTest(PureTestBuilderHelper.buildSuite(TestCollection.collectTests("meta::external::store::relational", executionSupport.getProcessorSupport(), ci -> PureTestBuilderHelper.satisfiesConditions(ci, executionSupport.getProcessorSupport())), executionSupport));
         suite.addTest(PureTestBuilderHelper.buildSuite(TestCollection.collectTests("meta::alloy::objectReference", executionSupport.getProcessorSupport(), ci -> PureTestBuilderHelper.satisfiesConditions(ci, executionSupport.getProcessorSupport())), executionSupport));
         suite.addTest(PureTestBuilderHelper.buildSuite(TestCollection.collectTests("meta::alloy::service::execution", executionSupport.getProcessorSupport(), ci -> PureTestBuilderHelper.satisfiesConditions(ci, executionSupport.getProcessorSupport())), executionSupport));
         suite.addTest(PureTestBuilderHelper.buildSuite(TestCollection.collectTests("meta::pure::lineage", executionSupport.getProcessorSupport(), ci -> PureTestBuilderHelper.satisfiesConditions(ci, executionSupport.getProcessorSupport())), executionSupport));
@@ -39,7 +39,7 @@ public class Test_Pure_Relational
         suite.addTest(PureTestBuilderHelper.buildSuite(TestCollection.collectTests("meta::pure::mapping", executionSupport.getProcessorSupport(), ci -> PureTestBuilderHelper.satisfiesConditions(ci, executionSupport.getProcessorSupport())), executionSupport));
         suite.addTest(PureTestBuilderHelper.buildSuite(TestCollection.collectTests("meta::pure::milestoning", executionSupport.getProcessorSupport(), ci -> PureTestBuilderHelper.satisfiesConditions(ci, executionSupport.getProcessorSupport())), executionSupport));
         suite.addTest(PureTestBuilderHelper.buildSuite(TestCollection.collectTests("meta::protocols::pure", executionSupport.getProcessorSupport(), ci -> PureTestBuilderHelper.satisfiesConditions(ci, executionSupport.getProcessorSupport())), executionSupport));
-        suite.addTest(PureTestBuilderHelper.buildSuite(TestCollection.collectTests("meta::csv", executionSupport.getProcessorSupport(), ci -> PureTestBuilderHelper.satisfiesConditions(ci, executionSupport.getProcessorSupport())), executionSupport));
+        suite.addTest(PureTestBuilderHelper.buildSuite(TestCollection.collectTests("meta::external::store::relational::tests::csv", executionSupport.getProcessorSupport(), ci -> PureTestBuilderHelper.satisfiesConditions(ci, executionSupport.getProcessorSupport())), executionSupport));
 
         return suite;
     }

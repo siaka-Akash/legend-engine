@@ -20,7 +20,7 @@ import meta::pure::executionPlan::engine::java::naming::*;
 import meta::pure::executionPlan::engine::java::platform::*;
 import meta::pure::executionPlan::engine::java::typeInfo::*;
 
-import meta::pure::mapping::modelToModel::*;
+import meta::external::store::model::*;
 import meta::pure::router::extension::*;
 
 import meta::external::format::json::executionPlan::engine::*;

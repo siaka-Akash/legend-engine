@@ -14,15 +14,15 @@
 
 import meta::pure::mapping::*;
 import meta::pure::executionPlan::profiles::*;
-import meta::pure::mapping::modelToModel::test::filter::*;
-import meta::pure::mapping::modelToModel::test::shared::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::*;
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
+import meta::external::store::model::test::filter::*;
+import meta::external::store::model::test::shared::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
 import meta::pure::runtime::*;
 
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::filter::testTypeFilterThoughGetter():Any[*]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::filter::testTypeFilterThoughGetter():Any[*]
 {
     let res = execute(
             |Firm.all(),
@@ -40,13 +40,13 @@ function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::
    testTypeFilterThoughGetterAsserts($res);
 }
 
-function meta::pure::mapping::modelToModel::test::filter::testTypeFilterThoughGetterAsserts(res:Result<Firm|*>[1]):Boolean[1]
+function meta::external::store::model::test::filter::testTypeFilterThoughGetterAsserts(res:Result<Firm|*>[1]):Boolean[1]
 {
    assertEquals(['A. Only One'], $res.values->at(0).employees.lastName);
 }
 
 
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::filter::testTypeFilterThoughProject():Any[*]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::filter::testTypeFilterThoughProject():Any[*]
 {
     let res = execute(
             |Firm.all()->project([f|$f.legalName, f|$f.employees.lastName],['legalName','employeeNames']),
@@ -65,14 +65,14 @@ function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::
 }
 
 
-function meta::pure::mapping::modelToModel::test::filter::testTypeFilterThoughProjectAsserts(res:Result<TabularDataSet|1>[1]):Boolean[1]
+function meta::external::store::model::test::filter::testTypeFilterThoughProjectAsserts(res:Result<TabularDataSet|1>[1]):Boolean[1]
 {
    assertEquals(1, $res.values->at(0).rows->size());
    assertEquals('A', $res.values->at(0).rows->at(0).get('legalName'));
    assertEquals('A. Only One', $res.values->at(0).rows->at(0).get('employeeNames'));
 }
 
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::filter::testTypeFilter():Any[*]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::filter::testTypeFilter():Any[*]
 {
     let res = execute(
             |Person.all()->project([f|$f.lastName],['lastName']),
@@ -90,17 +90,17 @@ function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::
    testTypeFilterAsserts($res);
 }
 
-function meta::pure::mapping::modelToModel::test::filter::testTypeFilterAsserts(res:Result<TabularDataSet|1>[1]):Boolean[1]
+function meta::external::store::model::test::filter::testTypeFilterAsserts(res:Result<TabularDataSet|1>[1]):Boolean[1]
 {
    assertEquals(1, $res.values->at(0).rows->size());
    assertEquals('A. Only One', $res.values->at(0).rows->at(0).get('lastName'));
 }
 ###Mapping
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::filter::filterMapping
+Mapping meta::external::store::model::test::filter::filterMapping
 (
    Person : Pure
    {

@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::milestoning::*;
-import meta::relational::tests::milestoning::inheritance::*;
+import meta::external::store::relational::tests::milestoning::*;
+import meta::external::store::relational::tests::milestoning::inheritance::*;
 
-Class meta::relational::tests::milestoning::Order{
+Class meta::external::store::relational::tests::milestoning::Order{
    id : Integer[1];
    product : Product[*];
    biTemporalProduct : BiTemporalProduct[*];
@@ -40,23 +40,23 @@ Class meta::relational::tests::milestoning::Order{
    }:String[1];
 }
 
-Class <<temporal.bitemporal>> meta::relational::tests::milestoning::ClearingHouse{
+Class <<temporal.bitemporal>> meta::external::store::relational::tests::milestoning::ClearingHouse{
    name : String[1];
    location : Location[0..1];
 }
 
-Class <<temporal.bitemporal>> meta::relational::tests::milestoning::Location{
+Class <<temporal.bitemporal>> meta::external::store::relational::tests::milestoning::Location{
    place : String[1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::OrderPnl
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::OrderPnl
 {
    pnl:Float[1];
    productName : String[0..1];
    product : Product[0..1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::OrderPnlWithConstraint
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::OrderPnlWithConstraint
 [
    CST( ~function:$this.product($this.businessDate->adjust(-1, DurationUnit.DAYS)).id > 0
         ~message: 'Constraint to ensure that $this.businessDate milestoning property is processed correctly when mapped to a View'
@@ -68,37 +68,37 @@ Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::OrderP
    product : Product[0..1];
 }
 
-Class meta::relational::tests::milestoning::OrderDescription{
+Class meta::external::store::relational::tests::milestoning::OrderDescription{
    id : Integer[1];
    description : String[1];
 }
 
-Class meta::relational::tests::milestoning::OrderDetails{
+Class meta::external::store::relational::tests::milestoning::OrderDetails{
    id : Integer[1];
    settlementDate : Date[1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::SystemAOrderDescription{
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::SystemAOrderDescription{
    description : String[1];
 }
 
-Class <<temporal.processingtemporal>> meta::relational::tests::milestoning::Trader{
+Class <<temporal.processingtemporal>> meta::external::store::relational::tests::milestoning::Trader{
    kerberos : String[1];
    certifications : Certification[*];
    location : Location[0..1];
 }
 
-Class <<temporal.processingtemporal>> meta::relational::tests::milestoning::Certification{
+Class <<temporal.processingtemporal>> meta::external::store::relational::tests::milestoning::Certification{
    name : String[1];
 }
 
-Association meta::relational::tests::milestoning::Trader_AccreditedCertification
+Association meta::external::store::relational::tests::milestoning::Trader_AccreditedCertification
 {
    trader        : Trader[1];
    accreditedCertifications : Certification[*];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::Product{
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::Product{
    id : Integer[1];
    name : String[1];
    type : String[1];
@@ -132,7 +132,7 @@ Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::Produc
    }:ProductClassification[1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::ProductWithConstraint1 extends meta::relational::tests::milestoning::Product
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::ProductWithConstraint1 extends meta::external::store::relational::tests::milestoning::Product
 [
    CST
    (
@@ -143,7 +143,7 @@ Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::Produc
 {
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::ProductWithConstraint1b extends meta::relational::tests::milestoning::Product
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::ProductWithConstraint1b extends meta::external::store::relational::tests::milestoning::Product
 [
    CST
    (
@@ -154,7 +154,7 @@ Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::Produc
 {
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::ProductWithConstraint1c 
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::ProductWithConstraint1c
 [
    CST
    (
@@ -167,7 +167,7 @@ Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::Produc
    referenceSystem : System[0..1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::ProductWithConstraint2 extends meta::relational::tests::milestoning::Product
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::ProductWithConstraint2 extends meta::external::store::relational::tests::milestoning::Product
 [
    CST
    (
@@ -178,7 +178,7 @@ Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::Produc
 {
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::ProductWithConstraint3 extends meta::relational::tests::milestoning::Product
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::ProductWithConstraint3 extends meta::external::store::relational::tests::milestoning::Product
 [
    CST
    (
@@ -189,7 +189,7 @@ Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::Produc
 {
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::OrderWithConstraint 
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::OrderWithConstraint
 [
    CST
    (
@@ -202,14 +202,14 @@ Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::OrderW
    orderDate : Date[0..1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::OrderWithProductWithConstraints
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::OrderWithProductWithConstraints
 {
    orderDate : Date[0..1];
    product : ProductWithConstraint1[1];
    getClassificationDescription(date: Date[1]){$this.product($date).classification.description->joinStrings()}:String[1];
 }
 
-Class <<temporal.bitemporal>> meta::relational::tests::milestoning::BiTemporalProduct{
+Class <<temporal.bitemporal>> meta::external::store::relational::tests::milestoning::BiTemporalProduct{
    id : Integer[1];
    name : String[1];
    type : String[1];
@@ -220,12 +220,12 @@ Class <<temporal.bitemporal>> meta::relational::tests::milestoning::BiTemporalPr
    biTemporalClassificationTypeWithIndirect(){biTemporalClassificationType($this, $this.processingDate, $this.businessDate)} : String[0..1];
 }
 
-function meta::relational::tests::milestoning::biTemporalClassificationType(biTemporalProduct:BiTemporalProduct[1], processingDate:Date[1], businessDate:Date[1]):String[0..1]
+function meta::external::store::relational::tests::milestoning::biTemporalClassificationType(biTemporalProduct:BiTemporalProduct[1], processingDate:Date[1], businessDate:Date[1]):String[0..1]
 {
    $biTemporalProduct.biTemporalClassification($processingDate, $businessDate).type
 }
 
-Class <<temporal.bitemporal>> meta::relational::tests::milestoning::BiTemporalProductClassification{
+Class <<temporal.bitemporal>> meta::external::store::relational::tests::milestoning::BiTemporalProductClassification{
    type : String[1];
    description : String[1];
    system : System[1];
@@ -233,10 +233,10 @@ Class <<temporal.bitemporal>> meta::relational::tests::milestoning::BiTemporalPr
    product : Product[0..1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::StockProduct extends meta::relational::tests::milestoning::Product{
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::StockProduct extends meta::external::store::relational::tests::milestoning::Product{
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::ProductClassification{
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::ProductClassification{
    type : String[1];
    description : String[1];
    system : System[1];
@@ -246,113 +246,113 @@ Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::Produc
    biTemporalProduct : BiTemporalProduct[0..1];
 }
 
-Enum meta::relational::tests::milestoning::ProductClassificationType
+Enum meta::external::store::relational::tests::milestoning::ProductClassificationType
 {
     STOCK
 }
 
-Class meta::relational::tests::milestoning::System{
+Class meta::external::store::relational::tests::milestoning::System{
    name : String[1];
    systemType : String[1];
    systemDescription : SystemDescription[0..1];
 }
 
-Class meta::relational::tests::milestoning::ExternalSystem{
+Class meta::external::store::relational::tests::milestoning::ExternalSystem{
    name : String[1];
    systemType : String[1];
    systemDescription : SystemDescription[0..1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::SystemDescription{
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::SystemDescription{
    description : String[1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::ProductSynonym{
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::ProductSynonym{
    synonym : String[1];
    type : String[1];
    createActivity: NewActivityInfo[0..1];
 }
 
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::Exchange{
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::Exchange{
    name : String[1];
    location : Location[0..1];
 }
 
-Class meta::relational::tests::milestoning::NewActivityInfo{
+Class meta::external::store::relational::tests::milestoning::NewActivityInfo{
    createdBy : String[1];
 }
 
-Class meta::relational::tests::milestoning::NewProductActivityInfo{
+Class meta::external::store::relational::tests::milestoning::NewProductActivityInfo{
    createdBy : String[1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::TradePnl
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::TradePnl
 {
    pnl:Float[1];
    supportContactName:String[1];
    //trade:Trade[1];
 }
 
-Association meta::relational::tests::milestoning::OrderProduct{
+Association meta::external::store::relational::tests::milestoning::OrderProduct{
    ascProduct : Product[1];
    orders : Order[*];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::inheritance::VehicleOwner
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::inheritance::VehicleOwner
 {
    vehicles : Vehicle[*];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::inheritance::Person extends VehicleOwner
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::inheritance::Person extends VehicleOwner
 {
    name : String[1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::inheritance::Vehicle
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::inheritance::Vehicle
 {
    id : Integer[1];
    description: String[1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::inheritance::Aircraft extends Vehicle
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::inheritance::Aircraft extends Vehicle
 {
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::inheritance::Jet extends Aircraft
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::inheritance::Jet extends Aircraft
 {
    engineCount : Integer[1];
 }
 
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::inheritance::RoadVehicle extends Vehicle
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::inheritance::RoadVehicle extends Vehicle
 {
    wheelCount : Integer[1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::inheritance::Bicycle extends RoadVehicle
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::inheritance::Bicycle extends RoadVehicle
 {
 
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::milestoning::inheritance::Car extends RoadVehicle
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::milestoning::inheritance::Car extends RoadVehicle
 {
    engineType : EngineType[1];
 }
 
 
-Enum meta::relational::tests::milestoning::inheritance::EngineType
+Enum meta::external::store::relational::tests::milestoning::inheritance::EngineType
 {
    V, U, H, W, X
 }
 
-Association meta::relational::tests::milestoning::inheritance::PersonRoadVehicle
+Association meta::external::store::relational::tests::milestoning::inheritance::PersonRoadVehicle
 {
    person : Person[1];
    roadVehicles : RoadVehicle[*];
 }
 
-Association meta::relational::tests::milestoning::inheritance::PersonVehicle
+Association meta::external::store::relational::tests::milestoning::inheritance::PersonVehicle
 {
    person : Person[1];
    vehicles : Vehicle[*];

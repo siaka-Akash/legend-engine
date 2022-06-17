@@ -13,8 +13,8 @@
 // limitations under the License.
 
 ###Mapping
-import meta::relational::tests::*;
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::model::simple::*;
 Mapping meta::pure::executionPlan::tests::alternateSimpleMapping
 (
 
@@ -41,8 +41,8 @@ Mapping meta::pure::executionPlan::tests::alternateSimpleMapping
 )
 
 ###Mapping
-import meta::relational::tests::*;
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::model::simple::*;
 Mapping meta::pure::executionPlan::tests::alternateSimpleMapping2
 (
 

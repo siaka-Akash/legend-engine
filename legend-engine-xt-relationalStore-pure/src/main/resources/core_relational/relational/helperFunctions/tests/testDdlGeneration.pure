@@ -12,47 +12,47 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::ddl::*;
+import meta::external::store::relational::tests::ddl::*;
 
 import meta::pure::profiles::*;
 
-import meta::relational::metamodel::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::join::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::functions::toDDL::*;
-import meta::relational::mapping::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::functions::toDDL::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::runtime::*;
 
-function <<test.Test>>  meta::relational::tests::ddl::findTableByName():Boolean[1]
+function <<test.Test>>  meta::external::store::relational::tests::ddl::findTableByName():Boolean[1]
 {
    let table = foo_db.schema('default')->toOne().table('bar_t');
    assertNotEmpty($table, 'Could not find table');
 }
 
-function <<test.Test>>  meta::relational::tests::ddl::createDropTableStatement():Boolean[1]
+function <<test.Test>>  meta::external::store::relational::tests::ddl::createDropTableStatement():Boolean[1]
 {
    assertEquals('Drop table if exists bar_t;', dropTableStatement(foo_db, 'bar_t'));
    assertEquals('Drop table if exists baz_t;', dropTableStatement(foo_db, 'baz_t'));
 }
 
-function <<test.Test>>  meta::relational::tests::ddl::createCreateTableStatement():Boolean[1]
+function <<test.Test>>  meta::external::store::relational::tests::ddl::createCreateTableStatement():Boolean[1]
 {
    let s = createTableStatement(foo_db, 'bar_t');
    assertEquals('Create Table bar_t(id INT NOT NULL,version INT NOT NULL,description CHAR(32) NULL, PRIMARY KEY(id,version));', $s);
 
-   assertEquals('Create Table baz_t(id INT NOT NULL,size FLOAT NULL,poem VARCHAR(255) NULL, PRIMARY KEY(id));', createTableStatement(meta::relational::tests::ddl::foo_db, 'baz_t'));
+   assertEquals('Create Table baz_t(id INT NOT NULL,size FLOAT NULL,poem VARCHAR(255) NULL, PRIMARY KEY(id));', createTableStatement(meta::external::store::relational::tests::ddl::foo_db, 'baz_t'));
 }
 
-function <<test.Test>> meta::relational::tests::ddl::createCreateTableStatementWithReservedWorks():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::ddl::createCreateTableStatementWithReservedWorks():Boolean[1]
 {
   let s = createTableStatement(foo_db, 'keyword_t');
   assertEquals('Create Table keyword_t(id INT NOT NULL,"order" INT NULL,"limit" INT NULL,"window" INT NULL,"current_date" DATE NULL, PRIMARY KEY(id));', $s);
 }
 
-function <<test.Test>>  meta::relational::tests::ddl::dropAndCreateTable():Boolean[1]
+function <<test.Test>>  meta::external::store::relational::tests::ddl::dropAndCreateTable():Boolean[1]
 {
-    let c = meta::relational::tests::testRuntime(foo_db).connections->toOne()->cast(@TestDatabaseConnection);
+    let c = meta::external::store::relational::tests::testRuntime(foo_db).connections->toOne()->cast(@TestDatabaseConnection);
     dropAndCreateTableInDb(foo_db, 'bar_t', $c);
     executeInDb('insert into bar_t (id, version, description) values (1, 1, \'Glorp\')', $c);
 
@@ -65,18 +65,18 @@ function <<test.Test>>  meta::relational::tests::ddl::dropAndCreateTable():Boole
     assertEquals(0, executeInDb('select count(*) from bar_t', $c).rows->at(0).value('COUNT(*)'));
 }
 
-function <<test.Test>> meta::relational::tests::ddl::testCreateTempTableStatement():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::ddl::testCreateTempTableStatement():Boolean[1]
 {
-   let h2 = createTempTableStatement()->eval('tt',  ^Column(name='col', type=^meta::relational::metamodel::datatype::Integer()), DatabaseType.H2 );
+   let h2 = createTempTableStatement()->eval('tt',  ^Column(name='col', type=^meta::external::store::relational::metamodel::datatype::Integer()), DatabaseType.H2 );
    assertEquals('Create LOCAL TEMPORARY TABLE tt(col INT);', $h2);
-   let sybase = createTempTableStatement()->eval('tt',  ^Column(name='col', type=^meta::relational::metamodel::datatype::Integer()), DatabaseType.Sybase );
+   let sybase = createTempTableStatement()->eval('tt',  ^Column(name='col', type=^meta::external::store::relational::metamodel::datatype::Integer()), DatabaseType.Sybase );
    assertEquals('Declare LOCAL TEMPORARY TABLE tt(col INT) on commit preserve rows;', $sybase);
 }
 
-function <<test.Test>> meta::relational::tests::ddl::dropAndCreateTempTable():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::ddl::dropAndCreateTempTable():Boolean[1]
 {
-    let c = meta::relational::tests::testRuntime(foo_db).connections->toOne()->cast(@TestDatabaseConnection);
-    createTempTable('tt', ^Column(name='col', type=^meta::relational::metamodel::datatype::Integer()), createTempTableStatement(), $c);
+    let c = meta::external::store::relational::tests::testRuntime(foo_db).connections->toOne()->cast(@TestDatabaseConnection);
+    createTempTable('tt', ^Column(name='col', type=^meta::external::store::relational::metamodel::datatype::Integer()), createTempTableStatement(), $c);
    
     let res = executeInDb('select * from tt', $c);
     let columnNames = $res.columnNames;
@@ -85,7 +85,7 @@ function <<test.Test>> meta::relational::tests::ddl::dropAndCreateTempTable():Bo
 }
 
 ###Relational
-Database meta::relational::tests::ddl::foo_db
+Database meta::external::store::relational::tests::ddl::foo_db
 (
    Table bar_t
    (

@@ -23,7 +23,7 @@ import meta::pure::executionPlan::engine::java::*;
 import meta::pure::executionPlan::engine::java::naming::*;
 import meta::pure::executionPlan::engine::java::typeInfo::*;
 import meta::pure::mapping::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::mapping::*;
 
 function meta::pure::executionPlan::engine::java::databaseConnectionPropertyName():String[1]
 {
@@ -250,14 +250,14 @@ function <<access.private>> meta::pure::executionPlan::engine::java::createRelat
          if($sets->size() == 1,
             | 
               let addMilestoningProps = meta::pure::milestoning::getTemporalMilestoningStrategy($sets->at(0).class)->isNotEmpty() && 
-                                        meta::pure::milestoning::getTemporalMilestoningStrategy($sets->at(0).class)->toOne()->meta::pure::milestoning::expandToSingleTemporalStrategies()->forAll(s| $s->meta::relational::milestoning::relationalElementCanSupportStrategy($sets->at(0)->resolveMainTable()));
+                                        meta::pure::milestoning::getTemporalMilestoningStrategy($sets->at(0).class)->toOne()->meta::pure::milestoning::expandToSingleTemporalStrategies()->forAll(s| $s->meta::external::store::relational::milestoning::relationalElementCanSupportStrategy($sets->at(0)->resolveMainTable()));
 
               let allProperties = $setToPropertyMappingsMap->get($sets->at(0)).values.property->concatenate($addMilestoningProps->if(|$sets->at(0).class.properties->filter(p| $p->genericType().typeArguments->at(1).rawType->toOne()->instanceOf(meta::pure::metamodel::type::DataType) && $p->meta::pure::milestoning::hasGeneratedMilestoningPropertyStereotype()), |[])->sortBy(x | $x.name->toOne()));
 
               $conventions->implementationName($sets->at(0), $path)->objectCreation($sets->at(0), $sets, $allProperties, 0, $context.conventions) + 'return object;\n';,
             | $sets->size()->range()->map({s | 
                  let addMilestoningProps = meta::pure::milestoning::getTemporalMilestoningStrategy($sets->at($s).class)->isNotEmpty() && 
-                                           meta::pure::milestoning::getTemporalMilestoningStrategy($sets->at($s).class)->toOne()->meta::pure::milestoning::expandToSingleTemporalStrategies()->forAll(k| $k->meta::relational::milestoning::relationalElementCanSupportStrategy($sets->at($s)->resolveMainTable()));
+                                           meta::pure::milestoning::getTemporalMilestoningStrategy($sets->at($s).class)->toOne()->meta::pure::milestoning::expandToSingleTemporalStrategies()->forAll(k| $k->meta::external::store::relational::milestoning::relationalElementCanSupportStrategy($sets->at($s)->resolveMainTable()));
 
                  let allProperties = $setToPropertyMappingsMap->get($sets->at($s)).values.property->concatenate($addMilestoningProps->if(|$sets->at($s).class.properties->filter(p| $p->genericType().typeArguments->at(1).rawType->toOne()->instanceOf(meta::pure::metamodel::type::DataType) && $p->meta::pure::milestoning::hasGeneratedMilestoningPropertyStereotype()), |[])->sortBy(x | $x.name->toOne()));
               
@@ -303,9 +303,9 @@ function <<access.private>> meta::pure::executionPlan::engine::java::createRelat
          $sets->size()->range()->map({s | 
             let currentSet = $sets->at($s);
             let addMilestoningProps = meta::pure::milestoning::getTemporalMilestoningStrategy($currentSet.class)->isNotEmpty() && 
-                                      meta::pure::milestoning::getTemporalMilestoningStrategy($currentSet.class)->toOne()->meta::pure::milestoning::expandToSingleTemporalStrategies()->forAll(s| $s->meta::relational::milestoning::relationalElementCanSupportStrategy($currentSet->resolveMainTable()));
+                                      meta::pure::milestoning::getTemporalMilestoningStrategy($currentSet.class)->toOne()->meta::pure::milestoning::expandToSingleTemporalStrategies()->forAll(s| $s->meta::external::store::relational::milestoning::relationalElementCanSupportStrategy($currentSet->resolveMainTable()));
 
-            let currentSetPks = if (!$currentSet->instanceOf(RootRelationalInstanceSetImplementation) || ($currentSet->cast(@RootRelationalInstanceSetImplementation)->meta::relational::functions::pureToSqlQuery::getGroupBy()->isEmpty() && ($currentSet->cast(@RootRelationalInstanceSetImplementation)->meta::relational::functions::pureToSqlQuery::getDistinct()->isEmpty() || $currentSet->cast(@RootRelationalInstanceSetImplementation)->meta::relational::functions::pureToSqlQuery::getDistinct()->toOne() == false)),
+            let currentSetPks = if (!$currentSet->instanceOf(RootRelationalInstanceSetImplementation) || ($currentSet->cast(@RootRelationalInstanceSetImplementation)->meta::external::store::relational::functions::pureToSqlQuery::getGroupBy()->isEmpty() && ($currentSet->cast(@RootRelationalInstanceSetImplementation)->meta::external::store::relational::functions::pureToSqlQuery::getDistinct()->isEmpty() || $currentSet->cast(@RootRelationalInstanceSetImplementation)->meta::external::store::relational::functions::pureToSqlQuery::getDistinct()->toOne() == false)),
                                     | $currentSet->resolvePrimaryKey(),
                                     | []);
             '    List<Integer> index_' + $s->toString() + ' = new ArrayList<>();\n' +
@@ -313,7 +313,7 @@ function <<access.private>> meta::pure::executionPlan::engine::java::createRelat
                ->map(pm | '    index_' + $s->toString() + '.add(columnNames.indexOf("' + $pm.property.name->toOne()->toUpper() + '") + 1);')
                ->concatenate(
                   if($addMilestoningProps,
-                     | let temporalColumnLabels = meta::pure::milestoning::getTemporalMilestoningStrategy($sets->at($s).class)->toOne()->meta::pure::milestoning::expandToSingleTemporalStrategies()->map(s| $s->meta::relational::milestoning::temporalColumnAliasProperties()).second->sort();
+                     | let temporalColumnLabels = meta::pure::milestoning::getTemporalMilestoningStrategy($sets->at($s).class)->toOne()->meta::pure::milestoning::expandToSingleTemporalStrategies()->map(s| $s->meta::external::store::relational::milestoning::temporalColumnAliasProperties()).second->sort();
                        $temporalColumnLabels->map(l | '    index_' + $s->toString() + '.add(columnNames.indexOf("' + $l->toUpper() + '") + 1);');,
                      | [])
                )
@@ -330,7 +330,7 @@ function <<access.private>> meta::pure::executionPlan::engine::java::createRelat
          $sets->size()->range()->map({s | 
             let currentSet = $sets->at($s);
             let addMilestoningProps = meta::pure::milestoning::getTemporalMilestoningStrategy($currentSet.class)->isNotEmpty() && 
-                                      meta::pure::milestoning::getTemporalMilestoningStrategy($currentSet.class)->toOne()->meta::pure::milestoning::expandToSingleTemporalStrategies()->forAll(s| $s->meta::relational::milestoning::relationalElementCanSupportStrategy($currentSet->resolveMainTable()));
+                                      meta::pure::milestoning::getTemporalMilestoningStrategy($currentSet.class)->toOne()->meta::pure::milestoning::expandToSingleTemporalStrategies()->forAll(s| $s->meta::external::store::relational::milestoning::relationalElementCanSupportStrategy($currentSet->resolveMainTable()));
 
             let allProperties = $setToPropertyMappingsMap->get($currentSet).values.property
                ->concatenate($addMilestoningProps->if(|$currentSet.class.properties->filter(p| $p->genericType().typeArguments->at(1).rawType->toOne()->instanceOf(meta::pure::metamodel::type::DataType) && $p->meta::pure::milestoning::hasGeneratedMilestoningPropertyStereotype()), |[])->sortBy(x | $x.name->toOne()));
@@ -412,7 +412,7 @@ function <<access.private>> meta::pure::executionPlan::engine::java::createRelat
 
 function <<access.private>> meta::pure::executionPlan::engine::java::objectCreation(implClass: meta::external::language::java::metamodel::Class[1], set: RelationalInstanceSetImplementation[1], allSets: RelationalInstanceSetImplementation[*],  properties: Property<Nil,Any|*>[*], index: Integer[1], conventions:Conventions[1]):String[1]
 {
-   let currentSetPks = if (!$set->instanceOf(RootRelationalInstanceSetImplementation) || ($set->cast(@RootRelationalInstanceSetImplementation)->meta::relational::functions::pureToSqlQuery::getGroupBy()->isEmpty() && ($set->cast(@RootRelationalInstanceSetImplementation)->meta::relational::functions::pureToSqlQuery::getDistinct()->isEmpty() || $set->cast(@RootRelationalInstanceSetImplementation)->meta::relational::functions::pureToSqlQuery::getDistinct()->toOne() == false)),
+   let currentSetPks = if (!$set->instanceOf(RootRelationalInstanceSetImplementation) || ($set->cast(@RootRelationalInstanceSetImplementation)->meta::external::store::relational::functions::pureToSqlQuery::getGroupBy()->isEmpty() && ($set->cast(@RootRelationalInstanceSetImplementation)->meta::external::store::relational::functions::pureToSqlQuery::getDistinct()->isEmpty() || $set->cast(@RootRelationalInstanceSetImplementation)->meta::external::store::relational::functions::pureToSqlQuery::getDistinct()->toOne() == false)),
                            | $set->resolvePrimaryKey(),
                            | []);
    

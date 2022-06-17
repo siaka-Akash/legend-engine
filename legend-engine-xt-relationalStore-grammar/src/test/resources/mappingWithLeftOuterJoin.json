@@ -26,9 +26,9 @@
         {
           "mainTable": {
             "schema": "default",
-            "database": "meta::relational::tests::mapping::join::model::store::db",
+            "database": "meta::external::store::relational::tests::mapping::join::model::store::db",
             "_type": "table",
-            "mainTableDb": "meta::relational::tests::mapping::join::model::store::db",
+            "mainTableDb": "meta::external::store::relational::tests::mapping::join::model::store::db",
             "table": "personTable"
           },
           "root": true,
@@ -40,16 +40,16 @@
                 "tableAlias": "personTable",
                 "table": {
                   "schema": "default",
-                  "database": "meta::relational::tests::mapping::join::model::store::db",
+                  "database": "meta::external::store::relational::tests::mapping::join::model::store::db",
                   "_type": "table",
-                  "mainTableDb": "meta::relational::tests::mapping::join::model::store::db",
+                  "mainTableDb": "meta::external::store::relational::tests::mapping::join::model::store::db",
                   "table": "personTable"
                 }
               },
               "_type": "relationalPropertyMapping",
               "property": {
                 "property": "firstName",
-                "class": "meta::relational::tests::model::simple::Person"
+                "class": "meta::external::store::relational::tests::model::simple::Person"
               },
               "target": ""
             },
@@ -60,16 +60,16 @@
                 "tableAlias": "personTable",
                 "table": {
                   "schema": "default",
-                  "database": "meta::relational::tests::mapping::join::model::store::db",
+                  "database": "meta::external::store::relational::tests::mapping::join::model::store::db",
                   "_type": "table",
-                  "mainTableDb": "meta::relational::tests::mapping::join::model::store::db",
+                  "mainTableDb": "meta::external::store::relational::tests::mapping::join::model::store::db",
                   "table": "personTable"
                 }
               },
               "_type": "relationalPropertyMapping",
               "property": {
                 "property": "lastName",
-                "class": "meta::relational::tests::model::simple::Person"
+                "class": "meta::external::store::relational::tests::model::simple::Person"
               },
               "target": ""
             },
@@ -78,12 +78,12 @@
                 "joins": [
                   {
                     "name": "Person_MiddleTable",
-                    "db": "meta::relational::tests::mapping::join::model::store::db"
+                    "db": "meta::external::store::relational::tests::mapping::join::model::store::db"
                   },
                   {
                     "joinType": "LEFT_OUTER",
                     "name": "MiddleTable_PersonExtension",
-                    "db": "meta::relational::tests::mapping::join::model::store::db"
+                    "db": "meta::external::store::relational::tests::mapping::join::model::store::db"
                   }
                 ],
                 "_type": "elemtWithJoins",
@@ -93,9 +93,9 @@
                   "tableAlias": "personExtensionTable",
                   "table": {
                     "schema": "default",
-                    "database": "meta::relational::tests::mapping::join::model::store::db",
+                    "database": "meta::external::store::relational::tests::mapping::join::model::store::db",
                     "_type": "table",
-                    "mainTableDb": "meta::relational::tests::mapping::join::model::store::db",
+                    "mainTableDb": "meta::external::store::relational::tests::mapping::join::model::store::db",
                     "table": "personExtensionTable"
                   }
                 }
@@ -103,15 +103,15 @@
               "_type": "relationalPropertyMapping",
               "property": {
                 "property": "age",
-                "class": "meta::relational::tests::model::simple::Person"
+                "class": "meta::external::store::relational::tests::model::simple::Person"
               },
               "target": ""
             }
           ],
           "_type": "relational",
           "distinct": false,
-          "id": "meta_relational_tests_model_simple_Person",
-          "class": "meta::relational::tests::model::simple::Person",
+          "id": "meta_external_store_relational_tests_model_simple_Person",
+          "class": "meta::external::store::relational::tests::model::simple::Person",
           "primaryKey": [
             {
               "_type": "column",
@@ -119,9 +119,9 @@
               "tableAlias": "",
               "table": {
                 "schema": "default",
-                "database": "meta::relational::tests::mapping::join::model::store::db",
+                "database": "meta::external::store::relational::tests::mapping::join::model::store::db",
                 "_type": "table",
-                "mainTableDb": "meta::relational::tests::mapping::join::model::store::db",
+                "mainTableDb": "meta::external::store::relational::tests::mapping::join::model::store::db",
                 "table": "personTable"
               }
             }

@@ -14,9 +14,9 @@
 
 import meta::pure::constraints::functions::util::*;
 import meta::pure::metamodel::constraint::*;
-import meta::relational::validation::showcase::model::*;
+import meta::external::store::relational::validation::showcase::model::*;
 
-Class {doc.doc = 'Simple Trade model (with constraints)'} meta::relational::validation::showcase::model::Trade
+Class {doc.doc = 'Simple Trade model (with constraints)'} meta::external::store::relational::validation::showcase::model::Trade
 [
    etiNotEmpty
    (
@@ -52,13 +52,13 @@ Class {doc.doc = 'Simple Trade model (with constraints)'} meta::relational::vali
    events: TradeEvent[*];
 }
 
-Class {doc.doc = 'Simple Trade model (with constraints)'} meta::relational::validation::showcase::model::TradeTradingGroup
+Class {doc.doc = 'Simple Trade model (with constraints)'} meta::external::store::relational::validation::showcase::model::TradeTradingGroup
 {
    name : String[0..1];
    status : TradingGroupStatus[0..1];
 }
 
-Class meta::relational::validation::showcase::model::Product
+Class meta::external::store::relational::validation::showcase::model::Product
 {
    name : String[1];
    
@@ -68,21 +68,21 @@ Class meta::relational::validation::showcase::model::Product
    isinSynonym() { $this.synonymByType(ProductSynonymType.ISIN) } : Synonym[1];
 }
 
-Class meta::relational::validation::showcase::model::TradeEvent
+Class meta::external::store::relational::validation::showcase::model::TradeEvent
 {
    eventType : String[0..1];
    date : StrictDate[1];
    traderAddress : String[0..1];
 }
 
-Class meta::relational::validation::showcase::model::Synonym
+Class meta::external::store::relational::validation::showcase::model::Synonym
 {
    typeAsString : String[1];
    type : ProductSynonymType[1];
    name : String[1];
 }
 
-Class meta::relational::validation::showcase::model::Account
+Class meta::external::store::relational::validation::showcase::model::Account
 {
    name : String[1];
    createDate : StrictDate[1];
@@ -91,7 +91,7 @@ Class meta::relational::validation::showcase::model::Account
    isTypeA()  { if ( $this.name->endsWith('_A'), | true, | false) } : Boolean[1];
 }
 
-Association meta::relational::validation::showcase::model::ProdSynonym
+Association meta::external::store::relational::validation::showcase::model::ProdSynonym
 {
    synonyms : Synonym[*];
    product : Product[1];
@@ -99,27 +99,27 @@ Association meta::relational::validation::showcase::model::ProdSynonym
    synonymByType(type:ProductSynonymType[1]) { $this.synonyms->filter(s|$s.type == $type)->toOne() } : Synonym[1];
 }
 
-Association meta::relational::validation::showcase::model::Trade_Accounts
+Association meta::external::store::relational::validation::showcase::model::Trade_Accounts
 {
    account : Account[0..1];
    trades : Trade[*];
 }
 
-Enum meta::relational::validation::showcase::model::ProductSynonymType
+Enum meta::external::store::relational::validation::showcase::model::ProductSynonymType
 {
    CUSIP,
    ISIN,
    GSN
 }
 
-Enum meta::relational::validation::showcase::model::TradingGroupStatus 
+Enum meta::external::store::relational::validation::showcase::model::TradingGroupStatus
 {
    DEAD,
    LIVE,
    UNKNOWN
 }
 
-function meta::relational::validation::showcase::model::getConstraintsContextInformation():ConstraintContextInformation<Any>[*]
+function meta::external::store::relational::validation::showcase::model::getConstraintsContextInformation():ConstraintContextInformation<Any>[*]
 {
    [
       createConstraintContextInformation('validLocation', Trade, EnforcementLevel.Warn, 'Location is not known'),

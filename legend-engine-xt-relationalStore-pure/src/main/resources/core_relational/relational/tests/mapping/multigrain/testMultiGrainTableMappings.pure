@@ -12,23 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::functions::asserts::*;
-import meta::relational::runtime::*;
-import meta::relational::runtime::authentication::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::runtime::authentication::*;
 import meta::pure::profiles::*;
 import meta::pure::runtime::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::mapping::*;
-import meta::csv::*;
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::tests::model::simple::*;
 
-import meta::relational::tests::mapping::multigrain::model::*;
-import meta::relational::tests::mapping::multigrain::model::domain::*;
-import meta::relational::tests::mapping::multigrain::model::store::*;
-import meta::relational::tests::mapping::multigrain::model::mapping::*;
+import meta::external::store::relational::tests::mapping::multigrain::model::*;
+import meta::external::store::relational::tests::mapping::multigrain::model::domain::*;
+import meta::external::store::relational::tests::mapping::multigrain::model::store::*;
+import meta::external::store::relational::tests::mapping::multigrain::model::mapping::*;
 
 
-function <<test.Test>> meta::relational::tests::mapping::multigrain::testProjectPerson():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::multigrain::testProjectPerson():Boolean[1]
 {
    let result = execute(|Person.all()->project([#/Person/firstName#,#/Person/address/name!address#,#/Person/firm/legalName#,#/Person/firm/address/name!firmAddress#]), testMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    
@@ -37,7 +37,7 @@ function <<test.Test>> meta::relational::tests::mapping::multigrain::testProject
 }
 
 
-function <<test.Test>> meta::relational::tests::mapping::multigrain::testProjectFirm():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::multigrain::testProjectFirm():Boolean[1]
 {
    let result = execute(|Firm.all()->project([#/Firm/legalName#, #/Firm/address/name!address#]), testMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    
@@ -46,7 +46,7 @@ function <<test.Test>> meta::relational::tests::mapping::multigrain::testProject
 }
 
 
-function <<test.Test>> meta::relational::tests::mapping::multigrain::testProjectPersonWithJoinToAddress():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::multigrain::testProjectPersonWithJoinToAddress():Boolean[1]
 {
    let result = execute(|Person.all()->project([#/Person/firstName#,#/Person/address/name!address#,#/Person/address/type!addressType#]), testMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    
@@ -55,14 +55,14 @@ function <<test.Test>> meta::relational::tests::mapping::multigrain::testProject
 }
 
 // Alloy exclusion reason: 4. Use getter relational protocol
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::mapping::multigrain::testGetter():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::mapping::multigrain::testGetter():Boolean[1]
 {
    let result = execute(|Person.all(), testMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSameElements(['Firm A', 'Firm X', 'Firm X'], $result.values->map(p|$p.firm.legalName));
 }
 
 
-function <<test.Test>> meta::relational::tests::mapping::multigrain::testToManyWithQualifierWithFilterOnDataType():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::multigrain::testToManyWithQualifierWithFilterOnDataType():Boolean[1]
 {
    let result = execute(|Position.all()->filter(p | $p.account.primaryIncomeFunction.code == 1022)
                                        ->project([s | $s.quantity], ['num'])
@@ -71,7 +71,7 @@ function <<test.Test>> meta::relational::tests::mapping::multigrain::testToManyW
    assertSameSQL('select "root".QTY as "num" from POSITION as "root" left outer join FIRM_ACCT_IF_MULTIGRAIN as "firm_acct_if_multigrain_0" on ("root".ACCT_I = "firm_acct_if_multigrain_0".OID) left outer join FIRM_ACCT_IF_MULTIGRAIN as "firm_acct_if_multigrain_1" on ("firm_acct_if_multigrain_0".ACCOUNT_NUM = "firm_acct_if_multigrain_1".ACCOUNT_NUM and "firm_acct_if_multigrain_1".IF_TYPE = \'P\' and "firm_acct_if_multigrain_1".DLEVEL = \'S\') where "firm_acct_if_multigrain_1".IF_NUM = 1022', $result);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::multigrain::testToManyWithQualifierWithFilterOnJoin():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::multigrain::testToManyWithQualifierWithFilterOnJoin():Boolean[1]
 {
    let result = execute(|Position.all()
                            ->filter(p | $p.account.incomeFunctionSplits->filter(i | $i.type == 'P')->toOne().incomeFunction.Classification.name == 'IfName1')
@@ -83,24 +83,24 @@ function <<test.Test>> meta::relational::tests::mapping::multigrain::testToManyW
 }
 
 
-function <<test.BeforePackage>> meta::relational::tests::mapping::multigrain::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::mapping::multigrain::setUp():Boolean[1]
 {
     createTablesAndFillDb();
 }
 
 
 
-function meta::relational::tests::mapping::multigrain::model::store::testDataTypeMappingRuntime():Runtime[1]
+function meta::external::store::relational::tests::mapping::multigrain::model::store::testDataTypeMappingRuntime():Runtime[1]
 {
-   meta::relational::tests::testRuntime(myDB);
+   meta::external::store::relational::tests::testRuntime(myDB);
 }
 
 
-function meta::relational::tests::mapping::multigrain::model::store::createTablesAndFillDb():Boolean[1]
+function meta::external::store::relational::tests::mapping::multigrain::model::store::createTablesAndFillDb():Boolean[1]
 {
    let connection = testDataTypeMappingRuntime().connectionByElement(myDB)->cast(@TestDatabaseConnection);
    
-   meta::relational::functions::toDDL::dropAndCreateTableInDb(myDB, 'PERSON_FIRM_ADDRESS_MULTIGRAIN', $connection);
+   meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(myDB, 'PERSON_FIRM_ADDRESS_MULTIGRAIN', $connection);
    
    let s = 'insert into PERSON_FIRM_ADDRESS_MULTIGRAIN (DLEVEL, OID, PERSON_FIRSTNAME, PERSON_LASTNAME, PERSON_FIRM_OID, PERSON_ADDRESS_OID, PERSON_ADDRESS_LINE_1, FIRM_LEGALNAME, FIRM_ADDRESS_OID, FIRM_ADDRESS_LINE_1, ADDRESS_LINE_1, ADDRESS_TYPE) values ';
    
@@ -117,7 +117,7 @@ function meta::relational::tests::mapping::multigrain::model::store::createTable
    executeInDb($s + '(\'A\', 10, null,       null,       null,null, null,       null,          null,    null,        \'3 somewhere\', 1);', $connection);
    
    
-   meta::relational::functions::toDDL::dropAndCreateTableInDb(myDBAccount, 'POSITION', $connection);
+   meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(myDBAccount, 'POSITION', $connection);
    
    let b = 'insert into POSITION(OID, ACCT_I, QTY) values';
    executeInDb($b + '(1, 1, 500);', $connection);
@@ -125,7 +125,7 @@ function meta::relational::tests::mapping::multigrain::model::store::createTable
    
    
    
-   meta::relational::functions::toDDL::dropAndCreateTableInDb(myDBAccount, 'FIRM_ACCT_IF_MULTIGRAIN', $connection);
+   meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(myDBAccount, 'FIRM_ACCT_IF_MULTIGRAIN', $connection);
    
    let c = 'insert into FIRM_ACCT_IF_MULTIGRAIN(OID, DLEVEL, ACCOUNT_NUM, IF_NUM, IF_TYPE, IF_PERCENT, IF_DESCRIPTION) values';
    
@@ -137,7 +137,7 @@ function meta::relational::tests::mapping::multigrain::model::store::createTable
    executeInDb($c + '(6, \'I\', null, 1022, null, null, \'IF 1\');', $connection);
    executeInDb($c + '(7, \'I\', null, 1023, null, null, \'IF 2\');', $connection);
    
-   meta::relational::functions::toDDL::dropAndCreateTableInDb(myDBAccount, 'IF_OTHER_INFO', $connection);
+   meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(myDBAccount, 'IF_OTHER_INFO', $connection);
    
    executeInDb('insert into IF_OTHER_INFO (IF_CODE, IF_NAME) values (1022, \'IfName1\');', $connection);
    executeInDb('insert into IF_OTHER_INFO (IF_CODE, IF_NAME) values (1023, \'IfName2\');', $connection);
@@ -145,20 +145,20 @@ function meta::relational::tests::mapping::multigrain::model::store::createTable
    true;
 }
 
-Class meta::relational::tests::mapping::multigrain::model::domain::Position
+Class meta::external::store::relational::tests::mapping::multigrain::model::domain::Position
 {
    account:FirmAccount[1];
    quantity: Integer[1];
 }
 
-Class meta::relational::tests::mapping::multigrain::model::domain::IncomeFunction
+Class meta::external::store::relational::tests::mapping::multigrain::model::domain::IncomeFunction
 {
    code:Integer[1];
    name:String[1];
       
 }
 
-Class meta::relational::tests::mapping::multigrain::model::domain::AccountIncomeFunctionSplit
+Class meta::external::store::relational::tests::mapping::multigrain::model::domain::AccountIncomeFunctionSplit
 {
    firmAccount : FirmAccount[1];
    incomeFunction: IncomeFunction[1];
@@ -167,7 +167,7 @@ Class meta::relational::tests::mapping::multigrain::model::domain::AccountIncome
 }
 
 
-Class meta::relational::tests::mapping::multigrain::model::domain::FirmAccount
+Class meta::external::store::relational::tests::mapping::multigrain::model::domain::FirmAccount
 {
    number:Integer[1];
    name: String[1];
@@ -180,12 +180,12 @@ Class meta::relational::tests::mapping::multigrain::model::domain::FirmAccount
 }
 
 
-Class meta::relational::tests::mapping::multigrain::model::domain::Classification
+Class meta::external::store::relational::tests::mapping::multigrain::model::domain::Classification
 {
    name:String[1];
 }
 
-Association meta::relational::tests::mapping::multigrain::model::domain::SDI_IF
+Association meta::external::store::relational::tests::mapping::multigrain::model::domain::SDI_IF
 {
    incomeFunctions:IncomeFunction[*];
    Classification:Classification[0..1];
@@ -195,7 +195,7 @@ Association meta::relational::tests::mapping::multigrain::model::domain::SDI_IF
 
 ###Relational
 
-Database meta::relational::tests::mapping::multigrain::model::store::myDB
+Database meta::external::store::relational::tests::mapping::multigrain::model::store::myDB
 (
     
     Table PERSON_FIRM_ADDRESS_MULTIGRAIN
@@ -230,7 +230,7 @@ Database meta::relational::tests::mapping::multigrain::model::store::myDB
 )
 
 ###Relational
-Database meta::relational::tests::mapping::multigrain::model::store::myDBAccount
+Database meta::external::store::relational::tests::mapping::multigrain::model::store::myDBAccount
 (
     Table POSITION
     (
@@ -276,13 +276,13 @@ Database meta::relational::tests::mapping::multigrain::model::store::myDBAccount
 
 
 ###Mapping
-import meta::relational::tests::mapping::multigrain::model::domain::*;
-import meta::relational::tests::mapping::multigrain::model::store::*;
+import meta::external::store::relational::tests::mapping::multigrain::model::domain::*;
+import meta::external::store::relational::tests::mapping::multigrain::model::store::*;
 
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::model::simple::*;
 
 
-Mapping meta::relational::tests::mapping::multigrain::model::mapping::testMapping
+Mapping meta::external::store::relational::tests::mapping::multigrain::model::mapping::testMapping
 (
     Person: Relational
     {
@@ -343,7 +343,7 @@ Mapping meta::relational::tests::mapping::multigrain::model::mapping::testMappin
 )
 
 
-Mapping meta::relational::tests::mapping::multigrain::model::mapping::testMappingFirmAccount
+Mapping meta::external::store::relational::tests::mapping::multigrain::model::mapping::testMappingFirmAccount
 (
    Position:Relational
    {

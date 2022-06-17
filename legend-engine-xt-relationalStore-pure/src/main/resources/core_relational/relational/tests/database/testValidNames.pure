@@ -13,14 +13,14 @@
 // limitations under the License.
 
 import meta::pure::profiles::*;
-import meta::relational::tests::mapping::database::*;
-import meta::relational::runtime::*;
-import meta::relational::metamodel::execute::*;
+import meta::external::store::relational::tests::mapping::database::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::metamodel::execute::*;
 import meta::pure::runtime::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::mapping::*;
 
 
-function <<test.Test>> meta::relational::tests::mapping::database::testColumnNames():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::database::testColumnNames():Boolean[1]
 {
    let result = execute(| MyClass.all(), testMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result, 1);
@@ -36,7 +36,7 @@ function <<test.Test>> meta::relational::tests::mapping::database::testColumnNam
    assertEquals(2, $result.values->first()->cast(@MyClass).a);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::database::testTableNameInJoinAlias():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::database::testTableNameInJoinAlias():Boolean[1]
 {
    let result = execute(| MyClass.all()->project([c | $c.b.c], ['c']), testMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result, 1);
@@ -44,12 +44,12 @@ function <<test.Test>> meta::relational::tests::mapping::database::testTableName
 }
 
 
-function meta::relational::tests::mapping::database::testRuntime():Runtime[1]
+function meta::external::store::relational::tests::mapping::database::testRuntime():Runtime[1]
 {
-   meta::relational::tests::testRuntime(myDB);
+   meta::external::store::relational::tests::testRuntime(myDB);
 }
 
-function <<test.BeforePackage>> meta::relational::tests::mapping::database::createTablesAndFillDb():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::mapping::database::createTablesAndFillDb():Boolean[1]
 {
    let connection = testRuntime().connectionByElement(myDB)->cast(@TestDatabaseConnection);
 
@@ -65,7 +65,7 @@ function <<test.BeforePackage>> meta::relational::tests::mapping::database::crea
 }
 
 
-Class meta::relational::tests::mapping::database::MyClass
+Class meta::external::store::relational::tests::mapping::database::MyClass
 {
 
    a:Integer[1];
@@ -73,13 +73,13 @@ Class meta::relational::tests::mapping::database::MyClass
    d:MyEnum[0..1];
 }
 
-Class meta::relational::tests::mapping::database::MyClassB
+Class meta::external::store::relational::tests::mapping::database::MyClassB
 {
 
    c:String[1];
 }
 
-Enum meta::relational::tests::mapping::database::MyEnum
+Enum meta::external::store::relational::tests::mapping::database::MyEnum
 {
    YES,
    NO
@@ -89,7 +89,7 @@ Enum meta::relational::tests::mapping::database::MyEnum
 ###Relational
 
 
-Database meta::relational::tests::mapping::database::myDB
+Database meta::external::store::relational::tests::mapping::database::myDB
 (
     Table testTable
     (
@@ -113,9 +113,9 @@ Database meta::relational::tests::mapping::database::myDB
 
 ###Mapping
 
-import meta::relational::tests::mapping::database::*;
+import meta::external::store::relational::tests::mapping::database::*;
 
-Mapping meta::relational::tests::mapping::database::testMapping
+Mapping meta::external::store::relational::tests::mapping::database::testMapping
 (
     MyEnum: EnumerationMapping Active
     {

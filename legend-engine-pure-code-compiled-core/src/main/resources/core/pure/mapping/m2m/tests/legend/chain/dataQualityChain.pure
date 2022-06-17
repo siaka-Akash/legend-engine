@@ -16,15 +16,15 @@ import meta::pure::executionPlan::engine::java::roadmap::*;
 import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::bridge::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::dest::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::alloy::chain::dataQuality::*;
+import meta::external::store::model::test::alloy::chain::dataQuality::src::*;
+import meta::external::store::model::test::alloy::chain::dataQuality::bridge::*;
+import meta::external::store::model::test::alloy::chain::dataQuality::dest::*;
 import meta::pure::runtime::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'}
-meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::constraintFailureAtRootChain(): Boolean[1]
+meta::external::store::model::test::alloy::chain::dataQuality::constraintFailureAtRootChain(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -88,7 +88,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::constraintFa
    '            "ruleType": "ClassConstraint",' +
    '            "externalId": null,' +
    '            "id": "__Firm_Constraint",' +
-   '            "ruleDefinerPath": "meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::src::__Firm",' +
+   '            "ruleDefinerPath": "meta::external::store::model::test::alloy::chain::dataQuality::src::__Firm",' +
    '            "message": "Constraint :[__Firm_Constraint] violated in the Class __Firm"' +
    '          }' +
    '        ],' +
@@ -120,7 +120,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::constraintFa
    '          "ruleType": "ClassConstraint",' +
    '          "externalId": null,' +
    '          "id": "_Firm_Constraint",' +
-   '          "ruleDefinerPath": "meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::bridge::_Firm",' +
+   '          "ruleDefinerPath": "meta::external::store::model::test::alloy::chain::dataQuality::bridge::_Firm",' +
    '          "message": "Constraint :[_Firm_Constraint] violated in the Class _Firm"' +
    '        }' +
    '      ],' +
@@ -133,7 +133,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::constraintFa
    '            "ruleType": "ClassConstraint",' +
    '            "externalId": null,' +
    '            "id": "__Firm_Constraint",' +
-   '            "ruleDefinerPath": "meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::src::__Firm",' +
+   '            "ruleDefinerPath": "meta::external::store::model::test::alloy::chain::dataQuality::src::__Firm",' +
    '            "message": "Constraint :[__Firm_Constraint] violated in the Class __Firm"' +
    '          }' +
    '        ],' +
@@ -162,7 +162,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::constraintFa
    '        "ruleType": "ClassConstraint",' +
    '        "externalId": null,' +
    '        "id": "Firm_Constraint",' +
-   '        "ruleDefinerPath": "meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::dest::Firm",' +
+   '        "ruleDefinerPath": "meta::external::store::model::test::alloy::chain::dataQuality::dest::Firm",' +
    '        "message": "Constraint :[Firm_Constraint] violated in the Class Firm"' +
    '      }' +
    '    ],' +
@@ -175,7 +175,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::constraintFa
    '          "ruleType": "ClassConstraint",' +
    '          "externalId": null,' +
    '          "id": "_Firm_Constraint",' +
-   '          "ruleDefinerPath": "meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::bridge::_Firm",' +
+   '          "ruleDefinerPath": "meta::external::store::model::test::alloy::chain::dataQuality::bridge::_Firm",' +
    '          "message": "Constraint :[_Firm_Constraint] violated in the Class _Firm"' +
    '        }' +
    '      ],' +
@@ -188,7 +188,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::constraintFa
    '            "ruleType": "ClassConstraint",' +
    '            "externalId": null,' +
    '            "id": "__Firm_Constraint",' +
-   '            "ruleDefinerPath": "meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::src::__Firm",' +
+   '            "ruleDefinerPath": "meta::external::store::model::test::alloy::chain::dataQuality::src::__Firm",' +
    '            "message": "Constraint :[__Firm_Constraint] violated in the Class __Firm"' +
    '          }' +
    '        ],' +
@@ -213,7 +213,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::constraintFa
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'}
-meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::constraintFailureAtNestedPropertyChain(): Boolean[1]
+meta::external::store::model::test::alloy::chain::dataQuality::constraintFailureAtNestedPropertyChain(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -255,7 +255,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::constraintFa
    '        "ruleType": "ClassConstraint",' +
    '        "externalId": null,' +
    '        "id": "_Person_Constraint",' +
-   '        "ruleDefinerPath": "meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::bridge::_Person",' +
+   '        "ruleDefinerPath": "meta::external::store::model::test::alloy::chain::dataQuality::bridge::_Person",' +
    '        "message": "Constraint :[_Person_Constraint] violated in the Class _Person"' +
    '      }' +
    '    ],' +
@@ -315,11 +315,11 @@ meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::constraintFa
 }
 
 ###Pure
-import meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::bridge::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::dest::*;
+import meta::external::store::model::test::alloy::chain::dataQuality::src::*;
+import meta::external::store::model::test::alloy::chain::dataQuality::bridge::*;
+import meta::external::store::model::test::alloy::chain::dataQuality::dest::*;
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::src::__Firm
+Class meta::external::store::model::test::alloy::chain::dataQuality::src::__Firm
 [
    __Firm_Constraint: $this.name->endsWith('1')
 ]
@@ -327,18 +327,18 @@ Class meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::src::_
    name      : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::src::__Person
+Class meta::external::store::model::test::alloy::chain::dataQuality::src::__Person
 {
    fullName  : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::src::__Firm___Person
+Association meta::external::store::model::test::alloy::chain::dataQuality::src::__Firm___Person
 {
    firm      : __Firm[1];        
    employees : __Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::bridge::_Firm
+Class meta::external::store::model::test::alloy::chain::dataQuality::bridge::_Firm
 [
    _Firm_Constraint: $this.name->endsWith('1$') || $this.name->endsWith('2$')
 ]
@@ -346,7 +346,7 @@ Class meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::bridge
    name      : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::bridge::_Person
+Class meta::external::store::model::test::alloy::chain::dataQuality::bridge::_Person
 [
    _Person_Constraint: $this.fullName->endsWith('1$') || $this.fullName->endsWith('2$')
 ]
@@ -354,13 +354,13 @@ Class meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::bridge
    fullName  : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::bridge::_Firm__Person
+Association meta::external::store::model::test::alloy::chain::dataQuality::bridge::_Firm__Person
 {
    firm      : _Firm[1];        
    employees : _Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::dest::Firm
+Class meta::external::store::model::test::alloy::chain::dataQuality::dest::Firm
 [
    Firm_Constraint: $this.name->endsWith('1$|') || $this.name->endsWith('2$|') || $this.name->endsWith('3$|')
 ]
@@ -368,23 +368,23 @@ Class meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::dest::
    name      : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::dest::Person
+Class meta::external::store::model::test::alloy::chain::dataQuality::dest::Person
 {
    fullName  : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::dest::Firm_Person
+Association meta::external::store::model::test::alloy::chain::dataQuality::dest::Firm_Person
 {
    firm      : Firm[1];        
    employees : Person[*];
 }
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::bridge::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::dest::*;
+import meta::external::store::model::test::alloy::chain::dataQuality::src::*;
+import meta::external::store::model::test::alloy::chain::dataQuality::bridge::*;
+import meta::external::store::model::test::alloy::chain::dataQuality::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::BridgeToDestMapping
+Mapping meta::external::store::model::test::alloy::chain::dataQuality::BridgeToDestMapping
 (
    Firm: Pure {
       ~src _Firm
@@ -398,7 +398,7 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::Brid
    }
 )
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::chain::dataQuality::SrcToBridgeMapping
+Mapping meta::external::store::model::test::alloy::chain::dataQuality::SrcToBridgeMapping
 (
    _Firm: Pure {
       ~src __Firm

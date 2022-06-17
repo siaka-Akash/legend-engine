@@ -13,7 +13,7 @@
 // limitations under the License.
 
 ###Diagram
-Diagram meta::pure::mapping::modelToModel::executionPlan::diagram::InMemoryExecutionNodeDiagram(width=0.0, height=0.0)
+Diagram meta::external::store::model::executionPlan::diagram::InMemoryExecutionNodeDiagram(width=0.0, height=0.0)
 {
     TypeView cview_1(
         type=meta::pure::executionPlan::ExecutionNode,
@@ -28,7 +28,7 @@ Diagram meta::pure::mapping::modelToModel::executionPlan::diagram::InMemoryExecu
         lineWidth=1.0)
 
     TypeView cview_2(
-        type=meta::pure::mapping::modelToModel::graphFetch::executionPlan::InMemoryGraphFetchExecutionNode,
+        type=meta::external::store::model::graphFetch::executionPlan::InMemoryGraphFetchExecutionNode,
         position=(908.00000, 534.00000),
         width=276.70149,
         height=58.00000,
@@ -52,7 +52,7 @@ Diagram meta::pure::mapping::modelToModel::executionPlan::diagram::InMemoryExecu
         lineWidth=1.0)
 
     TypeView cview_6(
-        type=meta::pure::mapping::modelToModel::graphFetch::executionPlan::StoreStreamReadingExecutionNode,
+        type=meta::external::store::model::graphFetch::executionPlan::StoreStreamReadingExecutionNode,
         position=(14.00000, 335.00000),
         width=239.00000,
         height=154.00000,
@@ -76,7 +76,7 @@ Diagram meta::pure::mapping::modelToModel::executionPlan::diagram::InMemoryExecu
         lineWidth=1.0)
 
     TypeView cview_4(
-        type=meta::pure::mapping::modelToModel::graphFetch::executionPlan::InMemoryRootGraphFetchExecutionNode,
+        type=meta::external::store::model::graphFetch::executionPlan::InMemoryRootGraphFetchExecutionNode,
         position=(766.00000, 660.00000),
         width=258.65672,
         height=58.00000,
@@ -88,7 +88,7 @@ Diagram meta::pure::mapping::modelToModel::executionPlan::diagram::InMemoryExecu
         lineWidth=1.0)
 
     TypeView cview_3(
-        type=meta::pure::mapping::modelToModel::graphFetch::executionPlan::InMemoryPropertyGraphFetchExecutionNode,
+        type=meta::external::store::model::graphFetch::executionPlan::InMemoryPropertyGraphFetchExecutionNode,
         position=(1093.00000, 662.00000),
         width=281.00000,
         height=59.00000,
@@ -100,7 +100,7 @@ Diagram meta::pure::mapping::modelToModel::executionPlan::diagram::InMemoryExecu
         lineWidth=1.0)
 
     TypeView cview_5(
-        type=meta::pure::mapping::modelToModel::graphFetch::executionPlan::InMemoryCrossStoreGraphFetchExecutionNode,
+        type=meta::external::store::model::graphFetch::executionPlan::InMemoryCrossStoreGraphFetchExecutionNode,
         position=(748.46341, 784.80488),
         width=292.61194,
         height=58.00000,

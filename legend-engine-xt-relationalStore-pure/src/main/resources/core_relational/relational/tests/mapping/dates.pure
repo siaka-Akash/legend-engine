@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::metamodel::execute::*;
-import meta::relational::runtime::*;
-import meta::relational::mapping::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
 import meta::pure::profiles::*;
 
-function <<test.BeforePackage>> meta::relational::tests::mapping::dates::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::mapping::dates::setUp():Boolean[1]
 {
-    meta::relational::tests::createTablesAndFillDb();
+    meta::external::store::relational::tests::createTablesAndFillDb();
     let connection = testRuntime().connectionByElement(db)->cast(@TestDatabaseConnection);
     executeInDb('insert into tradeTable (id, prodid, accountId, quantity, tradeDate, settlementDateTime) values (12, 3, 2, 45, \'2016-02-04\', \'2016-02-05T21:00:00.123456789\');', $connection);//winter datetime in UTC format
     executeInDb('insert into tradeTable (id, prodid, accountId, quantity, tradeDate, settlementDateTime) values (13, 3, 2, 45, \'2016-03-28\', \'2016-03-29T21:00:00.123456789\');', $connection);//summer datetime in UTC format
@@ -33,7 +33,7 @@ function <<test.BeforePackage>> meta::relational::tests::mapping::dates::setUp()
     true;
 }
 
-function <<test.Test>> meta::relational::tests::mapping::dates::strictdate::testGet():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::dates::strictdate::testGet():Boolean[1]
 {
    let result = execute(|Trade.all(), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 15);
@@ -42,7 +42,7 @@ function <<test.Test>> meta::relational::tests::mapping::dates::strictdate::test
   
 }
 
-function <<test.Test>> meta::relational::tests::mapping::dates::strictdate::testQuery():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::dates::strictdate::testQuery():Boolean[1]
 {
    let result = execute(|Trade.all()->filter(i|$i.date == %2014-12-01), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 3);
@@ -52,7 +52,7 @@ function <<test.Test>> meta::relational::tests::mapping::dates::strictdate::test
    
 }
 
-function <<test.Test>> meta::relational::tests::mapping::dates::strictdate::testProject():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::dates::strictdate::testProject():Boolean[1]
 {
    let result = execute(|Trade.all()->project([t| $t.id,t|$t.date],['id','date']), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 15);
@@ -60,7 +60,7 @@ function <<test.Test>> meta::relational::tests::mapping::dates::strictdate::test
 }
 
 
-function <<test.Test>> meta::relational::tests::mapping::dates::datetime::testGet():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::dates::datetime::testGet():Boolean[1]
 {
    let result = execute(|Trade.all(), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 15);
@@ -71,7 +71,7 @@ function <<test.Test>> meta::relational::tests::mapping::dates::datetime::testGe
   
 }
 
-function <<test.Test>> meta::relational::tests::mapping::dates::datetime::testQuery():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::dates::datetime::testQuery():Boolean[1]
 {
   
    let result = execute(|Trade.all()->filter(i|(%2014-12-04T15:22:23.123456789 < $i.settlementDateTime ) && ($i.settlementDateTime < %2014-12-04T23:59:59.999999999)) , simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -83,7 +83,7 @@ function <<test.Test>> meta::relational::tests::mapping::dates::datetime::testQu
    
 }
 
-function <<test.ToFix>> meta::relational::tests::mapping::dates::datetime::testQueryExactEquals():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::mapping::dates::datetime::testQueryExactEquals():Boolean[1]
 {
   
    let result = execute(|Trade.all()->filter(i| (%2014-12-04T15:22:23.123456789 <= $i.settlementDateTime) && ($i.settlementDateTime < %2014-12-04T23:59:59.999999999)), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -95,7 +95,7 @@ function <<test.ToFix>> meta::relational::tests::mapping::dates::datetime::testQ
    
 }
 
-function <<test.Test>> meta::relational::tests::mapping::dates::datetime::testProject():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::dates::datetime::testProject():Boolean[1]
 {
    let result = execute(|Trade.all()->filter(i|$i.date == %2014-12-04 && $i.settlementDateTime->isNotEmpty())->project([t|$t.settlementDateTime],['settlementDateTime']), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 2);
@@ -103,7 +103,7 @@ function <<test.Test>> meta::relational::tests::mapping::dates::datetime::testPr
 }
 
 
-function <<test.Test>> meta::relational::tests::mapping::dates::datetime::retrieveDateWithTimeZone():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::dates::datetime::retrieveDateWithTimeZone():Boolean[1]
 {
    //for testing timezone for databse is in ETS
    

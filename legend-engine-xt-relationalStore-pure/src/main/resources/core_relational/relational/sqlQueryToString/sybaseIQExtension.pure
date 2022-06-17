@@ -1,17 +1,17 @@
-import meta::relational::functions::sqlQueryToString::sybaseIQ::*;
-import meta::relational::functions::sqlQueryToString::default::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::*;
+import meta::external::store::relational::functions::sqlQueryToString::default::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::router::extension::*;
 
-function <<db.ExtensionLoader>> meta::relational::functions::sqlQueryToString::sybaseIQ::dbExtensionLoaderForSybaseIQ():DbExtensionLoader[1]
+function <<db.ExtensionLoader>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::dbExtensionLoaderForSybaseIQ():DbExtensionLoader[1]
 {
   ^DbExtensionLoader(dbType = DatabaseType.SybaseIQ, loader = createDbExtensionForSybaseIQ__DbExtension_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::createDbExtensionForSybaseIQ():DbExtension[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::createDbExtensionForSybaseIQ():DbExtension[1]
 {
    let reservedWords = sybaseReservedWords();
    let literalProcessors = getDefaultLiteralProcessors()->putAll(getLiteralProcessorsForSybaseIQ());
@@ -35,7 +35,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::sybas
    );
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::getLiteralProcessorsForSybaseIQ():Map<Type,LiteralProcessor>[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::getLiteralProcessorsForSybaseIQ():Map<Type,LiteralProcessor>[1]
 {
    newMap([
       pair(StrictDate,     ^LiteralProcessor(format = 'convert(DATE, \'%s\', 121)',     transform = {d:StrictDate[1], dbTimeZone:String[0..1] | $d->convertDateToSqlString($dbTimeZone)})),
@@ -44,7 +44,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::sybas
    ])
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::getDynaFunctionToSqlForSybaseIQ(): DynaFunctionToSql[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::getDynaFunctionToSqlForSybaseIQ(): DynaFunctionToSql[*]
 {
   let allStates = allGenerationStates();
 
@@ -58,7 +58,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::sybas
   ]->concatenate(getDynaFunctionToSqlCommonToBothSybases());
 }
 
-function meta::relational::functions::sqlQueryToString::sybaseIQ::getDynaFunctionToSqlCommonToBothSybases(): DynaFunctionToSql[*]
+function meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::getDynaFunctionToSqlCommonToBothSybases(): DynaFunctionToSql[*]
 {
   let allStates = allGenerationStates();
   let selectOutsideWhen = selectOutsideWhenGenerationState();
@@ -124,7 +124,7 @@ function meta::relational::functions::sqlQueryToString::sybaseIQ::getDynaFunctio
   ];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::convertToDateIQ(params:String[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::convertToDateIQ(params:String[*]):String[1]
 {
    $params->convertDateFunctionHasCorrectParams();
    let dateFormat = if( $params->size() == 1,| 120,| dateFormats()->get($params->at(1)->replace('\'', ''))->toOne(););
@@ -133,7 +133,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::sybas
        |'convert ( date,'+$params->at(0)+','+$dateFormat->toString() +')';);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::transformLikeParamsForSybaseIQ(params: String[2]):String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::transformLikeParamsForSybaseIQ(params: String[2]):String[*]
 {
    let likeExpression = $params->at(1)->removeQuotes()->escapeLikeExprForSybaseIQ();
    $params->at(0)
@@ -141,14 +141,14 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::sybas
       ->concatenate(likeEscapeClauseForSybaseIQ($likeExpression));
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::likeEscapeClauseForSybaseIQ(expr: String[1]):String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::likeEscapeClauseForSybaseIQ(expr: String[1]):String[*]
 {
    if($expr->contains('\\'),
       |' escape \'\\\'',
       |'');
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::escapeLikeExprForSybaseIQ(query: String[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::escapeLikeExprForSybaseIQ(query: String[1]):String[1]
 {
    // Escaping references...
    // Sybase IQ: http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.infocenter.dc38151.1520/html/iqrefbb/CACGCGGC.htm
@@ -159,7 +159,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::sybas
       ->replace('[', '\\[');
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::convertToDateTimeIQ(params:String[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::convertToDateTimeIQ(params:String[*]):String[1]
 {
    $params->convertDateTimeFunctionHasCorrectParams();
    let dateTimeFormat = if( $params->size() == 1,| 120 ,| dateTimeFormats()->get($params->at(1)->replace('\'', ''))->toOne(););
@@ -167,38 +167,38 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::sybas
    'convert( timestamp,'+$params->at(0)+','+$dateTimeFormat->toString() +')';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::formatMostRecentSybase(p:String[1..2], defaultDay:String[1]):String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::formatMostRecentSybase(p:String[1..2], defaultDay:String[1]):String[*]
 {
    let day = $p->last()->toOne()->mapToDBDayOfWeekNumber()->toString();
    let current = if ($p->size() == 2, | $p->first()->toOne(), | $defaultDay);
    [$day, $current, $day, $current, $day, $current, $current];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::processDateDiffDurationUnitForSybaseIQ(durationUnit:String[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::processDateDiffDurationUnitForSybaseIQ(durationUnit:String[1]):String[1]
 {
    let durationEnumNames = [DurationUnit.YEARS,DurationUnit.MONTHS,DurationUnit.WEEKS,DurationUnit.DAYS,DurationUnit.HOURS,DurationUnit.MINUTES,DurationUnit.SECONDS,DurationUnit.MILLISECONDS]->map(e|$e->toString());
    let durationDbNames = ['yy', 'mm', 'wk', 'dd', 'hh', 'mi', 'ss', 'ms'];
    $durationEnumNames->zip($durationDbNames)->filter(h | $h.first == $durationUnit).second->toOne();
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::transformAlphaNumericParamsForSybaseIQ(params: String[1]):String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::transformAlphaNumericParamsForSybaseIQ(params: String[1]):String[*]
 {
    let param = '\'[^a-zA-Z0-9]\'';
    let expression = $param->removeQuotes();
    $params->at(0)->concatenate($expression);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::processJoinStringsOperationForSybaseIQ(js:JoinStrings[1], sgc:SqlGenerationContext[1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::processJoinStringsOperationForSybaseIQ(js:JoinStrings[1], sgc:SqlGenerationContext[1]): String[1]
 {
    processJoinStringsOperation($js, $sgc, {col, sep| 'list(' + $col + ',' + $sep + ' )'}, {strs, sep| $strs->joinStrings(if('\'\'' == $sep, |'+', |'+' + $sep + '+'))});
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::processSelectSQLQueryForSybaseIQ(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::processSelectSQLQueryForSybaseIQ(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
 {
    $s->processSelectSQLQueryForSybaseIQ($sgc.dbConfig, $sgc.format, $sgc.config, $isSubSelect, $sgc.extensions);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::processSelectSQLQueryForSybaseIQ(sq:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::processSelectSQLQueryForSybaseIQ(sq:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
 {
   // Sybase IQ does not support limit / offset in a subselect, so we need to adjust it, e.g.
   //       select * from (select top 10 "root".id as "ID" from trades as "root" ) as x
@@ -223,7 +223,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::sybas
   + processLimit($s, $format, [], processSliceOrDropForSybaseIQ_SelectSQLQuery_1__Format_1__Any_1__String_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::processSliceOrDropForSybaseIQ(s:SelectSQLQuery[1], format:Format[1], size:Any[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::processSliceOrDropForSybaseIQ(s:SelectSQLQuery[1], format:Format[1], size:Any[1]):String[1]
 {
     // queries where specifying query with "limit 100,1000" would return 1100 rows.
     // However when a order by column is specified, the expected number of rows is returned (i.e. 900 rows).
@@ -235,12 +235,12 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::sybas
     '%s limit %s,%s'->format([$format.separator, $s.fromRow->toOne()->getValueForTake(), $size]);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::columnNameToIdentifierForSybaseIQ(columnName: String[1], dbConfig: DbConfig[1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::columnNameToIdentifierForSybaseIQ(columnName: String[1], dbConfig: DbConfig[1]): String[1]
 {
    if($dbConfig.isDbReservedIdentifier($columnName->toLower()), |'"' + $columnName->toLower() + '"', |$columnName);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::sybaseIQ::sybaseReservedWords():String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::sybaseIQ::sybaseReservedWords():String[*]
 {
    //Based on
    // http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.infocenter.dc38151.1510/html/iqrefbb/Alhakeywords.htm

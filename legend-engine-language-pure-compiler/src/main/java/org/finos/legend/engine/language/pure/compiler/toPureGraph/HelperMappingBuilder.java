@@ -54,10 +54,10 @@ import org.finos.legend.pure.generated.Root_meta_pure_mapping_EnumerationMapping
 import org.finos.legend.pure.generated.Root_meta_pure_mapping_MappingClass_Impl;
 import org.finos.legend.pure.generated.Root_meta_pure_mapping_MappingInclude_Impl;
 import org.finos.legend.pure.generated.Root_meta_pure_mapping_SubstituteStore_Impl;
-import org.finos.legend.pure.generated.Root_meta_pure_mapping_aggregationAware_AggregateSetImplementationContainer_Impl;
-import org.finos.legend.pure.generated.Root_meta_pure_mapping_aggregationAware_AggregateSpecification_Impl;
-import org.finos.legend.pure.generated.Root_meta_pure_mapping_aggregationAware_AggregationFunctionSpecification_Impl;
-import org.finos.legend.pure.generated.Root_meta_pure_mapping_aggregationAware_GroupByFunctionSpecification_Impl;
+import org.finos.legend.pure.generated.Root_meta_external_store_aggregationAware_AggregateSetImplementationContainer_Impl;
+import org.finos.legend.pure.generated.Root_meta_external_store_aggregationAware_AggregateSpecification_Impl;
+import org.finos.legend.pure.generated.Root_meta_external_store_aggregationAware_AggregationFunctionSpecification_Impl;
+import org.finos.legend.pure.generated.Root_meta_external_store_aggregationAware_GroupByFunctionSpecification_Impl;
 import org.finos.legend.pure.generated.Root_meta_pure_mapping_xStore_XStoreAssociationImplementation_Impl;
 import org.finos.legend.pure.generated.Root_meta_pure_metamodel_function_LambdaFunction_Impl;
 import org.finos.legend.pure.generated.Root_meta_pure_metamodel_function_property_Property_Impl;
@@ -70,9 +70,9 @@ import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.Mapping;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.MappingClass;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.PropertyMappingsImplementation;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.SetImplementation;
-import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.aggregationAware.AggregateSpecification;
-import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.aggregationAware.AggregationFunctionSpecification;
-import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.aggregationAware.GroupByFunctionSpecification;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.aggregationAware.AggregateSpecification;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.aggregationAware.AggregationFunctionSpecification;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.aggregationAware.GroupByFunctionSpecification;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.xStore.XStoreAssociationImplementation;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.metamodel.function.LambdaFunction;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.metamodel.function.property.Property;
@@ -81,7 +81,7 @@ import org.finos.legend.pure.m3.coreinstance.meta.pure.metamodel.type.Class;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.metamodel.type.generics.GenericType;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.metamodel.valuespecification.InstanceValue;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.metamodel.valuespecification.VariableExpression;
-import org.finos.legend.pure.m3.coreinstance.meta.pure.store.Store;
+import org.finos.legend.pure.m3.coreinstance.meta.pure.store.metamodel.Store;
 import org.finos.legend.pure.m3.navigation.PackageableElement.PackageableElement;
 import org.finos.legend.pure.m4.coreinstance.SourceInformation;
 
@@ -384,7 +384,7 @@ public class HelperMappingBuilder
         return mappingClass;
     }
 
-    public static org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.aggregationAware.AggregateSetImplementationContainer processAggregateSetImplementationContainer(AggregateSetImplementationContainer aggregateSetImplementationContainer, CompileContext context, Mapping parent)
+    public static org.finos.legend.pure.m3.coreinstance.meta.external.store.aggregationAware.AggregateSetImplementationContainer processAggregateSetImplementationContainer(AggregateSetImplementationContainer aggregateSetImplementationContainer, CompileContext context, Mapping parent)
     {
         if (aggregateSetImplementationContainer.setImplementation.mappingClass == null)
         {
@@ -393,7 +393,7 @@ public class HelperMappingBuilder
             aggregateSetImplementationContainer.setImplementation.mappingClass.name = _class.getName() + "_" + parent.getName() + "_" + aggregateSetImplementationContainer.setImplementation.id;
             aggregateSetImplementationContainer.setImplementation.mappingClass.superTypes = Lists.mutable.with(getElementFullPath(_class, context.pureModel.getExecutionSupport()));
         }
-        org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.aggregationAware.AggregateSetImplementationContainer container = new Root_meta_pure_mapping_aggregationAware_AggregateSetImplementationContainer_Impl("");
+        org.finos.legend.pure.m3.coreinstance.meta.external.store.aggregationAware.AggregateSetImplementationContainer container = new Root_meta_external_store_aggregationAware_AggregateSetImplementationContainer_Impl("");
         container._setImplementation((InstanceSetImplementation) aggregateSetImplementationContainer.setImplementation.accept(new ClassMappingFirstPassBuilder(context, parent)).getOne());
         container._index(aggregateSetImplementationContainer.index);
         container._aggregateSpecification(processAggregateSpecification(aggregateSetImplementationContainer.aggregateSpecification, context, Lists.mutable.empty(), aggregateSetImplementationContainer.setImplementation._class));
@@ -405,7 +405,7 @@ public class HelperMappingBuilder
         ProcessingContext ctx = new ProcessingContext("Lambda");
         org.finos.legend.pure.m3.coreinstance.meta.pure.metamodel.valuespecification.ValueSpecification thisVariable = HelperModelBuilder.createThisVariableForClass(context, parentClassPath);
         ctx.addInferredVariables("this", thisVariable);
-        AggregateSpecification as = new Root_meta_pure_mapping_aggregationAware_AggregateSpecification_Impl(" ");
+        AggregateSpecification as = new Root_meta_external_store_aggregationAware_AggregateSpecification_Impl(" ");
         as._canAggregate(aggregateSpecification.canAggregate);
         for (GroupByFunction gb : aggregateSpecification.groupByFunctions)
         {
@@ -421,14 +421,14 @@ public class HelperMappingBuilder
 
     private static GroupByFunctionSpecification processGroupByFunction(GroupByFunction groupByFunction, CompileContext context, MutableList<String> openVariables, ProcessingContext processingContext)
     {
-        GroupByFunctionSpecification gb = new Root_meta_pure_mapping_aggregationAware_GroupByFunctionSpecification_Impl("");
+        GroupByFunctionSpecification gb = new Root_meta_external_store_aggregationAware_GroupByFunctionSpecification_Impl("");
         gb._groupByFn((LambdaFunction) ((org.finos.legend.pure.m3.coreinstance.meta.pure.metamodel.valuespecification.InstanceValue) groupByFunction.groupByFn.accept(new ValueSpecificationBuilder(context, openVariables, processingContext)))._values().getFirst());
         return gb;
     }
 
     private static AggregationFunctionSpecification processAggregationFunction(AggregateFunction aggregateFunction, CompileContext context, MutableList<String> openVariables, ProcessingContext processingContext)
     {
-        AggregationFunctionSpecification afs = new Root_meta_pure_mapping_aggregationAware_AggregationFunctionSpecification_Impl(" ");
+        AggregationFunctionSpecification afs = new Root_meta_external_store_aggregationAware_AggregationFunctionSpecification_Impl(" ");
         InstanceValue processed = (InstanceValue) aggregateFunction.mapFn.accept(new ValueSpecificationBuilder(context, openVariables, processingContext));
         afs._mapFn((LambdaFunction) processed._values().getFirst());
 

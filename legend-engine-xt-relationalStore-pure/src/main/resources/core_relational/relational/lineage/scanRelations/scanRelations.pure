@@ -14,22 +14,22 @@
 
 import meta::dsb::domain::config::*;
 import meta::pure::router::extension::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::functions::pureToSqlQuery::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::functions::pureToSqlQuery::*;
 import meta::pure::router::clustering::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::runtime::*;
 import meta::pure::lineage::analytics::*;
 import meta::pure::functions::io::http::*;
 import meta::pure::milestoning::*;
-import meta::relational::metamodel::*;
+import meta::external::store::relational::metamodel::*;
 import meta::pure::router::routing::*;
-import meta::relational::metamodel::join::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::mapping::*;
 import meta::pure::lineage::scanProperties::propertyTree::*;
 import meta::pure::lineage::scanProperties::*;
-import meta::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::relation::*;
 import meta::pure::mapping::*;
 import meta::pure::lineage::scanRelations::*;
 import meta::json::*;
@@ -586,13 +586,13 @@ function <<access.private>> meta::pure::lineage::scanRelations::processJoinFromT
 
       let milestoningAliasColumns  = $updatedNonNullPairs->removeDuplicatesBy(p | $p.second.alias.name)
                                                          ->map(p |if($p.second.alias.relation->instanceOf(Table),
-                                                                     |let config   = ^meta::relational::testDataGeneration::TestDataGenerationConfig(generateWithDefaultPKs = false,
+                                                                     |let config   = ^meta::external::store::relational::testDataGeneration::TestDataGenerationConfig(generateWithDefaultPKs = false,
                                                                                                                                                      hashStrings = false,
-                                                                                                                                                     temporalMilestoningDates = ^meta::relational::testDataGeneration::TemporalMilestoningDates(businessDate = %9999-12-31,
+                                                                                                                                                     temporalMilestoningDates = ^meta::external::store::relational::testDataGeneration::TemporalMilestoningDates(businessDate = %9999-12-31,
                                                                                                                                                                                                                                                 processingDate = %9999-12-31,
                                                                                                                                                                                                                                                 snapshotDate = %9999-12-31));
                                                                       let newAlias = $p.second.alias;
-                                                                      meta::relational::testDataGeneration::getMilestoningFilter($newAlias.relation->cast(@Table), ^$newAlias(name = $p.first.alias.name), $config, $extensions)->extractTableAliasColumns();,
+                                                                      meta::external::store::relational::testDataGeneration::getMilestoningFilter($newAlias.relation->cast(@Table), ^$newAlias(name = $p.first.alias.name), $config, $extensions)->extractTableAliasColumns();,
                                                                      |[]));
 
       let nullPairs                = $oldToNewTableColumnAlias->filter(p | $p.second->instanceOf(SQLNull));
@@ -617,8 +617,8 @@ function <<access.private>> meta::pure::lineage::scanRelations::processJoinFromT
                                                                                |$r)};
 
       let orgJoin                     = $j.join;
-      let updatedOperation            = $orgJoin.operation->meta::relational::postProcessor::transform($transformFunc)
-                                                          ->meta::relational::postProcessor::transform($removeGeneratedNullEquality);
+      let updatedOperation            = $orgJoin.operation->meta::external::store::relational::postProcessor::transform($transformFunc)
+                                                          ->meta::external::store::relational::postProcessor::transform($removeGeneratedNullEquality);
 
       ^$orgJoin(name      = $updatedOperation->buildUniqueName(false, $extensions),
                 aliases   = [pair($updatedAliases->at(0), $updatedAliases->at(1)), pair($updatedAliases->at(1), $updatedAliases->at(0))],

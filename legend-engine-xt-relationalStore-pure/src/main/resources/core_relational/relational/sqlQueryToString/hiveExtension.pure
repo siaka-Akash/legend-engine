@@ -1,18 +1,18 @@
-import meta::relational::functions::sqlQueryToString::hive::*;
-import meta::relational::functions::sqlQueryToString::default::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::functions::sqlQueryToString::hive::*;
+import meta::external::store::relational::functions::sqlQueryToString::default::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::router::extension::*;
 
-function <<db.ExtensionLoader>> meta::relational::functions::sqlQueryToString::hive::dbExtensionLoaderForHive():DbExtensionLoader[1]
+function <<db.ExtensionLoader>> meta::external::store::relational::functions::sqlQueryToString::hive::dbExtensionLoaderForHive():DbExtensionLoader[1]
 {
   ^DbExtensionLoader(dbType = DatabaseType.Hive, loader = createDbExtensionForHive__DbExtension_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::hive::createDbExtensionForHive():DbExtension[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::hive::createDbExtensionForHive():DbExtension[1]
 {
    let reservedWords = defaultReservedWords();
    let literalProcessors = getDefaultLiteralProcessors();

@@ -1,12 +1,12 @@
 {
   "mappings": [
     {
-      "package": "meta::pure::mapping::modelToModel::test::simple",
+      "package": "meta::external::store::model::test::simple",
       "_type": "mapping",
       "name": "simpleModelMapping",
       "classMappings": [
         {
-          "srcClass": "meta::pure::mapping::modelToModel::test::shared::src::_S_Person",
+          "srcClass": "meta::external::store::model::test::shared::src::_S_Person",
           "root": true,
           "_type": "pureInstance",
           "propertyMappings": [
@@ -77,14 +77,14 @@
                     },
                     "_type": "var",
                     "name": "src",
-                    "class": "meta::pure::mapping::modelToModel::test::shared::src::_S_Person"
+                    "class": "meta::external::store::model::test::shared::src::_S_Person"
                   }
                 ]
               },
               "_type": "purePropertyMapping",
               "property": {
                 "property": "firstName",
-                "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person"
+                "class": "meta::external::store::model::test::shared::dest::Person"
               },
               "source": "meta_pure_mapping_modelToModel_test_shared_dest_Person",
               "explodeProperty": false,
@@ -190,14 +190,14 @@
                     },
                     "_type": "var",
                     "name": "src",
-                    "class": "meta::pure::mapping::modelToModel::test::shared::src::_S_Person"
+                    "class": "meta::external::store::model::test::shared::src::_S_Person"
                   }
                 ]
               },
               "_type": "purePropertyMapping",
               "property": {
                 "property": "lastName",
-                "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person"
+                "class": "meta::external::store::model::test::shared::dest::Person"
               },
               "source": "meta_pure_mapping_modelToModel_test_shared_dest_Person",
               "explodeProperty": false,
@@ -205,10 +205,10 @@
             }
           ],
           "id": "meta_pure_mapping_modelToModel_test_shared_dest_Person",
-          "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person"
+          "class": "meta::external::store::model::test::shared::dest::Person"
         },
         {
-          "srcClass": "meta::pure::mapping::modelToModel::test::shared::src::_Product2",
+          "srcClass": "meta::external::store::model::test::shared::src::_Product2",
           "root": true,
           "_type": "pureInstance",
           "propertyMappings": [
@@ -235,14 +235,14 @@
                     },
                     "_type": "var",
                     "name": "src",
-                    "class": "meta::pure::mapping::modelToModel::test::shared::src::_Product2"
+                    "class": "meta::external::store::model::test::shared::src::_Product2"
                   }
                 ]
               },
               "_type": "purePropertyMapping",
               "property": {
                 "property": "name",
-                "class": "meta::pure::mapping::modelToModel::test::shared::dest::Product2Simple"
+                "class": "meta::external::store::model::test::shared::dest::Product2Simple"
               },
               "source": "meta_pure_mapping_modelToModel_test_shared_dest_Product2Simple",
               "explodeProperty": false,
@@ -271,14 +271,14 @@
                     },
                     "_type": "var",
                     "name": "src",
-                    "class": "meta::pure::mapping::modelToModel::test::shared::src::_Product2"
+                    "class": "meta::external::store::model::test::shared::src::_Product2"
                   }
                 ]
               },
               "_type": "purePropertyMapping",
               "property": {
                 "property": "region",
-                "class": "meta::pure::mapping::modelToModel::test::shared::dest::Product2Simple"
+                "class": "meta::external::store::model::test::shared::dest::Product2Simple"
               },
               "source": "meta_pure_mapping_modelToModel_test_shared_dest_Product2Simple",
               "explodeProperty": false,
@@ -286,7 +286,7 @@
             }
           ],
           "id": "meta_pure_mapping_modelToModel_test_shared_dest_Product2Simple",
-          "class": "meta::pure::mapping::modelToModel::test::shared::dest::Product2Simple"
+          "class": "meta::external::store::model::test::shared::dest::Product2Simple"
         }
       ]
     }
@@ -317,7 +317,7 @@
         "superTypes": [
           "meta::pure::metamodel::type::Any"
         ],
-        "package": "meta::pure::mapping::modelToModel::test::shared::dest",
+        "package": "meta::external::store::model::test::shared::dest",
         "_type": "class",
         "name": "Person",
         "properties": [
@@ -342,7 +342,7 @@
               "lowerBound": 0
             },
             "name": "addresses",
-            "type": "meta::pure::mapping::modelToModel::test::shared::dest::Address"
+            "type": "meta::external::store::model::test::shared::dest::Address"
           },
           {
             "multiplicity": {
@@ -350,7 +350,7 @@
               "lowerBound": 0
             },
             "name": "firm",
-            "type": "meta::pure::mapping::modelToModel::test::shared::dest::Firm"
+            "type": "meta::external::store::model::test::shared::dest::Firm"
           }
         ]
       },
@@ -358,7 +358,7 @@
         "superTypes": [
           "meta::pure::metamodel::type::Any"
         ],
-        "package": "meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "meta::external::store::model::test::shared::src",
         "_type": "class",
         "name": "_S_Person",
         "properties": [
@@ -376,7 +376,7 @@
         "superTypes": [
           "meta::pure::metamodel::type::Any"
         ],
-        "package": "meta::pure::mapping::modelToModel::test::shared::dest",
+        "package": "meta::external::store::model::test::shared::dest",
         "_type": "class",
         "name": "Product2Simple",
         "properties": [
@@ -394,7 +394,7 @@
               "lowerBound": 0
             },
             "name": "region",
-            "type": "meta::pure::mapping::modelToModel::test::shared::dest::Region"
+            "type": "meta::external::store::model::test::shared::dest::Region"
           }
         ]
       },
@@ -402,7 +402,7 @@
         "superTypes": [
           "meta::pure::metamodel::type::Any"
         ],
-        "package": "meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "meta::external::store::model::test::shared::src",
         "_type": "class",
         "name": "_Product2",
         "properties": [
@@ -436,7 +436,7 @@
               "lowerBound": 0
             },
             "name": "region",
-            "type": "meta::pure::mapping::modelToModel::test::shared::dest::Region"
+            "type": "meta::external::store::model::test::shared::dest::Region"
           }
         ]
       }
@@ -450,7 +450,7 @@
   "services": [
     {
       "execution": {
-        "mapping": "meta::pure::mapping::modelToModel::test::simple::simpleModelMapping",
+        "mapping": "meta::external::store::model::test::simple::simpleModelMapping",
         "func": {
           "_type": "lambda",
           "body": [
@@ -470,7 +470,7 @@
                       "_type": "func",
                       "parameters": [
                         {
-                          "fullPath": "meta::pure::mapping::modelToModel::test::shared::dest::Person",
+                          "fullPath": "meta::external::store::model::test::shared::dest::Person",
                           "_type": "class"
                         }
                       ]
@@ -487,7 +487,7 @@
                         }
                       ],
                       "_type": "rootGraphFetchTree",
-                      "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person"
+                      "class": "meta::external::store::model::test::shared::dest::Person"
                     }
                   ]
                 },
@@ -503,7 +503,7 @@
                     }
                   ],
                   "_type": "rootGraphFetchTree",
-                  "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person"
+                  "class": "meta::external::store::model::test::shared::dest::Person"
                 }
               ]
             }
@@ -514,7 +514,7 @@
           "connections": [
             {
               "_type": "JsonModelConnection",
-              "class": "meta::pure::mapping::modelToModel::test::shared::src::_S_Person",
+              "class": "meta::external::store::model::test::shared::src::_S_Person",
               "url": "executor:default",
               "element": "ModelStore"
             }

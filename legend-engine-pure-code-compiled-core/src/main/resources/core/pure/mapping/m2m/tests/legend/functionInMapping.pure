@@ -16,8 +16,8 @@ import meta::pure::executionPlan::engine::java::roadmap::*;
 import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::test::alloy::simple::function::*;
-import meta::pure::mapping::modelToModel::test::alloy::utils::*;
+import meta::external::store::model::test::alloy::simple::function::*;
+import meta::external::store::model::test::alloy::utils::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly, feature.DataQuality>>
 {  serverVersion.start='v1_19_0',
@@ -25,13 +25,13 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the mapping completes without error and no defects are reported'
 }
-meta::pure::mapping::modelToModel::test::alloy::simple::canUseFunctionsInAMapping() : Boolean[1]
+meta::external::store::model::test::alloy::simple::canUseFunctionsInAMapping() : Boolean[1]
 {
    let tree = #{FirstEmployee {name} }#;
 
    let result = execute(
       |FirstEmployee.all()->graphFetchChecked($tree)->serialize($tree),
-      meta::pure::mapping::modelToModel::test::alloy::simple::function::m1,
+      meta::external::store::model::test::alloy::simple::function::m1,
       testJsonRuntime(Firm, '{"name": "firm1", "employees": [{"firstName": "Dave", "lastName": "Miles"}]}'),
       []
    );
@@ -50,30 +50,30 @@ meta::pure::mapping::modelToModel::test::alloy::simple::canUseFunctionsInAMappin
    assert(jsonEquivalent($expected->parseJSON(), $json->parseJSON()));   
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::simple::function::Firm
+Class meta::external::store::model::test::alloy::simple::function::Firm
 {
   name: String[1];
   employees: Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::simple::function::Person
+Class meta::external::store::model::test::alloy::simple::function::Person
 {
   firstName: String[1];
   lastName: String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::simple::function::FirstEmployee
+Class meta::external::store::model::test::alloy::simple::function::FirstEmployee
 {
   name: String[1];
 }
 
 ###Mapping
    
-Mapping meta::pure::mapping::modelToModel::test::alloy::simple::function::m1
+Mapping meta::external::store::model::test::alloy::simple::function::m1
 (
-  *meta::pure::mapping::modelToModel::test::alloy::simple::function::FirstEmployee[test_FirstEmployee]: Pure
+  *meta::external::store::model::test::alloy::simple::function::FirstEmployee[test_FirstEmployee]: Pure
   {
-    ~src meta::pure::mapping::modelToModel::test::alloy::simple::function::Firm
+    ~src meta::external::store::model::test::alloy::simple::function::Firm
     name: $src.employees->at(0).lastName
   }
 )

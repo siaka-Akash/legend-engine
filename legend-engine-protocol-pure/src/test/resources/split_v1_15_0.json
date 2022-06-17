@@ -18,7 +18,7 @@
           "enumeration": "meta::pure::tests::model::simple::GeographicEntityType"
         }
       ],
-      "package": "meta::relational::tests",
+      "package": "meta::external::store::relational::tests",
       "_type": "mapping",
       "name": "simpleMapping",
       "classMappings": []
@@ -32,7 +32,7 @@
       "version": "none",
       "packageableElementPointers": [
         {
-          "path": "meta::relational::tests::simpleMapping",
+          "path": "meta::external::store::relational::tests::simpleMapping",
           "type": "MAPPING"
         }
       ]
@@ -3222,7 +3222,7 @@
         "superTypes": [
           "meta::pure::tests::model::simple::Person"
         ],
-        "package": "meta::relational::tests::mapping::union::extend",
+        "package": "meta::external::store::relational::tests::mapping::union::extend",
         "_type": "class",
         "name": "Person"
       },
@@ -3327,7 +3327,7 @@
         "superTypes": [
           "meta::pure::tests::model::simple::Firm"
         ],
-        "package": "meta::relational::tests::mapping::union::extend",
+        "package": "meta::external::store::relational::tests::mapping::union::extend",
         "_type": "class",
         "name": "Firm"
       },
@@ -3335,7 +3335,7 @@
         "superTypes": [
           "meta::pure::tests::model::simple::Address"
         ],
-        "package": "meta::relational::tests::mapping::union::extend",
+        "package": "meta::external::store::relational::tests::mapping::union::extend",
         "_type": "class",
         "name": "Address"
       },

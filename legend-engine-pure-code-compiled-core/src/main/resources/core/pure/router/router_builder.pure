@@ -16,8 +16,8 @@ import meta::pure::metamodel::serialization::grammar::*;
 import meta::pure::graphFetch::execution::*;
 import meta::pure::executionPlan::engine::java::*;
 import meta::pure::mapping::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::inMemory::*;
+import meta::external::store::model::*;
+import meta::external::store::model::inMemory::*;
 import meta::pure::runtime::*;
 import meta::pure::metamodel::path::*;
 import meta::pure::runtime::*;
@@ -225,7 +225,7 @@ function meta::pure::graphFetch::execution::isSerialize(fe:FunctionExpression[1]
    $fe.func == serialize_Checked_MANY__RootGraphFetchTree_1__String_1_ ||
    $fe.func == serialize_T_MANY__RootGraphFetchTree_1__AlloySerializationConfig_1__String_1_ ||
    $fe.func == serialize_Checked_MANY__RootGraphFetchTree_1__AlloySerializationConfig_1__String_1_ ||
-   $extensions.moduleExtension('platform')->cast(@meta::pure::store::platform::router::extension::PlatformStoreExtension).routing_extraIsSerialize->exists(f|$f->eval($fe));
+   $extensions.moduleExtension('platform')->cast(@meta::external::store::platform::router::extension::PlatformStoreExtension).routing_extraIsSerialize->exists(f|$f->eval($fe));
 }
 
 

@@ -13,29 +13,29 @@
 // limitations under the License.
 
 ###Mapping
-import meta::relational::tests::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::classMappingByClass::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::classMappingByClass::*;
 
-Mapping meta::relational::tests::mapping::classMappingByClass::TestMapping1
+Mapping meta::external::store::relational::tests::mapping::classMappingByClass::TestMapping1
 (
    include AccountMapping1
    include AccountMapping2
 )
 
-Mapping meta::relational::tests::mapping::classMappingByClass::TestMapping2
+Mapping meta::external::store::relational::tests::mapping::classMappingByClass::TestMapping2
 (
    include AccountMapping2
    include AccountMapping1
 )
 
-Mapping meta::relational::tests::mapping::classMappingByClass::TestMapping3
+Mapping meta::external::store::relational::tests::mapping::classMappingByClass::TestMapping3
 (
    include TradeMapping1
    include AccountMapping1
 )
 
-Mapping meta::relational::tests::mapping::classMappingByClass::TradeMapping1
+Mapping meta::external::store::relational::tests::mapping::classMappingByClass::TradeMapping1
 (
    include AccountMapping1
    
@@ -54,7 +54,7 @@ Mapping meta::relational::tests::mapping::classMappingByClass::TradeMapping1
    } 
 )
 
-Mapping meta::relational::tests::mapping::classMappingByClass::AccountMapping1
+Mapping meta::external::store::relational::tests::mapping::classMappingByClass::AccountMapping1
 (
    Account[a1] : Relational
    {
@@ -62,7 +62,7 @@ Mapping meta::relational::tests::mapping::classMappingByClass::AccountMapping1
    }
 )
 
-Mapping meta::relational::tests::mapping::classMappingByClass::AccountMapping2
+Mapping meta::external::store::relational::tests::mapping::classMappingByClass::AccountMapping2
 (
    Account[a2] : Relational
    {
@@ -72,23 +72,23 @@ Mapping meta::relational::tests::mapping::classMappingByClass::AccountMapping2
 
 ###Pure
 import meta::pure::mapping::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::classMappingByClass::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::classMappingByClass::*;
 
-function <<test.Test, test.ToFix>> meta::relational::tests::mapping::classMappingByClass::testRootMappingForDifferentIncludeOrder():Boolean[1]
+function <<test.Test, test.ToFix>> meta::external::store::relational::tests::mapping::classMappingByClass::testRootMappingForDifferentIncludeOrder():Boolean[1]
 {
    let id1 = TestMapping1.rootClassMappingByClass(Account).id;
    let id2 = TestMapping2.rootClassMappingByClass(Account).id;
    assertEquals($id1, $id2, 'Either the logic to determine root mapping should be independent of ordering of includes or the logic should be communicated to the user');
 }
 
-function <<test.Test, test.ToFix>> meta::relational::tests::mapping::classMappingByClass::testCountClassMappingsForRedundantInclude():Boolean[1]
+function <<test.Test, test.ToFix>> meta::external::store::relational::tests::mapping::classMappingByClass::testCountClassMappingsForRedundantInclude():Boolean[1]
 {
    let count = TestMapping3.classMappingByClass(Account)->size();
    assertEquals(1, $count, 'There is only 1 class mapping defined for Account class in the mapping heirarchy of TestMapping3 - count should be 1');
 }
 
-function <<test.Test, test.ToFix>> meta::relational::tests::mapping::classMappingByClass::testRootClassMappingForRedundantInclude():Boolean[1]
+function <<test.Test, test.ToFix>> meta::external::store::relational::tests::mapping::classMappingByClass::testRootClassMappingForRedundantInclude():Boolean[1]
 {
    let root1 = TestMapping3.classMappings()->filter(cm|$cm.class == Account && $cm.root == true)->cast(@InstanceSetImplementation);
    let root2 = TestMapping3.rootClassMappingByClass(Account)->cast(@InstanceSetImplementation);

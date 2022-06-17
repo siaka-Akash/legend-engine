@@ -142,7 +142,7 @@ public class TestRelationalMappingGrammarParser extends TestGrammarParser.TestGr
     public void testMappingTestDataSQL()
     {
         test("###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                 "(\n" +
                 "   MappingTests\n" +
                 "   [\n" +
@@ -159,7 +159,7 @@ public class TestRelationalMappingGrammarParser extends TestGrammarParser.TestGr
                 ")\n");
 
         test("###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                 "(\n" +
                 "   MappingTests\n" +
                 "   [\n" +
@@ -180,7 +180,7 @@ public class TestRelationalMappingGrammarParser extends TestGrammarParser.TestGr
     public void testMappingTestDataCSV()
     {
         test("###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                 "(\n" +
                 "   MappingTests\n" +
                 "   [\n" +
@@ -197,7 +197,7 @@ public class TestRelationalMappingGrammarParser extends TestGrammarParser.TestGr
                 ")\n");
 
         test("###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                 "(\n" +
                 "   MappingTests\n" +
                 "   [\n" +

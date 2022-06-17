@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::routing::*;
-import meta::relational::tests::*;
-import meta::relational::tests::model::simple::*;
-function meta::relational::tests::routing::testColumnSpecificationRouting():Boolean[1]
+import meta::external::store::relational::tests::routing::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::model::simple::*;
+function meta::external::store::relational::tests::routing::testColumnSpecificationRouting():Boolean[1]
 {
    let list = ['firstname'];
    let str='a';
@@ -23,14 +23,14 @@ function meta::relational::tests::routing::testColumnSpecificationRouting():Bool
    true;
 }
 
-function meta::relational::tests::routing::columnListA(): ColumnSpecification<Person>[*]
+function meta::external::store::relational::tests::routing::columnListA(): ColumnSpecification<Person>[*]
 {
    [col(x:Person[1]| $x.firstName,'firstname'),
     col(x:Person[1]|$x.lastName,'lastName')]
 }
 
 
-function meta::relational::tests::routing::columnListB(): ColumnSpecification<Person>[*]
+function meta::external::store::relational::tests::routing::columnListB(): ColumnSpecification<Person>[*]
 {
    [col(x:Person[1]| $x.firstName,'firstname'),
     col(x:Person[1]|$x.lastName,'lastName')]

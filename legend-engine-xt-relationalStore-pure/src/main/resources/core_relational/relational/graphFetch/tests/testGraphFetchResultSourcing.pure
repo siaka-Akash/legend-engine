@@ -13,52 +13,52 @@
 // limitations under the License.
 
 import meta::pure::runtime::*;
-import meta::csv::*;
+import meta::external::store::relational::tests::csv::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::*;
+import meta::external::store::model::*;
 import meta::pure::executionPlan::profiles::*;
-import meta::relational::runtime::*;
-import meta::relational::graphFetch::tests::resultSourcing::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::graphFetch::tests::resultSourcing::*;
 
-Class meta::relational::graphFetch::tests::resultSourcing::_Firm
+Class meta::external::store::relational::graphFetch::tests::resultSourcing::_Firm
 {
    name: String[1];
 }
-Class meta::relational::graphFetch::tests::resultSourcing::Firm
+Class meta::external::store::relational::graphFetch::tests::resultSourcing::Firm
 {
    name: String[1];
 }
 
-Class meta::relational::graphFetch::tests::resultSourcing::SettlementDateClass
+Class meta::external::store::relational::graphFetch::tests::resultSourcing::SettlementDateClass
 {
    settlementDate: Date[1];
 }
 
-Class meta::relational::graphFetch::tests::resultSourcing::_SettlementDateClass
+Class meta::external::store::relational::graphFetch::tests::resultSourcing::_SettlementDateClass
 {
    settlementDate: Date[1];
 }
 
-function meta::relational::graphFetch::tests::resultSourcing::createDbAndGetConnection():Connection[1]
+function meta::external::store::relational::graphFetch::tests::resultSourcing::createDbAndGetConnection():Connection[1]
 {
-   let connection = meta::relational::tests::testRuntime().connectionByElement(meta::relational::tests::db)->cast(@TestDatabaseConnection);
-   meta::relational::tests::createPersonTableAndFillDb($connection);
-   meta::relational::tests::createFirmTableAndFillDb($connection);
-   meta::relational::tests::createTradeTableAndFillDb($connection);
+   let connection = meta::external::store::relational::tests::testRuntime().connectionByElement(meta::external::store::relational::tests::db)->cast(@TestDatabaseConnection);
+   meta::external::store::relational::tests::createPersonTableAndFillDb($connection);
+   meta::external::store::relational::tests::createFirmTableAndFillDb($connection);
+   meta::external::store::relational::tests::createTradeTableAndFillDb($connection);
    $connection;
  }
 
-function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::resultSourcing::testSourcingJsonResultToQuery():Boolean[1]
+function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::resultSourcing::testSourcingJsonResultToQuery():Boolean[1]
 {
       let jsonConnection = ^JsonModelConnection(
       element=^ModelStore(),
-      class=meta::relational::graphFetch::tests::resultSourcing::_Firm,
+      class=meta::external::store::relational::graphFetch::tests::resultSourcing::_Firm,
       url='data:application/json,{"name":"Firm X","employees":[{"firstName":"Gunjan","lastName":"Shah"}]}'
    );
 
    let result = meta::pure::router::execute({|
-      let x = meta::relational::graphFetch::tests::resultSourcing::Firm.all()->toOne()->graphFetch(#{meta::relational::graphFetch::tests::resultSourcing::Firm {name} }#);
-      meta::relational::tests::model::simple::Person.all()->filter(y|$y.firm.legalName == $x->toOne().name)->project([col(y|$y.firstName,'firstName')])->sort(['firstName']);
+      let x = meta::external::store::relational::graphFetch::tests::resultSourcing::Firm.all()->toOne()->graphFetch(#{meta::external::store::relational::graphFetch::tests::resultSourcing::Firm {name} }#);
+      meta::external::store::relational::tests::model::simple::Person.all()->filter(y|$y.firm.legalName == $x->toOne().name)->project([col(y|$y.firstName,'firstName')])->sort(['firstName']);
    }, mappingWithoutFilters, ^Runtime(connections = [$jsonConnection, createDbAndGetConnection()]),meta::pure::router::extension::defaultRelationalExtensions());
    let expectedValue = 'firstName\n'+
                         'Anthony\n'+
@@ -68,53 +68,53 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    assertSameElements($expectedValue,$result.values->toCSV());
 }
 
-function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::resultSourcing::testSourcingJsonResultToQueryWithFiltersInMapping():Boolean[1]
+function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::resultSourcing::testSourcingJsonResultToQueryWithFiltersInMapping():Boolean[1]
 {
       let jsonConnection = ^JsonModelConnection(
       element=^ModelStore(),
-      class=meta::relational::graphFetch::tests::resultSourcing::_Firm,
+      class=meta::external::store::relational::graphFetch::tests::resultSourcing::_Firm,
       url='data:application/json,[{"name":"Firm A","employees":[{"firstName":"Gunjan","lastName":"Shah"}]},{"name":"Apple","employees":[{"firstName":"Tim","lastName":"Cook"}]}]'
    );
 
    let result = meta::pure::router::execute({|
-      let x = meta::relational::graphFetch::tests::resultSourcing::Firm.all()->toOne()->graphFetch(#{meta::relational::graphFetch::tests::resultSourcing::Firm {name} }#);
-      meta::relational::tests::model::simple::Person.all()->filter(y|$y.firm.legalName == $x->toOne().name)->project([col(y|$y.firstName,'firstName')])->sort(['firstName']);
+      let x = meta::external::store::relational::graphFetch::tests::resultSourcing::Firm.all()->toOne()->graphFetch(#{meta::external::store::relational::graphFetch::tests::resultSourcing::Firm {name} }#);
+      meta::external::store::relational::tests::model::simple::Person.all()->filter(y|$y.firm.legalName == $x->toOne().name)->project([col(y|$y.firstName,'firstName')])->sort(['firstName']);
    }, mappingWithFilters, ^Runtime(connections = [$jsonConnection, createDbAndGetConnection()]),meta::pure::router::extension::defaultRelationalExtensions());
    let expectedValue = 'firstName\n'+
                         'Fabrice\n';
    assertSameElements($expectedValue,$result.values->toCSV());
 }
 
-function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::resultSourcing::testSourcingJsonResultToQueryWithParametersInUrl():Boolean[1]
+function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::resultSourcing::testSourcingJsonResultToQueryWithParametersInUrl():Boolean[1]
 {
       let jsonConnection = ^JsonModelConnection(
       element=^ModelStore(),
-      class=meta::relational::graphFetch::tests::resultSourcing::_Firm,
+      class=meta::external::store::relational::graphFetch::tests::resultSourcing::_Firm,
       url='data:application/json,[{"name":"Firm A","employees":[{"firstName":"Gunjan","lastName":"Shah"}]},{"name":"${firmName}","employees":[{"Tim":"Ursa","lastName":"Cook"}]}]'
    );
 
    let result = meta::pure::router::execute({|
       let firmName = 'Apple';
-      let x = meta::relational::graphFetch::tests::resultSourcing::Firm.all()->toOne()->graphFetch(#{meta::relational::graphFetch::tests::resultSourcing::Firm {name} }#);
-      meta::relational::tests::model::simple::Person.all()->filter(y|$y.firm.legalName == $x->toOne().name)->project([col(y|$y.firstName,'firstName')])->sort(['firstName']);
+      let x = meta::external::store::relational::graphFetch::tests::resultSourcing::Firm.all()->toOne()->graphFetch(#{meta::external::store::relational::graphFetch::tests::resultSourcing::Firm {name} }#);
+      meta::external::store::relational::tests::model::simple::Person.all()->filter(y|$y.firm.legalName == $x->toOne().name)->project([col(y|$y.firstName,'firstName')])->sort(['firstName']);
    }, mappingWithFilters, ^Runtime(connections = [$jsonConnection, createDbAndGetConnection()]),meta::pure::router::extension::defaultRelationalExtensions());
    let expectedValue = 'firstName\n'+
                         'Fabrice\n';
    assertSameElements($expectedValue,$result.values->toCSV());
 }
 
-function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::resultSourcing::testSourcingJsonResultToQueryWithPureDateAsParam():Boolean[1]
+function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::resultSourcing::testSourcingJsonResultToQueryWithPureDateAsParam():Boolean[1]
 {
       let jsonConnection = ^JsonModelConnection(
       element=^ModelStore(),
-      class=meta::relational::graphFetch::tests::resultSourcing::_SettlementDateClass,
+      class=meta::external::store::relational::graphFetch::tests::resultSourcing::_SettlementDateClass,
       url='data:application/json,{"settlementDate":"2014-12-05T21:00:00"}'
    );
 
    let result = meta::pure::router::execute({|
-      let x = meta::relational::graphFetch::tests::resultSourcing::SettlementDateClass.all()->toOne()->graphFetch(#{meta::relational::graphFetch::tests::resultSourcing::SettlementDateClass {settlementDate} }#);
-      meta::relational::tests::model::simple::Trade.all()->filter(y|$y.settlementDateTime == $x->toOne().settlementDate)->project([col(y|$y.id,'id')])->sort(['id']);
-   }, meta::relational::graphFetch::tests::resultSourcing::identityMappingForDate, ^Runtime(connections = [$jsonConnection, createDbAndGetConnection()]), meta::pure::router::extension::defaultRelationalExtensions());
+      let x = meta::external::store::relational::graphFetch::tests::resultSourcing::SettlementDateClass.all()->toOne()->graphFetch(#{meta::external::store::relational::graphFetch::tests::resultSourcing::SettlementDateClass {settlementDate} }#);
+      meta::external::store::relational::tests::model::simple::Trade.all()->filter(y|$y.settlementDateTime == $x->toOne().settlementDate)->project([col(y|$y.id,'id')])->sort(['id']);
+   }, meta::external::store::relational::graphFetch::tests::resultSourcing::identityMappingForDate, ^Runtime(connections = [$jsonConnection, createDbAndGetConnection()]), meta::pure::router::extension::defaultRelationalExtensions());
    let expectedValue = 'id\n'+
                         '8\n'+
                         '9\n';
@@ -122,36 +122,36 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
 }
 
 ###Mapping
-import meta::relational::tests::*;
-import meta::pure::mapping::modelToModel::test::alloy::constraints::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::model::test::alloy::constraints::*;
 
-Mapping meta::relational::graphFetch::tests::resultSourcing::mappingWithoutFilters
+Mapping meta::external::store::relational::graphFetch::tests::resultSourcing::mappingWithoutFilters
 (
    include simpleRelationalMapping
-   meta::relational::graphFetch::tests::resultSourcing::Firm:Pure
+   meta::external::store::relational::graphFetch::tests::resultSourcing::Firm:Pure
    {
-      ~src meta::relational::graphFetch::tests::resultSourcing::_Firm
+      ~src meta::external::store::relational::graphFetch::tests::resultSourcing::_Firm
          name: $src.name
      }
 )
 
-Mapping meta::relational::graphFetch::tests::resultSourcing::mappingWithFilters
+Mapping meta::external::store::relational::graphFetch::tests::resultSourcing::mappingWithFilters
 (
    include simpleRelationalMapping
-   meta::relational::graphFetch::tests::resultSourcing::Firm:Pure
+   meta::external::store::relational::graphFetch::tests::resultSourcing::Firm:Pure
    {
-      ~src meta::relational::graphFetch::tests::resultSourcing::_Firm
+      ~src meta::external::store::relational::graphFetch::tests::resultSourcing::_Firm
        ~filter $src.name->startsWith('F')
          name: $src.name
      }
 )
 
-Mapping meta::relational::graphFetch::tests::resultSourcing::identityMappingForDate
+Mapping meta::external::store::relational::graphFetch::tests::resultSourcing::identityMappingForDate
 (
    include simpleRelationalMapping
-   meta::relational::graphFetch::tests::resultSourcing::SettlementDateClass:Pure
+   meta::external::store::relational::graphFetch::tests::resultSourcing::SettlementDateClass:Pure
    {
-      ~src meta::relational::graphFetch::tests::resultSourcing::_SettlementDateClass
+      ~src meta::external::store::relational::graphFetch::tests::resultSourcing::_SettlementDateClass
          settlementDate: $src.settlementDate
      }
 )

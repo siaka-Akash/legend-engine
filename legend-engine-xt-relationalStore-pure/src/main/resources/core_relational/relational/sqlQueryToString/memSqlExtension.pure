@@ -1,19 +1,19 @@
-import meta::relational::functions::sqlQueryToString::memSql::*;
-import meta::relational::functions::sqlQueryToString::default::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::join::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::functions::sqlQueryToString::memSql::*;
+import meta::external::store::relational::functions::sqlQueryToString::default::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::router::extension::*;
 
-function <<db.ExtensionLoader>> meta::relational::functions::sqlQueryToString::memSql::dbExtensionLoaderForMemSQL():DbExtensionLoader[1]
+function <<db.ExtensionLoader>> meta::external::store::relational::functions::sqlQueryToString::memSql::dbExtensionLoaderForMemSQL():DbExtensionLoader[1]
 {
   ^DbExtensionLoader(dbType = DatabaseType.MemSQL, loader = createDbExtensionForMemSQL__DbExtension_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::memSql::createDbExtensionForMemSQL():DbExtension[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::memSql::createDbExtensionForMemSQL():DbExtension[1]
 {
    let reservedWords = memSQLReservedWords();
    let literalProcessors = getDefaultLiteralProcessors();
@@ -35,7 +35,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::memSq
    );
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::memSql::memSQLReservedWords():String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::memSql::memSQLReservedWords():String[*]
 {
     [
        'absolute','action','allocate','are','assertion',
@@ -64,7 +64,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::memSq
        ];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::memSql::getDynaFunctionToSqlForMemSQL(): DynaFunctionToSql[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::memSql::getDynaFunctionToSqlForMemSQL(): DynaFunctionToSql[*]
 {
   let allStates = allGenerationStates();
 
@@ -111,7 +111,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::memSq
   ];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::memSql::convertToDateMemSQL(params:String[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::memSql::convertToDateMemSQL(params:String[*]):String[1]
 {
    assert( 2 - $params->size()  >= 0,'Incorrect number of parameters for convertDate: convertDate(column,[dateformat])');
    assert($params->size()==1 || dateFormatsMemSQL()->contains($params->at(1)->replace('\'', '')) , | $params->at(1) +' not supported ');
@@ -119,7 +119,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::memSq
    'cast( to_date('+$params->at(0)+','+$dateFormat +') as date)';
 }
 
-function  <<access.private>> meta::relational::functions::sqlQueryToString::memSql::generateDateDiffExpressionForMemSQL(params:String[*]):String[1]
+function  <<access.private>> meta::external::store::relational::functions::sqlQueryToString::memSql::generateDateDiffExpressionForMemSQL(params:String[*]):String[1]
 {
   let enumList = [DurationUnit.YEARS,DurationUnit.MONTHS,DurationUnit.WEEKS,DurationUnit.DAYS,DurationUnit.HOURS,DurationUnit.MINUTES,DurationUnit.SECONDS,DurationUnit.MILLISECONDS]->map(e|$e->toString());
 
@@ -144,24 +144,24 @@ function  <<access.private>> meta::relational::functions::sqlQueryToString::memS
   format($dbSpecificUnits->at($indexOfDiff)->eval(), [$params->at(0), $params->at(1)]);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::memSql::formatMostRecentMemSQL(p:String[1..2], defaultDay:String[1]):String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::memSql::formatMostRecentMemSQL(p:String[1..2], defaultDay:String[1]):String[*]
 {
    let day = $p->last()->toOne()->mapToDBDayOfWeekNumber()->toString();
    let current = if ($p->size() == 2, | $p->first()->toOne(), | $defaultDay);
    [$current, $day, $current, $day, $current, $day, $current];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::memSql::dateFormatsMemSQL():String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::memSql::dateFormatsMemSQL():String[*]
 {
    ['YYYY-MM-DD', 'MMMYYYY', 'YYYYMMDD'];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::memSql::processSelectSQLQueryForMemSQL(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::memSql::processSelectSQLQueryForMemSQL(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
 {
    $s->processSelectSQLQueryForMemSQL($sgc.dbConfig, $sgc.format, $sgc.config, $isSubSelect, $sgc.extensions);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::memSql::processSelectSQLQueryForMemSQL(sq:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::memSql::processSelectSQLQueryForMemSQL(sq:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
 {
   let s = if($sq.fromRow->isNotEmpty() && $sq.toRow->isEmpty(), |$sq->rewriteSliceAsWindowFunction(), |$sq);
   let opStr = if($s.filteringOperation->isEmpty(), |'', |$s.filteringOperation->map(s|$s->processOperation($dbConfig, $format->indent(), ^$config(callingFromFilter = true), $extensions))->filter(s|$s != '')->joinStrings(' <||> '));

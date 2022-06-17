@@ -276,7 +276,7 @@ public class TestExecutionPlan extends AlloyTestServer
     @Test
     public void testClassWithEnum() throws Exception
     {
-        // executionPlan(|meta::relational::tests::mapping::enumeration::model::domain::Employee.all(), meta::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping, meta::relational::tests::mapping::enumeration::enumTestRuntime())->meta::alloy::protocol::vX_X_X::transformation::fromPureGraph::executionPlan::transformPlan()->toJSON([], 1000, config(false, false, true, true));
+        // executionPlan(|meta::external::store::relational::tests::mapping::enumeration::model::domain::Employee.all(), meta::external::store::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping, meta::external::store::relational::tests::mapping::enumeration::enumTestRuntime())->meta::alloy::protocol::vX_X_X::transformation::fromPureGraph::executionPlan::transformPlan()->toJSON([], 1000, config(false, false, true, true));
         String plan = "{\n" +
                 "  \"rootExecutionNode\": {\n" +
                 "    \"sqlQuery\": \"select \\\"root\\\".id as \\\"pk_0\\\", \\\"root\\\".id as \\\"id\\\", \\\"root\\\".name as \\\"name\\\", \\\"root\\\".doh as \\\"dateOfHire\\\", \\\"root\\\".type as \\\"type\\\", \\\"root\\\".active as \\\"active\\\" from employeeTable as \\\"root\\\"\",\n" +
@@ -321,12 +321,12 @@ public class TestExecutionPlan extends AlloyTestServer
                 "    }," +
                 "    \"_type\": \"relational\",\n" +
                 "    \"resultType\": {\n" +
-                "      \"class\": \"meta::relational::tests::mapping::enumeration::model::domain::Employee\",\n" +
+                "      \"class\": \"meta::external::store::relational::tests::mapping::enumeration::model::domain::Employee\",\n" +
                 "      \"setImplementations\": [\n" +
                 "        {\n" +
-                "          \"class\": \"meta::relational::tests::mapping::enumeration::model::domain::Employee\",\n" +
-                "          \"mapping\": \"meta::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping\",\n" +
-                "          \"id\": \"meta_relational_tests_mapping_enumeration_model_domain_Employee\",\n" +
+                "          \"class\": \"meta::external::store::relational::tests::mapping::enumeration::model::domain::Employee\",\n" +
+                "          \"mapping\": \"meta::external::store::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping\",\n" +
+                "          \"id\": \"meta_external_store_relational_tests_mapping_enumeration_model_domain_Employee\",\n" +
                 "          \"propertyMappings\": [\n" +
                 "            {\n" +
                 "              \"property\": \"id\",\n" +
@@ -342,7 +342,7 @@ public class TestExecutionPlan extends AlloyTestServer
                 "            },\n" +
                 "            {\n" +
                 "              \"property\": \"type\",\n" +
-                "              \"type\": \"meta::relational::tests::mapping::enumeration::model::domain::EmployeeType\",\n" +
+                "              \"type\": \"meta::external::store::relational::tests::mapping::enumeration::model::domain::EmployeeType\",\n" +
                 "              \"enumMapping\": {\n" +
                 "                \"CONTRACT\": [\n" +
                 "                  \"FTC\",\n" +
@@ -355,7 +355,7 @@ public class TestExecutionPlan extends AlloyTestServer
                 "            },\n" +
                 "            {\n" +
                 "              \"property\": \"active\",\n" +
-                "              \"type\": \"meta::relational::tests::mapping::enumeration::model::domain::YesNo\",\n" +
+                "              \"type\": \"meta::external::store::relational::tests::mapping::enumeration::model::domain::YesNo\",\n" +
                 "              \"enumMapping\": {\n" +
                 "                \"YES\": [\n" +
                 "                  \"1\"\n" +
@@ -374,13 +374,13 @@ public class TestExecutionPlan extends AlloyTestServer
                 "}";
         SingleExecutionPlan executionPlan = objectMapper.readValue(plan, SingleExecutionPlan.class);
         RelationalResult result = (RelationalResult) executionPlan.rootExecutionNode.accept(new ExecutionNodeExecutor(null, new ExecutionState(Maps.mutable.empty(), Lists.mutable.withAll(executionPlan.templateFunctions), Lists.mutable.with(new RelationalStoreExecutionState(new RelationalStoreState(serverPort))))));
-        Assert.assertEquals("{\"builder\": {\"_type\":\"classBuilder\",\"mapping\":\"meta::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping\",\"classMappings\":[{\"setImplementationId\":\"meta_relational_tests_mapping_enumeration_model_domain_Employee\",\"properties\":[{\"property\":\"id\",\"type\":\"Integer\"},{\"property\":\"name\",\"type\":\"String\"},{\"property\":\"dateOfHire\",\"type\":\"Date\"},{\"property\":\"type\",\"type\":\"meta::relational::tests::mapping::enumeration::model::domain::EmployeeType\"},{\"property\":\"active\",\"type\":\"meta::relational::tests::mapping::enumeration::model::domain::YesNo\"}],\"class\":\"meta::relational::tests::mapping::enumeration::model::domain::Employee\"}],\"class\":\"meta::relational::tests::mapping::enumeration::model::domain::Employee\"}, \"activities\": [{\"_type\":\"relational\",\"sql\":\"select \\\"root\\\".id as \\\"pk_0\\\", \\\"root\\\".id as \\\"id\\\", \\\"root\\\".name as \\\"name\\\", \\\"root\\\".doh as \\\"dateOfHire\\\", \\\"root\\\".type as \\\"type\\\", \\\"root\\\".active as \\\"active\\\" from employeeTable as \\\"root\\\"\"}], \"result\" : {\"columns\" : [\"pk_0\",\"id\",\"name\",\"dateOfHire\",\"type\",\"active\"], \"rows\" : [{\"values\": [1,1,\"Alice\",\"1983-03-15T00:00:00.000000000+0000\",\"CONTRACT\",\"YES\"]},{\"values\": [2,2,\"Bob\",\"2003-07-19T00:00:00.000000000+0000\",\"FULL_TIME\",\"NO\"]},{\"values\": [3,3,\"Curtis\",\"2012-08-25T00:00:00.000000000+0000\",\"CONTRACT\",null]}]}}", result.flush(new RelationalResultToJsonDefaultSerializer(result)));
+        Assert.assertEquals("{\"builder\": {\"_type\":\"classBuilder\",\"mapping\":\"meta::external::store::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping\",\"classMappings\":[{\"setImplementationId\":\"meta_external_store_relational_tests_mapping_enumeration_model_domain_Employee\",\"properties\":[{\"property\":\"id\",\"type\":\"Integer\"},{\"property\":\"name\",\"type\":\"String\"},{\"property\":\"dateOfHire\",\"type\":\"Date\"},{\"property\":\"type\",\"type\":\"meta::external::store::relational::tests::mapping::enumeration::model::domain::EmployeeType\"},{\"property\":\"active\",\"type\":\"meta::external::store::relational::tests::mapping::enumeration::model::domain::YesNo\"}],\"class\":\"meta::external::store::relational::tests::mapping::enumeration::model::domain::Employee\"}],\"class\":\"meta::external::store::relational::tests::mapping::enumeration::model::domain::Employee\"}, \"activities\": [{\"_type\":\"relational\",\"sql\":\"select \\\"root\\\".id as \\\"pk_0\\\", \\\"root\\\".id as \\\"id\\\", \\\"root\\\".name as \\\"name\\\", \\\"root\\\".doh as \\\"dateOfHire\\\", \\\"root\\\".type as \\\"type\\\", \\\"root\\\".active as \\\"active\\\" from employeeTable as \\\"root\\\"\"}], \"result\" : {\"columns\" : [\"pk_0\",\"id\",\"name\",\"dateOfHire\",\"type\",\"active\"], \"rows\" : [{\"values\": [1,1,\"Alice\",\"1983-03-15T00:00:00.000000000+0000\",\"CONTRACT\",\"YES\"]},{\"values\": [2,2,\"Bob\",\"2003-07-19T00:00:00.000000000+0000\",\"FULL_TIME\",\"NO\"]},{\"values\": [3,3,\"Curtis\",\"2012-08-25T00:00:00.000000000+0000\",\"CONTRACT\",null]}]}}", result.flush(new RelationalResultToJsonDefaultSerializer(result)));
     }
 
     @Test
     public void testTDSWithEnum() throws Exception
     {
-        // executionPlan(|meta::relational::tests::mapping::enumeration::model::domain::Employee.all()->project(a|$a.type, 'xx'), meta::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping, meta::relational::tests::mapping::enumeration::enumTestRuntime())->meta::alloy::protocol::vX_X_X::transformation::fromPureGraph::executionPlan::transformPlan()->toJSON([], 1000, config(false, false, true, true));
+        // executionPlan(|meta::external::store::relational::tests::mapping::enumeration::model::domain::Employee.all()->project(a|$a.type, 'xx'), meta::external::store::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping, meta::external::store::relational::tests::mapping::enumeration::enumTestRuntime())->meta::alloy::protocol::vX_X_X::transformation::fromPureGraph::executionPlan::transformPlan()->toJSON([], 1000, config(false, false, true, true));
         String plan = "{\n" +
                 "  \"rootExecutionNode\": {\n" +
                 "    \"sqlQuery\": \"select \\\"root\\\".type as \\\"xx\\\" from employeeTable as \\\"root\\\"\",\n" +
@@ -434,7 +434,7 @@ public class TestExecutionPlan extends AlloyTestServer
     @Test
     public void testUnion() throws Exception
     {
-        // executionPlan(|meta::pure::tests::model::simple::Person.all(), meta::relational::tests::mapping::union::unionMapping, meta::relational::tests::testRuntime())->meta::alloy::protocol::vX_X_X::transformation::fromPureGraph::executionPlan::transformPlan()->toJSON([], 1000, config(false, false, true, true));
+        // executionPlan(|meta::pure::tests::model::simple::Person.all(), meta::external::store::relational::tests::mapping::union::unionMapping, meta::external::store::relational::tests::testRuntime())->meta::alloy::protocol::vX_X_X::transformation::fromPureGraph::executionPlan::transformPlan()->toJSON([], 1000, config(false, false, true, true));
         String plan = "{\n" +
                 "  \"rootExecutionNode\": {\n" +
                 "    \"sqlQuery\": \"select \\\"unionBase\\\".u_type as u_type, \\\"unionBase\\\".\\\"pk_0_0\\\" as \\\"pk_0_0\\\", \\\"unionBase\\\".\\\"pk_0_1\\\" as \\\"pk_0_1\\\", \\\"unionBase\\\".\\\"lastName\\\" as \\\"lastName\\\" from (select '0' as u_type, \\\"root\\\".ID as \\\"pk_0_0\\\", null as \\\"pk_0_1\\\", \\\"root\\\".lastName_s1 as \\\"lastName\\\" from PersonSet1 as \\\"root\\\" UNION ALL select '1' as u_type, null as \\\"pk_0_0\\\", \\\"root\\\".ID as \\\"pk_0_1\\\", \\\"root\\\".lastName_s2 as \\\"lastName\\\" from PersonSet2 as \\\"root\\\") as \\\"unionBase\\\"\",\n" +
@@ -475,7 +475,7 @@ public class TestExecutionPlan extends AlloyTestServer
                 "      \"setImplementations\": [\n" +
                 "        {\n" +
                 "          \"class\": \"meta::pure::tests::model::simple::Person\",\n" +
-                "          \"mapping\": \"meta::relational::tests::mapping::union::unionMapping\",\n" +
+                "          \"mapping\": \"meta::external::store::relational::tests::mapping::union::unionMapping\",\n" +
                 "          \"id\": \"set1\",\n" +
                 "          \"propertyMappings\": [\n" +
                 "            {\n" +
@@ -486,7 +486,7 @@ public class TestExecutionPlan extends AlloyTestServer
                 "        },\n" +
                 "        {\n" +
                 "          \"class\": \"meta::pure::tests::model::simple::Person\",\n" +
-                "          \"mapping\": \"meta::relational::tests::mapping::union::unionMapping\",\n" +
+                "          \"mapping\": \"meta::external::store::relational::tests::mapping::union::unionMapping\",\n" +
                 "          \"id\": \"set2\",\n" +
                 "          \"propertyMappings\": [\n" +
                 "            {\n" +
@@ -502,7 +502,7 @@ public class TestExecutionPlan extends AlloyTestServer
                 "}";
         SingleExecutionPlan executionPlan = objectMapper.readValue(plan, SingleExecutionPlan.class);
         RelationalResult result = (RelationalResult) executionPlan.rootExecutionNode.accept(new ExecutionNodeExecutor(null, new ExecutionState(Maps.mutable.empty(), Lists.mutable.withAll(executionPlan.templateFunctions), Lists.mutable.with(new RelationalStoreExecutionState(new RelationalStoreState(serverPort))))));
-        Assert.assertEquals("{\"builder\": {\"_type\":\"classBuilder\",\"mapping\":\"meta::relational::tests::mapping::union::unionMapping\",\"classMappings\":[{\"setImplementationId\":\"set1\",\"properties\":[{\"property\":\"lastName\",\"type\":\"String\"}],\"class\":\"meta::pure::tests::model::simple::Person\"},{\"setImplementationId\":\"set2\",\"properties\":[{\"property\":\"lastName\",\"type\":\"String\"}],\"class\":\"meta::pure::tests::model::simple::Person\"}],\"class\":\"meta::pure::tests::model::simple::Person\"}, \"activities\": [{\"_type\":\"relational\",\"sql\":\"select \\\"unionBase\\\".u_type as u_type, \\\"unionBase\\\".\\\"pk_0_0\\\" as \\\"pk_0_0\\\", \\\"unionBase\\\".\\\"pk_0_1\\\" as \\\"pk_0_1\\\", \\\"unionBase\\\".\\\"lastName\\\" as \\\"lastName\\\" from (select '0' as u_type, \\\"root\\\".ID as \\\"pk_0_0\\\", null as \\\"pk_0_1\\\", \\\"root\\\".lastName_s1 as \\\"lastName\\\" from PersonSet1 as \\\"root\\\" UNION ALL select '1' as u_type, null as \\\"pk_0_0\\\", \\\"root\\\".ID as \\\"pk_0_1\\\", \\\"root\\\".lastName_s2 as \\\"lastName\\\" from PersonSet2 as \\\"root\\\") as \\\"unionBase\\\"\"}], \"result\" : {\"columns\" : [\"U_TYPE\",\"pk_0_0\",\"pk_0_1\",\"lastName\"], \"rows\" : [{\"values\": [\"0\",1,null,\"Doe\"]},{\"values\": [\"0\",2,null,\"Jones\"]},{\"values\": [\"0\",3,null,\"Evans\"]},{\"values\": [\"1\",null,1,\"Smith\"]},{\"values\": [\"1\",null,2,\"Johnson\"]}]}}", result.flush(new RelationalResultToJsonDefaultSerializer(result)));
+        Assert.assertEquals("{\"builder\": {\"_type\":\"classBuilder\",\"mapping\":\"meta::external::store::relational::tests::mapping::union::unionMapping\",\"classMappings\":[{\"setImplementationId\":\"set1\",\"properties\":[{\"property\":\"lastName\",\"type\":\"String\"}],\"class\":\"meta::pure::tests::model::simple::Person\"},{\"setImplementationId\":\"set2\",\"properties\":[{\"property\":\"lastName\",\"type\":\"String\"}],\"class\":\"meta::pure::tests::model::simple::Person\"}],\"class\":\"meta::pure::tests::model::simple::Person\"}, \"activities\": [{\"_type\":\"relational\",\"sql\":\"select \\\"unionBase\\\".u_type as u_type, \\\"unionBase\\\".\\\"pk_0_0\\\" as \\\"pk_0_0\\\", \\\"unionBase\\\".\\\"pk_0_1\\\" as \\\"pk_0_1\\\", \\\"unionBase\\\".\\\"lastName\\\" as \\\"lastName\\\" from (select '0' as u_type, \\\"root\\\".ID as \\\"pk_0_0\\\", null as \\\"pk_0_1\\\", \\\"root\\\".lastName_s1 as \\\"lastName\\\" from PersonSet1 as \\\"root\\\" UNION ALL select '1' as u_type, null as \\\"pk_0_0\\\", \\\"root\\\".ID as \\\"pk_0_1\\\", \\\"root\\\".lastName_s2 as \\\"lastName\\\" from PersonSet2 as \\\"root\\\") as \\\"unionBase\\\"\"}], \"result\" : {\"columns\" : [\"U_TYPE\",\"pk_0_0\",\"pk_0_1\",\"lastName\"], \"rows\" : [{\"values\": [\"0\",1,null,\"Doe\"]},{\"values\": [\"0\",2,null,\"Jones\"]},{\"values\": [\"0\",3,null,\"Evans\"]},{\"values\": [\"1\",null,1,\"Smith\"]},{\"values\": [\"1\",null,2,\"Johnson\"]}]}}", result.flush(new RelationalResultToJsonDefaultSerializer(result)));
     }
 
     @Test

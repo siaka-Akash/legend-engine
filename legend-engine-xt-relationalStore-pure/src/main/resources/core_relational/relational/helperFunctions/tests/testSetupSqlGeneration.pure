@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::ddl::*;
+import meta::external::store::relational::tests::ddl::*;
 
 import meta::pure::profiles::*;
 
-import meta::relational::metamodel::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::join::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::functions::toDDL::*;
-import meta::relational::mapping::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::functions::toDDL::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::runtime::*;
 
-function <<test.Test>>  meta::relational::tests::ddl::testSetupDataSqlGeneration():Boolean[1]
+function <<test.Test>>  meta::external::store::relational::tests::ddl::testSetupDataSqlGeneration():Boolean[1]
 {
   let parsedRecords =[ 
                         list(['default']),
@@ -35,7 +35,7 @@ function <<test.Test>>  meta::relational::tests::ddl::testSetupDataSqlGeneration
                       ];
                       // this parsed data format should be documented and standardised 
     
-  let sqls = meta::alloy::service::execution::setUpDataSQLs($parsedRecords, meta::relational::tests::dbInc, meta::relational::functions::sqlQueryToString::createDbConfig(DatabaseType.H2));
+  let sqls = meta::alloy::service::execution::setUpDataSQLs($parsedRecords, meta::external::store::relational::tests::dbInc, meta::external::store::relational::functions::sqlQueryToString::createDbConfig(DatabaseType.H2));
 
   let expectedSqls= [
    'Drop schema if exists productSchema cascade;',
@@ -70,7 +70,7 @@ function <<test.Test>>  meta::relational::tests::ddl::testSetupDataSqlGeneration
 
 
 //pure based parsing is higly unstable
-function <<test.Test>>  meta::relational::tests::ddl::testSetupDataSqlGenerationWithDataAsString():Boolean[1]
+function <<test.Test>>  meta::external::store::relational::tests::ddl::testSetupDataSqlGenerationWithDataAsString():Boolean[1]
 {
 
   let records ='default\n'+
@@ -78,7 +78,7 @@ function <<test.Test>>  meta::relational::tests::ddl::testSetupDataSqlGeneration
                 'id, firstName, lastName, age, addressId, firmId, managerId\n'+
                 '1,Peter,Smith,23,1,1,2';
 
-  let sqls = meta::alloy::service::execution::setUpDataSQLs($records, meta::relational::tests::dbInc, meta::relational::functions::sqlQueryToString::createDbConfig(DatabaseType.H2));
+  let sqls = meta::alloy::service::execution::setUpDataSQLs($records, meta::external::store::relational::tests::dbInc, meta::external::store::relational::functions::sqlQueryToString::createDbConfig(DatabaseType.H2));
   
   let expectedSqls= [
    'Drop schema if exists productSchema cascade;',

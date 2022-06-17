@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::mapping::*;
-import meta::csv::*;
-import meta::relational::tests::mapping::innerjoin::isolation::*;
-function <<test.BeforePackage>> meta::relational::tests::mapping::innerjoin::isolation::setUp():Any[*]
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::tests::mapping::innerjoin::isolation::*;
+function <<test.BeforePackage>> meta::external::store::relational::tests::mapping::innerjoin::isolation::setUp():Any[*]
 {
    initAutomobileDb();
 }
-function <<test.Test>> meta::relational::tests::mapping::innerjoin::isolation::testIsolationOfInnerJoins():Any[*]
+function <<test.Test>> meta::external::store::relational::tests::mapping::innerjoin::isolation::testIsolationOfInnerJoins():Any[*]
 {
    let func = {| Car.all()->filter(c|$c.org.publicAncestor.name != 'GSorg2'
                                    && $c.org.publicAncestor.name->contains('GSorg')

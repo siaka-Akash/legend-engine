@@ -1,0 +1,66 @@
+import meta::pure::store::contract::*;
+import meta::pure::mapping::*;
+import meta::pure::runtime::*;
+import meta::pure::router::extension::*;
+import meta::external::store::model::*;
+import meta::external::store::model::inMemory::*;
+import meta::external::store::model::chain::*;
+import meta::pure::executionPlan::*;
+import meta::pure::graphFetch::execution::*;
+import meta::external::store::model::graphFetch::executionPlan::*;
+import meta::external::store::model::*;
+import meta::external::store::model::contract::*;
+
+function meta::external::store::model::contract::pureMappingStoreContract():StoreContract[1]
+{
+   ^StoreContract
+   (
+     id = 'Model2ModelStore',
+
+     executeStoreQuery = meta::external::store::model::contract::execution_StoreQuery_1__RoutedValueSpecification_$0_1$__Mapping_1__Runtime_1__ExecutionContext_1__RouterExtension_MANY__DebugContext_1__Result_1_,
+     supports = meta::external::store::model::contract::supports_FunctionExpression_1__Boolean_1_,
+     planExecution = meta::external::store::model::contract::planExecution_StoreQuery_1__RoutedValueSpecification_$0_1$__Mapping_$0_1$__Runtime_$0_1$__ExecutionContext_1__RouterExtension_MANY__DebugContext_1__ExecutionNode_1_,
+     localGetterOverrideMapped = meta::external::store::model::contract::getterOverrideMapped_Any_1__PropertyMapping_1__Any_MANY_,
+     localGetterOverrideNonMapped = meta::external::store::model::contract::getterOverrideNonMapped_Any_1__Property_1__Any_MANY_,
+     supportsStream = f:FunctionExpression[1]|false,
+
+     supportsSetImplementation = s:SetImplementation[1]| $s->instanceOf(PureInstanceSetImplementation),
+     resolveStore = {e:ExtendedRoutedValueSpecification[1], s:SetImplementation[1], m:Mapping[1] | ^meta::external::store::model::ModelStore(name='MODEL', package=::)}
+   )
+}
+
+function meta::external::store::model::contract::execution(sq:meta::pure::mapping::StoreQuery[1], ext:RoutedValueSpecification[0..1], m:Mapping[1], runtime:Runtime[1], exeCtx:ExecutionContext[1], extensions:RouterExtension[*], debug:DebugContext[1]):Result<Any|*>[1]
+{
+   let connection = $runtime->connectionByElement($sq.store);
+   $connection->match(
+                        [
+                           mc:ModelConnection[1]| executeInMemory($sq.fe, $ext->cast(@ExtendedRoutedValueSpecification), $m, $mc, $runtime, $sq.advancedRouting->toOne(), $exeCtx, $extensions, $debug),
+                           mcc:ModelChainConnection[1]| executeChain($sq, $ext->cast(@ExtendedRoutedValueSpecification), $m, $mcc, $runtime, $exeCtx, $extensions, $debug)
+                        ]
+               );
+}
+
+function meta::external::store::model::contract::planExecution(sq:meta::pure::mapping::StoreQuery[1], ext:RoutedValueSpecification[0..1], m:Mapping[0..1], runtime:Runtime[0..1], exeCtx:ExecutionContext[1], extension:RouterExtension[*], debug:DebugContext[1]):ExecutionNode[1]
+{
+   let fe = $sq.fe->evaluateAndDeactivate()->cast(@FunctionExpression);
+   if ($fe->meta::pure::router::isUnionOnGraphFetch(true) || $fe.func->in(graphFetchFunctions()) || $fe->meta::pure::router::isMergeOnGraphFetch() ,
+       | planInMemoryGraphFetchExecution($sq, $ext, $m->toOne(), $runtime->toOne(), $exeCtx, $extension, $debug),
+       | planExecutionPure($sq, $ext, $m, $runtime, $exeCtx, $extension, $debug)
+   );
+}
+
+function meta::external::store::model::contract::supports(f:FunctionExpression[1]):Boolean[1]
+{
+   $f.func == meta::json::toJSON_T_MANY__LambdaFunction_MANY__String_1_
+      || ($f.func->isWithinPackage(meta::pure) && !($f->isSerialize() || $f->isLetFunction()));
+}
+
+function meta::external::store::model::contract::getterOverrideMapped(o:Any[1], propertyMapping:PropertyMapping[1]):Any[*]
+{
+   getter($o, $propertyMapping.property, $propertyMapping);
+}
+
+function meta::external::store::model::contract::getterOverrideNonMapped(o:Any[1], property:Property<Nil,Any|*>[1]):Any[*]
+{
+   getter($o, $property, []);
+}

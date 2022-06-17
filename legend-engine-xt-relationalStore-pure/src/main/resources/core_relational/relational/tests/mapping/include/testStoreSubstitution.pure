@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::*;
+import meta::external::store::relational::tests::*;
 
-function <<test.Test>> meta::relational::tests::mapping::include::testStoreSubstitution():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::include::testStoreSubstitution():Boolean[1]
 {
    assertIs(dbInc, simpleRelationalMappingInc.resolveStore(dbInc));
    assertIs(db, simpleRelationalMappingInc.resolveStore(db));

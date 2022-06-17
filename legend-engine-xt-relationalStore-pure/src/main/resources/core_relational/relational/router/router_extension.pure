@@ -25,14 +25,15 @@ import meta::pure::router::clustering::*;
 import meta::pure::router::extension::*;
 import meta::pure::router::routing::*;
 import meta::pure::router::store::embedded::*;
-import meta::pure::router::systemMapping::*;
+import meta::pure::store::contract::*;
 import meta::pure::runtime::*;
-import meta::pure::store::*;
+import meta::pure::store::metamodel::*;
 import meta::pure::tds::schema::*;
-import meta::relational::metamodel::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::mapping::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::contract::*;
 
 function meta::pure::router::extension::defaultRelationalExtensions() : meta::pure::router::extension::RouterExtension[*]
 {
@@ -49,22 +50,31 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
    ^RouterExtension
    (
       type = $type,
+
+      storeContracts = [
+                        meta::external::store::aggregationAware::contract::aggregationAwareStoreContract(),
+                        meta::external::store::model::contract::pureMappingStoreContract(),
+                        meta::external::store::platform::contract::purePlatformStoreContract(),
+                        meta::external::store::relational::contract::relationalStoreContract(),
+                        meta::external::store::relational::contract::relationalEmbeddedStoreContract()
+                       ],
+
+
       serializerExtension =  meta::pure::router::extension::relationalSerializerExtension_String_1__String_1_,
-      analytics_getStoreFromSetImpl = mapping:Mapping[1] | {rsi:meta::relational::mapping::RootRelationalInstanceSetImplementation[1] | let resolvedDb = $rsi->getResolvedStore($mapping)->toOne(); $mapping.resolveStore($resolvedDb);},
-      analytics_getStoreFromSetImpl_Operation = mapping:Mapping[1] | {rr : meta::relational::mapping::RootRelationalInstanceSetImplementation[*] | 
+      analytics_getStoreFromSetImpl = mapping:Mapping[1] | {rsi:meta::external::store::relational::mapping::RootRelationalInstanceSetImplementation[1] | let resolvedDb = $rsi->getResolvedStore($mapping)->toOne(); $mapping.resolveStore($resolvedDb);},
+      analytics_getStoreFromSetImpl_Operation = mapping:Mapping[1] | {rr : meta::external::store::relational::mapping::RootRelationalInstanceSetImplementation[*] |
                                                                                                       let databases = $rr->getResolvedStore($mapping)->removeDuplicates();
                                                                                assert($databases->size() == 1, | 'Found ' + $databases->size()->toString() + ' stores while trying to resolve Operation Mappings. 1 unique store is required for routing. Stores found were ' + $databases.name->joinStrings('[',',', ']'));
                                                                                $mapping.resolveStore($databases->at(0));},
       
       cluster_cluster_ExtendedRoutedValueSpecification = {r:ExtendedRoutedValueSpecification[1], openVariables:Map<String, List<Any>>[1], mapping:Mapping[1] |
                                                                                 [
-                                                                                   {rsi: meta::relational::mapping::RootRelationalInstanceSetImplementation[1]|
-                                                                                     let resolvedDb = $rsi->getResolvedStore($mapping)->toOne();           
+                                                                                   {rsi: meta::external::store::relational::mapping::RootRelationalInstanceSetImplementation[1]|
                                                                                      ^ClusteredValueSpecification(
                                                                                         genericType  = $r.genericType,
                                                                                         multiplicity = $r.multiplicity,
-                                                                                        s = meta::pure::router::systemMapping::relationalSystemMapping(),
-                                                                                        store = $r.mapping.resolveStore($resolvedDb),
+                                                                                        s = meta::external::store::relational::contract::relationalStoreContract(),
+                                                                                        store = $r.mapping.resolveStore($rsi->getResolvedStore($mapping)->toOne()),
                                                                                         mapping = $r.mapping,
                                                                                         runtime = $r.runtime,
                                                                                         openVars = $openVariables,
@@ -76,7 +86,7 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
                                                                                      ^ClusteredValueSpecification(
                                                                                         genericType  = $r.genericType,
                                                                                         multiplicity = $r.multiplicity,
-                                                                                        s = meta::pure::router::systemMapping::relationalSystemMapping(),
+                                                                                        s = meta::external::store::relational::contract::relationalStoreContract(),
                                                                                         store = $rsi.targetStore,
                                                                                         mapping = $r.mapping,
                                                                                         runtime = $r.runtime,
@@ -89,7 +99,7 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
                                                                                      ^ClusteredValueSpecification(
                                                                                         genericType  = $r.genericType,
                                                                                         multiplicity = $r.multiplicity,
-                                                                                        s = meta::pure::router::systemMapping::relationalEmbeddedSystemMapping(),
+                                                                                        s = meta::external::store::relational::contract::relationalEmbeddedStoreContract(),
                                                                                         store = ^EmbeddedStore(package=::),
                                                                                         mapping = $r.mapping,
                                                                                         openVars = $openVariables,
@@ -100,13 +110,13 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
                                                                                  ]
                      },
       cluster_cluster_ExtendedRoutedValueSpecification_Operation = {r:ExtendedRoutedValueSpecification[1], openVariables:Map<String, List<Any>>[1], mapping:Mapping[1] |
-                                                                                    {rr:meta::relational::mapping::RootRelationalInstanceSetImplementation[*]|
+                                                                                    {rr:meta::external::store::relational::mapping::RootRelationalInstanceSetImplementation[*]|
                                                                                        let databases = $rr->getResolvedStore($r.mapping);
                                                                                        assert($databases->size() == 1, | 'Found ' + $databases->size()->toString() + ' stores while trying to resolve Operation Mappings. 1 unique store is required for routing. Stores found were ' + $databases.name->joinStrings('[',',', ']'));
                                                                                        ^ClusteredValueSpecification(
                                                                                           genericType  = $r.genericType,
                                                                                           multiplicity = $r.multiplicity,
-                                                                                          s = meta::pure::router::systemMapping::relationalSystemMapping(),
+                                                                                          s = meta::external::store::relational::contract::relationalStoreContract(),
                                                                                           store = $mapping.resolveStore($databases->at(0)),
                                                                                           mapping = $r.mapping,
                                                                                           runtime = $r.runtime,
@@ -120,7 +130,7 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
                                                             {t:TDSRoutedValueSpecification[1] | ^ClusterResponse(cluster = ^ClusteredValueSpecification(
                                                                                genericType  = $t.genericType,
                                                                                multiplicity = $t.multiplicity,
-                                                                               s = meta::pure::router::systemMapping::relationalSystemMapping(),
+                                                                               s = meta::external::store::relational::contract::relationalStoreContract(),
                                                                                store = $t.store,
                                                                                mapping = $t.mapping,
                                                                                runtime = $t.runtime,
@@ -131,19 +141,19 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
                                                                                ))
                                                             }
                         },
-      cluster_resolveInstanceSetImplementations = {r : RouterExtension[*] | {r:meta::relational::mapping::RootRelationalInstanceSetImplementation[1] | $r}},
-      cluster_resolveRootFromEmbedded = {r:meta::relational::mapping::RootRelationalInstanceSetImplementation[1]|$r},
-      graphFetch_getStoreFromSet = mapping:Mapping[1] | {rsi : meta::relational::mapping::RootRelationalInstanceSetImplementation[1] | $mapping.resolveStore($rsi->getResolvedStore($mapping)->toOne())},
-      graphFetch_getStoreFromSet_Operation = mapping:Mapping[1] | {rr : meta::relational::mapping::RootRelationalInstanceSetImplementation[*] | let databases = $rr->getResolvedStore($mapping); 
+      cluster_resolveInstanceSetImplementations = {r : RouterExtension[*] | {r:meta::external::store::relational::mapping::RootRelationalInstanceSetImplementation[1] | $r}},
+      cluster_resolveRootFromEmbedded = {r:meta::external::store::relational::mapping::RootRelationalInstanceSetImplementation[1]|$r},
+      graphFetch_getStoreFromSet = mapping:Mapping[1] | {rsi : meta::external::store::relational::mapping::RootRelationalInstanceSetImplementation[1] | $mapping.resolveStore($rsi->getResolvedStore($mapping)->toOne())},
+      graphFetch_getStoreFromSet_Operation = mapping:Mapping[1] | {rr : meta::external::store::relational::mapping::RootRelationalInstanceSetImplementation[*] | let databases = $rr->getResolvedStore($mapping);
                                                                                                                        assert($databases->size() == 1, | 'Found ' + $databases->size()->toString() + ' stores while trying to resolve Operation Mappings. 1 unique store is required for routing. Stores found were ' + $databases.name->joinStrings('[',',', ']'));
                                                                                                                        $mapping.resolveStore($databases->at(0));},
-      graphFetch_getSystemMappingFromStore = db : meta::relational::metamodel::Database[1] | meta::pure::router::systemMapping::relationalSystemMapping(),
+      graphFetch_getStoreContractFromStore = db : meta::external::store::relational::metamodel::Database[1] | meta::external::store::relational::contract::relationalStoreContract(),
       routing_routeFunctionExpressionFunctionDefinition = pair(
-            fe:FunctionExpression[1] | $fe->evaluateAndDeactivate().genericType.rawType == meta::relational::mapping::TableTDS,
+            fe:FunctionExpression[1] | $fe->evaluateAndDeactivate().genericType.rawType == meta::external::store::relational::mapping::TableTDS,
             {fe:FunctionExpression[1], state:RoutingState[1], runtime : Runtime[1], mapping: Mapping[1], executionContext:ExecutionContext[1] |
                     let name = $fe.parametersValues->at(0)->cast(@FunctionExpression).functionName;
-                    assert($fe.parametersValues->at(0)->cast(@FunctionExpression).func->in([meta::relational::functions::database::tableReference_Database_1__String_1__String_1__Table_1_, meta::relational::functions::database::viewReference_Database_1__String_1__String_1__View_1_]), 'Must use meta::pure::tds::tableReference / viewReference function to specify table / view ');
-                    let store = $fe.parametersValues->at(0)->cast(@FunctionExpression).parametersValues->at(0)->cast(@InstanceValue).values->cast(@meta::pure::store::Store)->toOne();
+                    assert($fe.parametersValues->at(0)->cast(@FunctionExpression).func->in([meta::external::store::relational::functions::database::tableReference_Database_1__String_1__String_1__Table_1_, meta::external::store::relational::functions::database::viewReference_Database_1__String_1__String_1__View_1_]), 'Must use meta::pure::tds::tableReference / viewReference function to specify table / view ');
+                    let store = $fe.parametersValues->at(0)->cast(@FunctionExpression).parametersValues->at(0)->cast(@InstanceValue).values->cast(@meta::pure::store::metamodel::Store)->toOne();
                     ^$state(value = ^TDSRoutedValueSpecification(  genericType = $fe.genericType,
                                                                  multiplicity = $fe.multiplicity,
                                                                  id = 'Table TDS',
@@ -157,33 +167,33 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
       
       graphFetch_executionPlan_planGraphFetchExecution = {
          sq: meta::pure::mapping::StoreQuery[1], ext: RoutedValueSpecification[0..1], clusteredTree: ClusteredGraphFetchTree[1], orderedPaths: String[*], mapping: Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], enableConstraints: Boolean[1], checked: Boolean[1], extensions: RouterExtension[*], debug: DebugContext[1] |
-         {db : meta::relational::metamodel::Database[1] | meta::relational::graphFetch::executionPlan::planRootGraphFetchExecutionRelational($sq, $ext, $clusteredTree, $orderedPaths, $mapping, $runtime, $exeCtx, $enableConstraints, $checked, $extensions, $debug)}
+         {db : meta::external::store::relational::metamodel::Database[1] | meta::external::store::relational::graphFetch::executionPlan::planRootGraphFetchExecutionRelational($sq, $ext, $clusteredTree, $orderedPaths, $mapping, $runtime, $exeCtx, $enableConstraints, $checked, $extensions, $debug)}
       },
       
       graphFetch_executionPlan_addCrossStoreChildren = {
          clusteredTree: ClusteredGraphFetchTree[1], orderedPaths: String[*], parentPath: String[1], inScopeVars: Map<String, List<Any>>[1], mapping: Mapping[1], runtime: Runtime[1], exeCtx: ExecutionContext[1], enableConstraints: Boolean[1], checked: Boolean[1], extensions: RouterExtension[*], debug: DebugContext[1] |
-         {db : meta::relational::metamodel::Database[1] | meta::relational::graphFetch::executionPlan::planCrossRootGraphFetchExecutionRelational($clusteredTree, $orderedPaths, $parentPath, $inScopeVars, $mapping, $runtime, $exeCtx, $extensions, $debug)}
+         {db : meta::external::store::relational::metamodel::Database[1] | meta::external::store::relational::graphFetch::executionPlan::planCrossRootGraphFetchExecutionRelational($clusteredTree, $orderedPaths, $parentPath, $inScopeVars, $mapping, $runtime, $exeCtx, $extensions, $debug)}
       },
       
-      graphFetch_executionPlan_localGraphFetchExecutionNodeToString = {space: String[1], extensions:meta::pure::router::extension::RouterExtension[*] | {r: meta::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode[1] | $r->relationalGraphFetchExecutionNodeToString($space, $extensions)}},
+      graphFetch_executionPlan_localGraphFetchExecutionNodeToString = {space: String[1], extensions:meta::pure::router::extension::RouterExtension[*] | {r: meta::external::store::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode[1] | $r->relationalGraphFetchExecutionNodeToString($space, $extensions)}},
       
       routing_extraShouldStop = [
                                     project_TableTDS_1__ColumnSpecification_MANY__TabularDataSet_1_,
                                     tableToTDS_Table_1__TableTDS_1_,
                                     viewToTDS_View_1__TableTDS_1_,
-                                    meta::relational::functions::database::tableReference_Database_1__String_1__String_1__Table_1_,
+                                    meta::external::store::relational::functions::database::tableReference_Database_1__String_1__String_1__Table_1_,
                                     meta::json::toJSON_T_MANY__LambdaFunction_MANY__String_1_,
                                     meta::pure::tds::join_TabularDataSet_1__TabularDataSet_1__JoinType_1__Function_1__TabularDataSet_1_,
                                     meta::pure::tds::join_TabularDataSet_1__TabularDataSet_1__JoinType_1__String_$1_MANY$__String_$1_MANY$__TabularDataSet_1_,
-                                    meta::relational::functions::columnProjectionsFromRoot_Any_MANY__NamedRelation_1__String_MANY__Boolean_$0_1$__Integer_$0_1$__RelationData_1_
+                                    meta::external::store::relational::functions::columnProjectionsFromRoot_Any_MANY__NamedRelation_1__String_MANY__Boolean_$0_1$__Integer_$0_1$__RelationData_1_
                                 ],
-      main_storeEquals = {a:Any[1], b:Any[1] | {k:meta::relational::mapping::KeyInformation[1] | $a->getHiddenPayload() == $b->getHiddenPayload()->toOne()->cast(@meta::relational::mapping::KeyInformation).pk}},
+      main_storeEquals = {a:Any[1], b:Any[1] | {k:meta::external::store::relational::mapping::KeyInformation[1] | $a->getHiddenPayload() == $b->getHiddenPayload()->toOne()->cast(@meta::external::store::relational::mapping::KeyInformation).pk}},
       executionPlan_print_planNodeToString = 
                                 {space : String[1], extensions:meta::pure::router::extension::RouterExtension[*]|
                                        [
-                                          cpt:CreateAndPopulateTempTableExecutionNode[1]|'CreateAndPopulateTempTable\n'+$space+'('+header($cpt, $space, $extensions)+'\n'+$space+'  inputVarNames = ' + $cpt.inputVarNames->joinStrings('[', ', ', ']') + '\n' + $space + '  tempTableName = ' + $cpt.tempTableName + '\n' +$space+'  tempTableColumns = '+$cpt.tempTableColumnMetaData->map(col|'('+$col.column.label+', '+if($col.column.dataType->isEmpty(),|'""',| $col.column.dataType->toOne()->meta::relational::metamodel::datatype::dataTypeToSqlText()) + if($col.identifierForGetter->isEmpty(), | '', | ', ' + $col.identifierForGetter->toOne() + ', ' + if($col.parametersForGetter->isEmpty(),|'[""]',| $col.parametersForGetter->toOne()->keyValues()->map(param| '(' + $param.first + ', ' + $param.second->toString() + ')')->joinStrings('[', ', ', ']') )) + ' )')->joinStrings('[',', ',']') +'\n' + $space + '  connection = '+$cpt.connection ->connectionToString($extensions) +'\n' + $cpt.implementation->printImplementation('implementation', $space+'  ', $extensions) + $space+')\n',
-                                          r:SQLExecutionNode[1]|'SQL\n'+$space+'('+header($r, $space, $extensions)+'\n'+$space+'  resultColumns = '+$r.resultColumns->map(rc|'('+$rc.label+', '+if($rc.dataType->isEmpty(),|'""',| $rc.dataType->toOne()->meta::relational::metamodel::datatype::dataTypeToSqlText())+')')->joinStrings('[',', ',']')+'\n'+$space+'  sql = '+$r.sqlQuery+'\n'+ $space + '  connection = '+$r.connection ->connectionToString($extensions) +'\n'+$r.implementation->printImplementation('implementation', $space+'  ', $extensions)+ $space+')\n',
-                                          r:RelationalInstantiationExecutionNode[1]|'Relational\n'+$space+'('+header($r, $space, $extensions)+'\n'+$space+'  resultColumns = '+$r.executionNodes->at(0)->cast(@meta::relational::mapping::SQLExecutionNode).resultColumns->map(rc|'('+$rc.label+', '+if($rc.dataType->isEmpty(),|'""',| $rc.dataType->toOne()->meta::relational::metamodel::datatype::dataTypeToSqlText())+')')->joinStrings('[',', ',']')+'\n'+$space+'  sql = '+$r.executionNodes->at(0)->cast(@meta::relational::mapping::SQLExecutionNode).sqlQuery+'\n'+ $space + '  connection = '+$r.executionNodes->at(0)->cast(@meta::relational::mapping::SQLExecutionNode).connection ->connectionToString($extensions) +'\n'+$r.implementation->printImplementation('implementation', $space+'  ', $extensions)+ $space+')\n',
+                                          cpt:CreateAndPopulateTempTableExecutionNode[1]|'CreateAndPopulateTempTable\n'+$space+'('+header($cpt, $space, $extensions)+'\n'+$space+'  inputVarNames = ' + $cpt.inputVarNames->joinStrings('[', ', ', ']') + '\n' + $space + '  tempTableName = ' + $cpt.tempTableName + '\n' +$space+'  tempTableColumns = '+$cpt.tempTableColumnMetaData->map(col|'('+$col.column.label+', '+if($col.column.dataType->isEmpty(),|'""',| $col.column.dataType->toOne()->meta::external::store::relational::metamodel::datatype::dataTypeToSqlText()) + if($col.identifierForGetter->isEmpty(), | '', | ', ' + $col.identifierForGetter->toOne() + ', ' + if($col.parametersForGetter->isEmpty(),|'[""]',| $col.parametersForGetter->toOne()->keyValues()->map(param| '(' + $param.first + ', ' + $param.second->toString() + ')')->joinStrings('[', ', ', ']') )) + ' )')->joinStrings('[',', ',']') +'\n' + $space + '  connection = '+$cpt.connection ->connectionToString($extensions) +'\n' + $cpt.implementation->printImplementation('implementation', $space+'  ', $extensions) + $space+')\n',
+                                          r:SQLExecutionNode[1]|'SQL\n'+$space+'('+header($r, $space, $extensions)+'\n'+$space+'  resultColumns = '+$r.resultColumns->map(rc|'('+$rc.label+', '+if($rc.dataType->isEmpty(),|'""',| $rc.dataType->toOne()->meta::external::store::relational::metamodel::datatype::dataTypeToSqlText())+')')->joinStrings('[',', ',']')+'\n'+$space+'  sql = '+$r.sqlQuery+'\n'+ $space + '  connection = '+$r.connection ->connectionToString($extensions) +'\n'+$r.implementation->printImplementation('implementation', $space+'  ', $extensions)+ $space+')\n',
+                                          r:RelationalInstantiationExecutionNode[1]|'Relational\n'+$space+'('+header($r, $space, $extensions)+'\n'+$space+'  resultColumns = '+$r.executionNodes->at(0)->cast(@meta::external::store::relational::mapping::SQLExecutionNode).resultColumns->map(rc|'('+$rc.label+', '+if($rc.dataType->isEmpty(),|'""',| $rc.dataType->toOne()->meta::external::store::relational::metamodel::datatype::dataTypeToSqlText())+')')->joinStrings('[',', ',']')+'\n'+$space+'  sql = '+$r.executionNodes->at(0)->cast(@meta::external::store::relational::mapping::SQLExecutionNode).sqlQuery+'\n'+ $space + '  connection = '+$r.executionNodes->at(0)->cast(@meta::external::store::relational::mapping::SQLExecutionNode).connection ->connectionToString($extensions) +'\n'+$r.implementation->printImplementation('implementation', $space+'  ', $extensions)+ $space+')\n',
                                           rb:RelationalBlockExecutionNode[1]|'RelationalBlockExecutionNode\n'+ $space+ '(' + header($rb, $space, $extensions) + $rb->childrenToString($space+'  ', $extensions) +' \n' +$space+ ')\n';
                                        ]},
       executionPlan_print_connectionToString =
@@ -195,8 +205,8 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
       executionPlan_print_typeToString = 
                                 {space : String[1], extensions:meta::pure::router::extension::RouterExtension[*]|
                                        [
-                                           tdsResultType:TDSResultType[1]|'TDS['+$tdsResultType.tdsColumns->map(c|'('+$c.name+', '+$c.type->toOne()->elementToPath()+ ', '+ if($c.sourceDataType->isEmpty(),|'""',| $c.sourceDataType->toOne()->cast(@meta::relational::metamodel::datatype::DataType)->meta::relational::metamodel::datatype::dataTypeToSqlText()) + if($c.documentation->isEmpty(),|', ""',|', "'+$c.documentation->toOne()+'"')+if($c.enumMappingId->isEmpty(),|'',|', '+$c.enumMappingId->toOne())+')')->joinStrings(', ')+']',
-                                           relationResultType : RelationResultType[1]|'Relation[name='+$relationResultType.relationName+', type='+$relationResultType.relationType->toString()+', schema='+$relationResultType.schemaName+', database='+$relationResultType.database+$relationResultType.columns->map(c | '('+$c.name+','+$c.type->meta::relational::metamodel::datatype::dataTypeToSqlText()+')')->joinStrings(', columns=[', ', ', ']')+']'
+                                           tdsResultType:TDSResultType[1]|'TDS['+$tdsResultType.tdsColumns->map(c|'('+$c.name+', '+$c.type->toOne()->elementToPath()+ ', '+ if($c.sourceDataType->isEmpty(),|'""',| $c.sourceDataType->toOne()->cast(@meta::external::store::relational::metamodel::datatype::DataType)->meta::external::store::relational::metamodel::datatype::dataTypeToSqlText()) + if($c.documentation->isEmpty(),|', ""',|', "'+$c.documentation->toOne()+'"')+if($c.enumMappingId->isEmpty(),|'',|', '+$c.enumMappingId->toOne())+')')->joinStrings(', ')+']',
+                                           relationResultType : RelationResultType[1]|'Relation[name='+$relationResultType.relationName+', type='+$relationResultType.relationType->toString()+', schema='+$relationResultType.schemaName+', database='+$relationResultType.database+$relationResultType.columns->map(c | '('+$c.name+','+$c.type->meta::external::store::relational::metamodel::datatype::dataTypeToSqlText()+')')->joinStrings(', columns=[', ', ', ']')+']'
                                       ]},
       executionPlan_execution_processNode = 
                                 {mapping:Mapping[1], runtime: Runtime[1], parametersValues:Pair<VariableExpression, Any>[*], extensions:meta::pure::router::extension::RouterExtension[*] |
@@ -235,14 +245,14 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
 
                                                                                                                                                                           if ($propertyMappings->isNotEmpty(),
                                                                                                                                                                               |pair($c.name,^PathInformation(type = $c.type ->toOne(),
-                                                                                                                                                                                                             relationalType = $c.sourceDataType->cast(@meta::relational::metamodel::datatype::DataType),
+                                                                                                                                                                                                             relationalType = $c.sourceDataType->cast(@meta::external::store::relational::metamodel::datatype::DataType),
                                                                                                                                                                                                              propertyMapping = $propertyMappings->first())),
                                                                                                                                                                               |[]);
                                                                                                                                                                           );,
                                                                                                                  |[]);,
                                                                                                             |[]);
 
-                                                                                   meta::relational::mapping::executeQuery($sql
+                                                                                   meta::external::store::relational::mapping::executeQuery($sql
                                                                                         , []
                                                                                         , $pathInfoPairs->cast(@Pair<String, PathInformation>)
                                                                                         , $r.executionNodes->at(0)->cast(@SQLExecutionNode).connection
@@ -258,19 +268,19 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
                                        c:CreateAndPopulateTempTableExecutionNode[1] | assert($c.inputVarNames->size() == 1, 'CreateAndPopulateTempTableExecutionNode with more than 1 inputs are only supported in engine execution flow and not in pure flow');
                                                                                       assert($c.tempTableColumnMetaData->size() == 1, 'CreateAndPopulateTempTableExecutionNode with more than 1 columns are only supported in engine execution flow and not in pure flow');
                                                                                       let column = ^Column(name = $c.tempTableColumnMetaData->toOne().column.label, type = $c.tempTableColumnMetaData.column.dataType->toOne());
-                                                                                      meta::relational::metamodel::execute::createTempTable($c.tempTableName, $column, meta::relational::functions::toDDL::createTempTableStatement(), true, $c.connection);
+                                                                                      meta::external::store::relational::metamodel::execute::createTempTable($c.tempTableName, $column, meta::external::store::relational::functions::toDDL::createTempTableStatement(), true, $c.connection);
 
                                                                                       let srcvalue = $parametersValues->filter(p | $p.first->evaluateAndDeactivate().name == $c.inputVarNames).second->toOne();
                                                                                       let values   = meta::pure::executionPlan::execution::flattenList($srcvalue);
                                                                                       let insertStatement = 'INSERT INTO '+ $c.tempTableName + '(' + $column.name + ') values ' + $values->map(v | '(' + $v->processLiteralDefaultForPlanService(DatabaseType.H2, [], []) + ')')->joinStrings(', ') + ';';
-                                                                                      meta::relational::metamodel::execute::executeInDb($insertStatement, $c.connection);
+                                                                                      meta::external::store::relational::metamodel::execute::executeInDb($insertStatement, $c.connection);
                                                                                       [];
                                    ]
                                 },
       executionPlan_execution_allNodes = 
                               {extensions:meta::pure::router::extension::RouterExtension[*] |
                                     [
-                                       g : meta::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode[1] | $g->concatenate($g.children->concatenate($g.executionNodes)->map(n | $n->allNodes($extensions)))
+                                       g : meta::external::store::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode[1] | $g->concatenate($g.children->concatenate($g.executionNodes)->map(n | $n->allNodes($extensions)))
                                     ]
                               },
       executionPlan_execution_buildVariableTemplateString =
@@ -279,15 +289,15 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
                                        d:DatabaseConnection[1]|
                                              let dbConfig         = createDbConfig($d.type, $d.timeZone, $d.quoteIdentifiers);
                                              let varMultiplicity  = if($parameterVal->instanceOf(List), |ZeroMany, |PureOne);
-                                             convertPlaceHolderToSQLString(^meta::relational::functions::pureToSqlQuery::metamodel::VarPlaceHolder(name = $name, type=$type, multiplicity=$varMultiplicity), $dbConfig.dbExtension.literalProcessor, $d.timeZone);
+                                             convertPlaceHolderToSQLString(^meta::external::store::relational::functions::pureToSqlQuery::metamodel::VarPlaceHolder(name = $name, type=$type, multiplicity=$varMultiplicity), $dbConfig.dbExtension.literalProcessor, $d.timeZone);
                               },
       executionPlan_generation_updateConnection =
                      [
-                        t:meta::relational::runtime::TestDatabaseConnection[1] |
-                              ^$t(testDataSetupSqls = if ($t.testDataSetupCsv->isEmpty() || !$t.element->instanceOf(meta::relational::metamodel::Database),
+                        t:meta::external::store::relational::runtime::TestDatabaseConnection[1] |
+                              ^$t(testDataSetupSqls = if ($t.testDataSetupCsv->isEmpty() || !$t.element->instanceOf(meta::external::store::relational::metamodel::Database),
                                                  | [];,
                                                  | if ($t.testDataSetupSqls->isEmpty(),
-                                                       | $t.testDataSetupCsv->toOne()->meta::alloy::service::execution::setUpDataSQLs($t.element->cast(@meta::relational::metamodel::Database)),
+                                                       | $t.testDataSetupCsv->toOne()->meta::alloy::service::execution::setUpDataSQLs($t.element->cast(@meta::external::store::relational::metamodel::Database)),
                                                        | $t.testDataSetupSqls))),
                         r:meta::pure::alloy::connections::RelationalDatabaseConnection[1] |
                               ^$r(
@@ -297,9 +307,9 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
                                        (
                                             testDataSetupSqls =
                                                 $l.testDataSetupSqls->concatenate(
-                                                    if ($l.testDataSetupCsv->isEmpty() || !$r.element->instanceOf(meta::relational::metamodel::Database),
+                                                    if ($l.testDataSetupCsv->isEmpty() || !$r.element->instanceOf(meta::external::store::relational::metamodel::Database),
                                                         | [];,
-                                                        | $l.testDataSetupCsv->toOne()->meta::alloy::service::execution::setUpDataSQLs($r.element->cast(@meta::relational::metamodel::Database))
+                                                        | $l.testDataSetupCsv->toOne()->meta::alloy::service::execution::setUpDataSQLs($r.element->cast(@meta::external::store::relational::metamodel::Database))
                                                     )
                                                  )
                                        ),
@@ -310,47 +320,47 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
                      ],
       java_conventions_defaultProhibitedFunctions = 
             [
-                  meta::relational::functions::columnProjectionsFromRoot_Any_MANY__NamedRelation_1__String_MANY__Boolean_$0_1$__Integer_$0_1$__RelationData_1_,
-                  meta::relational::metamodel::execute::createTempTable_String_1__Column_MANY__Function_1__Boolean_1__DatabaseConnection_1__Nil_0_,
-                  meta::relational::metamodel::execute::createTempTable_String_1__Column_MANY__Function_1__DatabaseConnection_1__Nil_0_,
-                  meta::relational::metamodel::execute::dropTempTable_String_1__DatabaseConnection_1__Nil_0_,
-                  meta::relational::metamodel::execute::executeInDb_String_1__DatabaseConnection_1__Integer_1__Integer_1__ResultSet_1_,
-                  meta::relational::metamodel::execute::fetchDbColumnsMetaData_DatabaseConnection_1__String_$0_1$__String_$0_1$__String_$0_1$__ResultSet_1_,
-                  meta::relational::metamodel::execute::fetchDbImportedKeysMetaData_DatabaseConnection_1__String_$0_1$__String_1__ResultSet_1_,
-                  meta::relational::metamodel::execute::fetchDbPrimaryKeysMetaData_DatabaseConnection_1__String_$0_1$__String_1__ResultSet_1_,
-                  meta::relational::metamodel::execute::fetchDbSchemasMetaData_DatabaseConnection_1__String_$0_1$__ResultSet_1_,
-                  meta::relational::metamodel::execute::fetchDbTablesMetaData_DatabaseConnection_1__String_$0_1$__String_$0_1$__ResultSet_1_,
-                  meta::relational::metamodel::execute::loadCsvToDbTable_String_1__Table_1__DatabaseConnection_1__Integer_$0_1$__Nil_0_,
-                  meta::relational::metamodel::execute::loadValuesToDbTable_List_1__Table_1__DatabaseConnection_1__Nil_0_,
-                  meta::relational::metamodel::execute::loadValuesToDbTable_List_MANY__Table_1__DatabaseConnection_1__Nil_0_,
+                  meta::external::store::relational::functions::columnProjectionsFromRoot_Any_MANY__NamedRelation_1__String_MANY__Boolean_$0_1$__Integer_$0_1$__RelationData_1_,
+                  meta::external::store::relational::metamodel::execute::createTempTable_String_1__Column_MANY__Function_1__Boolean_1__DatabaseConnection_1__Nil_0_,
+                  meta::external::store::relational::metamodel::execute::createTempTable_String_1__Column_MANY__Function_1__DatabaseConnection_1__Nil_0_,
+                  meta::external::store::relational::metamodel::execute::dropTempTable_String_1__DatabaseConnection_1__Nil_0_,
+                  meta::external::store::relational::metamodel::execute::executeInDb_String_1__DatabaseConnection_1__Integer_1__Integer_1__ResultSet_1_,
+                  meta::external::store::relational::metamodel::execute::fetchDbColumnsMetaData_DatabaseConnection_1__String_$0_1$__String_$0_1$__String_$0_1$__ResultSet_1_,
+                  meta::external::store::relational::metamodel::execute::fetchDbImportedKeysMetaData_DatabaseConnection_1__String_$0_1$__String_1__ResultSet_1_,
+                  meta::external::store::relational::metamodel::execute::fetchDbPrimaryKeysMetaData_DatabaseConnection_1__String_$0_1$__String_1__ResultSet_1_,
+                  meta::external::store::relational::metamodel::execute::fetchDbSchemasMetaData_DatabaseConnection_1__String_$0_1$__ResultSet_1_,
+                  meta::external::store::relational::metamodel::execute::fetchDbTablesMetaData_DatabaseConnection_1__String_$0_1$__String_$0_1$__ResultSet_1_,
+                  meta::external::store::relational::metamodel::execute::loadCsvToDbTable_String_1__Table_1__DatabaseConnection_1__Integer_$0_1$__Nil_0_,
+                  meta::external::store::relational::metamodel::execute::loadValuesToDbTable_List_1__Table_1__DatabaseConnection_1__Nil_0_,
+                  meta::external::store::relational::metamodel::execute::loadValuesToDbTable_List_MANY__Table_1__DatabaseConnection_1__Nil_0_,
                   meta::pure::functions::io::logActivities_Activity_MANY__Nil_0_
             ],
-      java_graphFetch_graphFetchCommon_generateCodeForLocalGraphFetchNode = {path:String[1], context:GenerationContext[1], extensions:RouterExtension[*], debug:DebugContext[1] | {rel: meta::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode[1] | $rel->meta::pure::executionPlan::engine::java::graphFetch::relational::generateRelationalStoreGraphFetchProject($path, $context, $extensions, $debug)}},
-      java_graphFetch_graphFetchCommon_updateImplementationClassWithStoreSpecificFieldsAndMethods= {x:meta::external::language::java::metamodel::Class[1], context:GenerationContext[1], extensions:RouterExtension[*], debug:DebugContext[1] | {rel: meta::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode[1] | $x->meta::pure::executionPlan::engine::java::graphFetch::relational::enrichForRelationalGraphExecution($rel, $context, $extensions, $debug)}},
+      java_graphFetch_graphFetchCommon_generateCodeForLocalGraphFetchNode = {path:String[1], context:GenerationContext[1], extensions:RouterExtension[*], debug:DebugContext[1] | {rel: meta::external::store::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode[1] | $rel->meta::pure::executionPlan::engine::java::graphFetch::relational::generateRelationalStoreGraphFetchProject($path, $context, $extensions, $debug)}},
+      java_graphFetch_graphFetchCommon_updateImplementationClassWithStoreSpecificFieldsAndMethods= {x:meta::external::language::java::metamodel::Class[1], context:GenerationContext[1], extensions:RouterExtension[*], debug:DebugContext[1] | {rel: meta::external::store::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode[1] | $x->meta::pure::executionPlan::engine::java::graphFetch::relational::enrichForRelationalGraphExecution($rel, $context, $extensions, $debug)}},
       java_parseObjectReference_getParseObjectReferenceImplClass = {storeType:String[1], args:Any[*], path:String[1], context:GenerationContext[1], debug:DebugContext[1] | 
-                                                                                                       if($storeType == meta::relational::postProcessor::getObjectReferenceStoreType(),
+                                                                                                       if($storeType == meta::external::store::relational::postProcessor::getObjectReferenceStoreType(),
                                                                                                           |  let pkOrder = $args->cast(@String);
                                                                                                              meta::pure::executionPlan::engine::java::getRelationalObjectReferenceParserHelperClass($pkOrder, $path, $context, $debug);,
                                                                                                           | [])},
       plan_javaRuntime_main_prepare1 =
             {path:String[1], contextFromChildren:GenerationContext[1], extensions:RouterExtension[*], debug:DebugContext[1] |
                [
-                  g: meta::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode[1] | 
+                  g: meta::external::store::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode[1] |
                      $g.children->size()->range()->fold({x, ctx | $g.children->at($x)->prepare($path+'.localChild' + $x->toString(), $ctx, $extensions, $debug)}, $contextFromChildren);
                ]
             },
       plan_javaRuntime_main_prepare2 =
             {path:String[1], contextFromOtherNodes:GenerationContext[1], extensions:RouterExtension[*], debug:DebugContext[1] |
                [
-                  g:meta::relational::mapping::RelationalClassInstantiationExecutionNode[1]           | $g->prepareForClassResult($path, $contextFromOtherNodes, $debug),
-                  g:meta::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode[1] | $g->meta::pure::executionPlan::engine::java::graphFetch::relational::prepareForRelationalGraphFetch($path, $contextFromOtherNodes, $debug)
+                  g:meta::external::store::relational::mapping::RelationalClassInstantiationExecutionNode[1]           | $g->prepareForClassResult($path, $contextFromOtherNodes, $debug),
+                  g:meta::external::store::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode[1] | $g->meta::pure::executionPlan::engine::java::graphFetch::relational::prepareForRelationalGraphFetch($path, $contextFromOtherNodes, $debug)
                ]
             },
       plan_javaRuntime_main_generatePlatformCode1 =
             {path:String[1], context:GenerationContext[1], extendsion:RouterExtension[*], debug:DebugContext[1] |
                [
-                  c:meta::relational::mapping::CreateAndPopulateTempTableExecutionNode[1]   | $c->generateImplementationForCreateAndPopulateTempTableNode($path, $context, $debug),
-                  e:meta::relational::mapping::RelationalClassInstantiationExecutionNode[1] | $e.resultType->match([
+                  c:meta::external::store::relational::mapping::CreateAndPopulateTempTableExecutionNode[1]   | $c->generateImplementationForCreateAndPopulateTempTableNode($path, $context, $debug),
+                  e:meta::external::store::relational::mapping::RelationalClassInstantiationExecutionNode[1] | $e.resultType->match([
                                                                                                    pc : PartialClassResultType[1] | $e->generateImplementionForRelationalPartialClassResult($path, $pc.propertiesWithParameters.property, $context, $debug),
                                                                                                    c  : ClassResultType[1]        | $e->generateImplementionForRelationalClassResult($path, $context, $debug)
                                                                                                 ])
@@ -360,12 +370,12 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
       plan_javaRuntime_main_generatePlatformCode2 =
             {path: String[1], mapping:Mapping[1], context:GenerationContext[1], extensions:RouterExtension[*], fullProject:Project[0..1], debug:DebugContext[1] |
                [
-                  g: meta::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode[1] |
+                  g: meta::external::store::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode[1] |
                      let transformedChildren = $g.children->size()->range()->map(x | $g.children->at($x)->generatePlatformCode($path+'.localChild' + $x->toString(), $mapping, $context, $extensions, $debug));
-                     ^GeneratedNode(node=^$g(children = $transformedChildren.node->cast(@meta::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode)), project = mergeProjectsNullable($fullProject->concatenate($transformedChildren.project)));
+                     ^GeneratedNode(node=^$g(children = $transformedChildren.node->cast(@meta::external::store::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode)), project = mergeProjectsNullable($fullProject->concatenate($transformedChildren.project)));
                ]
             },
-      systemMapping_systemForSetImplementation = r:RelationalInstanceSetImplementation[1]|relationalSystemMapping(),
+      systemMapping_systemForSetImplementation = r:RelationalInstanceSetImplementation[1]|relationalStoreContract(),
       tdsSchema_resolveSchemaImpl = {fe:FunctionExpression[1], openVars:Map<String, List<Any>>[1], extensions:RouterExtension[*]|
                                              [
                                                 join_TabularDataSet_1__TabularDataSet_1__JoinType_1__String_$1_MANY$__String_$1_MANY$__TabularDataSet_1_,
@@ -417,7 +427,7 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
                                     },
       testExtension_testedBy = {allReferenceUses:ReferenceUsage[*], extensions:RouterExtension[*] | {soFarr:TestedByResult[1]| $allReferenceUses.owner->filter(o|$o->instanceOf(Database))->cast(@Database)->fold({db,tbr|$db->testedBy($tbr, $extensions)}, $soFarr)}},
       logActivities = activities:meta::pure::mapping::Activity[*] | meta::pure::functions::io::logActivities($activities),
-      validTestPackages = 'meta::relational::tests'
+      validTestPackages = 'meta::external::store::relational::tests'
      
    )
 }
@@ -425,7 +435,7 @@ function <<access.private>> meta::pure::router::extension::relationalExtension(t
 
 //Helper Functions
 
-function meta::pure::router::clustering::getResolvedStore(rr: 	meta::relational::mapping::RootRelationalInstanceSetImplementation[*], mapping: Mapping[1]):Store[*]
+function meta::pure::router::clustering::getResolvedStore(rr: 	meta::external::store::relational::mapping::RootRelationalInstanceSetImplementation[*], mapping: Mapping[1]):Store[*]
 {
    $rr->map(r | let mainTableAlias = $r.mainTableAlias;
                 if ($mainTableAlias.database->isEmpty(), | $r.mainTable.schema.database, | $mainTableAlias.database->toOne());

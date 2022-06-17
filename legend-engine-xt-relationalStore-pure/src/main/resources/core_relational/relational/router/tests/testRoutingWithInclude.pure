@@ -13,56 +13,56 @@
 // limitations under the License.
 
 ###Relational
-Database meta::relational::tests::database::dbA
+Database meta::external::store::relational::tests::database::dbA
 (
    Table personTable (ID INT PRIMARY KEY, FIRSTNAME VARCHAR(100), LASTNAME VARCHAR(100), FIRMID INT)
 )
 
 ###Relational
-Database meta::relational::tests::database::dbB
+Database meta::external::store::relational::tests::database::dbB
 (
    Table firmTable (ID INT PRIMARY KEY, LEGALNAME VARCHAR(100))
 )
 
 ###Relational
-Database meta::relational::tests::database::mainDb
+Database meta::external::store::relational::tests::database::mainDb
 (
-   include meta::relational::tests::database::dbA
-   include meta::relational::tests::database::dbB
+   include meta::external::store::relational::tests::database::dbA
+   include meta::external::store::relational::tests::database::dbB
    
-   Join Firm_Person([meta::relational::tests::database::mainDb]personTable.FIRMID = [meta::relational::tests::database::mainDb]firmTable.ID)
+   Join Firm_Person([meta::external::store::relational::tests::database::mainDb]personTable.FIRMID = [meta::external::store::relational::tests::database::mainDb]firmTable.ID)
 )
 
 ###Mapping
-import meta::relational::tests::tds::tdsJoin::*;
-Mapping meta::relational::tests::database::mainMapping
+import meta::external::store::relational::tests::tds::tdsJoin::*;
+Mapping meta::external::store::relational::tests::database::mainMapping
 (
    testJoinTDS_Person : Relational
             {
-                scope([meta::relational::tests::database::mainDb]personTable) (  personID : ID, firstName : FIRSTNAME, lastName : LASTNAME, employerID : FIRMID )
+                scope([meta::external::store::relational::tests::database::mainDb]personTable) (  personID : ID, firstName : FIRSTNAME, lastName : LASTNAME, employerID : FIRMID )
             }
 
    testJoinTDS_Firm : Relational
           {
-             scope([meta::relational::tests::database::mainDb]firmTable) ( legalName : LEGALNAME, firmID : ID )
+             scope([meta::external::store::relational::tests::database::mainDb]firmTable) ( legalName : LEGALNAME, firmID : ID )
           }
 )
 
 ###Pure
-import meta::relational::metamodel::join::*;
-import meta::relational::tests::tds::tdsJoin::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::tests::tds::tdsJoin::*;
+import meta::external::store::relational::tests::*;
 
-function <<test.BeforePackage>>  meta::relational::tests::database::setUp(): Boolean[1]
+function <<test.BeforePackage>>  meta::external::store::relational::tests::database::setUp(): Boolean[1]
 {
    createTablesAndFillDb();
 }
 
-function <<test.Test>> meta::relational::tests::database::testRoutingWithDbsIncluded(): Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::database::testRoutingWithDbsIncluded(): Boolean[1]
 {
    let res = execute({|testJoinTDS_Person.all()->project([p|$p.lastName, p|$p.personID, p|$p.employerID], ['LastName', 'PersonID', 'FirmID'])
                                              ->join(testJoinTDS_Firm.all()->project([f|$f.legalName, f|$f.firmID], ['LegalName', 'ID']), JoinType.INNER, {a,b|$a.getInteger('FirmID') == $b.getInteger('ID')})},
-                      meta::relational::tests::database::mainMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values->at(0);
+                      meta::external::store::relational::tests::database::mainMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values->at(0);
    assertSize($res.rows, 7);
    assertSameElements(['Smith,1,1,Firm X,1', 'Johnson,2,1,Firm X,1', 'Hill,3,1,Firm X,1', 'Allen,4,1,Firm X,1',
                        'Roberts,5,2,Firm A,2', 'Hill,6,3,Firm B,3', 'Harris,7,4,Firm C,4'], $res.rows->map(r|$r.values->makeString(',')));

@@ -12,34 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::functions::asserts::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::tests::mapping::subType::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::tests::mapping::subType::*;
 import meta::pure::mapping::*;
-import meta::relational::runtime::*;
-import meta::relational::tests::*;
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::model::simple::*;
 
 
-function <<test.BeforePackage>> meta::relational::tests::mapping::subType::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::mapping::subType::setUp():Boolean[1]
 {
    let connection = testRuntime().connectionByElement(db)->cast(@TestDatabaseConnection);
-    meta::relational::tests::createTablesAndFillDb();
-   meta::relational::functions::toDDL::dropAndCreateTableInDb(MyDb, 'PRODUCT_RATING', $connection);
+    meta::external::store::relational::tests::createTablesAndFillDb();
+   meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(MyDb, 'PRODUCT_RATING', $connection);
 
    executeInDb('insert into PRODUCT_RATING (PRODUCT_ID, RATING) values (1, \'Aaa\');', $connection);
    executeInDb('insert into PRODUCT_RATING (PRODUCT_ID, RATING) values (2, \'Bbb\');', $connection);
    true;
 }
 
-function <<test.Test>> meta::relational::tests::mapping::subType::testProject():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::subType::testProject():Boolean[1]
 {
    let result1 = execute(|MyProduct.all()->project([p|$p.name, p|$p.rating.description], ['name','description']), MyMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values;
    assertEquals(4, $result1.rows->size());
    assertSameElements(['Firm A', 'Firm X', 'Firm C', 'Firm D'], $result1.rows->map(r|$r.getString('name')));
 }
 
-function <<test.Test>> meta::relational::tests::mapping::subType::testProjectWithIds():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::subType::testProjectWithIds():Boolean[1]
 {
    let result1 = execute(|MyProduct.all()->project([p|$p.name, p|$p.rating.description], ['name','description']), MyMappingWithIds, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values;
    assertEquals(4, $result1.rows->size());
@@ -47,7 +47,7 @@ function <<test.Test>> meta::relational::tests::mapping::subType::testProjectWit
 }
 
 // Alloy exclusion reason: 4. Use getter relational protocol
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::mapping::subType::testObjectQuery():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::mapping::subType::testObjectQuery():Boolean[1]
 {
    let result1 = execute(|MyProduct.all(), MyMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values;
    assertEquals(4, $result1->size());
@@ -56,42 +56,42 @@ function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::mapping::subT
    assertEquals(['Aaa', 'Bbb'], $result1.rating.description);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::subType::testProjectSubtype():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::subType::testProjectSubtype():Boolean[1]
 {
-   let result1 = execute(|Trade.all()->project([t|$t.id,  t | $t.product->subType(@meta::relational::tests::mapping::subType::MyProduct).rating.description], ['id','description']), MyMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values;
+   let result1 = execute(|Trade.all()->project([t|$t.id,  t | $t.product->subType(@meta::external::store::relational::tests::mapping::subType::MyProduct).rating.description], ['id','description']), MyMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values;
    assertEquals(11, $result1.rows->size());
    assertSameElements(['Aaa', 'Aaa', 'Bbb', 'Bbb', 'Bbb'], $result1.rows->map(r|$r.getNullableString($result1.columnByName('description')->toOne())));
 }
 
-function <<test.Test>> meta::relational::tests::mapping::subType::testSubTypeMappingValidWhenMappedExplicitly():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::subType::testSubTypeMappingValidWhenMappedExplicitly():Boolean[1]
 {
-   let cm = meta::relational::tests::mapping::subType::SubTypeMappingValidWhenMappedExplicitly.classMappingByClass(meta::relational::tests::mapping::subType::MyProduct)->filter(s|$s.root == true);
+   let cm = meta::external::store::relational::tests::mapping::subType::SubTypeMappingValidWhenMappedExplicitly.classMappingByClass(meta::external::store::relational::tests::mapping::subType::MyProduct)->filter(s|$s.root == true);
    assertSize($cm, 1);
    let result = execute(|CreditRating.all()->project([r| $r.product.rating.description], ['description']), SubTypeMappingValidWhenMappedExplicitly, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSameSQL('select "product_rating_1".RATING as "description" from PRODUCT_RATING as "root" left outer join productSchema.productTable as "producttable_0" on ("producttable_0".ID = "root".PRODUCT_ID) left outer join PRODUCT_RATING as "product_rating_1" on ("producttable_0".ID = "product_rating_1".PRODUCT_ID)', $result);
 }
 
-Class meta::relational::tests::mapping::subType::MyProduct extends Product
+Class meta::external::store::relational::tests::mapping::subType::MyProduct extends Product
 {
 }
 
-Class meta::relational::tests::mapping::subType::CreditRating
+Class meta::external::store::relational::tests::mapping::subType::CreditRating
 {
    description:String[1];
 }
 
-Association meta::relational::tests::mapping::subType::ProductRating
+Association meta::external::store::relational::tests::mapping::subType::ProductRating
 {
    product:MyProduct[1];
    rating:CreditRating[0..1];
 }
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::subType::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::subType::*;
+import meta::external::store::relational::tests::*;
 
-Mapping meta::relational::tests::mapping::subType::SubTypeMappingValidWhenMappedExplicitly
+Mapping meta::external::store::relational::tests::mapping::subType::SubTypeMappingValidWhenMappedExplicitly
 (
    include simpleRelationalMapping[db->MyDb]
 
@@ -100,7 +100,7 @@ Mapping meta::relational::tests::mapping::subType::SubTypeMappingValidWhenMapped
       description:[MyDb]PRODUCT_RATING.RATING
    }
    
-   MyProduct extends [meta_relational_tests_model_simple_Product] : Relational
+   MyProduct extends [meta_external_store_relational_tests_model_simple_Product] : Relational
    {
      
    }
@@ -109,22 +109,22 @@ Mapping meta::relational::tests::mapping::subType::SubTypeMappingValidWhenMapped
    {
       AssociationMapping
       (
-         product[rating,meta_relational_tests_mapping_subType_MyProduct]:[MyDb]@Product_Rating,
-         rating[meta_relational_tests_mapping_subType_MyProduct, rating]:[MyDb]@Product_Rating   
+         product[rating,meta_external_store_relational_tests_mapping_subType_MyProduct]:[MyDb]@Product_Rating,
+         rating[meta_external_store_relational_tests_mapping_subType_MyProduct, rating]:[MyDb]@Product_Rating
       )      
    }
 )
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
-import meta::relational::tests::mapping::subType::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::mapping::subType::*;
 
-Mapping meta::relational::tests::mapping::subType::MyMapping
+Mapping meta::external::store::relational::tests::mapping::subType::MyMapping
 (
    include simpleRelationalMapping[db->MyDb]
 
-   MyProduct extends [meta_relational_tests_model_simple_Product] : Relational
+   MyProduct extends [meta_external_store_relational_tests_model_simple_Product] : Relational
    {
       rating:[MyDb]@Product_Rating
    }
@@ -135,23 +135,23 @@ Mapping meta::relational::tests::mapping::subType::MyMapping
       product:[MyDb]@Product_Rating
    }
 
-   Trade[trade1] extends [meta_relational_tests_model_simple_Trade] : Relational
+   Trade[trade1] extends [meta_external_store_relational_tests_model_simple_Trade] : Relational
    {
-      product[meta_relational_tests_model_simple_Trade, meta_relational_tests_mapping_subType_MyProduct]:[MyDb]@Trade_Product
+      product[meta_external_store_relational_tests_model_simple_Trade, meta_external_store_relational_tests_mapping_subType_MyProduct]:[MyDb]@Trade_Product
    }
 )
 
 ###Mapping
-import meta::relational::tests::*;
-import meta::relational::tests::mapping::subType::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::mapping::subType::*;
 
-Mapping meta::relational::tests::mapping::subType::MyMappingWithIds
+Mapping meta::external::store::relational::tests::mapping::subType::MyMappingWithIds
 (
    include simpleRelationalMapping[db->MyDb]
 
-   MyProduct extends [meta_relational_tests_model_simple_Product] : Relational
+   MyProduct extends [meta_external_store_relational_tests_model_simple_Product] : Relational
    {
-      rating[meta_relational_tests_mapping_subType_MyProduct,meta_relational_tests_mapping_subType_CreditRating]:[MyDb]@Product_Rating
+      rating[meta_external_store_relational_tests_mapping_subType_MyProduct,meta_external_store_relational_tests_mapping_subType_CreditRating]:[MyDb]@Product_Rating
    }
 
    CreditRating : Relational
@@ -162,9 +162,9 @@ Mapping meta::relational::tests::mapping::subType::MyMappingWithIds
 
 ###Relational
 
-Database meta::relational::tests::mapping::subType::MyDb
+Database meta::external::store::relational::tests::mapping::subType::MyDb
 (
-   include meta::relational::tests::db
+   include meta::external::store::relational::tests::db
    
    Table PRODUCT_RATING(PRODUCT_ID INTEGER PRIMARY KEY, RATING VARCHAR(24))
    

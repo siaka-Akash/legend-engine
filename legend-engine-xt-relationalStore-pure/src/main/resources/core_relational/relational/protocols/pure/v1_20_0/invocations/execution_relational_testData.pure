@@ -94,7 +94,7 @@ function meta::protocols::pure::v1_20_0::invocation::execution::testDataGenerati
       runtime = transformRuntime($pureRuntime, $extensions),
       context = $transformedContext,
       model = if($execMode == ExecutionMode.SEMI_INTERACTIVE,
-                  |let stores =  $pureRuntime.connections.element->cast(@meta::pure::store::Store)
+                  |let stores =  $pureRuntime.connections.element->cast(@meta::pure::store::metamodel::Store)
                                     ->map(s|$s->findAllStoreIncludes())
                                     ->removeDuplicates()
                                     ->map(c|^meta::protocols::pure::v1_20_0::metamodel::PackageableElementPointer(type=meta::protocols::pure::v1_20_0::metamodel::PackageableElementType.STORE,path=$c->elementToPath()));
@@ -129,27 +129,27 @@ function meta::protocols::pure::v1_20_0::invocation::execution::testDataGenerati
    $resp.entity;
 }
 
-function meta::protocols::pure::v1_20_0::invocation::execution::testDataGeneration::alloyGenerateTestDataWithSeedInteractive(f:FunctionDefinition<Any>[1], m:Mapping[1], pureRuntime:Runtime[1], context:ExecutionContext[0..1], tableRowIdentifiers: meta::relational::testDataGeneration::TableRowIdentifiers[*], hashStrings: Boolean[0..1], host:String[1], port:Integer[1], version:String[1], extensions:meta::pure::router::extension::RouterExtension[*]):String[1]
+function meta::protocols::pure::v1_20_0::invocation::execution::testDataGeneration::alloyGenerateTestDataWithSeedInteractive(f:FunctionDefinition<Any>[1], m:Mapping[1], pureRuntime:Runtime[1], context:ExecutionContext[0..1], tableRowIdentifiers: meta::external::store::relational::testDataGeneration::TableRowIdentifiers[*], hashStrings: Boolean[0..1], host:String[1], port:Integer[1], version:String[1], extensions:meta::pure::router::extension::RouterExtension[*]):String[1]
 {
    alloyGenerateTestDataWithSeed($f, $m, $pureRuntime, $context, $tableRowIdentifiers, $hashStrings, '-1', $host, $port, $version, ExecutionMode.INTERACTIVE->toString(), $extensions)
 }
 
-function meta::protocols::pure::v1_20_0::invocation::execution::testDataGeneration::alloyGenerateTestDataWithSeedSemiInteractive(f:FunctionDefinition<Any>[1], m:Mapping[1], pureRuntime:Runtime[1], context:ExecutionContext[0..1], tableRowIdentifiers: meta::relational::testDataGeneration::TableRowIdentifiers[*],  hashStrings: Boolean[0..1], host:String[1], port:Integer[1], version:String[1], extensions:meta::pure::router::extension::RouterExtension[*]):String[1]
+function meta::protocols::pure::v1_20_0::invocation::execution::testDataGeneration::alloyGenerateTestDataWithSeedSemiInteractive(f:FunctionDefinition<Any>[1], m:Mapping[1], pureRuntime:Runtime[1], context:ExecutionContext[0..1], tableRowIdentifiers: meta::external::store::relational::testDataGeneration::TableRowIdentifiers[*],  hashStrings: Boolean[0..1], host:String[1], port:Integer[1], version:String[1], extensions:meta::pure::router::extension::RouterExtension[*]):String[1]
 {
    alloyGenerateTestDataWithSeed($f, $m, $pureRuntime, $context, $tableRowIdentifiers, $hashStrings, '-1', $host, $port, $version, ExecutionMode.SEMI_INTERACTIVE->toString(), $extensions)
 }
 
-function meta::protocols::pure::v1_20_0::invocation::execution::testDataGeneration::alloyGenerateTestDataWithSeedInteractive(f:FunctionDefinition<Any>[1], m:Mapping[1], pureRuntime:Runtime[1], context:ExecutionContext[0..1], tableRowIdentifiers: meta::relational::testDataGeneration::TableRowIdentifiers[*], hashStrings: Boolean[0..1], baseVersion:String[1], host:String[1], port:Integer[1], version:String[1], extensions:meta::pure::router::extension::RouterExtension[*]):String[1]
+function meta::protocols::pure::v1_20_0::invocation::execution::testDataGeneration::alloyGenerateTestDataWithSeedInteractive(f:FunctionDefinition<Any>[1], m:Mapping[1], pureRuntime:Runtime[1], context:ExecutionContext[0..1], tableRowIdentifiers: meta::external::store::relational::testDataGeneration::TableRowIdentifiers[*], hashStrings: Boolean[0..1], baseVersion:String[1], host:String[1], port:Integer[1], version:String[1], extensions:meta::pure::router::extension::RouterExtension[*]):String[1]
 {
    alloyGenerateTestDataWithSeed($f, $m, $pureRuntime, $context, $tableRowIdentifiers, $hashStrings, $baseVersion, $host, $port, $version, ExecutionMode.INTERACTIVE->toString(), $extensions)
 }
 
-function meta::protocols::pure::v1_20_0::invocation::execution::testDataGeneration::alloyGenerateTestDataWithSeedSemiInteractive(f:FunctionDefinition<Any>[1], m:Mapping[1], pureRuntime:Runtime[1], context:ExecutionContext[0..1], tableRowIdentifiers: meta::relational::testDataGeneration::TableRowIdentifiers[*],  hashStrings: Boolean[0..1], baseVersion:String[1], host:String[1], port:Integer[1], version:String[1], extensions:meta::pure::router::extension::RouterExtension[*]):String[1]
+function meta::protocols::pure::v1_20_0::invocation::execution::testDataGeneration::alloyGenerateTestDataWithSeedSemiInteractive(f:FunctionDefinition<Any>[1], m:Mapping[1], pureRuntime:Runtime[1], context:ExecutionContext[0..1], tableRowIdentifiers: meta::external::store::relational::testDataGeneration::TableRowIdentifiers[*],  hashStrings: Boolean[0..1], baseVersion:String[1], host:String[1], port:Integer[1], version:String[1], extensions:meta::pure::router::extension::RouterExtension[*]):String[1]
 {
    alloyGenerateTestDataWithSeed($f, $m, $pureRuntime, $context, $tableRowIdentifiers, $hashStrings, $baseVersion, $host, $port, $version, ExecutionMode.SEMI_INTERACTIVE->toString(), $extensions)
 }
 
-function meta::protocols::pure::v1_20_0::invocation::execution::testDataGeneration::alloyGenerateTestDataWithSeed(f:FunctionDefinition<Any>[1], m:Mapping[1], pureRuntime:Runtime[1], context:ExecutionContext[0..1], tableRowIdentifiers: meta::relational::testDataGeneration::TableRowIdentifiers[*], hashStrings: Boolean[0..1], baseVersion:String[1], host:String[1], port:Integer[1], version:String[1], executionMode:String[1], extensions:meta::pure::router::extension::RouterExtension[*]):String[1]
+function meta::protocols::pure::v1_20_0::invocation::execution::testDataGeneration::alloyGenerateTestDataWithSeed(f:FunctionDefinition<Any>[1], m:Mapping[1], pureRuntime:Runtime[1], context:ExecutionContext[0..1], tableRowIdentifiers: meta::external::store::relational::testDataGeneration::TableRowIdentifiers[*], hashStrings: Boolean[0..1], baseVersion:String[1], host:String[1], port:Integer[1], version:String[1], executionMode:String[1], extensions:meta::pure::router::extension::RouterExtension[*]):String[1]
 {
    let transformedContext = if($context->isNotEmpty(), | $context->toOne()->transformContext($extensions),| []);
    let execMode = ExecutionMode->extractEnumValue($executionMode);
@@ -164,7 +164,7 @@ function meta::protocols::pure::v1_20_0::invocation::execution::testDataGenerati
       runtime = transformRuntime($pureRuntime, $extensions),
       context = $transformedContext,
       model = if($execMode == ExecutionMode.SEMI_INTERACTIVE,
-                  |let stores =  $pureRuntime.connections.element->cast(@meta::pure::store::Store)
+                  |let stores =  $pureRuntime.connections.element->cast(@meta::pure::store::metamodel::Store)
                                     ->map(s|$s->findAllStoreIncludes())
                                     ->removeDuplicates()
                                     ->map(c|^meta::protocols::pure::v1_20_0::metamodel::PackageableElementPointer(type=meta::protocols::pure::v1_20_0::metamodel::PackageableElementType.STORE,path=$c->elementToPath()));
@@ -237,7 +237,7 @@ function meta::protocols::pure::v1_20_0::invocation::execution::testDataGenerati
       model = if($execMode == ExecutionMode.SEMI_INTERACTIVE,
                   |let stores =  $pureRuntime.connections.element->map(element |
                      $element->match([
-                        store:meta::pure::store::Store[1] | $store->map(s|$s->findAllStoreIncludes())
+                        store:meta::pure::store::metamodel::Store[1] | $store->map(s|$s->findAllStoreIncludes())
                                     ->removeDuplicates()
                                     ->map(c|^meta::protocols::pure::v1_20_0::metamodel::PackageableElementPointer(type=meta::protocols::pure::v1_20_0::metamodel::PackageableElementType.STORE,path=$c->elementToPath()));,
                         a:Any[*] | []
@@ -275,7 +275,7 @@ function meta::protocols::pure::v1_20_0::invocation::execution::testDataGenerati
    $resp.entity;
 }
 
-function meta::protocols::pure::v1_20_0::transformation::fromPureGraph::testDataGeneration::transformTableRowIdentifiers(t: meta::relational::testDataGeneration::TableRowIdentifiers[1]):meta::protocols::pure::v1_20_0::metamodel::testDataGeneration::TableRowIdentfiiers[1]
+function meta::protocols::pure::v1_20_0::transformation::fromPureGraph::testDataGeneration::transformTableRowIdentifiers(t: meta::external::store::relational::testDataGeneration::TableRowIdentifiers[1]):meta::protocols::pure::v1_20_0::metamodel::testDataGeneration::TableRowIdentfiiers[1]
 {
    ^meta::protocols::pure::v1_20_0::metamodel::testDataGeneration::TableRowIdentfiiers
    (

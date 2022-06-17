@@ -1,18 +1,18 @@
-import meta::relational::functions::sqlQueryToString::databricks::*;
-import meta::relational::functions::sqlQueryToString::default::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::functions::sqlQueryToString::databricks::*;
+import meta::external::store::relational::functions::sqlQueryToString::default::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::router::extension::*;
 
-function <<db.ExtensionLoader>> meta::relational::functions::sqlQueryToString::databricks::dbExtensionLoaderForDatabricks():DbExtensionLoader[1]
+function <<db.ExtensionLoader>> meta::external::store::relational::functions::sqlQueryToString::databricks::dbExtensionLoaderForDatabricks():DbExtensionLoader[1]
 {
   ^DbExtensionLoader(dbType = DatabaseType.Databricks, loader = createDbExtensionForDatabricks__DbExtension_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::databricks::createDbExtensionForDatabricks():DbExtension[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::databricks::createDbExtensionForDatabricks():DbExtension[1]
 {
    let reservedWords = defaultReservedWords();
    let literalProcessors = getDefaultLiteralProcessors()->putAll(getLiteralProcessorsForDatabricks());
@@ -33,7 +33,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::datab
    );
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::databricks::getLiteralProcessorsForDatabricks():Map<Type,LiteralProcessor>[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::databricks::getLiteralProcessorsForDatabricks():Map<Type,LiteralProcessor>[1]
 {
    newMap([
       pair(StrictDate,     ^LiteralProcessor(format = 'to_date(\'%s\')',    transform = {d:StrictDate[1], dbTimeZone:String[0..1] | $d->convertDateToSqlString($dbTimeZone)})),
@@ -42,7 +42,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::datab
    ])
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::databricks::getDynaFunctionToSqlForDatabricks(): DynaFunctionToSql[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::databricks::getDynaFunctionToSqlForDatabricks(): DynaFunctionToSql[*]
 {
   let allStates = allGenerationStates();
 
@@ -101,12 +101,12 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::datab
   ];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::databricks::processSelectSQLQueryForDatabricks(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::databricks::processSelectSQLQueryForDatabricks(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
 {
    $s->processSelectSQLQueryForDatabricks($sgc.dbConfig, $sgc.format, $sgc.config, $isSubSelect, $sgc.extensions);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::databricks::processSelectSQLQueryForDatabricks(s:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::databricks::processSelectSQLQueryForDatabricks(s:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
 {
   let opStr = if($s.filteringOperation->isEmpty(), |'', |$s.filteringOperation->map(s|$s->processOperation($dbConfig, $format->indent(), ^$config(callingFromFilter = true), $extensions))->filter(s|$s != '')->joinStrings(' <||> '));
   let havingStr = if($s.havingOperation->isEmpty(), |'', |$s.havingOperation->map(s|$s->processOperation($dbConfig, $format->indent(), $config, $extensions))->filter(s|$s != '')->joinStrings(' <||> '));
@@ -121,7 +121,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::datab
   + processLimit($s, $format, processTakeDefault_SelectSQLQuery_1__Format_1__String_1_, processSliceOrDropDefault_SelectSQLQuery_1__Format_1__Any_1__String_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::databricks::convertToDateDatabricks(params:String[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::databricks::convertToDateDatabricks(params:String[*]):String[1]
 {
    assert( 2 - $params->size()  >= 0,'Incorrect number of parameters for convertDate: convertDate(column,[dateformat])');
    assert($params->size()==1 || dateFormatsDatabricks()->contains($params->at(1)->replace('\'', '')) , | $params->at(1) +' not supported ');
@@ -129,14 +129,14 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::datab
    'to_date('+$params->at(0)+','+$dateFormat +')';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::databricks::convertToDateTimeDatabricks(params:String[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::databricks::convertToDateTimeDatabricks(params:String[*]):String[1]
 {
    $params->convertDateTimeFunctionHasCorrectParams();
    let dateTimeFormat = if( $params->size() == 1,|'\'yyyy-MM-dd hh:mm:ss[.nnnnnnnnn]\'',| $params->at(1););
    'to_timestamp('+$params->at(0)+','+$dateTimeFormat +')';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::databricks::dateDiffDatabricks(p:String[2..3]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::databricks::dateDiffDatabricks(p:String[2..3]):String[1]
 {
     let interval = if($p->size() == 2, |'DAY', |$p->at(2)->mapToDBUnitType());
     let cmd = if ($interval == 'YEAR',
@@ -153,14 +153,14 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::datab
     [$cmd];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::databricks::formatMostRecentDatabricks(p:String[1..2], defaultDay:String[1]):String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::databricks::formatMostRecentDatabricks(p:String[1..2], defaultDay:String[1]):String[*]
 {
    let day = $p->last()->toOne()->mapToDBDayOfWeekNumber()->toString();
    let current = if ($p->size() == 2, | $p->first()->toOne(), | $defaultDay);
    [$current, $current, $day, $current, $day];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::databricks::dateFormatsDatabricks():String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::databricks::dateFormatsDatabricks():String[*]
 {
    ['yyyy-MM-dd', 'MMMyyyy', 'yyyyMMdd'];
 }

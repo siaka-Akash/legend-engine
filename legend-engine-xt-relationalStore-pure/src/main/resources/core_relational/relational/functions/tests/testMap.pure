@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::mapping::filter::model::domain::*;
-import meta::relational::mapping::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::tests::mapping::filter::model::domain::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
 import meta::pure::profiles::*;
 
-function <<test.BeforePackage>> meta::relational::tests::map::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::map::setUp():Boolean[1]
 {
     createTablesAndFillDb();
 }
 
-function <<test.Test>> meta::relational::tests::map::testSimpleAutoMap():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testSimpleAutoMap():Boolean[1]
 {
    let result = execute(|Person.all().firstName, simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 7);
@@ -31,7 +31,7 @@ function <<test.Test>> meta::relational::tests::map::testSimpleAutoMap():Boolean
    assertEquals('select "root".FIRSTNAME from personTable as "root"', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testSimpleExplicitMap():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testSimpleExplicitMap():Boolean[1]
 {
    let result = execute(|Person.all()->map(p|$p.firstName), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 7);
@@ -39,7 +39,7 @@ function <<test.Test>> meta::relational::tests::map::testSimpleExplicitMap():Boo
    assertEquals('select "root".FIRSTNAME from personTable as "root"', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testFilterOnSimpleTypeProperty():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testFilterOnSimpleTypeProperty():Boolean[1]
 {
    let result = execute(|Firm.all().employees.lastName->filter(p|$p->in(['Roberts', 'Hill'])), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 3);
@@ -47,7 +47,7 @@ function <<test.Test>> meta::relational::tests::map::testFilterOnSimpleTypePrope
    assertEquals('select "persontable_0".LASTNAME from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID) where "persontable_0".LASTNAME in (\'Roberts\', \'Hill\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testFilterThenMapAndReturnObject():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testFilterThenMapAndReturnObject():Boolean[1]
 {
    let result = execute(|Firm.all()->filter(f|$f.legalName == 'Firm X').employees, simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 4);
@@ -55,7 +55,7 @@ function <<test.Test>> meta::relational::tests::map::testFilterThenMapAndReturnO
    assertEquals('select "persontable_0".ID as "pk_0", "persontable_0".FIRSTNAME as "firstName", "persontable_0".AGE as "age", "persontable_0".LASTNAME as "lastName" from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID) where "root".LEGALNAME = \'Firm X\'', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testFilterOnSimpleTypePropertyDeep():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testFilterOnSimpleTypePropertyDeep():Boolean[1]
 {
    let result = execute(|Firm.all().employees.address.name->filter(p|$p->in(['Hoboken', 'New York'])), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 5);
@@ -63,7 +63,7 @@ function <<test.Test>> meta::relational::tests::map::testFilterOnSimpleTypePrope
    assertEquals('select "addresstable_0".NAME from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID) left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "persontable_0".ADDRESSID) where "addresstable_0".NAME in (\'Hoboken\', \'New York\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testFilterOnSimpleTypePropertyEq():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testFilterOnSimpleTypePropertyEq():Boolean[1]
 {
    let result = execute(|Firm.all().employees.lastName->filter(p|$p == 'Roberts'), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 1);
@@ -72,7 +72,7 @@ function <<test.Test>> meta::relational::tests::map::testFilterOnSimpleTypePrope
 }
 
 
-function <<test.Test>> meta::relational::tests::map::testAssociationToManyAutoMap():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testAssociationToManyAutoMap():Boolean[1]
 {
    let result = execute(|Firm.all().employees.lastName, simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 7);
@@ -81,7 +81,7 @@ function <<test.Test>> meta::relational::tests::map::testAssociationToManyAutoMa
 }
 
 
-function <<test.Test>> meta::relational::tests::map::testAssociationToOneAutoMap():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testAssociationToOneAutoMap():Boolean[1]
 {
    let result = execute(|Person.all().address.name, simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 7);
@@ -89,7 +89,7 @@ function <<test.Test>> meta::relational::tests::map::testAssociationToOneAutoMap
    assertEquals('select "addresstable_0".NAME from personTable as "root" left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "root".ADDRESSID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testAssociationDeep():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testAssociationDeep():Boolean[1]
 {
    let result = execute(|Firm.all().employees.address.name, simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 7);
@@ -98,7 +98,7 @@ function <<test.Test>> meta::relational::tests::map::testAssociationDeep():Boole
 }
 
 
-function <<test.Test>> meta::relational::tests::map::testOperation():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testOperation():Boolean[1]
 {
    let result = execute(|Person.all()->map(p|$p.firstName+' '+$p.lastName), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 7);
@@ -107,7 +107,7 @@ function <<test.Test>> meta::relational::tests::map::testOperation():Boolean[1]
 }
 
 
-function <<test.Test>> meta::relational::tests::map::testBoolean():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testBoolean():Boolean[1]
 {
    let result = execute(|Person.all()->map(p|$p.lastName == 'Smith'), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 7);
@@ -115,7 +115,7 @@ function <<test.Test>> meta::relational::tests::map::testBoolean():Boolean[1]
    assertEquals('select "root".LASTNAME = \'Smith\' from personTable as "root"', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testIntegerMultiply():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testIntegerMultiply():Boolean[1]
 {
    let result = execute(|Person.all()->map(p|$p.age->toOne() * 2), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 7);
@@ -123,7 +123,7 @@ function <<test.Test>> meta::relational::tests::map::testIntegerMultiply():Boole
    assertEquals('select ("root".AGE * 2) from personTable as "root"', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testSimpleDerivedProperty():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testSimpleDerivedProperty():Boolean[1]
 {
    let result = execute(|Person.all()->map(p|$p.name + '_ok'), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 7);
@@ -131,7 +131,7 @@ function <<test.Test>> meta::relational::tests::map::testSimpleDerivedProperty()
    assertEquals('select concat(concat("root".FIRSTNAME, \' \', "root".LASTNAME), \'_ok\') from personTable as "root"', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testAdvancedDerivedProperty():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testAdvancedDerivedProperty():Boolean[1]
 {
    let result = execute(|Person.all()->map(p|$p.fullName(true) + '_ok'), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 7);
@@ -139,7 +139,7 @@ function <<test.Test>> meta::relational::tests::map::testAdvancedDerivedProperty
    assertEquals('select concat(case when \'true\' then concat("root".LASTNAME, \', \', "root".FIRSTNAME) else concat("root".FIRSTNAME, \' \', "root".LASTNAME) end, \'_ok\') from personTable as "root"', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testAdvancedDerivedPropertyThroughAssociation():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testAdvancedDerivedPropertyThroughAssociation():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.employees->map(e|$e.fullName(true) + '_ok')), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 7);
@@ -147,7 +147,7 @@ function <<test.Test>> meta::relational::tests::map::testAdvancedDerivedProperty
    assertEquals('select concat(case when \'true\' then concat("persontable_0".LASTNAME, \', \', "persontable_0".FIRSTNAME) else concat("persontable_0".FIRSTNAME, \' \', "persontable_0".LASTNAME) end, \'_ok\') from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testFilter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testFilter():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.employees->filter(e|$e.firstName == 'John')), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 2);
@@ -155,7 +155,7 @@ function <<test.Test>> meta::relational::tests::map::testFilter():Boolean[1]
    assertEquals('select "persontable_0".ID as "pk_0", "persontable_0".FIRSTNAME as "firstName", "persontable_0".AGE as "age", "persontable_0".LASTNAME as "lastName" from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID) where "persontable_0".FIRSTNAME = \'John\'', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testFilterWithProperty():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testFilterWithProperty():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.employees->filter(e|$e.firstName == 'John').lastName), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 2);
@@ -163,7 +163,7 @@ function <<test.Test>> meta::relational::tests::map::testFilterWithProperty():Bo
    assertEquals('select "persontable_0".LASTNAME from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID) where "persontable_0".FIRSTNAME = \'John\'', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testFilterPostMapWithObject():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testFilterPostMapWithObject():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.employees->filter(e|$e.firstName == 'John')), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 2);
@@ -171,7 +171,7 @@ function <<test.Test>> meta::relational::tests::map::testFilterPostMapWithObject
    assertEquals('select "persontable_0".ID as "pk_0", "persontable_0".FIRSTNAME as "firstName", "persontable_0".AGE as "age", "persontable_0".LASTNAME as "lastName" from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID) where "persontable_0".FIRSTNAME = \'John\'', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testBooleanFilterWithProperty():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testBooleanFilterWithProperty():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.employees->filter(e|$e.firstName == 'John' && $e.lastName == 'Johnson').lastName), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 1);
@@ -179,7 +179,7 @@ function <<test.Test>> meta::relational::tests::map::testBooleanFilterWithProper
    assertEquals('select "persontable_0".LASTNAME from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID) where ("persontable_0".FIRSTNAME = \'John\' and "persontable_0".LASTNAME = \'Johnson\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testAutoMapBooleanFilterWithProperty():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testAutoMapBooleanFilterWithProperty():Boolean[1]
 {
    let result = execute(|Firm.all().employees->filter(e|$e.firstName == 'John' && $e.lastName == 'Johnson').lastName, simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 1);
@@ -187,7 +187,7 @@ function <<test.Test>> meta::relational::tests::map::testAutoMapBooleanFilterWit
    assertEquals('select "persontable_0".LASTNAME from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID) where ("persontable_0".FIRSTNAME = \'John\' and "persontable_0".LASTNAME = \'Johnson\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testDeepBooleanFilterWithProperty():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testDeepBooleanFilterWithProperty():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.employees->filter(e|$e.address.name == 'New York' && $e.lastName == 'Johnson').lastName), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 1);
@@ -195,7 +195,7 @@ function <<test.Test>> meta::relational::tests::map::testDeepBooleanFilterWithPr
    assertEquals('select "persontable_0".LASTNAME from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID) left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "persontable_0".ADDRESSID) where ("addresstable_0".NAME = \'New York\' and "persontable_0".LASTNAME = \'Johnson\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testDeepBooleanFilterWithPropertyUsingOr():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testDeepBooleanFilterWithPropertyUsingOr():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.employees->filter(e|$e.address.name == 'New York' || $e.lastName == 'Smith').lastName), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 5);
@@ -204,7 +204,7 @@ function <<test.Test>> meta::relational::tests::map::testDeepBooleanFilterWithPr
 }
 
 
-function <<test.Test>> meta::relational::tests::map::testGlobalAggregation():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testGlobalAggregation():Boolean[1]
 {
    let result = execute(|Firm.all().employees->count(), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 1);
@@ -212,7 +212,7 @@ function <<test.Test>> meta::relational::tests::map::testGlobalAggregation():Boo
    assertEquals('select count(*) from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testSubAggregation():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testSubAggregation():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.employees.age->average()), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 4);
@@ -220,7 +220,7 @@ function <<test.Test>> meta::relational::tests::map::testSubAggregation():Boolea
    assertEquals('select "firmtable_1".aggCol from firmTable as "root" left outer join (select "firmtable_1".ID as ID, avg(1.0 * "persontable_0".AGE) as aggCol from firmTable as "firmtable_1" left outer join personTable as "persontable_0" on ("firmtable_1".ID = "persontable_0".FIRMID) group by "firmtable_1".ID) as "firmtable_1" on ("root".ID = "firmtable_1".ID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testSubAggregationMultiLevel():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testSubAggregationMultiLevel():Boolean[1]
 {
    let result = execute(|Firm.all().employees->map(e|$e.age->average()), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 7);
@@ -238,7 +238,7 @@ function <<test.Test>> meta::relational::tests::map::testSubAggregationMultiLeve
    assertEquals('select "firmtable_1".aggCol from firmTable as "root" left outer join (select "firmtable_1".ID as ID, avg(1.0 * "persontable_0".AGE) as aggCol from firmTable as "firmtable_1" left outer join personTable as "persontable_0" on ("firmtable_1".ID = "persontable_0".FIRMID) group by "firmtable_1".ID) as "firmtable_1" on ("root".ID = "firmtable_1".ID)', $result3->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testSubAggregationMultiLevelJoinString():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testSubAggregationMultiLevelJoinString():Boolean[1]
 {
    let result = execute(|Firm.all().employees->map(e|$e.lastName->joinStrings()), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 7);
@@ -258,7 +258,7 @@ function <<test.Test>> meta::relational::tests::map::testSubAggregationMultiLeve
 }
 
 
-function <<test.Test>> meta::relational::tests::map::testSubAggregationAverageWithOperation():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testSubAggregationAverageWithOperation():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.employees.age->average()*2), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 4);
@@ -266,7 +266,7 @@ function <<test.Test>> meta::relational::tests::map::testSubAggregationAverageWi
    assertEquals('select ("firmtable_1".aggCol * 2) from firmTable as "root" left outer join (select "firmtable_1".ID as ID, avg(1.0 * "persontable_0".AGE) as aggCol from firmTable as "firmtable_1" left outer join personTable as "persontable_0" on ("firmtable_1".ID = "persontable_0".FIRMID) group by "firmtable_1".ID) as "firmtable_1" on ("root".ID = "firmtable_1".ID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testSubAggregationSumWithOperation():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testSubAggregationSumWithOperation():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.employees.age->sum()*10), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 4);
@@ -274,7 +274,7 @@ function <<test.Test>> meta::relational::tests::map::testSubAggregationSumWithOp
    assertEquals('select ("firmtable_1".aggCol * 10) from firmTable as "root" left outer join (select "firmtable_1".ID as ID, sum("persontable_0".AGE) as aggCol from firmTable as "firmtable_1" left outer join personTable as "persontable_0" on ("firmtable_1".ID = "persontable_0".FIRMID) group by "firmtable_1".ID) as "firmtable_1" on ("root".ID = "firmtable_1".ID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testSubAggregationUsingIf():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testSubAggregationUsingIf():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.employees->map(e|if($e.lastName == 'Hill',|$e.age->toOne()/2,|1.0))->average()), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 4);
@@ -282,7 +282,7 @@ function <<test.Test>> meta::relational::tests::map::testSubAggregationUsingIf()
    assertEquals('select "firmtable_1".aggCol from firmTable as "root" left outer join (select "firmtable_1".ID as ID, avg(1.0 * case when "persontable_0".LASTNAME = \'Hill\' then ((1.0 * "persontable_0".AGE) / 2) else 1.0 end) as aggCol from firmTable as "firmtable_1" left outer join personTable as "persontable_0" on ("firmtable_1".ID = "persontable_0".FIRMID) group by "firmtable_1".ID) as "firmtable_1" on ("root".ID = "firmtable_1".ID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testSubAggregationAverageInQualifier():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testSubAggregationAverageInQualifier():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.averageEmployeesAge()), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 4);
@@ -290,7 +290,7 @@ function <<test.Test>> meta::relational::tests::map::testSubAggregationAverageIn
    assertEquals('select ("firmtable_1".aggCol * 2.0) from firmTable as "root" left outer join (select "firmtable_1".ID as ID, avg(1.0 * "persontable_0".AGE) as aggCol from firmTable as "firmtable_1" left outer join personTable as "persontable_0" on ("firmtable_1".ID = "persontable_0".FIRMID) group by "firmtable_1".ID) as "firmtable_1" on ("root".ID = "firmtable_1".ID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testSubAggregationMaxInQualifier():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testSubAggregationMaxInQualifier():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.maxEmployeesAge()), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 4);
@@ -298,7 +298,7 @@ function <<test.Test>> meta::relational::tests::map::testSubAggregationMaxInQual
    assertEquals('select "firmtable_1".aggCol from firmTable as "root" left outer join (select "firmtable_1".ID as ID, max("persontable_0".AGE) as aggCol from firmTable as "firmtable_1" left outer join personTable as "persontable_0" on ("firmtable_1".ID = "persontable_0".FIRMID) group by "firmtable_1".ID) as "firmtable_1" on ("root".ID = "firmtable_1".ID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testSubAggregationSumInQualifier():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testSubAggregationSumInQualifier():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.sumEmployeesAge()), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 4);
@@ -306,9 +306,9 @@ function <<test.Test>> meta::relational::tests::map::testSubAggregationSumInQual
    assertEquals('select "firmtable_1".aggCol from firmTable as "root" left outer join (select "firmtable_1".ID as ID, sum("persontable_0".AGE) as aggCol from firmTable as "firmtable_1" left outer join personTable as "persontable_0" on ("firmtable_1".ID = "persontable_0".FIRMID) group by "firmtable_1".ID) as "firmtable_1" on ("root".ID = "firmtable_1".ID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::map::testSequenceMapWithConfusingSetImplementation():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::map::testSequenceMapWithConfusingSetImplementation():Boolean[1]
 {
-   meta::relational::tests::mapping::filter::model::store::createTablesAndFillDb();
+   meta::external::store::relational::tests::mapping::filter::model::store::createTablesAndFillDb();
    let result = execute(|Org.all()->project([o|$o.name,
                                              o|$o.parent->map(p|$p.name),
                                              o|$o.parent->map(p|$p.parent)->map(p|$p.name)
@@ -318,8 +318,8 @@ function <<test.Test>> meta::relational::tests::map::testSequenceMapWithConfusin
                                                'p_name',
                                                'p_p_name'
                                             ]
-                                           ), meta::relational::tests::map::embeddedWithConsfusingSetImpl
-                                            , meta::relational::tests::testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
+                                           ), meta::external::store::relational::tests::map::embeddedWithConsfusingSetImpl
+                                            , meta::external::store::relational::tests::testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
     assertEquals(6, $result.values.rows->size());
     assertEquals(['ROOT','ok',^TDSNull()], $result.values.rows->at(0).values);
     assertEquals(['Firm X','ok','ROOT'], $result.values.rows->at(1).values);
@@ -332,9 +332,9 @@ function <<test.Test>> meta::relational::tests::map::testSequenceMapWithConfusin
 }
 
 ###Mapping
-import meta::relational::tests::mapping::filter::model::store::*;
-import meta::relational::tests::mapping::filter::model::domain::*;
-Mapping meta::relational::tests::map::embeddedWithConsfusingSetImpl
+import meta::external::store::relational::tests::mapping::filter::model::store::*;
+import meta::external::store::relational::tests::mapping::filter::model::domain::*;
+Mapping meta::external::store::relational::tests::map::embeddedWithConsfusingSetImpl
 (
     Org: Relational
     {

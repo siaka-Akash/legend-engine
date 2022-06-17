@@ -13,9 +13,9 @@
 // limitations under the License.
 
 import meta::pure::router::extension::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::mapping::*;
-import meta::relational::metamodel::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::metamodel::*;
 import meta::pure::runtime::*;
 import meta::pure::mapping::*;
 

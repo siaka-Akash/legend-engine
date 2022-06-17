@@ -8,7 +8,7 @@
     {
       "_type": "mapping",
       "name": "simpleRelationalMapping",
-      "package": "meta::relational::tests",
+      "package": "meta::external::store::relational::tests",
       "enumerationMappings": [
         {
           "id": "SynonymEnum",
@@ -6880,7 +6880,7 @@
       {
         "_type": "class",
         "name": "Person",
-        "package": "meta::relational::tests::mapping::union::extend",
+        "package": "meta::external::store::relational::tests::mapping::union::extend",
         "superTypes": [
           "meta::pure::tests::model::simple::Person"
         ]
@@ -6952,7 +6952,7 @@
       {
         "_type": "class",
         "name": "Firm",
-        "package": "meta::relational::tests::mapping::union::extend",
+        "package": "meta::external::store::relational::tests::mapping::union::extend",
         "superTypes": [
           "meta::pure::tests::model::simple::Firm"
         ]
@@ -7124,7 +7124,7 @@
       {
         "_type": "class",
         "name": "Address",
-        "package": "meta::relational::tests::mapping::union::extend",
+        "package": "meta::external::store::relational::tests::mapping::union::extend",
         "superTypes": [
           "meta::pure::tests::model::simple::Address"
         ]
@@ -7132,7 +7132,7 @@
       {
         "_type": "class",
         "name": "MyProduct",
-        "package": "meta::relational::tests::mapping::subType",
+        "package": "meta::external::store::relational::tests::mapping::subType",
         "superTypes": [
           "meta::pure::tests::model::simple::Product"
         ]
@@ -7809,7 +7809,7 @@
       {
         "_type": "class",
         "name": "CreditRating",
-        "package": "meta::relational::tests::mapping::subType",
+        "package": "meta::external::store::relational::tests::mapping::subType",
         "properties": [
           {
             "name": "description",
@@ -8318,7 +8318,7 @@
       {
         "_type": "association",
         "name": "ProductRating",
-        "package": "meta::relational::tests::mapping::subType",
+        "package": "meta::external::store::relational::tests::mapping::subType",
         "properties": [
           {
             "name": "product",
@@ -8326,7 +8326,7 @@
               "lowerBound": 1,
               "upperBound": 1
             },
-            "type": "meta::relational::tests::mapping::subType::MyProduct"
+            "type": "meta::external::store::relational::tests::mapping::subType::MyProduct"
           },
           {
             "name": "rating",
@@ -8334,7 +8334,7 @@
               "lowerBound": 0,
               "upperBound": 1
             },
-            "type": "meta::relational::tests::mapping::subType::CreditRating"
+            "type": "meta::external::store::relational::tests::mapping::subType::CreditRating"
           }
         ]
       },
@@ -8520,7 +8520,7 @@
     "packages": [
       {
         "packageType": "MAPPING",
-        "packagePath": "meta::relational::tests::simpleRelationalMapping"
+        "packagePath": "meta::external::store::relational::tests::simpleRelationalMapping"
       }
     ],
     "serializer": {

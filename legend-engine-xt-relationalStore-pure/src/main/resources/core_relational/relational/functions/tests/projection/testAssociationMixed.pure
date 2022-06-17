@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::functions::asserts::*;
-import meta::relational::mapping::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
 import meta::pure::profiles::*;
 import meta::pure::metamodel::tds::*;
 
-function <<test.Test>> meta::relational::tests::projection::association::mixed::testAssociationMixed():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::association::mixed::testAssociationMixed():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p | $p.firm.employees->exists(e | $e.firstName == 'Oliver'))->project(#/Person/firm/legalName#), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals(1, $result.values.rows->size());
    assertEquals('Firm B', $result.values.rows->at(0).values);
 }
 
-function <<test.Test>> meta::relational::tests::projection::association::mixed::testAssociationMixedAdvanced():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::association::mixed::testAssociationMixedAdvanced():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|$p.firm.employees->exists(e|$e.name == 'Peter Smith' && $e.lastName == 'Smith') && $p.firm.legalName == 'Firm X')->project([#/Person/name#, #/Person/firstName#, #/Person/firm/legalName#]), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 4);

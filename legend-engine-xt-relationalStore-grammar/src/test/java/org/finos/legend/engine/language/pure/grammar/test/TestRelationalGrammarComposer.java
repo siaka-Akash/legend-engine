@@ -65,7 +65,7 @@ public class TestRelationalGrammarComposer
 
         String expected =
                 "###Mapping\n" +
-                        "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                        "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                         "(\n" +
                         "  MappingTests\n" +
                         "  [\n" +
@@ -98,7 +98,7 @@ public class TestRelationalGrammarComposer
 
         String expected =
                 "###Mapping\n" +
-                        "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                        "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                         "(\n" +
                         "  MappingTests\n" +
                         "  [\n" +
@@ -134,16 +134,16 @@ public class TestRelationalGrammarComposer
                 "###Mapping\n" +
                         "Mapping testDB::test\n" +
                         "(\n" +
-                        "  *meta::relational::tests::model::simple::Person[meta_relational_tests_model_simple_Person]: Relational\n" +
+                        "  *meta::external::store::relational::tests::model::simple::Person[meta_external_store_relational_tests_model_simple_Person]: Relational\n" +
                         "  {\n" +
                         "    ~primaryKey\n" +
                         "    (\n" +
-                        "      [meta::relational::tests::mapping::join::model::store::db]personTable.ID\n" +
+                        "      [meta::external::store::relational::tests::mapping::join::model::store::db]personTable.ID\n" +
                         "    )\n" +
-                        "    ~mainTable [meta::relational::tests::mapping::join::model::store::db]personTable\n" +
-                        "    firstName: [meta::relational::tests::mapping::join::model::store::db]personTable.FIRSTNAME,\n" +
-                        "    lastName: [meta::relational::tests::mapping::join::model::store::db]personTable.LASTNAME,\n " +
-                        "   age: [meta::relational::tests::mapping::join::model::store::db]@Person_MiddleTable > (OUTER) [meta::relational::tests::mapping::join::model::store::db]@MiddleTable_PersonExtension | [meta::relational::tests::mapping::join::model::store::db]personExtensionTable.AGE\n" +
+                        "    ~mainTable [meta::external::store::relational::tests::mapping::join::model::store::db]personTable\n" +
+                        "    firstName: [meta::external::store::relational::tests::mapping::join::model::store::db]personTable.FIRSTNAME,\n" +
+                        "    lastName: [meta::external::store::relational::tests::mapping::join::model::store::db]personTable.LASTNAME,\n " +
+                        "   age: [meta::external::store::relational::tests::mapping::join::model::store::db]@Person_MiddleTable > (OUTER) [meta::external::store::relational::tests::mapping::join::model::store::db]@MiddleTable_PersonExtension | [meta::external::store::relational::tests::mapping::join::model::store::db]personExtensionTable.AGE\n" +
                         "  }\n" +
                         ")\n";
 

@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::functions::asserts::*;
-import meta::relational::mapping::*;
-import meta::csv::*;
-import meta::relational::tests::mapping::embedded::advanced::mapping::*;
-import meta::relational::tests::mapping::embedded::advanced::model::*;
-import meta::relational::tests::mapping::embedded::advanced::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::mapping::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::model::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::*;
 
-function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inline::targetid::testProjection():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::targetid::testProjection():Boolean[1]
 {
 
 
@@ -32,7 +32,7 @@ function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inl
   true;
 }
 
-function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inline::targetid::testSubType():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::targetid::testSubType():Boolean[1]
 {
   let result = execute(|BondDetail.all()->project([p| $p.type, p| $p.issuer->subType(@Party).name], ['type', 'i'])
                         , testMappingEmbeddedTargetIds, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -44,7 +44,7 @@ function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inl
 /**
  (router_)routing (::processClass()) selects the incorrect setImpl for subType(@Party); it looks for the root impl for the Class parameter which is not always correct
 */
-function <<test.Test, test.ToFix>> meta::relational::tests::mapping::embedded::advanced::inline::targetid::testSubTypeOnPropertyMappedToNonRootInlineSetImpl():Boolean[1]
+function <<test.Test, test.ToFix>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::targetid::testSubTypeOnPropertyMappedToNonRootInlineSetImpl():Boolean[1]
 {
   let result = execute(|BondDetail.all()->project([p| $p.type, p| $p.holder->subType(@Party).name], ['type', 'h'])
                         , testMappingEmbeddedTargetIds, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -53,7 +53,7 @@ function <<test.Test, test.ToFix>> meta::relational::tests::mapping::embedded::a
   assertSameSQL('select "root".BOND_TYPE as "type", "root".ISSUER as "i" from PRODUCT_DENORM as "root"', $result);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inline::targetid::testFilter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::targetid::testFilter():Boolean[1]
 {
    
     let result1 = execute(|BondDetail.all()->filter(b | $b.issuer.name == 'issuer3' )
@@ -72,7 +72,7 @@ function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inl
 
 }
 
-function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inline::targetid::testDenormWithComplexFilter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::targetid::testDenormWithComplexFilter():Boolean[1]
 {
   //filter with two embedded properties in the filter
   let result = execute(|BondDetail.all()->filter(p | $p.holder.name->startsWith('holder3') && $p.description->startsWith('Super'))
@@ -85,7 +85,7 @@ function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inl
  }
 
 
-function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inline::targetid::testGroupBy():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::targetid::testGroupBy():Boolean[1]
 {
   let result = execute(|BondDetail.all()->groupBy( [p | $p.holder.name] ,
                                  [agg(x|if ( $x.type == '5 years' ,|5.0,|1.0),
@@ -99,7 +99,7 @@ function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inl
 
 }
 
-function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inline::targetid::testGroupByComplexAgg():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::targetid::testGroupByComplexAgg():Boolean[1]
 {
   let result = execute(|BondDetail.all()->groupBy( [p | $p.holder.name] ,
                                  [agg(x|if($x.holder.name->startsWith('holder3'),|5.0,|1.0),
@@ -113,7 +113,7 @@ function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inl
 
 }
 
-function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inline::targetid::testQualifierProperty():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::targetid::testQualifierProperty():Boolean[1]
 {
    let result = execute(|BondDetail.all()->filter(p | $p.issuer.description->startsWith('issuer1') )
                                       ->project( [p | $p.description, p | $p.issuer.description,p | $p.holder.description], ['name', 'c2','c3'])
@@ -125,7 +125,7 @@ function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inl
 }
 
 
-function <<test.ToFix>> meta::relational::tests::mapping::embedded::advanced::inline::targetid::testProjectionMappingIncludes():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::targetid::testProjectionMappingIncludes():Boolean[1]
 {
 
 
@@ -138,11 +138,11 @@ function <<test.ToFix>> meta::relational::tests::mapping::embedded::advanced::in
   true;
 }
 ###Mapping
-import meta::relational::tests::mapping::embedded::advanced::store::*;
-import meta::relational::tests::mapping::embedded::advanced::model::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::store::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::model::*;
 
 
-Mapping meta::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedTargetIds
+Mapping meta::external::store::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedTargetIds
 (
 
   PartyType: EnumerationMapping partyType
@@ -192,7 +192,7 @@ Mapping meta::relational::tests::mapping::embedded::advanced::mapping::testMappi
   }
 )
 
-Mapping meta::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedTargetIds_Common
+Mapping meta::external::store::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedTargetIds_Common
 (
 
     PartyType: EnumerationMapping partyType
@@ -230,16 +230,16 @@ Mapping meta::relational::tests::mapping::embedded::advanced::mapping::testMappi
      )
   }
 )
-Mapping meta::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedTargetIdsWithIncludesOne
+Mapping meta::external::store::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedTargetIdsWithIncludesOne
 (
-    include meta::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedTargetIds_Common
+    include meta::external::store::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedTargetIds_Common
 )
 
-Mapping meta::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedTargetIdsWithIncludes
+Mapping meta::external::store::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedTargetIdsWithIncludes
 (
 
-  include meta::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedTargetIds_Common
-  include meta::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedTargetIdsWithIncludesOne
+  include meta::external::store::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedTargetIds_Common
+  include meta::external::store::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedTargetIdsWithIncludesOne
    
   BondDetail[myBondMapping]: Relational
   {

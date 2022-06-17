@@ -12,33 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::pure::mapping::modelToModel::test::milestoning::*;
+import meta::external::store::model::test::milestoning::*;
 import meta::pure::mapping::*;
 import meta::pure::router::extension::*;
-import meta::relational::tests::milestoning::*;
-import meta::relational::tests::functions::objectReferenceIn::*;
+import meta::external::store::relational::tests::milestoning::*;
+import meta::external::store::relational::tests::functions::objectReferenceIn::*;
 import meta::pure::graphFetch::*;
-import meta::pure::mapping::modelToModel::test::milestoning::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
+import meta::external::store::model::test::milestoning::*;
+import meta::external::store::model::test::shared::dest::*;
 import meta::pure::runtime::*;
-import meta::relational::tests::functions::objectReferenceIn::*;
-import meta::pure::mapping::modelToModel::test::shared::src::*;
+import meta::external::store::relational::tests::functions::objectReferenceIn::*;
+import meta::external::store::model::test::shared::src::*;
 import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::executionPlan::toString::*;
 import meta::pure::executionPlan::*;
 import meta::pure::graphFetch::execution::*;
 import meta::alloy::objectReference::*;
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::functions::toDDL::*;
-import meta::relational::runtime::*;
-import meta::pure::mapping::modelToModel::test::shared::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::functions::toDDL::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::model::test::shared::*;
 
-function <<meta::pure::profiles::test.BeforePackage>> meta::relational::tests::functions::objectReferenceIn::setUp():Boolean[1]
+function <<meta::pure::profiles::test.BeforePackage>> meta::external::store::relational::tests::functions::objectReferenceIn::setUp():Boolean[1]
 {
-   meta::relational::tests::mapping::embedded::setUp();
-   meta::relational::tests::milestoning::initDatabase();
+   meta::external::store::relational::tests::mapping::embedded::setUp();
+   meta::external::store::relational::tests::milestoning::initDatabase();
    
    let connection = getConnection()->cast(@DatabaseConnection);
    dropAndCreateTableInDb(relationalDB, 'default', 'Person', $connection);
@@ -57,10 +57,10 @@ function <<meta::pure::profiles::test.BeforePackage>> meta::relational::tests::f
    true;
 }
 
-function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::tests::functions::objectReferenceIn::testObjectReferenceInSimple():Boolean[1]
+function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::tests::functions::objectReferenceIn::testObjectReferenceInSimple():Boolean[1]
 {
    let tree = #{
-      meta::pure::mapping::modelToModel::test::shared::src::_Firm{
+      meta::external::store::model::test::shared::src::_Firm{
          name,
          employees{
             fullName,
@@ -68,17 +68,17 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
          }
       }}#;
    
-   let firmObjectRef = generateObjectReferences('vX_X_X', 'meta::pure::mapping::modelToModel::test::shared::relationalMapping', 'meta_pure_mapping_modelToModel_test_shared_src__Firm', 'meta::relational::tests::testRuntime__Runtime_1_', pair('name', 'C')->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
-   let personObjectRef = generateObjectReferences('vX_X_X', 'meta::pure::mapping::modelToModel::test::shared::relationalMapping', 'meta_pure_mapping_modelToModel_test_shared_src__Person', 'meta::relational::tests::testRuntime__Runtime_1_', pair('fullname', 'Peter Smith')->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
-   let addressObjectRef = generateObjectReferences('vX_X_X', 'meta::pure::mapping::modelToModel::test::shared::relationalMapping', 'meta_pure_mapping_modelToModel_test_shared_dest_Address','meta::relational::tests::testRuntime__Runtime_1_', pair('id', 1)->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
+   let firmObjectRef = generateObjectReferences('vX_X_X', 'meta::external::store::model::test::shared::relationalMapping', 'meta_external_store_model_test_shared_src__Firm', 'meta::external::store::relational::tests::testRuntime__Runtime_1_', pair('name', 'C')->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
+   let personObjectRef = generateObjectReferences('vX_X_X', 'meta::external::store::model::test::shared::relationalMapping', 'meta_external_store_model_test_shared_src__Person', 'meta::external::store::relational::tests::testRuntime__Runtime_1_', pair('fullname', 'Peter Smith')->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
+   let addressObjectRef = generateObjectReferences('vX_X_X', 'meta::external::store::model::test::shared::relationalMapping', 'meta_external_store_model_test_shared_dest_Address','meta::external::store::relational::tests::testRuntime__Runtime_1_', pair('id', 1)->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
    
    let query = {|
                  _Firm.all()->filter(f | $f->objectReferenceIn($firmObjectRef) ||
                                          $f.employees->exists(p | $p->objectReferenceIn($personObjectRef) || $p.addresses->exists(a| $a->objectReferenceIn($addressObjectRef))))
                             ->graphFetch($tree)->serialize($tree)};
    
-   let mapping = meta::pure::mapping::modelToModel::test::shared::relationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::model::test::shared::relationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
    
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions());
 
@@ -88,10 +88,10 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    );
 }
 
-function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::tests::functions::objectReferenceIn::testObjectReferenceInEmbeddedMapping():Boolean[1]
+function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::tests::functions::objectReferenceIn::testObjectReferenceInEmbeddedMapping():Boolean[1]
 {
    let tree = #{
-      meta::relational::tests::model::simple::Person {
+      meta::external::store::relational::tests::model::simple::Person {
          firstName,
          firm {
             legalName
@@ -99,16 +99,16 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
       }
    }#;
 
-   let firmObjectRef = generateObjectReferences('vX_X_X', 'meta::relational::tests::mapping::embedded::model::mapping::testMappingEmbedded', 'meta_relational_tests_model_simple_Person', 'meta::relational::tests::testRuntime__Runtime_1_', [pair('PERSON_ID', 5), pair('FIRM_ID', 2)]->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
-   let personObjectRef = generateObjectReferences('vX_X_X', 'meta::relational::tests::mapping::embedded::model::mapping::testMappingEmbedded', 'meta_relational_tests_model_simple_Person', 'meta::relational::tests::testRuntime__Runtime_1_', [pair('PERSON_ID', 1), pair('FIRM_ID', 1)]->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
+   let firmObjectRef = generateObjectReferences('vX_X_X', 'meta::external::store::relational::tests::mapping::embedded::model::mapping::testMappingEmbedded', 'meta_external_store_relational_tests_model_simple_Person', 'meta::external::store::relational::tests::testRuntime__Runtime_1_', [pair('PERSON_ID', 5), pair('FIRM_ID', 2)]->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
+   let personObjectRef = generateObjectReferences('vX_X_X', 'meta::external::store::relational::tests::mapping::embedded::model::mapping::testMappingEmbedded', 'meta_external_store_relational_tests_model_simple_Person', 'meta::external::store::relational::tests::testRuntime__Runtime_1_', [pair('PERSON_ID', 1), pair('FIRM_ID', 1)]->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
    
-   let query = {|meta::relational::tests::model::simple::Person.all()
+   let query = {|meta::external::store::relational::tests::model::simple::Person.all()
                             ->filter(p | $p->objectReferenceIn($personObjectRef) ||
                                          $p.firm->toOne()->objectReferenceIn($firmObjectRef))
                             ->graphFetch($tree)->serialize($tree)};
    
-   let mapping = meta::relational::tests::mapping::embedded::model::mapping::testMappingEmbedded;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::mapping::embedded::model::mapping::testMappingEmbedded;
+   let runtime = meta::external::store::relational::tests::testRuntime();
    
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions());
    
@@ -118,10 +118,10 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    );
 }
 
-function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::tests::functions::objectReferenceIn::testObjectReferneceInWithMilestonedRootClass(): Boolean[1]
+function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::tests::functions::objectReferenceIn::testObjectReferneceInWithMilestonedRootClass(): Boolean[1]
 {
    let sourceGraph = #{
-      meta::relational::tests::milestoning::Product {
+      meta::external::store::relational::tests::milestoning::Product {
          id,
          name,
          type,
@@ -129,13 +129,13 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
       }
    }#;
 
-   let productObjectRef = [generateObjectReferences('vX_X_X', 'meta::relational::tests::milestoning::milestoningmap', 'meta_relational_tests_milestoning_Product', 'meta::relational::tests::testRuntime__Runtime_1_', [pair('name', 'ProductName2'), pair('id', 2)]->newMap(), meta::pure::router::extension::defaultRelationalExtensions()),
-                           generateObjectReferences('vX_X_X', 'meta::relational::tests::milestoning::milestoningmap', 'meta_relational_tests_milestoning_Product', 'meta::relational::tests::testRuntime__Runtime_1_', [pair('name', 'ProductName3'), pair('id', 3)]->newMap(), meta::pure::router::extension::defaultRelationalExtensions())];
+   let productObjectRef = [generateObjectReferences('vX_X_X', 'meta::external::store::relational::tests::milestoning::milestoningmap', 'meta_external_store_relational_tests_milestoning_Product', 'meta::external::store::relational::tests::testRuntime__Runtime_1_', [pair('name', 'ProductName2'), pair('id', 2)]->newMap(), meta::pure::router::extension::defaultRelationalExtensions()),
+                           generateObjectReferences('vX_X_X', 'meta::external::store::relational::tests::milestoning::milestoningmap', 'meta_external_store_relational_tests_milestoning_Product', 'meta::external::store::relational::tests::testRuntime__Runtime_1_', [pair('name', 'ProductName3'), pair('id', 3)]->newMap(), meta::pure::router::extension::defaultRelationalExtensions())];
    
-   let query = {| meta::relational::tests::milestoning::Product.all(%2015-10-16)->filter(p | $p->objectReferenceIn($productObjectRef))->graphFetch($sourceGraph)->serialize($sourceGraph)};
+   let query = {| meta::external::store::relational::tests::milestoning::Product.all(%2015-10-16)->filter(p | $p->objectReferenceIn($productObjectRef))->graphFetch($sourceGraph)->serialize($sourceGraph)};
    
-   let mapping = meta::relational::tests::milestoning::milestoningmap;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::milestoningmap;
+   let runtime = meta::external::store::relational::tests::testRuntime();
    
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions());
    
@@ -145,13 +145,13 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    );
 }
 
-function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::tests::functions::objectReferenceIn::testObjectReferenceInWithMilestonedProperty(): Boolean[1]
+function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::tests::functions::objectReferenceIn::testObjectReferenceInWithMilestonedProperty(): Boolean[1]
 {
-   let orderObjectRef = generateObjectReferences('vX_X_X', 'meta::relational::tests::milestoning::milestoningmap', 'meta_relational_tests_milestoning_Order', 'meta::relational::tests::testRuntime__Runtime_1_', pair('id', 1)->newMap(), meta::pure::router::extension::defaultRelationalExtensions());   
-   let productObjectRef = generateObjectReferences('vX_X_X', 'meta::relational::tests::milestoning::milestoningmap', 'meta_relational_tests_milestoning_Product', 'meta::relational::tests::testRuntime__Runtime_1_', [pair('name', 'ProductName2'), pair('id', 2)]->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
+   let orderObjectRef = generateObjectReferences('vX_X_X', 'meta::external::store::relational::tests::milestoning::milestoningmap', 'meta_external_store_relational_tests_milestoning_Order', 'meta::external::store::relational::tests::testRuntime__Runtime_1_', pair('id', 1)->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
+   let productObjectRef = generateObjectReferences('vX_X_X', 'meta::external::store::relational::tests::milestoning::milestoningmap', 'meta_external_store_relational_tests_milestoning_Product', 'meta::external::store::relational::tests::testRuntime__Runtime_1_', [pair('name', 'ProductName2'), pair('id', 2)]->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
    
    let sourceGraph = #{
-      meta::relational::tests::milestoning::Order {
+      meta::external::store::relational::tests::milestoning::Order {
          id,
          product(%2015-10-16) {
             name,
@@ -162,13 +162,13 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    }#;
    
    let query = {| 
-      meta::relational::tests::milestoning::Order.all()->filter(o | $o->objectReferenceIn($orderObjectRef) || $o.product(%2015-10-16)->exists(p | $p->objectReferenceIn($productObjectRef)))
+      meta::external::store::relational::tests::milestoning::Order.all()->filter(o | $o->objectReferenceIn($orderObjectRef) || $o.product(%2015-10-16)->exists(p | $p->objectReferenceIn($productObjectRef)))
                                                        ->graphFetch($sourceGraph)
                                                        ->serialize($sourceGraph);
    };
    
-   let mapping = meta::relational::tests::milestoning::milestoningmap;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::milestoningmap;
+   let runtime = meta::external::store::relational::tests::testRuntime();
    
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions());
 
@@ -178,14 +178,14 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    );
 }
 
-function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::tests::functions::objectReferenceIn::testObjectReferenceInWithEmptyLists(): Boolean[1]
+function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::tests::functions::objectReferenceIn::testObjectReferenceInWithEmptyLists(): Boolean[1]
 {  
    let orderObjectRef = [];   
    let productObjectRef = [];
-   let classificationObjectRef = generateObjectReferences('vX_X_X', 'meta::relational::tests::milestoning::milestoningmap', 'meta_relational_tests_milestoning_ProductClassification','meta::relational::tests::testRuntime__Runtime_1_', pair('type', 'STOCK')->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
+   let classificationObjectRef = generateObjectReferences('vX_X_X', 'meta::external::store::relational::tests::milestoning::milestoningmap', 'meta_external_store_relational_tests_milestoning_ProductClassification','meta::external::store::relational::tests::testRuntime__Runtime_1_', pair('type', 'STOCK')->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
 
    let sourceGraph = #{
-      meta::relational::tests::milestoning::Order {
+      meta::external::store::relational::tests::milestoning::Order {
          id,
          orderDate,
          product(%2015-10-16) {
@@ -204,7 +204,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    }#;
 
    let serializeGraph = #{
-      meta::relational::tests::milestoning::Order {
+      meta::external::store::relational::tests::milestoning::Order {
          id,
          orderDate,
          product(%2015-10-16) {
@@ -228,13 +228,13 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    }#;
 
    let query = {| 
-      meta::relational::tests::milestoning::Order.all()->filter(o | $o->objectReferenceIn($orderObjectRef) ||
+      meta::external::store::relational::tests::milestoning::Order.all()->filter(o | $o->objectReferenceIn($orderObjectRef) ||
                                                                     $o.product(%2015-10-16)->exists(p | $p->objectReferenceIn($productObjectRef) || $p.classification->objectReferenceIn($classificationObjectRef)))
                                                        ->graphFetch($sourceGraph)->serialize($serializeGraph);
    };
    
-   let mapping = meta::relational::tests::milestoning::milestoningmap;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::milestoningmap;
+   let runtime = meta::external::store::relational::tests::testRuntime();
    
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions());
    
@@ -244,15 +244,15 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    );
 }
 
-function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::tests::functions::objectReferenceIn::testObjectReferenceInWithBiTemporalMilestoning(): Boolean[1]
+function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::tests::functions::objectReferenceIn::testObjectReferenceInWithBiTemporalMilestoning(): Boolean[1]
 {   
    let processingDate = %2017-06-10;
    let businessDate  = %2017-06-11;
-   let productObjectRef = generateObjectReferences('vX_X_X', 'meta::relational::tests::milestoning::milestoningmap', 'meta_relational_tests_milestoning_BiTemporalProduct','meta::relational::tests::testRuntime__Runtime_1_', pair('id', 1)->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
+   let productObjectRef = generateObjectReferences('vX_X_X', 'meta::external::store::relational::tests::milestoning::milestoningmap', 'meta_external_store_relational_tests_milestoning_BiTemporalProduct','meta::external::store::relational::tests::testRuntime__Runtime_1_', pair('id', 1)->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
    let classificationObjectRef = [];
 
    let sourceGraph = #{
-         meta::relational::tests::milestoning::BiTemporalProduct {
+         meta::external::store::relational::tests::milestoning::BiTemporalProduct {
             id,
             processingDate,
             businessDate,
@@ -261,15 +261,15 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
       }#;
 
    let query = {| 
-      meta::relational::tests::milestoning::BiTemporalProduct.all($processingDate, $businessDate)
+      meta::external::store::relational::tests::milestoning::BiTemporalProduct.all($processingDate, $businessDate)
          ->filter(p | $p->objectReferenceIn($productObjectRef) || 
                      ($p.biTemporalClassification->isNotEmpty() && $p.biTemporalClassification->toOne()->objectReferenceIn($classificationObjectRef)))
          ->graphFetch($sourceGraph)
          ->serialize($sourceGraph);
    };
    
-   let mapping = meta::relational::tests::milestoning::milestoningmap;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::milestoning::milestoningmap;
+   let runtime = meta::external::store::relational::tests::testRuntime();
    
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions());
    
@@ -279,11 +279,11 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    );
 }
 
-function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_20_0'} meta::relational::tests::functions::objectReferenceIn::testObjectReferenceInWithObjReferenceOutput():Boolean[1]
+function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_20_0'} meta::external::store::relational::tests::functions::objectReferenceIn::testObjectReferenceInWithObjReferenceOutput():Boolean[1]
 {
    let config = alloyConfig(false, false, false, false, true);
    let tree = #{
-      meta::pure::mapping::modelToModel::test::shared::src::_Firm{
+      meta::external::store::model::test::shared::src::_Firm{
          name,
          employees{
             fullName,
@@ -291,34 +291,34 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
          }
       }}#;
    
-   let firmObjectRef = generateObjectReferences('vX_X_X', 'meta::pure::mapping::modelToModel::test::shared::relationalMapping', 'meta_pure_mapping_modelToModel_test_shared_src__Firm', 'meta::relational::tests::testRuntime__Runtime_1_', pair('name', 'C')->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
-   let personObjectRef = generateObjectReferences('vX_X_X', 'meta::pure::mapping::modelToModel::test::shared::relationalMapping', 'meta_pure_mapping_modelToModel_test_shared_src__Person', 'meta::relational::tests::testRuntime__Runtime_1_', pair('fullname', 'Peter Smith')->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
-   let addressObjectRef = generateObjectReferences('vX_X_X', 'meta::pure::mapping::modelToModel::test::shared::relationalMapping', 'meta_pure_mapping_modelToModel_test_shared_dest_Address','meta::relational::tests::testRuntime__Runtime_1_', pair('id', 1)->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
+   let firmObjectRef = generateObjectReferences('vX_X_X', 'meta::external::store::model::test::shared::relationalMapping', 'meta_external_store_model_test_shared_src__Firm', 'meta::external::store::relational::tests::testRuntime__Runtime_1_', pair('name', 'C')->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
+   let personObjectRef = generateObjectReferences('vX_X_X', 'meta::external::store::model::test::shared::relationalMapping', 'meta_external_store_model_test_shared_src__Person', 'meta::external::store::relational::tests::testRuntime__Runtime_1_', pair('fullname', 'Peter Smith')->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
+   let addressObjectRef = generateObjectReferences('vX_X_X', 'meta::external::store::model::test::shared::relationalMapping', 'meta_external_store_model_test_shared_dest_Address','meta::external::store::relational::tests::testRuntime__Runtime_1_', pair('id', 1)->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
    
    let query = {|
                  _Firm.all()->filter(f | $f->objectReferenceIn($firmObjectRef) ||
                                          $f.employees->exists(p | $p->objectReferenceIn($personObjectRef) || $p.addresses->exists(a| $a->objectReferenceIn($addressObjectRef))))
                             ->graphFetch($tree)->serialize($tree, $config)};
    
-   let mapping = meta::pure::mapping::modelToModel::test::shared::relationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::model::test::shared::relationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
    
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions());
    
    assertJsonStringsEqual(
-      '[{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2NjptZXRhOjpwdXJlOjptYXBwaW5nOjptb2RlbFRvTW9kZWw6OnRlc3Q6OnNoYXJlZDo6cmVsYXRpb25hbE1hcHBpbmc6MDAwMDAwMDA1MjptZXRhX3B1cmVfbWFwcGluZ19tb2RlbFRvTW9kZWxfdGVzdF9zaGFyZWRfc3JjX19GaXJtOjAwMDAwMDAwNTI6bWV0YV9wdXJlX21hcHBpbmdfbW9kZWxUb01vZGVsX3Rlc3Rfc2hhcmVkX3NyY19fRmlybTowMDAwMDAwMjg4OnsiX3R5cGUiOiJSZWxhdGlvbmFsRGF0YWJhc2VDb25uZWN0aW9uIiwiYXV0aGVudGljYXRpb25TdHJhdGVneSI6eyJfdHlwZSI6ImgyRGVmYXVsdCJ9LCJkYXRhc291cmNlU3BlY2lmaWNhdGlvbiI6eyJfdHlwZSI6ImgyTG9jYWwifSwiZWxlbWVudCI6Im1ldGE6OnB1cmU6Om1hcHBpbmc6Om1vZGVsVG9Nb2RlbDo6dGVzdDo6c2hhcmVkOjpyZWxhdGlvbmFsREIiLCJwb3N0UHJvY2Vzc29yV2l0aFBhcmFtZXRlciI6W10sInBvc3RQcm9jZXNzb3JzIjpbXSwidGltZVpvbmUiOiJHTVQiLCJ0eXBlIjoiSDIifTowMDAwMDAwMDEzOnsicGskXzAiOiJBIn0","value":{"name":"A","employees":[{"addresses":[{"street":"31 street"}],"fullName":"A. Only One"},{"addresses":[{"street":"32 street"}],"fullName":"Peter Smith"}]}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2NjptZXRhOjpwdXJlOjptYXBwaW5nOjptb2RlbFRvTW9kZWw6OnRlc3Q6OnNoYXJlZDo6cmVsYXRpb25hbE1hcHBpbmc6MDAwMDAwMDA1MjptZXRhX3B1cmVfbWFwcGluZ19tb2RlbFRvTW9kZWxfdGVzdF9zaGFyZWRfc3JjX19GaXJtOjAwMDAwMDAwNTI6bWV0YV9wdXJlX21hcHBpbmdfbW9kZWxUb01vZGVsX3Rlc3Rfc2hhcmVkX3NyY19fRmlybTowMDAwMDAwMjg4OnsiX3R5cGUiOiJSZWxhdGlvbmFsRGF0YWJhc2VDb25uZWN0aW9uIiwiYXV0aGVudGljYXRpb25TdHJhdGVneSI6eyJfdHlwZSI6ImgyRGVmYXVsdCJ9LCJkYXRhc291cmNlU3BlY2lmaWNhdGlvbiI6eyJfdHlwZSI6ImgyTG9jYWwifSwiZWxlbWVudCI6Im1ldGE6OnB1cmU6Om1hcHBpbmc6Om1vZGVsVG9Nb2RlbDo6dGVzdDo6c2hhcmVkOjpyZWxhdGlvbmFsREIiLCJwb3N0UHJvY2Vzc29yV2l0aFBhcmFtZXRlciI6W10sInBvc3RQcm9jZXNzb3JzIjpbXSwidGltZVpvbmUiOiJHTVQiLCJ0eXBlIjoiSDIifTowMDAwMDAwMDEzOnsicGskXzAiOiJCIn0","value":{"name":"B","employees":[{"addresses":[{"street":"30 street"}],"fullName":"B. Only One"}]}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2NjptZXRhOjpwdXJlOjptYXBwaW5nOjptb2RlbFRvTW9kZWw6OnRlc3Q6OnNoYXJlZDo6cmVsYXRpb25hbE1hcHBpbmc6MDAwMDAwMDA1MjptZXRhX3B1cmVfbWFwcGluZ19tb2RlbFRvTW9kZWxfdGVzdF9zaGFyZWRfc3JjX19GaXJtOjAwMDAwMDAwNTI6bWV0YV9wdXJlX21hcHBpbmdfbW9kZWxUb01vZGVsX3Rlc3Rfc2hhcmVkX3NyY19fRmlybTowMDAwMDAwMjg4OnsiX3R5cGUiOiJSZWxhdGlvbmFsRGF0YWJhc2VDb25uZWN0aW9uIiwiYXV0aGVudGljYXRpb25TdHJhdGVneSI6eyJfdHlwZSI6ImgyRGVmYXVsdCJ9LCJkYXRhc291cmNlU3BlY2lmaWNhdGlvbiI6eyJfdHlwZSI6ImgyTG9jYWwifSwiZWxlbWVudCI6Im1ldGE6OnB1cmU6Om1hcHBpbmc6Om1vZGVsVG9Nb2RlbDo6dGVzdDo6c2hhcmVkOjpyZWxhdGlvbmFsREIiLCJwb3N0UHJvY2Vzc29yV2l0aFBhcmFtZXRlciI6W10sInBvc3RQcm9jZXNzb3JzIjpbXSwidGltZVpvbmUiOiJHTVQiLCJ0eXBlIjoiSDIifTowMDAwMDAwMDEzOnsicGskXzAiOiJDIn0","value":{"name":"C","employees":[]}}]"',
+      '[{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2MTptZXRhOjpleHRlcm5hbDo6c3RvcmU6Om1vZGVsOjp0ZXN0OjpzaGFyZWQ6OnJlbGF0aW9uYWxNYXBwaW5nOjAwMDAwMDAwNDc6bWV0YV9leHRlcm5hbF9zdG9yZV9tb2RlbF90ZXN0X3NoYXJlZF9zcmNfX0Zpcm06MDAwMDAwMDA0NzptZXRhX2V4dGVybmFsX3N0b3JlX21vZGVsX3Rlc3Rfc2hhcmVkX3NyY19fRmlybTowMDAwMDAwMjgzOnsiX3R5cGUiOiJSZWxhdGlvbmFsRGF0YWJhc2VDb25uZWN0aW9uIiwiYXV0aGVudGljYXRpb25TdHJhdGVneSI6eyJfdHlwZSI6ImgyRGVmYXVsdCJ9LCJkYXRhc291cmNlU3BlY2lmaWNhdGlvbiI6eyJfdHlwZSI6ImgyTG9jYWwifSwiZWxlbWVudCI6Im1ldGE6OmV4dGVybmFsOjpzdG9yZTo6bW9kZWw6OnRlc3Q6OnNoYXJlZDo6cmVsYXRpb25hbERCIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMzp7InBrJF8wIjoiQSJ9","value":{"name":"A","employees":[{"addresses":[{"street":"31 street"}],"fullName":"A. Only One"},{"addresses":[{"street":"32 street"}],"fullName":"Peter Smith"}]}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2MTptZXRhOjpleHRlcm5hbDo6c3RvcmU6Om1vZGVsOjp0ZXN0OjpzaGFyZWQ6OnJlbGF0aW9uYWxNYXBwaW5nOjAwMDAwMDAwNDc6bWV0YV9leHRlcm5hbF9zdG9yZV9tb2RlbF90ZXN0X3NoYXJlZF9zcmNfX0Zpcm06MDAwMDAwMDA0NzptZXRhX2V4dGVybmFsX3N0b3JlX21vZGVsX3Rlc3Rfc2hhcmVkX3NyY19fRmlybTowMDAwMDAwMjgzOnsiX3R5cGUiOiJSZWxhdGlvbmFsRGF0YWJhc2VDb25uZWN0aW9uIiwiYXV0aGVudGljYXRpb25TdHJhdGVneSI6eyJfdHlwZSI6ImgyRGVmYXVsdCJ9LCJkYXRhc291cmNlU3BlY2lmaWNhdGlvbiI6eyJfdHlwZSI6ImgyTG9jYWwifSwiZWxlbWVudCI6Im1ldGE6OmV4dGVybmFsOjpzdG9yZTo6bW9kZWw6OnRlc3Q6OnNoYXJlZDo6cmVsYXRpb25hbERCIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMzp7InBrJF8wIjoiQiJ9","value":{"name":"B","employees":[{"addresses":[{"street":"30 street"}],"fullName":"B. Only One"}]}},{"objectReference":"ASOR:MDAxOjAxMDowMDAwMDAwMDEwOlJlbGF0aW9uYWw6MDAwMDAwMDA2MTptZXRhOjpleHRlcm5hbDo6c3RvcmU6Om1vZGVsOjp0ZXN0OjpzaGFyZWQ6OnJlbGF0aW9uYWxNYXBwaW5nOjAwMDAwMDAwNDc6bWV0YV9leHRlcm5hbF9zdG9yZV9tb2RlbF90ZXN0X3NoYXJlZF9zcmNfX0Zpcm06MDAwMDAwMDA0NzptZXRhX2V4dGVybmFsX3N0b3JlX21vZGVsX3Rlc3Rfc2hhcmVkX3NyY19fRmlybTowMDAwMDAwMjgzOnsiX3R5cGUiOiJSZWxhdGlvbmFsRGF0YWJhc2VDb25uZWN0aW9uIiwiYXV0aGVudGljYXRpb25TdHJhdGVneSI6eyJfdHlwZSI6ImgyRGVmYXVsdCJ9LCJkYXRhc291cmNlU3BlY2lmaWNhdGlvbiI6eyJfdHlwZSI6ImgyTG9jYWwifSwiZWxlbWVudCI6Im1ldGE6OmV4dGVybmFsOjpzdG9yZTo6bW9kZWw6OnRlc3Q6OnNoYXJlZDo6cmVsYXRpb25hbERCIiwicG9zdFByb2Nlc3NvcldpdGhQYXJhbWV0ZXIiOltdLCJwb3N0UHJvY2Vzc29ycyI6W10sInRpbWVab25lIjoiR01UIiwidHlwZSI6IkgyIn06MDAwMDAwMDAxMzp7InBrJF8wIjoiQyJ9","value":{"name":"C","employees":[]}}]',
       $result.values
    );
    
    let objReferences = $result.values->parseJSON()->cast(@JSONArray).values->map(je | meta::alloy::objectReference::decodeObjectReferencesAndGetPkMap('vX_X_X', $je->cast(@JSONObject)->getValue('objectReference')->cast(@JSONString).value->toOne(), meta::pure::router::extension::defaultRelationalExtensions()))->joinStrings('[',',',']');
 
-   assertJsonStringsEqual('[{"pathToMapping":"meta::pure::mapping::modelToModel::test::shared::relationalMapping","pkMap":{"name":"A"},"setId":"meta_pure_mapping_modelToModel_test_shared_src__Firm"},{"pathToMapping":"meta::pure::mapping::modelToModel::test::shared::relationalMapping","pkMap":{"name":"B"},"setId":"meta_pure_mapping_modelToModel_test_shared_src__Firm"},{"pathToMapping":"meta::pure::mapping::modelToModel::test::shared::relationalMapping","pkMap":{"name":"C"},"setId":"meta_pure_mapping_modelToModel_test_shared_src__Firm"}]', $objReferences);
+   assertJsonStringsEqual('[{"pathToMapping":"meta::external::store::model::test::shared::relationalMapping","pkMap":{"name":"A"},"setId":"meta_external_store_model_test_shared_src__Firm"},{"pathToMapping":"meta::external::store::model::test::shared::relationalMapping","pkMap":{"name":"B"},"setId":"meta_external_store_model_test_shared_src__Firm"},{"pathToMapping":"meta::external::store::model::test::shared::relationalMapping","pkMap":{"name":"C"},"setId":"meta_external_store_model_test_shared_src__Firm"}]', $objReferences);
 }
 
-function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.ToFix, meta::pure::profiles::test.AlloyOnly>> meta::relational::tests::functions::objectReferenceIn::testObjectReferenceInUnion():Boolean[1]
+function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.ToFix, meta::pure::profiles::test.AlloyOnly>> meta::external::store::relational::tests::functions::objectReferenceIn::testObjectReferenceInUnion():Boolean[1]
 {
    let tree = #{
-      meta::relational::tests::model::simple::Firm{
+      meta::external::store::relational::tests::model::simple::Firm{
          legalName,
          employees {
             lastName
@@ -326,17 +326,17 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.ToFix, me
       }
    }#;
    
-   let firmObjectRef = generateObjectReferences('vX_X_X', 'meta::pure::mapping::modelToModel::test::shared::relationalMapping', 'meta_pure_mapping_modelToModel_test_shared_src__Firm', 'meta::relational::tests::testRuntime__Runtime_1_', pair('name', 'C')->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
-   let personObjectRef = [generateObjectReferences('vX_X_X', 'meta::pure::mapping::modelToModel::test::shared::relationalMapping', 'meta_pure_mapping_modelToModel_test_shared_src__Person', 'meta::relational::tests::testRuntime__Runtime_1_', pair('fullname', 'Peter Smith')->newMap(), meta::pure::router::extension::defaultRelationalExtensions()),
-                          generateObjectReferences('vX_X_X', 'meta::pure::mapping::modelToModel::test::shared::relationalMapping', 'meta_pure_mapping_modelToModel_test_shared_src__Person', 'meta::relational::tests::testRuntime__Runtime_1_', pair('fullname', 'Peter Smith')->newMap(), meta::pure::router::extension::defaultRelationalExtensions())];
+   let firmObjectRef = generateObjectReferences('vX_X_X', 'meta::external::store::model::test::shared::relationalMapping', 'meta_pure_mapping_modelToModel_test_shared_src__Firm', 'meta::external::store::relational::tests::testRuntime__Runtime_1_', pair('name', 'C')->newMap(), meta::pure::router::extension::defaultRelationalExtensions());
+   let personObjectRef = [generateObjectReferences('vX_X_X', 'meta::external::store::model::test::shared::relationalMapping', 'meta_pure_mapping_modelToModel_test_shared_src__Person', 'meta::external::store::relational::tests::testRuntime__Runtime_1_', pair('fullname', 'Peter Smith')->newMap(), meta::pure::router::extension::defaultRelationalExtensions()),
+                          generateObjectReferences('vX_X_X', 'meta::external::store::model::test::shared::relationalMapping', 'meta_pure_mapping_modelToModel_test_shared_src__Person', 'meta::external::store::relational::tests::testRuntime__Runtime_1_', pair('fullname', 'Peter Smith')->newMap(), meta::pure::router::extension::defaultRelationalExtensions())];
    
    let query = {|
-                 meta::relational::tests::model::simple::Firm.all()->filter(f | $f->objectReferenceIn($firmObjectRef) ||
+                 meta::external::store::relational::tests::model::simple::Firm.all()->filter(f | $f->objectReferenceIn($firmObjectRef) ||
                                                                           $f.employees->exists(p | $p->objectReferenceIn($personObjectRef)))
                             ->graphFetch($tree)->serialize($tree)};
    
-   let mapping = meta::relational::tests::mapping::union::unionMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::mapping::union::unionMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
    
    let executionPlan = executionPlan($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions());
    $executionPlan->planToString(meta::pure::router::extension::defaultRelationalExtensions())->println();
@@ -345,10 +345,10 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.ToFix, me
 
 // Below Queries are used to generate serialized queries on top of which tests are written on Legend Engine Side
 
-function meta::relational::tests::functions::objectReferenceIn::testObjectReferenceInWithObjectRefAsParams():Any[1]
+function meta::external::store::relational::tests::functions::objectReferenceIn::testObjectReferenceInWithObjectRefAsParams():Any[1]
 {
    let config = alloyConfig(false, false, false, false, true);
-   let tree = #{meta::pure::mapping::modelToModel::test::shared::src::_Firm{ name,
+   let tree = #{meta::external::store::model::test::shared::src::_Firm{ name,
                        employees{
                           fullName,
                           addresses { street }
@@ -360,14 +360,14 @@ function meta::relational::tests::functions::objectReferenceIn::testObjectRefere
                                          $f.employees->exists(p | $p->objectReferenceIn($personObjectRef) || $p.addresses->exists(a| $a->objectReferenceIn($addressObjectRef))))
                             ->graphFetch($tree)->serialize($tree, $config)};
    
-   let mapping = meta::pure::mapping::modelToModel::test::shared::relationalMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::model::test::shared::relationalMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 }
 
-function meta::relational::tests::functions::objectReferenceIn::testObjectReferenceInChainedWithObjectRefAsParams():Any[1]
+function meta::external::store::relational::tests::functions::objectReferenceIn::testObjectReferenceInChainedWithObjectRefAsParams():Any[1]
 {  
    let query = {firmObjectRef:String[*], personObjectRef:String[*], addressObjectRef:String[*]|
-                 let targetGraph = #{meta::pure::mapping::modelToModel::test::shared::dest::Firm{legalName,
+                 let targetGraph = #{meta::external::store::model::test::shared::dest::Firm{legalName,
                                           employees{
                                              firstName,
                                              lastName,
@@ -384,16 +384,16 @@ function meta::relational::tests::functions::objectReferenceIn::testObjectRefere
 
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::relational::tests::functions::objectReferenceIn::*;
-import meta::relational::tests::*;
-import meta::pure::mapping::modelToModel::test::shared::*;
-import meta::relational::tests::milestoning::*;
-import meta::relational::tests::functions::objectReferenceIn::*;
-import meta::pure::mapping::modelToModel::test::milestoning::*;
-import meta::pure::mapping::modelToModel::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::relational::tests::functions::objectReferenceIn::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::model::test::shared::*;
+import meta::external::store::relational::tests::milestoning::*;
+import meta::external::store::relational::tests::functions::objectReferenceIn::*;
+import meta::external::store::model::test::milestoning::*;
+import meta::external::store::model::test::shared::src::*;
 
-Mapping meta::relational::tests::functions::objectReferenceIn::simpleModelMapping
+Mapping meta::external::store::relational::tests::functions::objectReferenceIn::simpleModelMapping
 (
    Person : Pure
             {

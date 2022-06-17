@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::functions::asserts::*;
-import meta::relational::mapping::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
 import meta::pure::profiles::*;
 import meta::pure::metamodel::tds::*;
 
-function <<test.Test>> meta::relational::tests::projection::association::toMany::testAssociationToManyColumnProtocolOneColumn():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::association::toMany::testAssociationToManyColumnProtocolOneColumn():Boolean[1]
 {
    let result = execute(|Person.all()->project(col(p|$p.firstName, 'firstName')), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 7);
@@ -27,7 +27,7 @@ function <<test.Test>> meta::relational::tests::projection::association::toMany:
    assertEquals('select "root".FIRSTNAME as "firstName" from personTable as "root"', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::association::toMany::testAssociationToManyColumnProtocol():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::association::toMany::testAssociationToManyColumnProtocol():Boolean[1]
 {
    let result = execute(|Person.all()->project([col(p|$p.firstName, 'firstName'), col(p|$p.locations.place, 'place')]), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 13);
@@ -35,7 +35,7 @@ function <<test.Test>> meta::relational::tests::projection::association::toMany:
    assertEquals('select "root".FIRSTNAME as "firstName", "locationtable_0".PLACE as "place" from personTable as "root" left outer join locationTable as "locationtable_0" on ("root".ID = "locationtable_0".PERSONID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::association::toMany::testAssociationToManyColumnProtocolWithDoc():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::association::toMany::testAssociationToManyColumnProtocolWithDoc():Boolean[1]
 {
    let result = execute(|Person.all()->project([col(p|$p.firstName, 'firstName', 'Spec1'), col(p|$p.locations.place, 'place', 'Spec2')]), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals(['Spec1', 'Spec2'], $result.values->at(0).columns.documentation);
@@ -44,7 +44,7 @@ function <<test.Test>> meta::relational::tests::projection::association::toMany:
    assertEquals('select "root".FIRSTNAME as "firstName", "locationtable_0".PLACE as "place" from personTable as "root" left outer join locationTable as "locationtable_0" on ("root".ID = "locationtable_0".PERSONID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::association::toMany::testQualifiedPropertyUsingColumnProtocol():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::association::toMany::testQualifiedPropertyUsingColumnProtocol():Boolean[1]
 {
    let firmAge = 30;
    let result = execute(|Person.all()->filter(p|$p.name=='Peter Smith')->project([col(p|$p.name, 'personName'), col(p|$p.firm->toOne().employeesByAge($firmAge)->count(), '#30YrOldCoWorkers')]), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -52,7 +52,7 @@ function <<test.Test>> meta::relational::tests::projection::association::toMany:
    assertEquals('select concat("root".FIRSTNAME, \' \', "root".LASTNAME) as "personName", "persontable_1".aggCol as "#30YrOldCoWorkers" from personTable as "root" left outer join (select "persontable_2".ID as ID, count(*) as aggCol from personTable as "persontable_2" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "persontable_2".FIRMID) left outer join personTable as "persontable_3" on ("firmtable_0".ID = "persontable_3".FIRMID) where "persontable_3".AGE < 30 group by "persontable_2".ID) as "persontable_1" on ("root".ID = "persontable_1".ID) where concat("root".FIRSTNAME, \' \', "root".LASTNAME) = \'Peter Smith\'', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::association::toMany::testAssociationToMany():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::association::toMany::testAssociationToMany():Boolean[1]
 {
    let result = execute(|Person.all()->project([#/Person/firstName#, #/Person/locations/place#]), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 13);
@@ -60,15 +60,15 @@ function <<test.Test>> meta::relational::tests::projection::association::toMany:
    assertEquals('select "root".FIRSTNAME as "firstName", "locationtable_0".PLACE as "place" from personTable as "root" left outer join locationTable as "locationtable_0" on ("root".ID = "locationtable_0".PERSONID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::association::toMany::testAssociationToManyWithQuery():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::association::toMany::testAssociationToManyWithQuery():Boolean[1]
 {
-   let result = execute(|Person.all()->filter(p|$p.locations->exists(l|$l.place == 'Hoboken'))->project([#/Person/firstName#, #/Person/locations/place#]), meta::relational::tests::simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
+   let result = execute(|Person.all()->filter(p|$p.locations->exists(l|$l.place == 'Hoboken'))->project([#/Person/firstName#, #/Person/locations/place#]), meta::external::store::relational::tests::simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals(2, $result.values.rows->size());
    assertEquals('Hoboken,New York,Peter,Peter', $result.values.rows->map(r|$r.values)->sort()->makeString(','));
    assertSameSQL('select "root".FIRSTNAME as "firstName", "locationtable_2".PLACE as "place" from personTable as "root" left outer join (select distinct "locationtable_1".PERSONID from locationTable as "locationtable_1" where "locationtable_1".PLACE = \'Hoboken\') as "locationtable_0" on ("root".ID = "locationtable_0".PERSONID) left outer join locationTable as "locationtable_2" on ("root".ID = "locationtable_2".PERSONID) where "locationtable_0".PERSONID is not null', $result);
 }
 
-function <<test.Test>> meta::relational::tests::projection::association::toMany::testAssociationToManyDeepTwo():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::association::toMany::testAssociationToManyDeepTwo():Boolean[1]
 {
    let result = execute(|Firm.all()->project([#/Firm/legalName#,
                                               #/Firm/employees/firstName#,

@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::mapping::*;
+import meta::external::store::relational::mapping::*;
 import meta::pure::runtime::*;
-import meta::relational::runtime::*;
-import meta::relational::functions::toDDL::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::tests::functions::distance::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::functions::toDDL::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::tests::functions::distance::*;
 
-function <<test.BeforePackage>> meta::relational::tests::functions::distance::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::functions::distance::setUp():Boolean[1]
 {
     createAndFillTestDb();
 }
 
 // Alloy exclusion reason: 10. Tricky usage of variables
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::distance::testDistanceHaversine():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::functions::distance::testDistanceHaversine():Boolean[1]
 {
    let london = ^PointOfInterest(name = 'London', location = ^GeographicCoordinate(latitude = 51.507356, longitude = -0.127706));
    let result = execute(| PointOfInterest.all()->filter(f| distance($f.location, $london.location) < 350), testDistanceMapping, testDistanceRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -35,7 +35,7 @@ function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::di
 }
 
 // Alloy exclusion reason: 10. Tricky usage of variables
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::distance::testDistanceHaversine2():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::functions::distance::testDistanceHaversine2():Boolean[1]
 {
    let london = ^PointOfInterest(name = 'London', location = ^GeographicCoordinate(latitude = 51.507356, longitude = -0.127706));
    let result = execute(| PointOfInterest.all()->filter(f| distance($f.location, $london.location) > 15000), testDistanceMapping, testDistanceRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -45,7 +45,7 @@ function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::di
 }
 
 // Alloy exclusion reason: 10. Tricky usage of variables
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::distance::testDistanceHaversine3():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::functions::distance::testDistanceHaversine3():Boolean[1]
 {
    let london = ^PointOfInterest(name = 'London', location = ^GeographicCoordinate(latitude = 51.507356, longitude = -0.127706));
    let result = execute(| PointOfInterest.all()->filter(f| distance($f.location, $london.location) < 9.5), testDistanceMapping, testDistanceRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -55,7 +55,7 @@ function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::di
 }
 
 // Alloy exclusion reason: 10. Tricky usage of variables
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::distance::testDistanceHaversineInProject():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::functions::distance::testDistanceHaversineInProject():Boolean[1]
 {
    let london = ^PointOfInterest(name = 'London', location = ^GeographicCoordinate(latitude = 51.507356, longitude = -0.127706));
    let result = execute(| PointOfInterest.all()->project([p| $p.name, p| distance($p.location, $london.location)], ['name', 'distance']), testDistanceMapping, testDistanceRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -85,7 +85,7 @@ function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::di
 }
 
 // Alloy exclusion reason: 10. Tricky usage of variables
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::distance::testDistanceSphericalLawOfCosines():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::functions::distance::testDistanceSphericalLawOfCosines():Boolean[1]
 {
    let london = ^PointOfInterest(name = 'London', location = ^GeographicCoordinate(latitude = 51.507356, longitude = -0.127706));
    let result = execute(| PointOfInterest.all()->filter(f| distanceSphericalLawOfCosines($f.location, $london.location) < 350), testDistanceMapping, testDistanceRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -95,7 +95,7 @@ function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::di
 }
 
 // Alloy exclusion reason: 10. Tricky usage of variables
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::distance::testDistanceSphericalLawOfCosines2():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::functions::distance::testDistanceSphericalLawOfCosines2():Boolean[1]
 {
    let london = ^PointOfInterest(name = 'London', location = ^GeographicCoordinate(latitude = 51.507356, longitude = -0.127706));
    let result = execute(| PointOfInterest.all()->filter(f| distanceSphericalLawOfCosines($f.location, $london.location) > 15000), testDistanceMapping, testDistanceRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -105,7 +105,7 @@ function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::di
 }
 
 // Alloy exclusion reason: 10. Tricky usage of variables
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::distance::testDistanceSphericalLawOfCosines3():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::functions::distance::testDistanceSphericalLawOfCosines3():Boolean[1]
 {
    let london = ^PointOfInterest(name = 'London', location = ^GeographicCoordinate(latitude = 51.507356, longitude = -0.127706));
    let result = execute(| PointOfInterest.all()->filter(f| distanceSphericalLawOfCosines($f.location, $london.location) < 9.5), testDistanceMapping, testDistanceRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -115,7 +115,7 @@ function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::di
 }
 
 // Alloy exclusion reason: 10. Tricky usage of variables
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::distance::testDistanceSphericalLawOfCosinesInProject():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::functions::distance::testDistanceSphericalLawOfCosinesInProject():Boolean[1]
 {
    let london = ^PointOfInterest(name = 'London', location = ^GeographicCoordinate(latitude = 51.507356, longitude = -0.127706));
    let result = execute(| PointOfInterest.all()->project([p| $p.name, p| distanceSphericalLawOfCosines($p.location, $london.location)], ['name', 'distance']), testDistanceMapping, testDistanceRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -145,20 +145,20 @@ function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::functions::di
 
 }
 
-function meta::relational::tests::functions::distance::testDisplayMapFromDB():GeographicCoordinate[*]
+function meta::external::store::relational::tests::functions::distance::testDisplayMapFromDB():GeographicCoordinate[*]
 {
-   meta::relational::tests::functions::distance::setUp();
+   meta::external::store::relational::tests::functions::distance::setUp();
    let london = ^PointOfInterest(name = 'London', location = ^GeographicCoordinate(latitude = 51.507356, longitude = -0.127706));
    let result = execute(| PointOfInterest.all()->filter(f| distanceSphericalLawOfCosines($f.location, $london.location) > 9.5), testDistanceMapping, testDistanceRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    $result.values.location;
 }
 
-function meta::relational::tests::functions::distance::testDistanceRuntime():Runtime[1]
+function meta::external::store::relational::tests::functions::distance::testDistanceRuntime():Runtime[1]
 {
-   meta::relational::tests::testRuntime(testDistanceDB);
+   meta::external::store::relational::tests::testRuntime(testDistanceDB);
 }
 
-function meta::relational::tests::functions::distance::createAndFillTestDb():Boolean[1]
+function meta::external::store::relational::tests::functions::distance::createAndFillTestDb():Boolean[1]
 {
    let connection = testDistanceRuntime().connectionByElement(testDistanceDB)->cast(@TestDatabaseConnection);
 
@@ -173,40 +173,40 @@ function meta::relational::tests::functions::distance::createAndFillTestDb():Boo
    true;
 }
 
-Class meta::relational::tests::functions::distance::PointOfInterest
+Class meta::external::store::relational::tests::functions::distance::PointOfInterest
 {
    name : String[1];
    location : GeographicCoordinate[1];
 }
 
 Class {doc.doc = 'A class to represent GIS geographic coordinate'}
-meta::relational::tests::functions::distance::GeographicCoordinate
+meta::external::store::relational::tests::functions::distance::GeographicCoordinate
 {
    latitude : Float[1];
    longitude : Float[1];
 }
 
-function meta::relational::tests::functions::distance::distance(point1:GeographicCoordinate[1], point2:GeographicCoordinate[1]):Number[1]
+function meta::external::store::relational::tests::functions::distance::distance(point1:GeographicCoordinate[1], point2:GeographicCoordinate[1]):Number[1]
 {
    distanceHaversineDegrees($point1.latitude, $point1.longitude, $point2.latitude, $point2.longitude);
 }
 
-function meta::relational::tests::functions::distance::distanceSphericalLawOfCosines(point1:GeographicCoordinate[1], point2:GeographicCoordinate[1]):Number[1]
+function meta::external::store::relational::tests::functions::distance::distanceSphericalLawOfCosines(point1:GeographicCoordinate[1], point2:GeographicCoordinate[1]):Number[1]
 {
    distanceSphericalLawOfCosinesDegrees($point1.latitude, $point1.longitude, $point2.latitude, $point2.longitude);
 }
 
 ###Relational
 
-Database meta::relational::tests::functions::distance::testDistanceDB
+Database meta::external::store::relational::tests::functions::distance::testDistanceDB
 (
    Table coordinatesTable(ID INT PRIMARY KEY, name VARCHAR(50), latitude FLOAT, longitude FLOAT)
 )
 
 ###Mapping
-import meta::relational::tests::functions::distance::*;
+import meta::external::store::relational::tests::functions::distance::*;
 
-Mapping meta::relational::tests::functions::distance::testDistanceMapping
+Mapping meta::external::store::relational::tests::functions::distance::testDistanceMapping
 (
    PointOfInterest : Relational
    {

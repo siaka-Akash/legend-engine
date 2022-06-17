@@ -1,0 +1,53 @@
+import meta::pure::executionPlan::*;
+import meta::pure::router::extension::*;
+import meta::pure::router::printer::*;
+import meta::external::store::aggregationAware::*;
+import meta::pure::runtime::*;
+import meta::pure::mapping::*;
+import meta::pure::store::contract::*;
+import meta::pure::store::contract::tests::*;
+
+
+function meta::external::store::aggregationAware::contract::aggregationAwareStoreContract():StoreContract[1]
+{
+   ^StoreContract
+   (
+     id = 'AggregationAwareStore',
+
+     executeStoreQuery=meta::external::store::aggregationAware::contract::execution_StoreQuery_1__RoutedValueSpecification_$0_1$__Mapping_1__Runtime_1__ExecutionContext_1__RouterExtension_MANY__DebugContext_1__Result_1_,
+     supports=meta::external::store::aggregationAware::contract::supports_FunctionExpression_1__Boolean_1_,
+     planExecution=meta::external::store::aggregationAware::contract::planExecution_StoreQuery_1__RoutedValueSpecification_$0_1$__Mapping_$0_1$__Runtime_$0_1$__ExecutionContext_1__RouterExtension_MANY__DebugContext_1__ExecutionNode_1_,
+     supportsStream = f:FunctionExpression[1]|false,
+
+     supportsSetImplementation = s:SetImplementation[1]| $s->instanceOf(AggregationAwareSetImplementation),
+     resolveStore = {e:ExtendedRoutedValueSpecification[1], s:SetImplementation[1], m:Mapping[1] | ^meta::external::store::aggregationAware::AggregationAwareStore(name='AGGREGATION_AWARE', package=::)}
+   )
+}
+
+function meta::external::store::aggregationAware::contract::supports(f:FunctionExpression[1]):Boolean[1]
+{
+   true;
+}
+
+function meta::external::store::aggregationAware::contract::planExecution(f:meta::pure::mapping::StoreQuery[1], e:RoutedValueSpecification[0..1], m:Mapping[0..1], runtime:Runtime[0..1], exeCtx:ExecutionContext[1], extensions:RouterExtension[*], debug:DebugContext[1]):ExecutionNode[1]
+{
+   let reprocessedFunction = reprocessFunction($f.fe->evaluateAndDeactivate(), $f.inScopeVars, $e, $m->toOne(), $debug);
+   let node = meta::pure::executionPlan::executionPlan($reprocessedFunction, $m->toOne(), $runtime->toOne(), $exeCtx, $extensions, $debug).rootExecutionNode;
+   ^AggregationAwareExecutionNode(executionNodes = $node, resultType = $node.resultType, aggregationAwareActivity = $reprocessedFunction->asString());
+}
+
+function meta::external::store::aggregationAware::contract::execution(f:meta::pure::mapping::StoreQuery[1], e:RoutedValueSpecification[0..1], m:Mapping[1], runtime:Runtime[1], exeCtx:ExecutionContext[1],  extensions:RouterExtension[*], debug:DebugContext[1]):Result<Any|*>[1]
+{
+   let reprocessedFunction = reprocessFunction($f.fe->evaluateAndDeactivate(), $f.inScopeVars, $e, $m, $debug);
+   let result = execute($reprocessedFunction, $m, $runtime, $exeCtx, $extensions, $debug);
+   let aggregationAwareActivity = ^AggregationAwareActivity(rewrittenQuery = $reprocessedFunction->asString());
+   ^$result
+    (
+       activities = $result.activities->add($aggregationAwareActivity)
+    );
+}
+
+function <<meta::pure::profiles::test.Test>> meta::external::store::aggregationAware::contract::tests::testResolveCore():Any[*]
+{
+     meta::external::store::aggregationAware::contract::aggregationAwareStoreContract()->testStoreContracts();
+}

@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::functions::asserts::*;
-import meta::relational::mapping::*;
-import meta::relational::tests::*;
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::model::simple::*;
 import meta::pure::profiles::*;
-import meta::relational::tests::query::routing::*;
+import meta::external::store::relational::tests::query::routing::*;
 
-function meta::relational::tests::query::routing::mapNestedInUserFunction(value:Person[*], func:Function<{Person[1]->String[1]}>[1]):String[*]
+function meta::external::store::relational::tests::query::routing::mapNestedInUserFunction(value:Person[*], func:Function<{Person[1]->String[1]}>[1]):String[*]
 {
    $value->map($func);
 }
 
-function <<test.Test>> meta::relational::tests::query::routing::testNoRoutingWhenTraversingFunction():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::query::routing::testNoRoutingWhenTraversingFunction():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|($p.firstName == 'John' && $p.lastName == 'Johnson') || $p.lastName == 'Allen')->mapNestedInUserFunction(e|$e.lastName), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 2);
@@ -33,7 +33,7 @@ function <<test.Test>> meta::relational::tests::query::routing::testNoRoutingWhe
 }
 
 // Alloy exclusion reason: 8. Routing not supported yet
-function <<test.Test, test.ExcludeAlloy>>  meta::relational::tests::query::routing::testSimpleRouting():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>>  meta::external::store::relational::tests::query::routing::testSimpleRouting():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|($p.firstName == 'John' && $p.lastName == 'Johnson') || $p.lastName == 'Allen').lastName->makeString(', '), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 1);
@@ -42,7 +42,7 @@ function <<test.Test, test.ExcludeAlloy>>  meta::relational::tests::query::routi
 }
 
 // Alloy exclusion reason: 8. Routing not supported yet
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::query::routing::testRoutedFunctionAdvanced():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::query::routing::testRoutedFunctionAdvanced():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|$p.firstName == 'John')->mapNestedInUserFunction(e|$e.lastName)->makeString(', ') + ' | ' + Person.all()->filter(p|$p.firstName == 'Anthony')->toOne().lastName->toOne(), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 1);
@@ -51,7 +51,7 @@ function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::query::routin
    assertEquals('select "root".LASTNAME from personTable as "root" where "root".FIRSTNAME = \'Anthony\'', $result->sqlRemoveFormatting(1));
 }
 
-function <<test.Test>> meta::relational::tests::query::routing::testRoutingTwoExpressionsWithVariable():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::query::routing::testRoutingTwoExpressionsWithVariable():Boolean[1]
 {
    let fn = {| let personName = 'John';
                Person.all()->filter(p|$p.firstName == $personName);};
@@ -63,7 +63,7 @@ function <<test.Test>> meta::relational::tests::query::routing::testRoutingTwoEx
 }
 
 // Alloy exclusion reason: 8. Routing not supported yet
-function <<test.Test, test.ExcludeAlloy>> {test.excludePlatform = 'Java compiled'} meta::relational::tests::query::routing::testRoutingTwoFindAllExpressionsWithVariable():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> {test.excludePlatform = 'Java compiled'} meta::external::store::relational::tests::query::routing::testRoutingTwoFindAllExpressionsWithVariable():Boolean[1]
 {
    let fn = {| let name = 'Firm A';
                let firm = Firm.all()->filter(f|$f.legalName->startsWith($name));
@@ -81,7 +81,7 @@ function <<test.Test, test.ExcludeAlloy>> {test.excludePlatform = 'Java compiled
 }
 
 // Alloy exclusion reason: 8. Routing not supported yet
-function <<test.Test, test.ExcludeAlloy>> {test.excludePlatform = 'Java compiled'} meta::relational::tests::query::routing::testRoutingFindAllExpressionReturnsMany():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> {test.excludePlatform = 'Java compiled'} meta::external::store::relational::tests::query::routing::testRoutingFindAllExpressionReturnsMany():Boolean[1]
 {
    let fn = {| let firm = Firm.all()->filter(f|$f.legalName->startsWith('Firm A') || $f.legalName->startsWith('Firm X'));
                let legalNames = $firm.legalName->makeString(',');
@@ -95,7 +95,7 @@ function <<test.Test, test.ExcludeAlloy>> {test.excludePlatform = 'Java compiled
    assertEquals('select "root".ID as "pk_0", "root".LEGALNAME as "legalName" from firmTable as "root" where ("root".LEGALNAME like \'Firm A%\' or "root".LEGALNAME like \'Firm X%\')', $result->sqlRemoveFormatting(0));
 }
 
-function <<test.ToFix>>   meta::relational::tests::query::routing::testRoutingUseVariableBeforeAndAfterRelationalExecution():Boolean[1]
+function <<test.ToFix>>   meta::external::store::relational::tests::query::routing::testRoutingUseVariableBeforeAndAfterRelationalExecution():Boolean[1]
 {
    let fn = {| let name1 = 'Johnson';
                let name2 = 'Smith';
@@ -112,7 +112,7 @@ function <<test.ToFix>>   meta::relational::tests::query::routing::testRoutingUs
 }
 
 // Alloy exclusion reason: 8. Routing not supported yet
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::query::routing::testRoutingUseVariableInExpression():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::query::routing::testRoutingUseVariableInExpression():Boolean[1]
 {
    let fn = {| let name2 = 'Smith';
                ['Johnson', 'Smith']->filter(p|$p == $name2);
@@ -124,7 +124,7 @@ function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::query::routin
 }
 
 // Alloy exclusion reason: 8. Routing not supported yet
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::query::routing::testRoutingTwoFindAllExpressionsWithNewClassInstance():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::query::routing::testRoutingTwoFindAllExpressionsWithNewClassInstance():Boolean[1]
 {
    let fn = {| let firm = ^Firm(legalName='Firm A');
                Person.all()->filter(p|$p.firm->exists(f | $f.legalName == $firm.legalName));
@@ -138,7 +138,7 @@ function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::query::routin
 }
 
 
-function <<test.ToFix>> meta::relational::tests::query::routing::testRoutingTwoFindAllExpressionsWithClassPropertyInFilter():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::query::routing::testRoutingTwoFindAllExpressionsWithClassPropertyInFilter():Boolean[1]
 {
    let fn = {| let firm = Firm.all()->filter(f | $f.legalName =='Firm A');
                Person.all()->filter(p|$p.firm->exists(f | $f.legalName == $firm.legalName));
@@ -153,7 +153,7 @@ function <<test.ToFix>> meta::relational::tests::query::routing::testRoutingTwoF
 }
 
 // Alloy exclusion reason: 8. Routing not supported yet
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::query::routing::testRoutingTwoFindAllExpressionsWithClassPropertyUsedInQualifier():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::query::routing::testRoutingTwoFindAllExpressionsWithClassPropertyUsedInQualifier():Boolean[1]
 {
    let fn = {| let firm = Firm.all()->filter(f | $f.legalName =='Firm A')->toOne();
                Person.all()->project([p | $p.nameWithTitle($firm.legalName)], 'title');
@@ -166,7 +166,7 @@ function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::query::routin
    assertEquals('select concat(\'Firm A\', \' \', "root".FIRSTNAME, \' \', "root".LASTNAME) as "title" from personTable as "root"', $result->sqlRemoveFormatting(1));
 }
 
-function <<test.Test>> meta::relational::tests::query::routing::testRoutingWithClassAsVariableForGetAll():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::query::routing::testRoutingWithClassAsVariableForGetAll():Boolean[1]
 {
    let class = Person;
    let fn = {| getAll($class)->filter(p|$p.lastName == 'Johnson')};
@@ -176,7 +176,7 @@ function <<test.Test>> meta::relational::tests::query::routing::testRoutingWithC
    assertEquals('John', $result.values.firstName);
 }
 
-function <<test.Test>> meta::relational::tests::query::routing::testRoutingOfSimpleQualifiedProperty():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::query::routing::testRoutingOfSimpleQualifiedProperty():Boolean[1]
 {
    let f = {|Firm.all()->project([f | $f.nameAndAddress()],'nameAndAddress')};
    let routed = $f->routeFunction(simpleRelationalMapping, testRuntime(), ^meta::pure::runtime::ExecutionContext(), meta::pure::router::extension::defaultRelationalExtensions(), noDebug());
@@ -195,13 +195,13 @@ function <<test.Test>> meta::relational::tests::query::routing::testRoutingOfSim
 }
 
 
-function <<test.Test>> meta::relational::tests::projection::simple::testRoutingWithSubtypePropagation():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::simple::testRoutingWithSubtypePropagation():Boolean[1]
 {
-   let result = execute(|Firm.all()->project(col(x|$x.employees->subType(@meta::relational::tests::model::simple::PersonExtension).manager->subType(@meta::relational::tests::model::simple::PersonExtension).name, 'managerName')), meta::relational::tests::TestMappingOfSubtypeClass, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
+   let result = execute(|Firm.all()->project(col(x|$x.employees->subType(@meta::external::store::relational::tests::model::simple::PersonExtension).manager->subType(@meta::external::store::relational::tests::model::simple::PersonExtension).name, 'managerName')), meta::external::store::relational::tests::TestMappingOfSubtypeClass, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals('select concat("persontable_1".FIRSTNAME, \' \', "persontable_1".LASTNAME) as "managerName" from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID) left outer join personTable as "persontable_1" on ("persontable_0".MANAGERID = "persontable_1".ID)',$result->sqlRemoveFormatting());
 }
 
-function <<test.ToFix>> meta::relational::tests::query::routing::testRoutingPureFunctionWithMultipleExpressions():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::query::routing::testRoutingPureFunctionWithMultipleExpressions():Boolean[1]
 {
    let fn = {| doSomething(3)};
    
@@ -209,7 +209,7 @@ function <<test.ToFix>> meta::relational::tests::query::routing::testRoutingPure
    assertEquals('A chicken', $result.values);
 }
 
-function meta::relational::tests::query::routing::doSomething(a:Integer[1]):String[1]
+function meta::external::store::relational::tests::query::routing::doSomething(a:Integer[1]):String[1]
 {
    let b = 10;
    let value = $a - $b;

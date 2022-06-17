@@ -12,43 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::metamodel::relation::*;
-import meta::pure::store::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::pure::store::metamodel::*;
 import meta::pure::runtime::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::functions::typeInference::*;
-import meta::relational::translation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::functions::typeInference::*;
+import meta::external::store::relational::translation::*;
 
-function meta::relational::metamodel::execute::executeInDb(sql:String[1], databaseConnectionFunction:Function<{->DatabaseConnection[1]}>[1]):ResultSet[1]
+function meta::external::store::relational::metamodel::execute::executeInDb(sql:String[1], databaseConnectionFunction:Function<{->DatabaseConnection[1]}>[1]):ResultSet[1]
 {
    let databaseConnection = $databaseConnectionFunction->eval();
-   meta::relational::metamodel::execute::executeInDb($sql, $databaseConnection, 0, 1000);
+   meta::external::store::relational::metamodel::execute::executeInDb($sql, $databaseConnection, 0, 1000);
 }
 
-function meta::relational::metamodel::execute::executeInDb(sql:String[1], databaseConnection:DatabaseConnection[1]):ResultSet[1]
+function meta::external::store::relational::metamodel::execute::executeInDb(sql:String[1], databaseConnection:DatabaseConnection[1]):ResultSet[1]
 {
-    meta::relational::metamodel::execute::executeInDb($sql, $databaseConnection, 0, 1000)
+    meta::external::store::relational::metamodel::execute::executeInDb($sql, $databaseConnection, 0, 1000)
 }
 
-function meta::relational::functions::database::executeInDb(str: String[1] , connection:DatabaseConnection[1], debug:Boolean[1]):ResultSet[1]
+function meta::external::store::relational::functions::database::executeInDb(str: String[1] , connection:DatabaseConnection[1], debug:Boolean[1]):ResultSet[1]
 {
    print(if($debug,|$str+'\n',|''));
    executeInDb($str, $connection);
 }
 
-function meta::relational::metamodel::execute::loadCsvToDbTable(filePath:String[1], table:Table[1], databaseConnection:DatabaseConnection[1]):Nil[0]
+function meta::external::store::relational::metamodel::execute::loadCsvToDbTable(filePath:String[1], table:Table[1], databaseConnection:DatabaseConnection[1]):Nil[0]
 {
     loadCsvToDbTable($filePath, $table, $databaseConnection, [])
 }
 
-function meta::relational::metamodel::execute::createTestDatabaseConnection():DatabaseConnection[1]
+function meta::external::store::relational::metamodel::execute::createTestDatabaseConnection():DatabaseConnection[1]
 {
    ^TestDatabaseConnection(element='TEST', type=DatabaseType.H2);
 }
 
-function meta::relational::metamodel::execute::resultSetToTDS(resultSet:ResultSet[1]):TabularDataSet[1]
+function meta::external::store::relational::metamodel::execute::resultSetToTDS(resultSet:ResultSet[1]):TabularDataSet[1]
 {
    let columns = $resultSet.columnNames->size()->range()->map(i| ^TDSColumn(name=$resultSet.columnNames->at($i), offset=$i));
    let sqlNull = ^SQLNull();
@@ -62,12 +62,12 @@ function meta::relational::metamodel::execute::resultSetToTDS(resultSet:ResultSe
    $tds;
 }
 
-function meta::relational::metamodel::execute::executeInDbToTDS(sql:String[1], databaseConnectionFunction:Function<{->DatabaseConnection[1]}>[1]):TabularDataSet[1]
+function meta::external::store::relational::metamodel::execute::executeInDbToTDS(sql:String[1], databaseConnectionFunction:Function<{->DatabaseConnection[1]}>[1]):TabularDataSet[1]
 {
-   meta::relational::metamodel::execute::executeInDb($sql, $databaseConnectionFunction)->resultSetToTDS();
+   meta::external::store::relational::metamodel::execute::executeInDb($sql, $databaseConnectionFunction)->resultSetToTDS();
 }
 
-function meta::relational::runtime::mergeRuntimes(runtimes:Runtime[1..*]):Runtime[1]
+function meta::external::store::relational::runtime::mergeRuntimes(runtimes:Runtime[1..*]):Runtime[1]
 {
    if($runtimes->distinct()->size()==1,
       |$runtimes->at(0),
@@ -75,7 +75,7 @@ function meta::relational::runtime::mergeRuntimes(runtimes:Runtime[1..*]):Runtim
     );
 }
 
-function meta::relational::runtime::dataSourceEquality(a:DataSource[1],b:DataSource[1]):Boolean[1]
+function meta::external::store::relational::runtime::dataSourceEquality(a:DataSource[1],b:DataSource[1]):Boolean[1]
 {
    $a.host == $b.host &&
    $a.port == $b.port  &&   
@@ -86,33 +86,33 @@ function meta::relational::runtime::dataSourceEquality(a:DataSource[1],b:DataSou
 }
 
 
-function meta::relational::functions::typeInference::inferDynaFunctionReturnType(d: DynaFunction[1], failOnMatchFailure:Boolean[1]):meta::relational::metamodel::datatype::DataType[0..1]
+function meta::external::store::relational::functions::typeInference::inferDynaFunctionReturnType(d: DynaFunction[1], failOnMatchFailure:Boolean[1]):meta::external::store::relational::metamodel::datatype::DataType[0..1]
 {
-   let dfToReturnFunctionMap = meta::relational::functions::typeInference::getDynaFunctionTypeInferenceMap();
+   let dfToReturnFunctionMap = meta::external::store::relational::functions::typeInference::getDynaFunctionTypeInferenceMap();
    let candidateMatchAndDTypePairs = $dfToReturnFunctionMap->get($d.name).values;
    let filteredMatchAndDTypePairs = $candidateMatchAndDTypePairs->filter(p | $p.first->eval($d.parameters));
    if($failOnMatchFailure, | assert($filteredMatchAndDTypePairs->size() >= 1, 'Type inference not supported yet! Dyna function: ' + $d.name);, | []);
    if($filteredMatchAndDTypePairs->size() >= 1, | $filteredMatchAndDTypePairs->at(0).second->eval($d.parameters), | []);
 }
 
-function meta::relational::functions::typeInference::inferRelationalType(rop: RelationalOperationElement[1]):meta::relational::metamodel::datatype::DataType[0..1]
+function meta::external::store::relational::functions::typeInference::inferRelationalType(rop: RelationalOperationElement[1]):meta::external::store::relational::metamodel::datatype::DataType[0..1]
 {
    inferRelationalType($rop, true); 
 }
 
-function meta::relational::functions::typeInference::inferRelationalType(rop: RelationalOperationElement[1], translationContext:TranslationContext[1]):meta::relational::metamodel::datatype::DataType[0..1]
+function meta::external::store::relational::functions::typeInference::inferRelationalType(rop: RelationalOperationElement[1], translationContext:TranslationContext[1]):meta::external::store::relational::metamodel::datatype::DataType[0..1]
 {
    let relationalType = inferRelationalType($rop); 
    $relationalType->translateCoreTypeToDbSpecificType($translationContext);
 }
 
-function meta::relational::functions::typeInference::inferRelationalType(rop: RelationalOperationElement[1], failOnMatchFailure:Boolean[1], translationContext:TranslationContext[1]):meta::relational::metamodel::datatype::DataType[0..1]
+function meta::external::store::relational::functions::typeInference::inferRelationalType(rop: RelationalOperationElement[1], failOnMatchFailure:Boolean[1], translationContext:TranslationContext[1]):meta::external::store::relational::metamodel::datatype::DataType[0..1]
 {
    let relationalType = inferRelationalType($rop, $failOnMatchFailure); 
    $relationalType->translateCoreTypeToDbSpecificType($translationContext);
 }
 
-function meta::relational::functions::typeInference::inferRelationalType(rop: RelationalOperationElement[1], failOnMatchFailure:Boolean[1]):meta::relational::metamodel::datatype::DataType[0..1]
+function meta::external::store::relational::functions::typeInference::inferRelationalType(rop: RelationalOperationElement[1], failOnMatchFailure:Boolean[1]):meta::external::store::relational::metamodel::datatype::DataType[0..1]
 {
    $rop->match([
       t : TableAliasColumn[1] | if($t.column.owner->isNotEmpty() && $t.column.owner->toOne()->instanceOf(View),| $t.column.owner->toOne()->cast(@View).columnMappings->filter(cm | $cm.columnName == $t.column.name)->toOne().relationalOperationElement->inferRelationalType($failOnMatchFailure), | $t.column.type),
@@ -120,41 +120,41 @@ function meta::relational::functions::typeInference::inferRelationalType(rop: Re
       d : DynaFunction[1] | $d->inferDynaFunctionReturnType($failOnMatchFailure),
       d : Alias[1] | $d.relationalElement->inferRelationalType($failOnMatchFailure),
       l : Literal[1] | $l.value->match([
-         s: String[1]  | ^meta::relational::metamodel::datatype::Varchar(size = $s->length()),
-         b: Boolean[1] |  ^meta::relational::metamodel::datatype::Bit(),
-         i: Integer[1] |  ^meta::relational::metamodel::datatype::Integer(),
-         d: Float[1]   |  ^meta::relational::metamodel::datatype::Float(),
-         d: StrictDate[1]   |  ^meta::relational::metamodel::datatype::Date(),
-         d: Date[1]   |  ^meta::relational::metamodel::datatype::Timestamp(),
-         d: meta::relational::functions::pureToSqlQuery::metamodel::VarPlaceHolder[1]   |  
+         s: String[1]  | ^meta::external::store::relational::metamodel::datatype::Varchar(size = $s->length()),
+         b: Boolean[1] |  ^meta::external::store::relational::metamodel::datatype::Bit(),
+         i: Integer[1] |  ^meta::external::store::relational::metamodel::datatype::Integer(),
+         d: Float[1]   |  ^meta::external::store::relational::metamodel::datatype::Float(),
+         d: StrictDate[1]   |  ^meta::external::store::relational::metamodel::datatype::Date(),
+         d: Date[1]   |  ^meta::external::store::relational::metamodel::datatype::Timestamp(),
+         d: meta::external::store::relational::functions::pureToSqlQuery::metamodel::VarPlaceHolder[1]   |
             if($d.type == String,
-               | ^meta::relational::metamodel::datatype::Varchar(size = 4000),
+               | ^meta::external::store::relational::metamodel::datatype::Varchar(size = 4000),
                | if($d.type == Integer,
-                    | ^meta::relational::metamodel::datatype::Integer(),
+                    | ^meta::external::store::relational::metamodel::datatype::Integer(),
                     | if($d.type == Float,
-                         | ^meta::relational::metamodel::datatype::Float(),
+                         | ^meta::external::store::relational::metamodel::datatype::Float(),
                          | if($d.type == Boolean,
-                              | ^meta::relational::metamodel::datatype::Bit(),
+                              | ^meta::external::store::relational::metamodel::datatype::Bit(),
                               | if($d.type->in([DateTime, Date]),
-                                   | ^meta::relational::metamodel::datatype::Timestamp(),
+                                   | ^meta::external::store::relational::metamodel::datatype::Timestamp(),
                                    | if($d.type == StrictDate,
-                                        | ^meta::relational::metamodel::datatype::Date(),
-                                        | fail('Not supported yet!'); ^meta::relational::metamodel::datatype::DataType();
+                                        | ^meta::external::store::relational::metamodel::datatype::Date(),
+                                        | fail('Not supported yet!'); ^meta::external::store::relational::metamodel::datatype::DataType();
                                      )
                                 )
                            )
                       )
                  )
             ),
-         a: Any[1]     | if($failOnMatchFailure, | fail('Not supported yet!'); ^meta::relational::metamodel::datatype::DataType();, |[]);
+         a: Any[1]     | if($failOnMatchFailure, | fail('Not supported yet!'); ^meta::external::store::relational::metamodel::datatype::DataType();, |[]);
       ]),
-      j : meta::relational::metamodel::operation::JoinStrings[1] | ^meta::relational::metamodel::datatype::Varchar(size = $j.strings->concatenate($j.prefix)->concatenate($j.separator)->concatenate($j.suffix)->map(x | $x->inferRelationalType($failOnMatchFailure)->toOne()->getSize())->sum()),
+      j : meta::external::store::relational::metamodel::operation::JoinStrings[1] | ^meta::external::store::relational::metamodel::datatype::Varchar(size = $j.strings->concatenate($j.prefix)->concatenate($j.separator)->concatenate($j.suffix)->map(x | $x->inferRelationalType($failOnMatchFailure)->toOne()->getSize())->sum()),
       c:Column[1] | $c.type,
-      l : Any[1] | if($failOnMatchFailure, | fail('Not supported yet!'); ^meta::relational::metamodel::datatype::DataType();, |[]);
+      l : Any[1] | if($failOnMatchFailure, | fail('Not supported yet!'); ^meta::external::store::relational::metamodel::datatype::DataType();, |[]);
    ]);
 }
 
-function <<access.private>> meta::relational::functions::typeInference::getDynaFunctionTypeInferenceMap():Map<String, List<Pair<meta::pure::metamodel::function::Function<{RelationalOperationElement[*]->Boolean[1]}>, meta::pure::metamodel::function::Function<{RelationalOperationElement[*]->meta::relational::metamodel::datatype::DataType[0..1]}>>>>[1]
+function <<access.private>> meta::external::store::relational::functions::typeInference::getDynaFunctionTypeInferenceMap():Map<String, List<Pair<meta::pure::metamodel::function::Function<{RelationalOperationElement[*]->Boolean[1]}>, meta::pure::metamodel::function::Function<{RelationalOperationElement[*]->meta::external::store::relational::metamodel::datatype::DataType[0..1]}>>>>[1]
 {
    newMap([
 
@@ -173,7 +173,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -182,8 +182,8 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          'add',
          list([
             pair(
-               {params: RelationalOperationElement[*] | [$params->at(0)->inferRelationalType()->toOne(), $params->at(1)->inferRelationalType()->toOne()]->isSafeTypePossible() && [$params->at(0)->inferRelationalType()->toOne(), $params->at(1)->inferRelationalType()->toOne()]->getSafeType()->instanceOf(meta::relational::metamodel::datatype::Varchar)},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->toOne()->getSize() + $params->at(1)->inferRelationalType()->toOne()->getSize())}
+               {params: RelationalOperationElement[*] | [$params->at(0)->inferRelationalType()->toOne(), $params->at(1)->inferRelationalType()->toOne()]->isSafeTypePossible() && [$params->at(0)->inferRelationalType()->toOne(), $params->at(1)->inferRelationalType()->toOne()]->getSafeType()->instanceOf(meta::external::store::relational::metamodel::datatype::Varchar)},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->toOne()->getSize() + $params->at(1)->inferRelationalType()->toOne()->getSize())}
             ),
             pair(
                {params: RelationalOperationElement[*] | [$params->at(0)->inferRelationalType()->toOne(), $params->at(1)->inferRelationalType()->toOne()]->isSafeTypePossible()},
@@ -196,8 +196,8 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          'adjust',
          list([
             pair(
-               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::relational::metamodel::datatype::Char) || $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::relational::metamodel::datatype::Varchar)},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Timestamp()}
+               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::external::store::relational::metamodel::datatype::Char) || $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::external::store::relational::metamodel::datatype::Varchar)},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Timestamp()}
             ),
             pair(
                {params: RelationalOperationElement[*] | true},
@@ -211,7 +211,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -221,7 +221,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -231,7 +231,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -241,7 +241,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -251,7 +251,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -261,7 +261,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::BigInt()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::BigInt()}
             )
          ])
       ),
@@ -284,12 +284,12 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          'ceiling',
          list([
             pair(
-               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::relational::metamodel::datatype::Numeric)},
-               {params: RelationalOperationElement[*] | let type = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Numeric); ^$type(scale = 0);}
+               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::external::store::relational::metamodel::datatype::Numeric)},
+               {params: RelationalOperationElement[*] | let type = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Numeric); ^$type(scale = 0);}
             ),
             pair(
-               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::relational::metamodel::datatype::Decimal)},
-               {params: RelationalOperationElement[*] | let type = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Decimal); ^$type(scale = 0);}
+               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::external::store::relational::metamodel::datatype::Decimal)},
+               {params: RelationalOperationElement[*] | let type = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Decimal); ^$type(scale = 0);}
             ),
             pair(
                {params: RelationalOperationElement[*] | true},
@@ -312,8 +312,8 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          'concat',
          list([
             pair(
-               {params: RelationalOperationElement[*] | $params->map(p |$p->inferRelationalType())->forAll(x | $x->instanceOf(meta::relational::metamodel::datatype::Char) || $x->instanceOf(meta::relational::metamodel::datatype::Varchar))},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Varchar(size = $params->map(p |$p->inferRelationalType())->map(x|$x->getSize())->sum())}
+               {params: RelationalOperationElement[*] | $params->map(p |$p->inferRelationalType())->forAll(x | $x->instanceOf(meta::external::store::relational::metamodel::datatype::Char) || $x->instanceOf(meta::external::store::relational::metamodel::datatype::Varchar))},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Varchar(size = $params->map(p |$p->inferRelationalType())->map(x|$x->getSize())->sum())}
             )
          ])
       ),
@@ -323,7 +323,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -333,7 +333,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Date()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Date()}
             )
          ])
       ),
@@ -343,7 +343,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Timestamp()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Timestamp()}
             )
          ])
       ),
@@ -353,7 +353,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Varchar(size = 128)}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Varchar(size = 128)}
             )
          ])
       ),
@@ -363,7 +363,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -373,7 +373,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::BigInt()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::BigInt()}
             )
          ])
       ),
@@ -383,7 +383,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -393,7 +393,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Date()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Date()}
             )
          ])
       ),
@@ -403,7 +403,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -413,7 +413,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -423,7 +423,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::BigInt()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::BigInt()}
             )
          ])
       ),
@@ -443,7 +443,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -453,7 +453,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -463,7 +463,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -473,7 +473,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -483,7 +483,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -493,7 +493,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Date()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Date()}
             )
          ])
       ),
@@ -503,7 +503,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Date()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Date()}
             )
          ])
       ),
@@ -513,7 +513,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Date()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Date()}
             )
          ])
       ),
@@ -523,7 +523,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Date()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Date()}
             )
          ])
       ),
@@ -533,7 +533,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Date()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Date()}
             )
          ])
       ),
@@ -543,7 +543,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Date()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Date()}
             )
          ])
       ),
@@ -553,7 +553,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Date()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Date()}
             )
          ])
       ),
@@ -562,12 +562,12 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          'floor',
          list([
             pair(
-               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::relational::metamodel::datatype::Numeric)},
-               {params: RelationalOperationElement[*] | let type = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Numeric); ^$type(scale = 0);}
+               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::external::store::relational::metamodel::datatype::Numeric)},
+               {params: RelationalOperationElement[*] | let type = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Numeric); ^$type(scale = 0);}
             ),
             pair(
-               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::relational::metamodel::datatype::Decimal)},
-               {params: RelationalOperationElement[*] | let type = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Decimal); ^$type(scale = 0);}
+               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::external::store::relational::metamodel::datatype::Decimal)},
+               {params: RelationalOperationElement[*] | let type = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Decimal); ^$type(scale = 0);}
             ),
             pair(
                {params: RelationalOperationElement[*] | true},
@@ -581,7 +581,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -591,7 +591,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -611,7 +611,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -631,7 +631,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -641,7 +641,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -651,7 +651,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -661,7 +661,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -671,7 +671,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -681,7 +681,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -691,7 +691,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -700,8 +700,8 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          'joinStrings',
          list([
             pair(
-               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::relational::metamodel::datatype::Char) || $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::relational::metamodel::datatype::Varchar)},
-               {params: RelationalOperationElement[*] | let size = $params->at(0)->inferRelationalType()->toOne()->getSize(); ^meta::relational::metamodel::datatype::Varchar(size = max([4000, $size]));}
+               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::external::store::relational::metamodel::datatype::Char) || $params->at(0)->inferRelationalType()->toOne()->instanceOf(meta::external::store::relational::metamodel::datatype::Varchar)},
+               {params: RelationalOperationElement[*] | let size = $params->at(0)->inferRelationalType()->toOne()->getSize(); ^meta::external::store::relational::metamodel::datatype::Varchar(size = max([4000, $size]));}
             )
          ])
       ),
@@ -711,7 +711,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->match([c:meta::relational::metamodel::datatype::Char[1]|$c.size,c:meta::relational::metamodel::datatype::Varchar[1]|$c.size]))}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->match([c:meta::external::store::relational::metamodel::datatype::Char[1]|$c.size,c:meta::external::store::relational::metamodel::datatype::Varchar[1]|$c.size]))}
             )
          ])
       ),
@@ -721,7 +721,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -731,7 +731,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -741,7 +741,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -751,7 +751,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -761,7 +761,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->match([c:meta::relational::metamodel::datatype::Char[1]|$c.size,c:meta::relational::metamodel::datatype::Varchar[1]|$c.size]))}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->match([c:meta::external::store::relational::metamodel::datatype::Char[1]|$c.size,c:meta::external::store::relational::metamodel::datatype::Varchar[1]|$c.size]))}
             )
          ])
       ),
@@ -799,7 +799,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -819,7 +819,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -829,7 +829,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -839,7 +839,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -849,7 +849,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Date()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Date()}
             )
          ])
       ),
@@ -859,7 +859,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Timestamp()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Timestamp()}
             )
          ])
       ),
@@ -869,7 +869,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -879,7 +879,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -889,7 +889,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -899,7 +899,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -909,7 +909,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Timestamp()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Timestamp()}
             )
          ])
       ),
@@ -919,7 +919,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Float()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Float()}
             )
          ])
       ),
@@ -929,7 +929,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -938,24 +938,24 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          'plus',
          list([
             pair(
-               {params: RelationalOperationElement[*] | $params->size() == 1 && $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>)->in([meta::relational::metamodel::datatype::SmallInt, meta::relational::metamodel::datatype::TinyInt])},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | $params->size() == 1 && $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>)->in([meta::external::store::relational::metamodel::datatype::SmallInt, meta::external::store::relational::metamodel::datatype::TinyInt])},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             ),
             pair(
-               {params: RelationalOperationElement[*] | $params->size() == 1 && $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>)->in([meta::relational::metamodel::datatype::Integer, meta::relational::metamodel::datatype::BigInt])},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::BigInt()}
+               {params: RelationalOperationElement[*] | $params->size() == 1 && $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>)->in([meta::external::store::relational::metamodel::datatype::Integer, meta::external::store::relational::metamodel::datatype::BigInt])},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::BigInt()}
             ),
             pair(
-               {params: RelationalOperationElement[*] | $params->size() == 1 && $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>) == meta::relational::metamodel::datatype::Decimal},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Decimal(precision = min([31, $params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Decimal).precision]), scale = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Decimal).scale)}
+               {params: RelationalOperationElement[*] | $params->size() == 1 && $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>) == meta::external::store::relational::metamodel::datatype::Decimal},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Decimal(precision = min([31, $params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Decimal).precision]), scale = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Decimal).scale)}
             ),
             pair(
-               {params: RelationalOperationElement[*] | $params->size() == 1 && $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>) == meta::relational::metamodel::datatype::Numeric},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Numeric(precision = min([31, $params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Numeric).precision]), scale = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Numeric).scale)}
+               {params: RelationalOperationElement[*] | $params->size() == 1 && $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>) == meta::external::store::relational::metamodel::datatype::Numeric},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Numeric(precision = min([31, $params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Numeric).precision]), scale = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Numeric).scale)}
             ),
             pair(
-               {params: RelationalOperationElement[*] | $params->size() == 1 && $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>)->in([meta::relational::metamodel::datatype::Float, meta::relational::metamodel::datatype::Double])},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | $params->size() == 1 && $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>)->in([meta::external::store::relational::metamodel::datatype::Float, meta::external::store::relational::metamodel::datatype::Double])},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             ),
             pair(
                {params: RelationalOperationElement[*] | $params->size() > 1 && $params->map(p |$p->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>))->removeDuplicates()->size() == 1},
@@ -969,7 +969,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Date()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Date()}
             )
          ])
       ),
@@ -979,7 +979,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -989,7 +989,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -999,7 +999,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::BigInt()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::BigInt()}
             )
          ])
       ),
@@ -1009,7 +1009,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -1019,7 +1019,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->match([c:meta::relational::metamodel::datatype::Char[1]|$c.size,c:meta::relational::metamodel::datatype::Varchar[1]|$c.size]) * 2)} // Safe
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->match([c:meta::external::store::relational::metamodel::datatype::Char[1]|$c.size,c:meta::external::store::relational::metamodel::datatype::Varchar[1]|$c.size]) * 2)} // Safe
             )
          ])
       ),
@@ -1029,7 +1029,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->match([c:meta::relational::metamodel::datatype::Char[1]|$c.size,c:meta::relational::metamodel::datatype::Varchar[1]|$c.size]))}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->match([c:meta::external::store::relational::metamodel::datatype::Char[1]|$c.size,c:meta::external::store::relational::metamodel::datatype::Varchar[1]|$c.size]))}
             )
          ])
       ),
@@ -1039,7 +1039,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::BigInt()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::BigInt()}
             )
          ])
       ),
@@ -1048,12 +1048,12 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          'round',
          list([
             pair(
-               {params: RelationalOperationElement[*] | $params->size() == 1 && $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>) == meta::relational::metamodel::datatype::Decimal},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Decimal(precision = min([31, ($params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Decimal).precision + 1)]), scale = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Decimal).scale)}
+               {params: RelationalOperationElement[*] | $params->size() == 1 && $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>) == meta::external::store::relational::metamodel::datatype::Decimal},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Decimal(precision = min([31, ($params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Decimal).precision + 1)]), scale = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Decimal).scale)}
             ),
             pair(
-               {params: RelationalOperationElement[*] | $params->size() == 1 && $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>) == meta::relational::metamodel::datatype::Numeric},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Numeric(precision = min([31, ($params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Numeric).precision + 1)]), scale = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Numeric).scale)}
+               {params: RelationalOperationElement[*] | $params->size() == 1 && $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>) == meta::external::store::relational::metamodel::datatype::Numeric},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Numeric(precision = min([31, ($params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Numeric).precision + 1)]), scale = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Numeric).scale)}
             ),
             pair(
                {params: RelationalOperationElement[*] | true},
@@ -1067,7 +1067,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->match([c:meta::relational::metamodel::datatype::Char[1]|$c.size,c:meta::relational::metamodel::datatype::Varchar[1]|$c.size]))}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->match([c:meta::external::store::relational::metamodel::datatype::Char[1]|$c.size,c:meta::external::store::relational::metamodel::datatype::Varchar[1]|$c.size]))}
             )
          ])
       ),
@@ -1077,7 +1077,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -1087,7 +1087,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -1097,7 +1097,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -1107,7 +1107,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -1127,7 +1127,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->match([c:meta::relational::metamodel::datatype::Char[1]|$c.size,c:meta::relational::metamodel::datatype::Varchar[1]|$c.size]))}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->match([c:meta::external::store::relational::metamodel::datatype::Char[1]|$c.size,c:meta::external::store::relational::metamodel::datatype::Varchar[1]|$c.size]))}
             )
          ])
       ),
@@ -1137,7 +1137,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -1147,7 +1147,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Bit()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Bit()}
             )
          ])
       ),
@@ -1157,7 +1157,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Other()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Other()}
             )
          ])
       ),
@@ -1167,7 +1167,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -1177,7 +1177,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -1187,7 +1187,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -1196,24 +1196,24 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          'sum',
          list([
             pair(
-               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>)->in([meta::relational::metamodel::datatype::SmallInt, meta::relational::metamodel::datatype::TinyInt, meta::relational::metamodel::datatype::Integer])},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>)->in([meta::external::store::relational::metamodel::datatype::SmallInt, meta::external::store::relational::metamodel::datatype::TinyInt, meta::external::store::relational::metamodel::datatype::Integer])},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             ),
             pair(
-               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>)->in([meta::relational::metamodel::datatype::BigInt])},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::BigInt()}
+               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>)->in([meta::external::store::relational::metamodel::datatype::BigInt])},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::BigInt()}
             ),
             pair(
-               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>) == meta::relational::metamodel::datatype::Decimal},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Decimal(precision = min([31, $params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Decimal).precision]), scale = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Decimal).scale)}
+               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>) == meta::external::store::relational::metamodel::datatype::Decimal},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Decimal(precision = min([31, $params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Decimal).precision]), scale = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Decimal).scale)}
             ),
             pair(
-               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>) == meta::relational::metamodel::datatype::Numeric},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Numeric(precision = min([31, $params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Numeric).precision]), scale = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::relational::metamodel::datatype::Numeric).scale)}
+               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>) == meta::external::store::relational::metamodel::datatype::Numeric},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Numeric(precision = min([31, $params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Numeric).precision]), scale = $params->at(0)->inferRelationalType()->toOne()->cast(@meta::external::store::relational::metamodel::datatype::Numeric).scale)}
             ),
             pair(
-               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>)->in([meta::relational::metamodel::datatype::Float, meta::relational::metamodel::datatype::Double])},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | $params->at(0)->inferRelationalType()->genericType().rawType->toOne()->cast(@Class<Any>)->in([meta::external::store::relational::metamodel::datatype::Float, meta::external::store::relational::metamodel::datatype::Double])},
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -1223,7 +1223,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Double()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Double()}
             )
          ])
       ),
@@ -1243,7 +1243,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Date()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Date()}
             )
          ])
       ),
@@ -1273,7 +1273,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Varchar(size = 128)}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Varchar(size = 128)}
             )
          ])
       ),
@@ -1293,7 +1293,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->match([c:meta::relational::metamodel::datatype::Char[1]|$c.size,c:meta::relational::metamodel::datatype::Varchar[1]|$c.size]))}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Varchar(size = $params->at(0)->inferRelationalType()->match([c:meta::external::store::relational::metamodel::datatype::Char[1]|$c.size,c:meta::external::store::relational::metamodel::datatype::Varchar[1]|$c.size]))}
             )
          ])
       ),
@@ -1303,7 +1303,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       ),
@@ -1313,7 +1313,7 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
          list([
             pair(
                {params: RelationalOperationElement[*] | true},
-               {params: RelationalOperationElement[*] | ^meta::relational::metamodel::datatype::Integer()}
+               {params: RelationalOperationElement[*] | ^meta::external::store::relational::metamodel::datatype::Integer()}
             )
          ])
       )
@@ -1321,35 +1321,35 @@ function <<access.private>> meta::relational::functions::typeInference::getDynaF
 
 }
 
-function <<access.private>> meta::relational::functions::typeInference::isSafeTypePossible(types: meta::relational::metamodel::datatype::DataType[*]):Boolean[1]
+function <<access.private>> meta::external::store::relational::functions::typeInference::isSafeTypePossible(types: meta::external::store::relational::metamodel::datatype::DataType[*]):Boolean[1]
 {
    $types->tail()->fold({n,a |
       if(!$a.first,
          | $a,
          | if(isSafeTypePossible($n, $a.second),
               | pair(true, getSafeType($n, $a.second)),
-              | pair(false, ^meta::relational::metamodel::datatype::DataType())
+              | pair(false, ^meta::external::store::relational::metamodel::datatype::DataType())
            )
       )
    }, pair(true, $types->head()->toOne())).first
 }
 
 
-function <<access.private>> meta::relational::functions::typeInference::getSafeType(types: meta::relational::metamodel::datatype::DataType[*]):meta::relational::metamodel::datatype::DataType[1]
+function <<access.private>> meta::external::store::relational::functions::typeInference::getSafeType(types: meta::external::store::relational::metamodel::datatype::DataType[*]):meta::external::store::relational::metamodel::datatype::DataType[1]
 {
    $types->tail()->fold({n,a |
       if(!$a.first,
          | $a,
          | if(isSafeTypePossible($n, $a.second),
               | pair(true, getSafeType($n, $a.second)),
-              | pair(false, ^meta::relational::metamodel::datatype::DataType())
+              | pair(false, ^meta::external::store::relational::metamodel::datatype::DataType())
            )
       )
    }, pair(true, $types->head()->toOne())).second
 }
 
 
-function <<access.private>> meta::relational::functions::typeInference::isSafeTypePossible(type1: meta::relational::metamodel::datatype::DataType[1], type2: meta::relational::metamodel::datatype::DataType[1]):Boolean[1]
+function <<access.private>> meta::external::store::relational::functions::typeInference::isSafeTypePossible(type1: meta::external::store::relational::metamodel::datatype::DataType[1], type2: meta::external::store::relational::metamodel::datatype::DataType[1]):Boolean[1]
 {
    let safeTypeMap = safeTypeMap();
 
@@ -1362,43 +1362,43 @@ function <<access.private>> meta::relational::functions::typeInference::isSafeTy
    );
 }
 
-function <<access.private>> meta::relational::functions::typeInference::getSafeType(type1: meta::relational::metamodel::datatype::DataType[1], type2: meta::relational::metamodel::datatype::DataType[1]):meta::relational::metamodel::datatype::DataType[1]
+function <<access.private>> meta::external::store::relational::functions::typeInference::getSafeType(type1: meta::external::store::relational::metamodel::datatype::DataType[1], type2: meta::external::store::relational::metamodel::datatype::DataType[1]):meta::external::store::relational::metamodel::datatype::DataType[1]
 {
    let safeTypeMap = safeTypeMap();
    let safeType = if($safeTypeMap->keys()->contains($type1->genericType().rawType->toOne()) && $safeTypeMap->get($type1->genericType().rawType->toOne()).values->contains($type2->genericType().rawType->toOne()),
                      | $type2,
                      | $type1);
 
-   if($safeType->instanceOf(meta::relational::metamodel::datatype::Char) || $safeType->instanceOf(meta::relational::metamodel::datatype::Varchar),
-      | ^meta::relational::metamodel::datatype::Varchar(size = [if($type1->instanceOf(meta::relational::metamodel::datatype::Other), | 0, | $type1->getSize()), if($type2->instanceOf(meta::relational::metamodel::datatype::Other), | 0, | $type2->getSize())]->max()),
+   if($safeType->instanceOf(meta::external::store::relational::metamodel::datatype::Char) || $safeType->instanceOf(meta::external::store::relational::metamodel::datatype::Varchar),
+      | ^meta::external::store::relational::metamodel::datatype::Varchar(size = [if($type1->instanceOf(meta::external::store::relational::metamodel::datatype::Other), | 0, | $type1->getSize()), if($type2->instanceOf(meta::external::store::relational::metamodel::datatype::Other), | 0, | $type2->getSize())]->max()),
       | $safeType
    );
 }
 
-function <<access.private>> meta::relational::functions::typeInference::getSize(t: meta::relational::metamodel::datatype::DataType[1]):Integer[1]
+function <<access.private>> meta::external::store::relational::functions::typeInference::getSize(t: meta::external::store::relational::metamodel::datatype::DataType[1]):Integer[1]
 {
    $t->match([
-      c:meta::relational::metamodel::datatype::Char[1]|$c.size,
-      c:meta::relational::metamodel::datatype::Varchar[1]|$c.size
+      c:meta::external::store::relational::metamodel::datatype::Char[1]|$c.size,
+      c:meta::external::store::relational::metamodel::datatype::Varchar[1]|$c.size
    ])
 }
 
 
-function <<access.private>> meta::relational::functions::typeInference::safeTypeMap():Map<Class<Any>, List<Class<Any>>>[1]
+function <<access.private>> meta::external::store::relational::functions::typeInference::safeTypeMap():Map<Class<Any>, List<Class<Any>>>[1]
 {
    newMap([
-      pair(meta::relational::metamodel::datatype::TinyInt, list([meta::relational::metamodel::datatype::TinyInt, meta::relational::metamodel::datatype::SmallInt, meta::relational::metamodel::datatype::Integer, meta::relational::metamodel::datatype::Float, meta::relational::metamodel::datatype::BigInt, meta::relational::metamodel::datatype::Double])),
-      pair(meta::relational::metamodel::datatype::SmallInt, list([meta::relational::metamodel::datatype::SmallInt, meta::relational::metamodel::datatype::Integer, meta::relational::metamodel::datatype::Float, meta::relational::metamodel::datatype::BigInt, meta::relational::metamodel::datatype::Double])),
-      pair(meta::relational::metamodel::datatype::Integer, list([meta::relational::metamodel::datatype::Integer, meta::relational::metamodel::datatype::Float, meta::relational::metamodel::datatype::BigInt, meta::relational::metamodel::datatype::Double])),
-      pair(meta::relational::metamodel::datatype::BigInt, list([meta::relational::metamodel::datatype::BigInt, meta::relational::metamodel::datatype::Double])),
-      pair(meta::relational::metamodel::datatype::Float, list([meta::relational::metamodel::datatype::Float, meta::relational::metamodel::datatype::Double])),
-      pair(meta::relational::metamodel::datatype::Double, list([meta::relational::metamodel::datatype::Double])),
-      pair(meta::relational::metamodel::datatype::Char, list([meta::relational::metamodel::datatype::Char, meta::relational::metamodel::datatype::Varchar])),
-      pair(meta::relational::metamodel::datatype::Varchar, list([meta::relational::metamodel::datatype::Char, meta::relational::metamodel::datatype::Varchar])),
-      pair(meta::relational::metamodel::datatype::Date, list([meta::relational::metamodel::datatype::Date])),
-      pair(meta::relational::metamodel::datatype::Timestamp, list([meta::relational::metamodel::datatype::Timestamp])),
-      pair(meta::relational::metamodel::datatype::Bit, list([meta::relational::metamodel::datatype::Bit])),
-      pair(meta::relational::metamodel::datatype::Other, list([meta::relational::metamodel::datatype::TinyInt, meta::relational::metamodel::datatype::SmallInt, meta::relational::metamodel::datatype::Integer, meta::relational::metamodel::datatype::Float, meta::relational::metamodel::datatype::BigInt, meta::relational::metamodel::datatype::Double,
-                                                               meta::relational::metamodel::datatype::Char, meta::relational::metamodel::datatype::Varchar, meta::relational::metamodel::datatype::Date, meta::relational::metamodel::datatype::Timestamp, meta::relational::metamodel::datatype::Bit, meta::relational::metamodel::datatype::Other]))
+      pair(meta::external::store::relational::metamodel::datatype::TinyInt, list([meta::external::store::relational::metamodel::datatype::TinyInt, meta::external::store::relational::metamodel::datatype::SmallInt, meta::external::store::relational::metamodel::datatype::Integer, meta::external::store::relational::metamodel::datatype::Float, meta::external::store::relational::metamodel::datatype::BigInt, meta::external::store::relational::metamodel::datatype::Double])),
+      pair(meta::external::store::relational::metamodel::datatype::SmallInt, list([meta::external::store::relational::metamodel::datatype::SmallInt, meta::external::store::relational::metamodel::datatype::Integer, meta::external::store::relational::metamodel::datatype::Float, meta::external::store::relational::metamodel::datatype::BigInt, meta::external::store::relational::metamodel::datatype::Double])),
+      pair(meta::external::store::relational::metamodel::datatype::Integer, list([meta::external::store::relational::metamodel::datatype::Integer, meta::external::store::relational::metamodel::datatype::Float, meta::external::store::relational::metamodel::datatype::BigInt, meta::external::store::relational::metamodel::datatype::Double])),
+      pair(meta::external::store::relational::metamodel::datatype::BigInt, list([meta::external::store::relational::metamodel::datatype::BigInt, meta::external::store::relational::metamodel::datatype::Double])),
+      pair(meta::external::store::relational::metamodel::datatype::Float, list([meta::external::store::relational::metamodel::datatype::Float, meta::external::store::relational::metamodel::datatype::Double])),
+      pair(meta::external::store::relational::metamodel::datatype::Double, list([meta::external::store::relational::metamodel::datatype::Double])),
+      pair(meta::external::store::relational::metamodel::datatype::Char, list([meta::external::store::relational::metamodel::datatype::Char, meta::external::store::relational::metamodel::datatype::Varchar])),
+      pair(meta::external::store::relational::metamodel::datatype::Varchar, list([meta::external::store::relational::metamodel::datatype::Char, meta::external::store::relational::metamodel::datatype::Varchar])),
+      pair(meta::external::store::relational::metamodel::datatype::Date, list([meta::external::store::relational::metamodel::datatype::Date])),
+      pair(meta::external::store::relational::metamodel::datatype::Timestamp, list([meta::external::store::relational::metamodel::datatype::Timestamp])),
+      pair(meta::external::store::relational::metamodel::datatype::Bit, list([meta::external::store::relational::metamodel::datatype::Bit])),
+      pair(meta::external::store::relational::metamodel::datatype::Other, list([meta::external::store::relational::metamodel::datatype::TinyInt, meta::external::store::relational::metamodel::datatype::SmallInt, meta::external::store::relational::metamodel::datatype::Integer, meta::external::store::relational::metamodel::datatype::Float, meta::external::store::relational::metamodel::datatype::BigInt, meta::external::store::relational::metamodel::datatype::Double,
+                                                               meta::external::store::relational::metamodel::datatype::Char, meta::external::store::relational::metamodel::datatype::Varchar, meta::external::store::relational::metamodel::datatype::Date, meta::external::store::relational::metamodel::datatype::Timestamp, meta::external::store::relational::metamodel::datatype::Bit, meta::external::store::relational::metamodel::datatype::Other]))
    ])
 }

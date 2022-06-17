@@ -395,7 +395,7 @@ public class ServiceTestRunner
         Object value = pureResult._values().getAny();
         if (value instanceof org.finos.legend.pure.generated.Root_meta_pure_tds_TabularDataSet)
         {
-            return core_relational_relational_helperFunctions_helperFunctions.Root_meta_csv_toCSV_TabularDataSet_1__Boolean_1__String_1_((org.finos.legend.pure.generated.Root_meta_pure_tds_TabularDataSet) value, true, executionSupport);
+            return core_relational_relational_helperFunctions_helperFunctions.Root_meta_external_store_relational_tests_csv_toCSV_TabularDataSet_1__Boolean_1__String_1_((org.finos.legend.pure.generated.Root_meta_pure_tds_TabularDataSet) value, true, executionSupport);
         }
         if (value instanceof String)
         {

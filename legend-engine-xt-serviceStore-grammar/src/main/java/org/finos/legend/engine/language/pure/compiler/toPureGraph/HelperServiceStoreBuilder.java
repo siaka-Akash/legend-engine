@@ -56,7 +56,7 @@ import org.finos.legend.pure.generated.Root_meta_external_store_service_metamode
 import org.finos.legend.pure.generated.Root_meta_external_store_service_metamodel_StringTypeReference_Impl;
 import org.finos.legend.pure.generated.Root_meta_external_store_service_metamodel_TypeReference;
 import org.finos.legend.pure.generated.core_pure_model_modelUnit;
-import org.finos.legend.pure.m3.coreinstance.meta.pure.store.Store;
+import org.finos.legend.pure.m3.coreinstance.meta.pure.store.metamodel.Store;
 
 import java.util.Collections;
 import java.util.List;

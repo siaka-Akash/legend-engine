@@ -13,9 +13,9 @@
 // limitations under the License.
 
 import meta::pure::router::extension::*;
-import meta::pure::store::platform::executionPlan::generation::*;
+import meta::external::store::platform::executionPlan::generation::*;
 
-Class meta::pure::store::platform::router::extension::PlatformStoreExtension extends ModuleExtension
+Class meta::external::store::platform::router::extension::PlatformStoreExtension extends ModuleExtension
 {
    routing_extraIsSerialize : Function<{FunctionExpression[1]->Boolean[1]}>[0..1];
    executionPlan_generation_nodeForFunctionExpression: PureFunctionToProcessFunctionPair[*];

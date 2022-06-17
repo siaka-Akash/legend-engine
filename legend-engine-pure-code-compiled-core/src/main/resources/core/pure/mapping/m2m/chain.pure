@@ -16,16 +16,16 @@ import meta::pure::milestoning::*;
 import meta::pure::executionPlan::*;
 import meta::pure::router::routing::*;
 import meta::pure::router::clustering::*;
-import meta::pure::mapping::modelToModel::chain::*;
+import meta::external::store::model::chain::*;
 import meta::pure::metamodel::serialization::grammar::*;
-import meta::pure::mapping::modelToModel::inMemory::*;
+import meta::external::store::model::inMemory::*;
 import meta::pure::runtime::*;
-import meta::pure::mapping::modelToModel::chain::*;
+import meta::external::store::model::chain::*;
 import meta::pure::mapping::*;
-import meta::pure::mapping::modelToModel::*;
+import meta::external::store::model::*;
 import meta::pure::router::printer::*;
 
-function meta::pure::mapping::modelToModel::chain::executeChain(f:StoreQuery[1], e:ExtendedRoutedValueSpecification[0..1], mapping:Mapping[1], mcc:ModelChainConnection[1], runtime:Runtime[1], exeCtx:ExecutionContext[1], extensions:meta::pure::router::extension::RouterExtension[*], debug:DebugContext[1]):Result<Any|*>[1]
+function meta::external::store::model::chain::executeChain(f:StoreQuery[1], e:ExtendedRoutedValueSpecification[0..1], mapping:Mapping[1], mcc:ModelChainConnection[1], runtime:Runtime[1], exeCtx:ExecutionContext[1], extensions:meta::pure::router::extension::RouterExtension[*], debug:DebugContext[1]):Result<Any|*>[1]
 {
    let returnType = $f.fe.genericType.rawType->toOne();
    print(if(!$debug.debug, |'',|$debug.space+'Mappings: ['+$mapping->concatenate($mcc.mappings->init())->makeString(', ')+']\n'));
@@ -85,7 +85,7 @@ function meta::pure::mapping::modelToModel::chain::executeChain(f:StoreQuery[1],
                            (
                               setImplementation = $e.sets->at(0)->cast(@PureInstanceSetImplementation),
                               mapping = $mapping,                              runtime = $runtime,
-                              systemMapping = meta::pure::router::systemMapping::pureMappingSystemMapping(),
+                              systemMapping = meta::external::store::model::contract::pureMappingStoreContract(),
                               exeCtx = $exeCtx,
                               debug = $debug,
                               extensions = $extensions
@@ -97,7 +97,7 @@ function meta::pure::mapping::modelToModel::chain::executeChain(f:StoreQuery[1],
    ^Result<Any|*>(activities=$results.activities, values=$res);
 }
 
-function meta::pure::mapping::modelToModel::chain::planExecutionChain(sq:StoreQuery[1], e:ExtendedRoutedValueSpecification[0..1], mapping:Mapping[0..1], mcc:ModelChainConnection[1], runtime:Runtime[0..1], exeCtx:ExecutionContext[1], extensions:meta::pure::router::extension::RouterExtension[*], debug:DebugContext[1]):ExecutionNode[1]
+function meta::external::store::model::chain::planExecutionChain(sq:StoreQuery[1], e:ExtendedRoutedValueSpecification[0..1], mapping:Mapping[0..1], mcc:ModelChainConnection[1], runtime:Runtime[0..1], exeCtx:ExecutionContext[1], extensions:meta::pure::router::extension::RouterExtension[*], debug:DebugContext[1]):ExecutionNode[1]
 {
    let returnType = $sq.fe.genericType.rawType->toOne();
    assert($returnType->_subTypeOf(TabularDataSet), 'Non TDS return type not supported for Model Connections');
@@ -135,13 +135,13 @@ function meta::pure::mapping::modelToModel::chain::planExecutionChain(sq:StoreQu
    );
 }
 
-Class meta::pure::mapping::modelToModel::chain::Container
+Class meta::external::store::model::chain::Container
 {
    res : FunctionExpression[1];
    ex : ExtendedRoutedValueSpecification[*];
 }
 
-function meta::pure::mapping::modelToModel::chain::allReprocess(f:FunctionExpression[1], r:ExtendedRoutedValueSpecification[0..1], mappings:Mapping[*], extensions:meta::pure::router::extension::RouterExtension[*], debug:DebugContext[1]):Container[1]
+function meta::external::store::model::chain::allReprocess(f:FunctionExpression[1], r:ExtendedRoutedValueSpecification[0..1], mappings:Mapping[*], extensions:meta::pure::router::extension::RouterExtension[*], debug:DebugContext[1]):Container[1]
 {
    $mappings->fold(
                      {a,b|
@@ -161,13 +161,13 @@ function meta::pure::mapping::modelToModel::chain::allReprocess(f:FunctionExpres
                    )
 }
 
-Class meta::pure::mapping::modelToModel::chain::Res
+Class meta::external::store::model::chain::Res
 {
    newExpression : Any[1];
    vars : Map<String, GenericType>[0..1];
 }
 
-function meta::pure::mapping::modelToModel::chain::reprocess(vs:ValueSpecification[1], e:ExtendedRoutedValueSpecification[0..1], mapping:Mapping[1], mappings:Mapping[*], r:FunctionRoutedValueSpecification[0..1]):Res[1]
+function meta::external::store::model::chain::reprocess(vs:ValueSpecification[1], e:ExtendedRoutedValueSpecification[0..1], mapping:Mapping[1], mappings:Mapping[*], r:FunctionRoutedValueSpecification[0..1]):Res[1]
 {
    $vs->match(
       [ fe:FunctionExpression[1]|let results = $fe.parametersValues->evaluateAndDeactivate()->map(p|$p->reprocess($e, $mapping, $mappings, []));
@@ -304,7 +304,7 @@ function meta::pure::mapping::modelToModel::chain::reprocess(vs:ValueSpecificati
    );
 }
 
-function meta::pure::mapping::modelToModel::chain::createEvalFunctionExpression(lambdaFunction:LambdaFunction<Any>[1], secondParameter:ValueSpecification[1], functionExpression:FunctionExpression[1]):FunctionExpression[1]
+function meta::external::store::model::chain::createEvalFunctionExpression(lambdaFunction:LambdaFunction<Any>[1], secondParameter:ValueSpecification[1], functionExpression:FunctionExpression[1]):FunctionExpression[1]
 {
    let returnType = $lambdaFunction->genericType().typeArguments->at(0).rawType->cast(@FunctionType).returnType->toOne();
    let lambdaFunctionInstanceValue = ^InstanceValue(genericType = $lambdaFunction->genericType(), multiplicity = PureOne, values = $lambdaFunction);
@@ -314,14 +314,14 @@ function meta::pure::mapping::modelToModel::chain::createEvalFunctionExpression(
    );
 }
 
-function  meta::pure::mapping::modelToModel::chain::sourceClassFromFunction(fe:FunctionExpression[1]):PureInstanceSetImplementation[1]
+function  meta::external::store::model::chain::sourceClassFromFunction(fe:FunctionExpression[1]):PureInstanceSetImplementation[1]
 {
    if($fe.parametersValues->at(0)->instanceOf(FunctionExpression),
-              |meta::pure::mapping::modelToModel::chain::sourceClassFromFunction($fe.parametersValues->at(0)->cast(@FunctionExpression)),
+              |meta::external::store::model::chain::sourceClassFromFunction($fe.parametersValues->at(0)->cast(@FunctionExpression)),
               |$fe.parametersValues->at(0)->cast(@ExtendedRoutedValueSpecification).sets->at(0)->cast(@PureInstanceSetImplementation););
 }
 
-function meta::pure::mapping::modelToModel::chain::identifyTDSColumns(originalStoreQueryExpression:FunctionExpression[1], extensions:meta::pure::router::extension::RouterExtension[*]):TDSColumn[*]
+function meta::external::store::model::chain::identifyTDSColumns(originalStoreQueryExpression:FunctionExpression[1], extensions:meta::pure::router::extension::RouterExtension[*]):TDSColumn[*]
 {
    let functionExpression = if ($originalStoreQueryExpression.func == concatenate_T_MANY__T_MANY__T_MANY_,| $originalStoreQueryExpression.parametersValues->at(0),| $originalStoreQueryExpression);
    let routerInfoByPassedFunctionExpression = $functionExpression->deepByPassRouterInfo()->cast(@FunctionExpression)->evaluateAndDeactivate();
@@ -329,7 +329,7 @@ function meta::pure::mapping::modelToModel::chain::identifyTDSColumns(originalSt
    $routerInfoByPassedFunctionDefinition->meta::pure::tds::schema::resolveSchema($extensions);
 }
 
-function meta::pure::mapping::modelToModel::chain::potentialyApplyFilter(setImpl:PureInstanceSetImplementation[1], fe:FunctionExpression[1], src:ValueSpecification[1]):ValueSpecification[1]
+function meta::external::store::model::chain::potentialyApplyFilter(setImpl:PureInstanceSetImplementation[1], fe:FunctionExpression[1], src:ValueSpecification[1]):ValueSpecification[1]
 {
    let filter = $setImpl.filter;
    if ($filter->isEmpty(),
@@ -351,7 +351,7 @@ function meta::pure::mapping::modelToModel::chain::potentialyApplyFilter(setImpl
    );
 }
 
-function meta::pure::mapping::modelToModel::chain::manageEnumeration(l:LambdaFunction<Any>[1], r:FunctionRoutedValueSpecification[0..1]):LambdaFunction<Any>[1]
+function meta::external::store::model::chain::manageEnumeration(l:LambdaFunction<Any>[1], r:FunctionRoutedValueSpecification[0..1]):LambdaFunction<Any>[1]
 {
    if ($l->functionReturnType().rawType->toOne()->instanceOf(Enumeration),
        |let newLambda = ^$l(
@@ -362,7 +362,7 @@ function meta::pure::mapping::modelToModel::chain::manageEnumeration(l:LambdaFun
    );
 }
 
-function meta::pure::mapping::modelToModel::chain::manageEnumerationVS(vs:ValueSpecification[1], e:Enumeration<Any>[1], r:FunctionRoutedValueSpecification[0..1]):ValueSpecification[1]
+function meta::external::store::model::chain::manageEnumerationVS(vs:ValueSpecification[1], e:Enumeration<Any>[1], r:FunctionRoutedValueSpecification[0..1]):ValueSpecification[1]
 {
    $vs->match([
       fe:FunctionExpression[1]|if ($fe.func == extractEnumValue_Enumeration_1__String_1__T_1_,
@@ -388,7 +388,7 @@ function meta::pure::mapping::modelToModel::chain::manageEnumerationVS(vs:ValueS
    ]);
 }
 
-function meta::pure::mapping::modelToModel::chain::manageEnumerationMapping(transformer:ValueTransformer<Any>[1], variableName:String[1]):LambdaFunction<Any>[1]
+function meta::external::store::model::chain::manageEnumerationMapping(transformer:ValueTransformer<Any>[1], variableName:String[1]):LambdaFunction<Any>[1]
 {
    let enumValueMappings = $transformer->cast(@EnumerationMapping<Any>).enumValueMappings;
    let sourceValuesType = $enumValueMappings.sourceValues->genericType().rawType->toOne();                                                       
@@ -396,7 +396,7 @@ function meta::pure::mapping::modelToModel::chain::manageEnumerationMapping(tran
    createNestedIfElseLambdaFunction($enumValueMappings, $inputVariable, true);
 }
 
-function meta::pure::mapping::modelToModel::chain::buildLambdaType(lambda:LambdaFunction<Any>[1], m:Map<String, GenericType>[0..1], r:FunctionRoutedValueSpecification[0..1]):GenericType[1]
+function meta::external::store::model::chain::buildLambdaType(lambda:LambdaFunction<Any>[1], m:Map<String, GenericType>[0..1], r:FunctionRoutedValueSpecification[0..1]):GenericType[1]
 {
    let fType = $lambda->toOne()->genericType().typeArguments.rawType->cast(@FunctionType)->toOne();
    let ret = $lambda.expressionSequence->last().genericType.rawType->toOne();
@@ -426,11 +426,11 @@ function meta::pure::mapping::modelToModel::chain::buildLambdaType(lambda:Lambda
    );
 }
 
-Class <<temporal.businesstemporal>> meta::pure::mapping::modelToModel::chain::Dummy
+Class <<temporal.businesstemporal>> meta::external::store::model::chain::Dummy
 {
 }
 
-function meta::pure::mapping::modelToModel::chain::manageMilestoning(func:Function<Any>[1], vs:ValueSpecification[*]):ValueSpecification[*]
+function meta::external::store::model::chain::manageMilestoning(func:Function<Any>[1], vs:ValueSpecification[*]):ValueSpecification[*]
 {
    if ($func == getAll_Class_1__T_MANY_,
       |let class = $vs->at(0)->cast(@InstanceValue).values->cast(@Class<Any>)->toOne();
@@ -446,7 +446,7 @@ function meta::pure::mapping::modelToModel::chain::manageMilestoning(func:Functi
    );
 }
 
-function meta::pure::mapping::modelToModel::chain::createNestedIfElseLambdaFunction(enumValueMappings:EnumValueMapping[*], inputVariable:VariableExpression[1], root:Boolean[1]):LambdaFunction<Any>[1]
+function meta::external::store::model::chain::createNestedIfElseLambdaFunction(enumValueMappings:EnumValueMapping[*], inputVariable:VariableExpression[1], root:Boolean[1]):LambdaFunction<Any>[1]
 {
    let classifierGenericType = ^GenericType(rawType = LambdaFunction, typeArguments = ^GenericType(rawType = ^FunctionType(returnMultiplicity = PureOne, returnType = ^GenericType(rawType = String), parameters = if ($root,| $inputVariable,| []))));   
    let expressionSequence = createNestedIfElseFunctionExpression($enumValueMappings, $inputVariable);
@@ -454,7 +454,7 @@ function meta::pure::mapping::modelToModel::chain::createNestedIfElseLambdaFunct
    ^$lambdaFunction(classifierGenericType = $classifierGenericType);
 }
     
-function meta::pure::mapping::modelToModel::chain::createNestedIfElseFunctionExpression(enumValueMappings:EnumValueMapping[*], inputVariable:VariableExpression[1]):SimpleFunctionExpression[1]
+function meta::external::store::model::chain::createNestedIfElseFunctionExpression(enumValueMappings:EnumValueMapping[*], inputVariable:VariableExpression[1]):SimpleFunctionExpression[1]
 {
    ^SimpleFunctionExpression(func = if_Boolean_1__Function_1__Function_1__T_m_,
                              functionName = 'if',
@@ -467,7 +467,7 @@ function meta::pure::mapping::modelToModel::chain::createNestedIfElseFunctionExp
    )->evaluateAndDeactivate()
 }
 
-function meta::pure::mapping::modelToModel::chain::createEqualFunctionExpression(inputVariable:VariableExpression[1], sourceValue:Any[1]):SimpleFunctionExpression[1]
+function meta::external::store::model::chain::createEqualFunctionExpression(inputVariable:VariableExpression[1], sourceValue:Any[1]):SimpleFunctionExpression[1]
 {
    ^SimpleFunctionExpression(func = equal_Any_MANY__Any_MANY__Boolean_1_,
                              functionName = 'equal',
@@ -478,7 +478,7 @@ function meta::pure::mapping::modelToModel::chain::createEqualFunctionExpression
    )->evaluateAndDeactivate()
 }
 
-function meta::pure::mapping::modelToModel::chain::createInFunctionExpression(inputVariable:VariableExpression[1], sourceValues:Any[*]):SimpleFunctionExpression[1]
+function meta::external::store::model::chain::createInFunctionExpression(inputVariable:VariableExpression[1], sourceValues:Any[*]):SimpleFunctionExpression[1]
 {
    ^SimpleFunctionExpression(func = in_Any_1__Any_MANY__Boolean_1_,
                              functionName = 'in',
@@ -489,7 +489,7 @@ function meta::pure::mapping::modelToModel::chain::createInFunctionExpression(in
    )->evaluateAndDeactivate()
 }
     
-function meta::pure::mapping::modelToModel::chain::createNestedIfElseInstanceValue(enumValueMappings:EnumValueMapping[*], inputVariable:VariableExpression[1]):InstanceValue[1]
+function meta::external::store::model::chain::createNestedIfElseInstanceValue(enumValueMappings:EnumValueMapping[*], inputVariable:VariableExpression[1]):InstanceValue[1]
 {
    ^InstanceValue(genericType = ^GenericType(rawType = LambdaFunction, typeArguments = ^GenericType(rawType = ^FunctionType(returnMultiplicity = PureOne, returnType = ^GenericType(rawType = String)))),
                   multiplicity = PureOne,
@@ -497,7 +497,7 @@ function meta::pure::mapping::modelToModel::chain::createNestedIfElseInstanceVal
    )
 }
     
-function meta::pure::mapping::modelToModel::chain::createInstanceValue(values:Any[*]):InstanceValue[1]
+function meta::external::store::model::chain::createInstanceValue(values:Any[*]):InstanceValue[1]
 {
    ^InstanceValue(genericType = ^GenericType(rawType = $values->match([e:Enum[*] | String, a:Any[*] | $a->genericType().rawType->toOne()])),
                   multiplicity = PureOne, 
@@ -505,7 +505,7 @@ function meta::pure::mapping::modelToModel::chain::createInstanceValue(values:An
    )
 }
     
-function meta::pure::mapping::modelToModel::chain::createVariableExpression(type:Type[1], name:String[1]):VariableExpression[1]
+function meta::external::store::model::chain::createVariableExpression(type:Type[1], name:String[1]):VariableExpression[1]
 {
    ^VariableExpression(genericType = ^GenericType(rawType = $type->match([e:Enumeration<Any>[1] | String, t:Type[1] | $t])),
                        multiplicity = PureOne,

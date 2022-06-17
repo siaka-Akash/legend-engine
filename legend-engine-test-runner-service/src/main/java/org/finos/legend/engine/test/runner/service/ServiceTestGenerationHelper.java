@@ -341,7 +341,7 @@ public class ServiceTestGenerationHelper
         if (runtime instanceof RuntimePointer)
         {
             List<? extends org.finos.legend.pure.m3.coreinstance.meta.pure.runtime.Connection> connections = pureModel.getRuntime(((RuntimePointer) runtime).runtime)._connections().toList();
-            return (connections != null) && (connections.size() == 1) && !(connections.get(0) instanceof org.finos.legend.pure.m3.coreinstance.meta.relational.runtime.DatabaseConnection);
+            return (connections != null) && (connections.size() == 1) && !(connections.get(0) instanceof org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.runtime.DatabaseConnection);
         }
         throw new UnsupportedOperationException("Unsupported runtime type: " + runtime.getClass().getName());
     }
@@ -371,7 +371,7 @@ public class ServiceTestGenerationHelper
         }
         try (Scope scope = GlobalTracer.get().buildSpan("Generate setup data").startActive(true))
         {
-            return Lists.mutable.withAll(core_relational_relational_helperFunctions_helperFunctions.Root_meta_relational_functions_database_setUpData_String_1__Mapping_MANY__Runtime_1__String_MANY_(
+            return Lists.mutable.withAll(core_relational_relational_helperFunctions_helperFunctions.Root_meta_external_store_relational_functions_database_setUpData_String_1__Mapping_MANY__Runtime_1__String_MANY_(
                     testData,
                     Lists.immutable.with(pureModel.getMapping(mappingPath)),
                     HelperRuntimeBuilder.buildPureRuntime(runtime, pureModel.getContext()),
@@ -389,7 +389,7 @@ public class ServiceTestGenerationHelper
             );
             try (Scope scope = GlobalTracer.get().buildSpan("Generate setup data").startActive(true))
             {
-                return Lists.mutable.withAll(core_relational_relational_helperFunctions_helperFunctions.Root_meta_relational_functions_database_setUpData_List_MANY__Mapping_MANY__Runtime_1__String_MANY_(
+                return Lists.mutable.withAll(core_relational_relational_helperFunctions_helperFunctions.Root_meta_external_store_relational_functions_database_setUpData_List_MANY__Mapping_MANY__Runtime_1__String_MANY_(
                         csvRecords,
                         Lists.immutable.with(pureModel.getMapping(mappingPath)),
                         HelperRuntimeBuilder.buildPureRuntime(runtime, pureModel.getContext()),

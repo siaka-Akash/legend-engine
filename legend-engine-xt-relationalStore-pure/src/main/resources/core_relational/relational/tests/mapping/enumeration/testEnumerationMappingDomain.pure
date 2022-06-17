@@ -19,17 +19,17 @@ import meta::pure::metamodel::tds::*;
 import meta::pure::profiles::*;
 import meta::pure::mapping::*;
 
-import meta::relational::metamodel::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::join::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::mapping::*;
 
-import meta::relational::functions::toDDL::*;
+import meta::external::store::relational::functions::toDDL::*;
 
-import meta::relational::tests::mapping::enumeration::model::domain::*;
+import meta::external::store::relational::tests::mapping::enumeration::model::domain::*;
 
-Class meta::relational::tests::mapping::enumeration::model::domain::Employee
+Class meta::external::store::relational::tests::mapping::enumeration::model::domain::Employee
 {
     id: Integer[1];
     name: String[1];
@@ -39,48 +39,48 @@ Class meta::relational::tests::mapping::enumeration::model::domain::Employee
     skills:Skills[*];
 }
 
-Class meta::relational::tests::mapping::enumeration::model::domain::ConciseEmployee
+Class meta::external::store::relational::tests::mapping::enumeration::model::domain::ConciseEmployee
 {
     name: String[1];
     type: EmployeeType[0..1];
 }
 
-Class meta::relational::tests::mapping::enumeration::model::domain::EmployeeSkills
+Class meta::external::store::relational::tests::mapping::enumeration::model::domain::EmployeeSkills
 {
     id: Integer[1];
     skills:String[*];
 }
 
-Enum meta::relational::tests::mapping::enumeration::model::domain::EmployeeType
+Enum meta::external::store::relational::tests::mapping::enumeration::model::domain::EmployeeType
 {
     CONTRACT,
     FULL_TIME
 }
 
-Enum meta::relational::tests::mapping::enumeration::model::domain::Skills
+Enum meta::external::store::relational::tests::mapping::enumeration::model::domain::Skills
 {
     Java,SQL,JavaScript,Web
 }
 
-Class meta::relational::tests::mapping::enumeration::model::domain::Trade
+Class meta::external::store::relational::tests::mapping::enumeration::model::domain::Trade
 {
     type: TradeType[1];
 }
 
-Enum meta::relational::tests::mapping::enumeration::model::domain::ExecutionInstruction
+Enum meta::external::store::relational::tests::mapping::enumeration::model::domain::ExecutionInstruction
 {
     OK_CROSS,
     INST1
 }
 
-Class meta::relational::tests::mapping::enumeration::model::domain::EquityTrade extends Trade
+Class meta::external::store::relational::tests::mapping::enumeration::model::domain::EquityTrade extends Trade
 {
     product: String[1];
     quantity: Integer[1];
     executionInstructions:ExecutionInstruction[1];
 }
 
-Class meta::relational::tests::mapping::enumeration::model::domain::Product
+Class meta::external::store::relational::tests::mapping::enumeration::model::domain::Product
 {
    description: String[1];
    synonyms: ProductSynonym[*];
@@ -94,30 +94,30 @@ Class meta::relational::tests::mapping::enumeration::model::domain::Product
    }:ProductSynonym[*];
 }
 
-Class meta::relational::tests::mapping::enumeration::model::domain::ProductSynonym
+Class meta::external::store::relational::tests::mapping::enumeration::model::domain::ProductSynonym
 {
    type:ProductSynonymType[1];
    value:String[1];
 }
 
-Enum meta::relational::tests::mapping::enumeration::model::domain::ProductSynonymType
+Enum meta::external::store::relational::tests::mapping::enumeration::model::domain::ProductSynonymType
 {
    CUSIP,
    GS_NUMBER
 }
 
-Class meta::relational::tests::mapping::enumeration::model::domain::DerivativeTrade extends Trade
+Class meta::external::store::relational::tests::mapping::enumeration::model::domain::DerivativeTrade extends Trade
 {
     description: String[1];
 }
 
-Enum meta::relational::tests::mapping::enumeration::model::domain::TradeType
+Enum meta::external::store::relational::tests::mapping::enumeration::model::domain::TradeType
 {
     BUY,
     SELL
 }
 
-Enum meta::relational::tests::mapping::enumeration::model::domain::YesNo
+Enum meta::external::store::relational::tests::mapping::enumeration::model::domain::YesNo
 {
     YES,
     NO
@@ -125,7 +125,7 @@ Enum meta::relational::tests::mapping::enumeration::model::domain::YesNo
 
 ###Relational
 
-Database meta::relational::tests::mapping::enumeration::model::store::myDB
+Database meta::external::store::relational::tests::mapping::enumeration::model::store::myDB
 (
     Table employeeTable
     (
@@ -152,7 +152,7 @@ Database meta::relational::tests::mapping::enumeration::model::store::myDB
 
 ###Relational
 
-Database meta::relational::tests::mapping::enumeration::model::store::tradeDB
+Database meta::external::store::relational::tests::mapping::enumeration::model::store::tradeDB
 (
     Table eqTradeTable
     (
@@ -174,7 +174,7 @@ Database meta::relational::tests::mapping::enumeration::model::store::tradeDB
 
 
 ###Relational
-Database meta::relational::tests::mapping::enumeration::model::store::productDB
+Database meta::external::store::relational::tests::mapping::enumeration::model::store::productDB
 (
    Table Product
    (
@@ -194,10 +194,10 @@ Database meta::relational::tests::mapping::enumeration::model::store::productDB
 )
 
 ###Mapping
-import meta::relational::tests::mapping::enumeration::model::store::*;
-import meta::relational::tests::mapping::enumeration::model::domain::*;
+import meta::external::store::relational::tests::mapping::enumeration::model::store::*;
+import meta::external::store::relational::tests::mapping::enumeration::model::domain::*;
 
-Mapping meta::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping
+Mapping meta::external::store::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping
 (
 
     EmployeeType: EnumerationMapping Foo
@@ -225,7 +225,7 @@ Mapping meta::relational::tests::mapping::enumeration::model::mapping::employeeT
     }
 )
 
-Mapping meta::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping2
+Mapping meta::external::store::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping2
 (
 
     EmployeeType: EnumerationMapping Bar
@@ -246,7 +246,7 @@ Mapping meta::relational::tests::mapping::enumeration::model::mapping::employeeT
     }
 )
 
-Mapping meta::relational::tests::mapping::enumeration::model::mapping::employeeTestMappingWithFunction
+Mapping meta::external::store::relational::tests::mapping::enumeration::model::mapping::employeeTestMappingWithFunction
 (
 
     EmployeeType: EnumerationMapping Bar
@@ -267,7 +267,7 @@ Mapping meta::relational::tests::mapping::enumeration::model::mapping::employeeT
     }
 )
 
-Mapping meta::relational::tests::mapping::enumeration::model::mapping::employeeTestMappingWithMultipleClassMappings
+Mapping meta::external::store::relational::tests::mapping::enumeration::model::mapping::employeeTestMappingWithMultipleClassMappings
 (
     EmployeeType: EnumerationMapping Foo
     {
@@ -297,10 +297,10 @@ Mapping meta::relational::tests::mapping::enumeration::model::mapping::employeeT
 )
 
 ###Mapping
-import meta::relational::tests::mapping::enumeration::model::store::*;
-import meta::relational::tests::mapping::enumeration::model::domain::*;
+import meta::external::store::relational::tests::mapping::enumeration::model::store::*;
+import meta::external::store::relational::tests::mapping::enumeration::model::domain::*;
 
-Mapping meta::relational::tests::mapping::enumeration::model::mapping::tradeMapping
+Mapping meta::external::store::relational::tests::mapping::enumeration::model::mapping::tradeMapping
 (
     TradeType: EnumerationMapping TradeSource1
     {
@@ -327,11 +327,11 @@ Mapping meta::relational::tests::mapping::enumeration::model::mapping::tradeMapp
 )
 
 ###Mapping
-import meta::relational::tests::mapping::enumeration::model::store::*;
-import meta::relational::tests::mapping::enumeration::model::domain::*;
-import meta::relational::tests::mapping::enumeration::model::mapping::*;
+import meta::external::store::relational::tests::mapping::enumeration::model::store::*;
+import meta::external::store::relational::tests::mapping::enumeration::model::domain::*;
+import meta::external::store::relational::tests::mapping::enumeration::model::mapping::*;
 
-Mapping meta::relational::tests::mapping::enumeration::model::mapping::tradeMapping1
+Mapping meta::external::store::relational::tests::mapping::enumeration::model::mapping::tradeMapping1
 (
     TradeType: EnumerationMapping TradeSource11
     {
@@ -340,7 +340,7 @@ Mapping meta::relational::tests::mapping::enumeration::model::mapping::tradeMapp
     }
 )
 
-Mapping meta::relational::tests::mapping::enumeration::model::mapping::tradeMapping2
+Mapping meta::external::store::relational::tests::mapping::enumeration::model::mapping::tradeMapping2
 (
     include tradeMapping1
 
@@ -351,7 +351,7 @@ Mapping meta::relational::tests::mapping::enumeration::model::mapping::tradeMapp
     }
 )
 
-Mapping meta::relational::tests::mapping::enumeration::model::mapping::tradeMapping3
+Mapping meta::external::store::relational::tests::mapping::enumeration::model::mapping::tradeMapping3
 (
     include tradeMapping2
 
@@ -367,10 +367,10 @@ Mapping meta::relational::tests::mapping::enumeration::model::mapping::tradeMapp
 )
 
 ###Mapping
-import meta::relational::tests::mapping::enumeration::model::store::*;
-import meta::relational::tests::mapping::enumeration::model::domain::*;
+import meta::external::store::relational::tests::mapping::enumeration::model::store::*;
+import meta::external::store::relational::tests::mapping::enumeration::model::domain::*;
 
-Mapping meta::relational::tests::mapping::enumeration::model::mapping::productMapping
+Mapping meta::external::store::relational::tests::mapping::enumeration::model::mapping::productMapping
 (
 
    ProductSynonymType: EnumerationMapping synonym2

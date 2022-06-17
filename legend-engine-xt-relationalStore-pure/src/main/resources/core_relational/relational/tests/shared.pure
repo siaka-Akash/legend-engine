@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::transform::*;
+import meta::external::store::relational::transform::*;
 import meta::pure::runtime::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::functions::toDDL::*;
-import meta::pure::mapping::modelToModel::test::shared::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::functions::toDDL::*;
+import meta::external::store::model::test::shared::*;
+import meta::external::store::relational::runtime::*;
 
-function meta::pure::mapping::modelToModel::test::shared::getConnection():Connection[1]
+function meta::external::store::model::test::shared::getConnection():Connection[1]
 {
    ^TestDatabaseConnection(
       element = relationalDB,
@@ -27,7 +27,7 @@ function meta::pure::mapping::modelToModel::test::shared::getConnection():Connec
    )
 }
 
-function meta::pure::mapping::modelToModel::test::shared::initData():Boolean[1]
+function meta::external::store::model::test::shared::initData():Boolean[1]
 {
    let connection = getConnection()->cast(@DatabaseConnection);
    dropAndCreateTableInDb(relationalDB, 'default', 'SPerson', $connection);
@@ -54,12 +54,12 @@ function meta::pure::mapping::modelToModel::test::shared::initData():Boolean[1]
 
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::shared::*;
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::shared::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::shared::relationalMapping
+Mapping meta::external::store::model::test::shared::relationalMapping
 (
 
     Region : EnumerationMapping regionMapping
@@ -131,7 +131,7 @@ Mapping meta::pure::mapping::modelToModel::test::shared::relationalMapping
 
 
 ###Relational
-Database meta::pure::mapping::modelToModel::test::shared::relationalDB
+Database meta::external::store::model::test::shared::relationalDB
 (
    Table SPerson(fullname VARCHAR(200) PRIMARY KEY)
    Table Person(fullname VARCHAR(1000) PRIMARY KEY, firm VARCHAR(200))
@@ -145,7 +145,7 @@ Database meta::pure::mapping::modelToModel::test::shared::relationalDB
 )
 
 ###Relational
-Database meta::relational::transform::toPure::tests::SimpleDb1
+Database meta::external::store::relational::transform::toPure::tests::SimpleDb1
 (
     Table personTable (
        id INT PRIMARY KEY,
@@ -171,7 +171,7 @@ Database meta::relational::transform::toPure::tests::SimpleDb1
 
 
 ###Pure
-Class meta::relational::transform::toPure::tests::PersonTable
+Class meta::external::store::relational::transform::toPure::tests::PersonTable
 {
   id : Integer[1];
   firstName : String[0..1];
@@ -182,43 +182,43 @@ Class meta::relational::transform::toPure::tests::PersonTable
   isValidNotNullable : Boolean[1];
 }
 
-Class meta::relational::transform::toPure::tests::FirmTable
+Class meta::external::store::relational::transform::toPure::tests::FirmTable
 {
   id : Integer[1];
   legalname : String[1];
   alternativeName : String[0..1];
 }
 
-Class meta::relational::transform::toPure::tests::Other
+Class meta::external::store::relational::transform::toPure::tests::Other
 {
   id : Integer[1];
   name : String[1];
 }
 
 ###Mapping
-Mapping meta::relational::transform::toPure::tests::SimpleDb1Mapping
+Mapping meta::external::store::relational::transform::toPure::tests::SimpleDb1Mapping
 (
-   *meta::relational::transform::toPure::tests::FirmTable : Relational
+   *meta::external::store::relational::transform::toPure::tests::FirmTable : Relational
    {
-     id : [meta::relational::transform::toPure::tests::SimpleDb1]FirmTable.ID,
-     legalname : [meta::relational::transform::toPure::tests::SimpleDb1]FirmTable.LEGALNAME,
-     alternativeName : [meta::relational::transform::toPure::tests::SimpleDb1]FirmTable.ALTERNATIVE_NAME
+     id : [meta::external::store::relational::transform::toPure::tests::SimpleDb1]FirmTable.ID,
+     legalname : [meta::external::store::relational::transform::toPure::tests::SimpleDb1]FirmTable.LEGALNAME,
+     alternativeName : [meta::external::store::relational::transform::toPure::tests::SimpleDb1]FirmTable.ALTERNATIVE_NAME
    }
 
-   *meta::relational::transform::toPure::tests::Other : Relational
+   *meta::external::store::relational::transform::toPure::tests::Other : Relational
    {
-     id : [meta::relational::transform::toPure::tests::SimpleDb1]Others.ID,
-     name : [meta::relational::transform::toPure::tests::SimpleDb1]Others.NAME
+     id : [meta::external::store::relational::transform::toPure::tests::SimpleDb1]Others.ID,
+     name : [meta::external::store::relational::transform::toPure::tests::SimpleDb1]Others.NAME
    }
 
-   *meta::relational::transform::toPure::tests::PersonTable : Relational
+   *meta::external::store::relational::transform::toPure::tests::PersonTable : Relational
    {
-     id : [meta::relational::transform::toPure::tests::SimpleDb1]personTable.id,
-     firstName : [meta::relational::transform::toPure::tests::SimpleDb1]personTable.firstName,
-     lastName : [meta::relational::transform::toPure::tests::SimpleDb1]personTable.last_name,
-     a : [meta::relational::transform::toPure::tests::SimpleDb1]personTable.a,
-     b : [meta::relational::transform::toPure::tests::SimpleDb1]personTable.B,
-     isValid : case(isNull([meta::relational::transform::toPure::tests::SimpleDb1]personTable.is_valid),sqlNull(),case(equal([meta::relational::transform::toPure::tests::SimpleDb1]personTable.is_valid,1),sqlTrue(),sqlFalse())),
-     isValidNotNullable : case(equal([meta::relational::transform::toPure::tests::SimpleDb1]personTable.is_valid_not_nullable,1),sqlTrue(),sqlFalse())
+     id : [meta::external::store::relational::transform::toPure::tests::SimpleDb1]personTable.id,
+     firstName : [meta::external::store::relational::transform::toPure::tests::SimpleDb1]personTable.firstName,
+     lastName : [meta::external::store::relational::transform::toPure::tests::SimpleDb1]personTable.last_name,
+     a : [meta::external::store::relational::transform::toPure::tests::SimpleDb1]personTable.a,
+     b : [meta::external::store::relational::transform::toPure::tests::SimpleDb1]personTable.B,
+     isValid : case(isNull([meta::external::store::relational::transform::toPure::tests::SimpleDb1]personTable.is_valid),sqlNull(),case(equal([meta::external::store::relational::transform::toPure::tests::SimpleDb1]personTable.is_valid,1),sqlTrue(),sqlFalse())),
+     isValidNotNullable : case(equal([meta::external::store::relational::transform::toPure::tests::SimpleDb1]personTable.is_valid_not_nullable,1),sqlTrue(),sqlFalse())
    }
 )

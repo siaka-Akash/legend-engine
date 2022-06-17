@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::csv::*;
-import meta::relational::functions::asserts::*;
-import meta::relational::mapping::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
 
-import meta::relational::tests::projection::function::concatenate::model::*;
-import meta::relational::functions::toDDL::*;
-import meta::relational::runtime::*;
-import meta::relational::metamodel::execute::*;
+import meta::external::store::relational::tests::projection::function::concatenate::model::*;
+import meta::external::store::relational::functions::toDDL::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::metamodel::execute::*;
 
-import meta::relational::tests::projection::function::concatenate::store::*;
-import meta::relational::tests::projection::function::concatenate::mapping::*;
+import meta::external::store::relational::tests::projection::function::concatenate::store::*;
+import meta::external::store::relational::tests::projection::function::concatenate::mapping::*;
 
-function <<test.Test>> meta::relational::tests::query::function::concatenate::testAllWithProperty():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::query::function::concatenate::testAllWithProperty():Boolean[1]
 {
    let result = execute(|Product.all().name->concatenate(Product.all().name), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 8);
@@ -34,7 +34,7 @@ function <<test.Test>> meta::relational::tests::query::function::concatenate::te
    assertSameSQL('select "unionalias_0".NAME from (select "root".NAME from productSchema.productTable as "root" UNION ALL select "root".NAME from productSchema.productTable as "root") as "unionalias_0"', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::query::function::concatenate::testAll():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::query::function::concatenate::testAll():Boolean[1]
 {
    let result = execute(|Product.all()->concatenate(Product.all()), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 8);
@@ -42,7 +42,7 @@ function <<test.Test>> meta::relational::tests::query::function::concatenate::te
    assertSameSQL('select "unionalias_0".u_type as u_type, "unionalias_0"."pk_0" as "pk_0", "unionalias_0"."name" as "name" from (select \'0\' as u_type, "root".ID as "pk_0", "root".NAME as "name" from productSchema.productTable as "root" UNION ALL select \'0\' as u_type, "root".ID as "pk_0", "root".NAME as "name" from productSchema.productTable as "root") as "unionalias_0"', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::query::function::concatenate::testConcatenateDataType():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::query::function::concatenate::testConcatenateDataType():Boolean[1]
 {
    let result = execute(|Product.all()->filter(p|$p.synonymByType(ProductSynonymType.ISIN).name->concatenate($p.synonymByType(ProductSynonymType.CUSIP).name)->contains(['ISIN2'])), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 1);
@@ -50,7 +50,7 @@ function <<test.Test>> meta::relational::tests::query::function::concatenate::te
    assertSameSQL('select "root".ID as "pk_0", "root".NAME as "name" from productSchema.productTable as "root" left outer join (select "synonymtable_0".NAME as "name", "synonymtable_0".PRODID as PRODID from productSchema.synonymTable as "synonymtable_0" where "synonymtable_0".TYPE = \'ISIN\' UNION ALL select "synonymtable_0".NAME as "name", "synonymtable_0".PRODID as PRODID from productSchema.synonymTable as "synonymtable_0" where "synonymtable_0".TYPE = \'CUSIP\') as "unionalias_0" on ("unionalias_0".PRODID = "root".ID) where "unionalias_0"."name" = \'ISIN2\'', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::query::function::concatenate::testConcatenateDataTypeMerge():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::query::function::concatenate::testConcatenateDataTypeMerge():Boolean[1]
 {
    let result = execute(|Product.all()->filter(p|$p.synonymByType(ProductSynonymType.ISIN).name->concatenate($p.synonymByType(ProductSynonymType.CUSIP).name)->contains(['ISIN2']) &&
                                                  $p.synonymByType(ProductSynonymType.ISIN).typeAsString->concatenate($p.synonymByType(ProductSynonymType.CUSIP).typeAsString)->contains('ISIN')
@@ -60,7 +60,7 @@ function <<test.Test>> meta::relational::tests::query::function::concatenate::te
    assertSameSQL('select "root".ID as "pk_0", "root".NAME as "name" from productSchema.productTable as "root" left outer join (select "synonymtable_0".NAME as "name", "synonymtable_0".PRODID as PRODID, "synonymtable_0".TYPE as "typeAsString" from productSchema.synonymTable as "synonymtable_0" where "synonymtable_0".TYPE = \'ISIN\' UNION ALL select "synonymtable_0".NAME as "name", "synonymtable_0".PRODID as PRODID, "synonymtable_0".TYPE as "typeAsString" from productSchema.synonymTable as "synonymtable_0" where "synonymtable_0".TYPE = \'CUSIP\') as "unionalias_0" on ("unionalias_0".PRODID = "root".ID) where ("unionalias_0"."name" = \'ISIN2\' and "unionalias_0"."typeAsString" = \'ISIN\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::query::function::concatenate::testConcatenateDataTypeDiffProperty():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::query::function::concatenate::testConcatenateDataTypeDiffProperty():Boolean[1]
 {
    let result = execute(|Product.all()->filter(p|$p.synonymByType(ProductSynonymType.ISIN).name->concatenate($p.synonymByType(ProductSynonymType.CUSIP).typeAsString)->contains(['ISIN2'])), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 1);
@@ -68,7 +68,7 @@ function <<test.Test>> meta::relational::tests::query::function::concatenate::te
    assertSameSQL('select "root".ID as "pk_0", "root".NAME as "name" from productSchema.productTable as "root" left outer join (select "synonymtable_0".NAME as "name_typeAsString", "synonymtable_0".PRODID as PRODID from productSchema.synonymTable as "synonymtable_0" where "synonymtable_0".TYPE = \'ISIN\' UNION ALL select "synonymtable_0".TYPE as "name_typeAsString", "synonymtable_0".PRODID as PRODID from productSchema.synonymTable as "synonymtable_0" where "synonymtable_0".TYPE = \'CUSIP\') as "unionalias_0" on ("unionalias_0".PRODID = "root".ID) where "unionalias_0"."name_typeAsString" = \'ISIN2\'', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::query::function::concatenate::testConcatenateClass():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::query::function::concatenate::testConcatenateClass():Boolean[1]
 {
    let result = execute(|Product.all()->filter(p|$p.synonymByType(ProductSynonymType.ISIN)->concatenate($p.synonymByType(ProductSynonymType.CUSIP)).name->contains(['ISIN2'])), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 1);
@@ -76,7 +76,7 @@ function <<test.Test>> meta::relational::tests::query::function::concatenate::te
    assertSameSQL('select "root".ID as "pk_0", "root".NAME as "name" from productSchema.productTable as "root" left outer join (select "synonymtable_0".PRODID as PRODID, "synonymtable_0".NAME as "synonymTableNAME" from productSchema.synonymTable as "synonymtable_0" where "synonymtable_0".TYPE = \'ISIN\' UNION ALL select "synonymtable_0".PRODID as PRODID, "synonymtable_0".NAME as "synonymTableNAME" from productSchema.synonymTable as "synonymtable_0" where "synonymtable_0".TYPE = \'CUSIP\') as "unionalias_0" on ("unionalias_0".PRODID = "root".ID) where "unionalias_0"."synonymTableNAME" = \'ISIN2\'', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::function::concatenate::testConcatenateWithFilter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::function::concatenate::testConcatenateWithFilter():Boolean[1]
 {
    let result = execute(|Product.all()->project([p|$p.name,
                                                  p|$p->filter(p|$p.name->startsWith('Firm X')).name->concatenate($p->filter(p|$p.name->startsWith('Firm C')).name)
@@ -93,7 +93,7 @@ function <<test.Test>> meta::relational::tests::projection::function::concatenat
    assertSameSQL('select "root".NAME as "a", "unionalias_0"."name" as "b" from productSchema.productTable as "root" left outer join (select "producttable_1".NAME as "name", "producttable_1".ID as ID from productSchema.productTable as "producttable_1" where "producttable_1".NAME like \'Firm X%\' UNION ALL select "producttable_1".NAME as "name", "producttable_1".ID as ID from productSchema.productTable as "producttable_1" where "producttable_1".NAME like \'Firm C%\') as "unionalias_0" on ("root".ID = "unionalias_0".ID)', $result);
 }
 
-function <<test.Test>> meta::relational::tests::projection::function::concatenate::testConcatenateClass():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::function::concatenate::testConcatenateClass():Boolean[1]
 {
    let result = execute(|Product.all()->project([p|$p.name, p|$p.synonymByType(ProductSynonymType.ISIN)->concatenate($p.synonymByType(ProductSynonymType.CUSIP)).name], ['prod','syn']), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 7);
@@ -101,7 +101,7 @@ function <<test.Test>> meta::relational::tests::projection::function::concatenat
    assertSameSQL('select "root".NAME as "prod", "unionalias_0"."synonymTableNAME" as "syn" from productSchema.productTable as "root" left outer join (select "synonymtable_0".PRODID as PRODID, "synonymtable_0".NAME as "synonymTableNAME" from productSchema.synonymTable as "synonymtable_0" where "synonymtable_0".TYPE = \'ISIN\' UNION ALL select "synonymtable_0".PRODID as PRODID, "synonymtable_0".NAME as "synonymTableNAME" from productSchema.synonymTable as "synonymtable_0" where "synonymtable_0".TYPE = \'CUSIP\') as "unionalias_0" on ("unionalias_0".PRODID = "root".ID)', $result);
 }
 
-function <<test.Test>> meta::relational::tests::projection::function::concatenate::testConcatenateClassMerge():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::function::concatenate::testConcatenateClassMerge():Boolean[1]
 {
    let result = execute(|Product.all()->project([p|$p.name,
                                                  p|$p.synonymByType(ProductSynonymType.ISIN)->concatenate($p.synonymByType(ProductSynonymType.CUSIP)).name,
@@ -115,7 +115,7 @@ function <<test.Test>> meta::relational::tests::projection::function::concatenat
    assertSameSQL('select "root".NAME as "prod", "unionalias_0"."synonymTableNAME" as "syn", "unionalias_0"."synonymTableTYPE" as "type" from productSchema.productTable as "root" left outer join (select "synonymtable_0".PRODID as PRODID, "synonymtable_0".NAME as "synonymTableNAME", "synonymtable_0".TYPE as "synonymTableTYPE" from productSchema.synonymTable as "synonymtable_0" where "synonymtable_0".TYPE = \'ISIN\' UNION ALL select "synonymtable_0".PRODID as PRODID, "synonymtable_0".NAME as "synonymTableNAME", "synonymtable_0".TYPE as "synonymTableTYPE" from productSchema.synonymTable as "synonymtable_0" where "synonymtable_0".TYPE = \'CUSIP\') as "unionalias_0" on ("unionalias_0".PRODID = "root".ID)', $result);
 }
 
-function <<test.Test>> meta::relational::tests::projection::function::concatenate::testConcatenateClassAgg():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::function::concatenate::testConcatenateClassAgg():Boolean[1]
 {
    let result = execute(|Product.all()->project([p|$p.name,
                                                  p|$p.synonymByType(ProductSynonymType.ISIN)->concatenate($p.synonymByType(ProductSynonymType.CUSIP)).name->joinStrings('|')
@@ -128,14 +128,14 @@ function <<test.Test>> meta::relational::tests::projection::function::concatenat
    assertSameSQL('select "root".NAME as "prod", "producttable_1".aggCol as "syn" from productSchema.productTable as "root" left outer join (select "producttable_2".ID as ID, group_concat("unionalias_0"."synonymTableNAME" separator \'|\' ) as aggCol from productSchema.productTable as "producttable_2" left outer join (select "synonymtable_0".PRODID as PRODID, "synonymtable_0".NAME as "synonymTableNAME" from productSchema.synonymTable as "synonymtable_0" where "synonymtable_0".TYPE = \'ISIN\' UNION ALL select "synonymtable_0".PRODID as PRODID, "synonymtable_0".NAME as "synonymTableNAME" from productSchema.synonymTable as "synonymtable_0" where "synonymtable_0".TYPE = \'CUSIP\') as "unionalias_0" on ("unionalias_0".PRODID = "producttable_2".ID) group by "producttable_2".ID) as "producttable_1" on ("root".ID = "producttable_1".ID)', $result);
 }
 
-function <<test.Test>> meta::relational::tests::projection::function::concatenate::testConcatenateClassJoin():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::function::concatenate::testConcatenateClassJoin():Boolean[1]
 {
    let result = execute(|Trade.all()->project([t|$t.id, t|$t.product->toOne().synonymByType(ProductSynonymType.ISIN)->concatenate($t.product->toOne().synonymByType(ProductSynonymType.CUSIP)).name], ['trade','syn']), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals([1, 'ISIN1', 1, 'CUSIP1', 2, 'ISIN1', 2, 'CUSIP1', 3, 'ISIN2', 3, 'CUSIP2', 4, 'ISIN2', 4, 'CUSIP2', 5, 'ISIN2', 5, 'CUSIP2', 6, 'ISIN3', 6, 'CUSIP3', 7, 'ISIN3', 7, 'CUSIP3', 8, 'ISIN3', 8, 'CUSIP3', 9, 'ISIN3', 9, 'CUSIP3', 10, 'ISIN3', 10, 'CUSIP3', 11, ^TDSNull()], $result.values.rows.values);
    assertSameSQL('select "root".ID as "trade", "unionalias_0"."synonymTableNAME" as "syn" from tradeTable as "root" left outer join (select "producttable_0".ID as ID, "synonymtable_0".NAME as "synonymTableNAME" from productSchema.productTable as "producttable_0" left outer join productSchema.synonymTable as "synonymtable_0" on ("synonymtable_0".PRODID = "producttable_0".ID) where "synonymtable_0".TYPE = \'ISIN\' UNION ALL select "producttable_0".ID as ID, "synonymtable_0".NAME as "synonymTableNAME" from productSchema.productTable as "producttable_0" left outer join productSchema.synonymTable as "synonymtable_0" on ("synonymtable_0".PRODID = "producttable_0".ID) where "synonymtable_0".TYPE = \'CUSIP\') as "unionalias_0" on ("root".prodId = "unionalias_0".ID)', $result);
 }
 
-function <<test.ToFix>> meta::relational::tests::projection::function::concatenate::testConcatenateClassJoinMerge():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::projection::function::concatenate::testConcatenateClassJoinMerge():Boolean[1]
 {
    let result = execute(|Trade.all()->project([t|$t.product.name, t|$t.product->toOne().synonymByType(ProductSynonymType.ISIN)->concatenate($t.product->toOne().synonymByType(ProductSynonymType.CUSIP)).name], ['prod','syn']), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 7);
@@ -143,7 +143,7 @@ function <<test.ToFix>> meta::relational::tests::projection::function::concatena
    assertSameSQL('select "root".NAME as "prod", "union_d#4_d_m2"."name" as "syn" from productSchema.productTable as "root" left outer join (select "synonymTable_d#8".PRODID as PRODID, "synonymTable_d#8".NAME as "name" from productSchema.synonymTable as "synonymTable_d#8" where "synonymTable_d#8".TYPE = \'ISIN\' UNION ALL select "synonymTable_d#8".PRODID as PRODID, "synonymTable_d#8".NAME as "name" from productSchema.synonymTable as "synonymTable_d#8" where "synonymTable_d#8".TYPE = \'CUSIP\') as "union_d#4_d_m2" on ("union_d#4_d_m2".PRODID = "root".ID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::function::concatenate::testConcatenateInQualifierWithComplexReturnType():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::function::concatenate::testConcatenateInQualifierWithComplexReturnType():Boolean[1]
 {
    let result = execute(|Person.all()->project([p|$p.name, p|$p.addresses.name], ['name','address']), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals(['Peter Smith', 'Hoboken', 'Peter Smith', 'New York', 'John Johnson', 'Hoboken', 'John Johnson', 'New York', 'John Johnson', 'New York', 'John Johnson', 'Cupertino', 'John Hill', 'Hoboken', 'John Hill', 'New York', 'John Hill', 'New York', 'John Hill', 'Tokyo', 'Anthony Allen', 'Hoboken', 'Anthony Allen', 'New York', 'Anthony Allen', 'New York', 'Anthony Allen', 'Mountain View', 'Fabrice Roberts', 'New York', 'Fabrice Roberts', 'San Fransisco', 'Fabrice Roberts', 'Cupertino', 'Oliver Hill', 'New York', 'Oliver Hill', 'Hong Kong', 'Oliver Hill', 'Tokyo', 'David Harris', 'New York', 'David Harris', 'New York', 'David Harris', 'Mountain View'], $result.values.rows.values);
@@ -152,7 +152,7 @@ function <<test.Test>> meta::relational::tests::projection::function::concatenat
 
 
 
-function <<test.Test>> meta::relational::tests::projection::function::concatenate::testQualifierConcatenateTwoSimilarJoins():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::function::concatenate::testQualifierConcatenateTwoSimilarJoins():Boolean[1]
 {
    let result = execute(|NewTrade.all()->project([t | $t.id, t | $t.accountOrganizationalEntity.name], ['Trade ID', 'OE']), testMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
 
@@ -161,7 +161,7 @@ function <<test.Test>> meta::relational::tests::projection::function::concatenat
 }
 
 
-function <<test.Test>> meta::relational::tests::projection::function::concatenate::testQualifierConcatenateTwoSimilarJoinsEmbedded():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::function::concatenate::testQualifierConcatenateTwoSimilarJoinsEmbedded():Boolean[1]
 {
    let result = execute(|NewTrade.all()->project([t | $t.id, t | $t.accountOrganizationalEntity.name], ['Trade ID', 'OE']), testEmbeddedMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
 
@@ -170,7 +170,7 @@ function <<test.Test>> meta::relational::tests::projection::function::concatenat
 }
 
 
-function <<test.ToFix>> meta::relational::tests::projection::function::concatenate::testQualifierConcatenateDifferentJoinPaths():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::projection::function::concatenate::testQualifierConcatenateDifferentJoinPaths():Boolean[1]
 {
    let result = execute(|NewTrade.all()->project([t | $t.id, t | $t.organizationalEntity.name], ['Trade ID', 'OE']), testMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
 
@@ -178,14 +178,14 @@ function <<test.ToFix>> meta::relational::tests::projection::function::concatena
    assertSameSQL('select "root".NAME as "name", "synonymTable_d_1_d#5_d_m2".NAME as "cusip" from productSchema.productTable as "root" left outer join productSchema.synonymTable as "synonymTable_d_1_d#5_d_m2" on ("synonymTable_d_1_d#5_d_m2".PRODID = "root".ID and "synonymTable_d_1_d#5_d_m2".TYPE = \'CUSIP\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::function::concatenate::testConcatenateFlat():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::function::concatenate::testConcatenateFlat():Boolean[1]
 {
    let result = execute(|NewTrade.all()->project([t | $t.id->concatenate($t.id+18)], ['Concatenated']), testMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals([1, 19, 2, 20], $result.values.rows.values);
    assertSameSQL('select "unionalias_0"."id_plus_TRADEID_18" as "Concatenated" from CONCATENATE.TRADE as "root" left outer join (select "trade_1".ID as "id_plus_TRADEID_18", "trade_1".ID as ID from CONCATENATE.TRADE as "trade_1" UNION ALL select ("trade_1".ID + 18) as "id_plus_TRADEID_18", "trade_1".ID as ID from CONCATENATE.TRADE as "trade_1") as "unionalias_0" on ("root".ID = "unionalias_0".ID)', $result);
 }
 
-function <<test.Test>> meta::relational::tests::projection::function::concatenate::testConcatenateFlatWithOtherProperty():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::function::concatenate::testConcatenateFlatWithOtherProperty():Boolean[1]
 {
    let result = execute(|NewTrade.all()->project([t|$t.id, t|$t.id->concatenate($t.id+18)], ['simple', 'Concatenated']), testMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals([1, 1, 2, 2], $result.values.rows.getInteger('simple'));
@@ -194,7 +194,7 @@ function <<test.Test>> meta::relational::tests::projection::function::concatenat
 }
 
 
-function <<test.BeforePackage>> meta::relational::tests::projection::function::concatenate::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::projection::function::concatenate::setUp():Boolean[1]
 {
    let connection = testRuntime().connectionByElement(db)->cast(@TestDatabaseConnection);
    
@@ -226,7 +226,7 @@ function <<test.BeforePackage>> meta::relational::tests::projection::function::c
 
 
 
-Class  meta::relational::tests::projection::function::concatenate::model::NewTrade
+Class  meta::external::store::relational::tests::projection::function::concatenate::model::NewTrade
 {
    id:Integer[1];
    subAccount:SubAccount[0..1];
@@ -247,18 +247,18 @@ Class  meta::relational::tests::projection::function::concatenate::model::NewTra
    
 }
 
-Class meta::relational::tests::projection::function::concatenate::model::OrganizationalEntity
+Class meta::external::store::relational::tests::projection::function::concatenate::model::OrganizationalEntity
 {
    name:String[1];
 }
 
-Class meta::relational::tests::projection::function::concatenate::model::SubAccount
+Class meta::external::store::relational::tests::projection::function::concatenate::model::SubAccount
 {
    name:String[0..1];
    oe:OrganizationalEntity[1];
 }
 
-Class meta::relational::tests::projection::function::concatenate::model::OtherAccount
+Class meta::external::store::relational::tests::projection::function::concatenate::model::OtherAccount
 {
    name:String[0..1];
    oe:OrganizationalEntity[1];
@@ -267,7 +267,7 @@ Class meta::relational::tests::projection::function::concatenate::model::OtherAc
 
 ###Relational
 
-Database meta::relational::tests::projection::function::concatenate::store::myDb
+Database meta::external::store::relational::tests::projection::function::concatenate::store::myDb
 (
    Schema CONCATENATE
    (
@@ -315,10 +315,10 @@ Database meta::relational::tests::projection::function::concatenate::store::myDb
 
 ###Mapping
 
-import meta::relational::tests::projection::function::concatenate::model::*;
-import meta::relational::tests::projection::function::concatenate::store::*;
+import meta::external::store::relational::tests::projection::function::concatenate::model::*;
+import meta::external::store::relational::tests::projection::function::concatenate::store::*;
 
-Mapping meta::relational::tests::projection::function::concatenate::mapping::testMapping
+Mapping meta::external::store::relational::tests::projection::function::concatenate::mapping::testMapping
 (
 
    NewTrade: Relational
@@ -349,7 +349,7 @@ Mapping meta::relational::tests::projection::function::concatenate::mapping::tes
 )
 
 
-Mapping meta::relational::tests::projection::function::concatenate::mapping::testEmbeddedMapping
+Mapping meta::external::store::relational::tests::projection::function::concatenate::mapping::testEmbeddedMapping
 (
 
    NewTrade: Relational
@@ -387,7 +387,7 @@ Mapping meta::relational::tests::projection::function::concatenate::mapping::tes
 )
 
 
-Mapping meta::relational::tests::projection::function::concatenate::mapping::testEmbeddedMapping2
+Mapping meta::external::store::relational::tests::projection::function::concatenate::mapping::testEmbeddedMapping2
 (
 
    NewTrade: Relational

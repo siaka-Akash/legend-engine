@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::functions::asserts::*;
-import meta::relational::mapping::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
-import meta::relational::functions::*;
-import meta::relational::functions::pureToSqlQuery::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::functions::*;
+import meta::external::store::relational::functions::pureToSqlQuery::*;
 
-function <<test.BeforePackage>> meta::relational::tests::advanced::structure::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::advanced::structure::setUp():Boolean[1]
 {
     createTablesAndFillDb();
 }
 
-function <<test.Test, test.ToFix>> meta::relational::tests::advanced::structure::testWithForkedQualifier():Boolean[1]
+function <<test.Test, test.ToFix>> meta::external::store::relational::tests::advanced::structure::testWithForkedQualifier():Boolean[1]
 {
    let result1 = execute(|Firm.all()->filter(f|$f.employeesByCityOrManager('Hoboken', 'Bla')->exists(e|$e.lastName == 'Smith')), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result1.values, 1);
@@ -38,7 +38,7 @@ function <<test.Test, test.ToFix>> meta::relational::tests::advanced::structure:
    assertEmpty($result3.values);
 }
 
-function <<test.Test, test.ToFix>> meta::relational::tests::advanced::structure::testQualifierQueryWithOr2():Boolean[1]
+function <<test.Test, test.ToFix>> meta::external::store::relational::tests::advanced::structure::testQualifierQueryWithOr2():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.employeesByCityOrManagerAndLastName('Smith', 'Hoboken', 'Bla'))->filter(e|$e.firstName == 'John'),
                                              simpleRelationalMapping,
@@ -56,7 +56,7 @@ function <<test.Test, test.ToFix>> meta::relational::tests::advanced::structure:
 
 
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testQualifierQueryWithOr():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testQualifierQueryWithOr():Boolean[1]
 {
    let result = execute(|Firm.all()->filter(f|$f.employeesByCityOrManagerAndLastName('Smith', 'Hoboken', 'Bla').firstName == 'Peter' ||
                                               $f.employeesByCityOrManagerAndLastName('Johnson', 'New York', 'Bla').firstName == 'John'),
@@ -70,7 +70,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testQualifi
 
 
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testQualifierQuery():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testQualifierQuery():Boolean[1]
 {
    let result = execute(|Firm.all()->filter(f|$f.employeesByCityOrManagerAndLastName('Smith', 'Hoboken', 'Bla').firstName == 'Peter'),
                                              simpleRelationalMapping,
@@ -81,7 +81,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testQualifi
    assertEquals('select "root".ID as "pk_0", "root".LEGALNAME as "legalName" from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID) left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "persontable_0".ADDRESSID) left outer join personTable as "persontable_1" on ("persontable_0".MANAGERID = "persontable_1".ID) where ("persontable_0".LASTNAME = \'Smith\' and ("addresstable_0".NAME = \'Hoboken\' or concat("persontable_1".FIRSTNAME, \' \', "persontable_1".LASTNAME) = \'Bla\')) and "persontable_0".FIRSTNAME = \'Peter\'', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testQualifierWithOperation():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testQualifierWithOperation():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.employeesByCityOrManagerAndLastName('Smith', 'Hoboken', 'Bla').firstName+'Test'),
                                              simpleRelationalMapping,
@@ -92,7 +92,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testQualifi
    assertEquals('select concat("persontable_0".FIRSTNAME, \'Test\') from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID) left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "persontable_0".ADDRESSID) left outer join personTable as "persontable_1" on ("persontable_0".MANAGERID = "persontable_1".ID) where ("persontable_0".LASTNAME = \'Smith\' and ("addresstable_0".NAME = \'Hoboken\' or concat("persontable_1".FIRSTNAME, \' \', "persontable_1".LASTNAME) = \'Bla\'))', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testTwoQualifiersWithOperation():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testTwoQualifiersWithOperation():Boolean[1]
 {
    let result = execute(|Firm.all()->map(f|$f.employeesByCityOrManagerAndLastName('Smith', 'Hoboken', 'Bla').firstName+$f.employeesByCityOrManagerAndLastName('Hill', 'New York', 'Johnson').firstName),
                                              simpleRelationalMapping,
@@ -103,7 +103,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testTwoQual
    assertEquals('select concat("persontable_0".FIRSTNAME, "persontable_2".FIRSTNAME) from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID) left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "persontable_0".ADDRESSID) left outer join personTable as "persontable_1" on ("persontable_0".MANAGERID = "persontable_1".ID) left outer join personTable as "persontable_2" on ("root".ID = "persontable_2".FIRMID) left outer join addressTable as "addresstable_1" on ("addresstable_1".ID = "persontable_2".ADDRESSID) left outer join personTable as "persontable_3" on ("persontable_2".MANAGERID = "persontable_3".ID) where ("persontable_2".LASTNAME = \'Hill\' and ("addresstable_1".NAME = \'New York\' or concat("persontable_3".FIRSTNAME, \' \', "persontable_3".LASTNAME) = \'Johnson\')) and ("persontable_0".LASTNAME = \'Smith\' and ("addresstable_0".NAME = \'Hoboken\' or concat("persontable_1".FIRSTNAME, \' \', "persontable_1".LASTNAME) = \'Bla\'))', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testQualifierWithForkAndOrWithInline():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testQualifierWithForkAndOrWithInline():Boolean[1]
 {
    let result = execute(|Firm.all()->filter(f|$f.legalName=='Firm X')
                                     ->project([
@@ -129,7 +129,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testQualifi
    assertEquals('select "persontable_3".FIRSTNAME as "name1", "persontable_3".LASTNAME as "name2", "persontable_0".LASTNAME as "name3", "persontable_3".LASTNAME as "name4", "persontable_4".LASTNAME as "name5" from firmTable as "root" left outer join (select "persontable_1".FIRMID as FIRMID, "persontable_1".LASTNAME as LASTNAME from personTable as "persontable_1" left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "persontable_1".ADDRESSID) left outer join personTable as "persontable_2" on ("persontable_1".MANAGERID = "persontable_2".ID) where ("addresstable_0".NAME = \'Bla\' or concat("persontable_2".FIRSTNAME, \' \', "persontable_2".LASTNAME) = \'John Johnson\')) as "persontable_0" on ("root".ID = "persontable_0".FIRMID) left outer join (select "persontable_1".FIRMID as FIRMID, "persontable_1".FIRSTNAME as FIRSTNAME, "persontable_1".LASTNAME as LASTNAME from personTable as "persontable_1" left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "persontable_1".ADDRESSID) left outer join personTable as "persontable_2" on ("persontable_1".MANAGERID = "persontable_2".ID) where ("addresstable_0".NAME = \'Hoboken\' or concat("persontable_2".FIRSTNAME, \' \', "persontable_2".LASTNAME) = \'Bla\')) as "persontable_3" on ("root".ID = "persontable_3".FIRMID) left outer join (select "persontable_5".FIRMID as FIRMID, "persontable_5".LASTNAME as LASTNAME from personTable as "persontable_5" left outer join addressTable as "addresstable_1" on ("addresstable_1".ID = "persontable_5".ADDRESSID) left outer join personTable as "persontable_6" on ("persontable_5".MANAGERID = "persontable_6".ID) where ("addresstable_1".NAME = \'test\' or concat("persontable_6".FIRSTNAME, \' \', "persontable_6".LASTNAME) = \'John Johnson\')) as "persontable_4" on ("root".ID = "persontable_4".FIRMID) where "root".LEGALNAME = \'Firm X\'', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testQualifierWithForkAndOrWithInlineWithOffset():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testQualifierWithForkAndOrWithInlineWithOffset():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|$p.firm.employees->exists(e|$e.lastName->startsWith('Sm')))
                                      ->project([
@@ -160,7 +160,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testQualifi
     assertSameSQL('select "root".LASTNAME as "name1", "firmtable_0".LEGALNAME as "name2", "persontable_3".FIRSTNAME as "name3", "persontable_3".LASTNAME as "name4", "persontable_3".LASTNAME as "name5" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID) left outer join (select distinct "persontable_2".FIRMID from personTable as "persontable_2" where "persontable_2".LASTNAME like \'Sm%\') as "persontable_1" on ("firmtable_0".ID = "persontable_1".FIRMID) left outer join (select "persontable_4".FIRMID as FIRMID, "persontable_4".FIRSTNAME as FIRSTNAME, "persontable_4".LASTNAME as LASTNAME from personTable as "persontable_4" left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "persontable_4".ADDRESSID) left outer join personTable as "persontable_5" on ("persontable_4".MANAGERID = "persontable_5".ID) where ("addresstable_0".NAME = \'Hoboken\' or concat("persontable_5".FIRSTNAME, \' \', "persontable_5".LASTNAME) = \'Bla\')) as "persontable_3" on ("firmtable_0".ID = "persontable_3".FIRMID) where "persontable_1".FIRMID is not null', $result);
 }
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testQualifierWithForkAndOrWithInlineWithOffsetExplosion():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testQualifierWithForkAndOrWithInlineWithOffsetExplosion():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|$p.firm.employees->exists(e|$e.lastName->startsWith('Sm')))
                                      ->project([
@@ -201,7 +201,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testQualifi
    assertSameSQL('select "root".LASTNAME as "name1", "firmtable_0".LEGALNAME as "name2", "persontable_3".FIRSTNAME as "name3", "persontable_6".FIRSTNAME as "name4", "persontable_3".LASTNAME as "name5", "persontable_3".LASTNAME as "name6", "persontable_6".LASTNAME as "name7" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID) left outer join (select distinct "persontable_2".FIRMID from personTable as "persontable_2" where "persontable_2".LASTNAME like \'Sm%\') as "persontable_1" on ("firmtable_0".ID = "persontable_1".FIRMID) left outer join (select "persontable_4".FIRMID as FIRMID, "persontable_4".FIRSTNAME as FIRSTNAME, "persontable_4".LASTNAME as LASTNAME from personTable as "persontable_4" left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "persontable_4".ADDRESSID) left outer join personTable as "persontable_5" on ("persontable_4".MANAGERID = "persontable_5".ID) where ("addresstable_0".NAME = \'Hoboken\' or concat("persontable_5".FIRSTNAME, \' \', "persontable_5".LASTNAME) = \'Bla\')) as "persontable_3" on ("firmtable_0".ID = "persontable_3".FIRMID) left outer join (select "persontable_4".FIRMID as FIRMID, "persontable_4".FIRSTNAME as FIRSTNAME, "persontable_4".LASTNAME as LASTNAME from personTable as "persontable_4" left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "persontable_4".ADDRESSID) left outer join personTable as "persontable_5" on ("persontable_4".MANAGERID = "persontable_5".ID) where ("addresstable_0".NAME = \'Bla\' or concat("persontable_5".FIRSTNAME, \' \', "persontable_5".LASTNAME) = \'John Johnson\')) as "persontable_6" on ("firmtable_0".ID = "persontable_6".FIRMID) where "persontable_1".FIRMID is not null', $result);
 }
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testQualifierWithLineAndOrWithInLine():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testQualifierWithLineAndOrWithInLine():Boolean[1]
 {
    let result = execute(|Firm.all()->filter(f|$f.legalName=='Firm X')
                                    ->project([
@@ -220,7 +220,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testQualifi
    assertEquals('select "root".LEGALNAME as "name1", "persontable_0".FIRSTNAME as "name2", "persontable_0".LASTNAME as "name3" from firmTable as "root" left outer join (select "persontable_1".FIRMID as FIRMID, "persontable_1".FIRSTNAME as FIRSTNAME, "persontable_1".LASTNAME as LASTNAME from personTable as "persontable_1" left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "persontable_1".ADDRESSID) where ("persontable_1".LASTNAME = \'Smith\' or "addresstable_0".NAME = \'New York\')) as "persontable_0" on ("root".ID = "persontable_0".FIRMID) where "root".LEGALNAME = \'Firm X\'', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testQualifierWithIsolation():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testQualifierWithIsolation():Boolean[1]
 {
 
    let result = execute(|Firm.all()->project([
@@ -236,7 +236,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testQualifi
    assertEquals('select case when "persontable_0".LASTNAME = \'ok\' then null else ("persontable_0".AGE * "persontable_4".AGE) end as "name1" from firmTable as "root" left outer join (select "persontable_1".FIRMID as FIRMID, "persontable_1".LASTNAME as LASTNAME, "persontable_1".AGE as AGE from personTable as "persontable_1" where "persontable_1".LASTNAME = \'Smith\') as "persontable_0" on ("root".ID = "persontable_0".FIRMID) left outer join (select "persontable_3".FIRMID as FIRMID from personTable as "persontable_3" where "persontable_3".LASTNAME = \'Smith2\') as "persontable_2" on ("root".ID = "persontable_2".FIRMID) left outer join firmTable as "firmtable_1" on ("firmtable_1".ID = "persontable_2".FIRMID) left outer join (select "persontable_5".FIRMID as FIRMID, "persontable_5".AGE as AGE from personTable as "persontable_5" where "persontable_5".LASTNAME = \'Smith3\') as "persontable_4" on ("firmtable_1".ID = "persontable_4".FIRMID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testQualifierWithIsolationXX():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testQualifierWithIsolationXX():Boolean[1]
 {
 
    let result = execute(|Firm.all()->project([
@@ -251,7 +251,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testQualifi
    assertEquals('select case when "persontable_0".LASTNAME = \'ok\' then null else concat("persontable_0".LASTNAME, "firmtable_1".LEGALNAME) end as "name1" from firmTable as "root" left outer join personTable as "persontable_0" on ("root".ID = "persontable_0".FIRMID and "persontable_0".LASTNAME = \'Smith\') left outer join firmTable as "firmtable_1" on ("firmtable_1".ID = "persontable_0".FIRMID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testQualifierWithIsolationForced():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testQualifierWithIsolationForced():Boolean[1]
 {
 
    let result = execute(|Person.all()->project([
@@ -266,7 +266,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testQualifi
    assertEquals('select case when "persontable_1".LASTNAME = \'smith\' then \'ok\' else \'bla\' end as "name1", "firmtable_1".LEGALNAME as "name3" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID) left outer join (select "persontable_2".FIRMID as FIRMID, "persontable_2".LASTNAME as LASTNAME from personTable as "persontable_2" where "persontable_2".AGE < 30) as "persontable_1" on ("firmtable_0".ID = "persontable_1".FIRMID) left outer join firmTable as "firmtable_1" on ("firmtable_1".ID = "persontable_1".FIRMID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testQualifierWithIsolationForced2():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testQualifierWithIsolationForced2():Boolean[1]
 {
 
    let result = execute(|Person.all()->project([
@@ -281,7 +281,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testQualifi
    assertEquals('select "firmtable_1".LEGALNAME as "name1", "addresstable_0".NAME as "name2" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID) left outer join (select "persontable_2".FIRMID as FIRMID from personTable as "persontable_2" where "persontable_2".AGE < 30) as "persontable_1" on ("firmtable_0".ID = "persontable_1".FIRMID) left outer join firmTable as "firmtable_1" on ("firmtable_1".ID = "persontable_1".FIRMID) left outer join (select "persontable_4".FIRMID as FIRMID from personTable as "persontable_4" where "persontable_4".AGE < 20) as "persontable_3" on ("firmtable_0".ID = "persontable_3".FIRMID) left outer join firmTable as "firmtable_2" on ("firmtable_2".ID = "persontable_3".FIRMID) left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "firmtable_2".ADDRESSID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test, test.ToFix>> meta::relational::tests::advanced::structure::testQualifierChain():Boolean[1]
+function <<test.Test, test.ToFix>> meta::external::store::relational::tests::advanced::structure::testQualifierChain():Boolean[1]
 {
 
    let result = execute(|Person.all()->project([
@@ -298,7 +298,7 @@ function <<test.Test, test.ToFix>> meta::relational::tests::advanced::structure:
 
 
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testQualifierWithIsolationAndExists():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testQualifierWithIsolationAndExists():Boolean[1]
 {
 
    let result = execute(|Firm.all()->filter(f|$f.employeesByAge(30)->exists(e|$e.lastName == 'Smith'))
@@ -317,7 +317,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testQualifi
 }
 
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testIfIncludingQualifiers():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testIfIncludingQualifiers():Boolean[1]
 {
    // ensures the two branches of the if are isolated properly...
    let result = execute(|Firm.all()->filter(f|$f.employeesByAge(30)->exists(e|$e.lastName == 'Smith'))
@@ -333,7 +333,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testIfInclu
 }
 
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testQualifierWithIsolationAndExistsDeep():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testQualifierWithIsolationAndExistsDeep():Boolean[1]
 {
 
    let result = execute(|Person.all()->filter(p| $p.firm->toOne().employeesByAge(30)->exists(e|$e.lastName == 'Smith'))
@@ -347,7 +347,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testQualifi
   assertSameSQL('select "root".ID as "pk_0", "root".FIRSTNAME as "firstName", "root".AGE as "age", "root".LASTNAME as "lastName" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID) left outer join (select distinct "persontable_2".FIRMID from personTable as "persontable_2" where "persontable_2".AGE < 30 and "persontable_2".LASTNAME = \'Smith\') as "persontable_1" on ("firmtable_0".ID = "persontable_1".FIRMID) where "persontable_1".FIRMID is not null', $result);
 }
 
-function <<test.Test>> meta::relational::tests::advanced::structure::testQualifierContainingAJoinWithIsolationAndExistsDeep():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::advanced::structure::testQualifierContainingAJoinWithIsolationAndExistsDeep():Boolean[1]
 {
 
    let result = execute(|Person.all()->filter(p|$p.firm->toOne().employeesByCityOrManager('Hoboken', 'Bla')->exists(e|$e.lastName == 'smith'))
@@ -357,7 +357,7 @@ function <<test.Test>> meta::relational::tests::advanced::structure::testQualifi
 }
 
 
-function <<test.Test>>  meta::relational::tests::advanced::structure::testQualifierWithIsolationAndExistsDeepWithParallelProject():Boolean[1]
+function <<test.Test>>  meta::external::store::relational::tests::advanced::structure::testQualifierWithIsolationAndExistsDeepWithParallelProject():Boolean[1]
 {
 
    let result = execute(|Person.all()->filter(p|$p.firm->toOne().employeesByCityOrManager('Hoboken', 'Bla')->exists(e|$e.lastName == 'smith'))
@@ -372,7 +372,7 @@ function <<test.Test>>  meta::relational::tests::advanced::structure::testQualif
    assertSameSQL('select "persontable_4".LASTNAME as "name1" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID) left outer join (select distinct "persontable_2".FIRMID from personTable as "persontable_2" left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "persontable_2".ADDRESSID) left outer join personTable as "persontable_3" on ("persontable_2".MANAGERID = "persontable_3".ID) where ("addresstable_0".NAME = \'Hoboken\' or concat("persontable_3".FIRSTNAME, \' \', "persontable_3".LASTNAME) = \'Bla\') and "persontable_2".LASTNAME = \'smith\') as "persontable_1" on ("firmtable_0".ID = "persontable_1".FIRMID) left outer join (select "persontable_2".FIRMID as FIRMID, "persontable_2".LASTNAME as LASTNAME from personTable as "persontable_2" left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "persontable_2".ADDRESSID) left outer join personTable as "persontable_3" on ("persontable_2".MANAGERID = "persontable_3".ID) where ("addresstable_0".NAME = \'Hoboken\' or concat("persontable_3".FIRSTNAME, \' \', "persontable_3".LASTNAME) = \'Bla\')) as "persontable_4" on ("firmtable_0".ID = "persontable_4".FIRMID) where "persontable_1".FIRMID is not null', $result);
 }
 
-function <<test.Test>>  meta::relational::tests::advanced::structure::testMultipleIsolationWithSameProp():Boolean[1]
+function <<test.Test>>  meta::external::store::relational::tests::advanced::structure::testMultipleIsolationWithSameProp():Boolean[1]
 {
 
    let result = execute(|Person.all()->project([p | $p.firstName, 
@@ -380,7 +380,7 @@ function <<test.Test>>  meta::relational::tests::advanced::structure::testMultip
    assertSameSQL('select "root".FIRSTNAME as "1", "addresstable_2".NAME as "2" from personTable as "root" left outer join (select "firmtable_1".ID as ID, "firmtable_1".ADDRESSID as ADDRESSID, "firmtable_1".ID as ID_1 from firmTable as "firmtable_1" left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "firmtable_1".ADDRESSID) left outer join addressTable as "addresstable_1" on ("addresstable_1".ID = "firmtable_1".ADDRESSID) where "addresstable_1".STREET = \'Hoboken\' and "addresstable_0".NAME = \'New York\') as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID) left outer join addressTable as "addresstable_2" on ("addresstable_2".ID = "firmtable_0".ADDRESSID)', $result);
 }
 
-function <<test.Test, test.ToFix>>  meta::relational::tests::advanced::structure::testMultipleIsolationWithDifferentProp():Boolean[1]
+function <<test.Test, test.ToFix>>  meta::external::store::relational::tests::advanced::structure::testMultipleIsolationWithDifferentProp():Boolean[1]
 {
 
    let result = execute(|Person.all()->project([p | $p.firstName, 
@@ -388,7 +388,7 @@ function <<test.Test, test.ToFix>>  meta::relational::tests::advanced::structure
    true;
 }
 
-function <<test.Test>>  meta::relational::tests::advanced::structure::testLiteralConditionsForcedIsolation():Boolean[1]
+function <<test.Test>>  meta::external::store::relational::tests::advanced::structure::testLiteralConditionsForcedIsolation():Boolean[1]
 {
 
    let result = execute(|Firm.all()->filter(p| $p.employees.locations->exists(e| 1==1))
@@ -398,7 +398,7 @@ function <<test.Test>>  meta::relational::tests::advanced::structure::testLitera
 }
 
 
-function <<test.Test>>  meta::relational::tests::advanced::structure::testForcedIsolationFilterOnTop():Boolean[1]
+function <<test.Test>>  meta::external::store::relational::tests::advanced::structure::testForcedIsolationFilterOnTop():Boolean[1]
 {
 
    let result = execute(|Firm.all()->filter(p| $p.employees.locations.place == 'lala')

@@ -18,8 +18,8 @@ import org.finos.legend.engine.language.pure.compiler.test.TestCompilationFromGr
 import org.finos.legend.engine.language.pure.compiler.toPureGraph.PureModel;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.InstanceSetImplementation;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.SetImplementation;
-import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.aggregationAware.AggregationAwareSetImplementation;
-import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.modelToModel.PureInstanceSetImplementation;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.aggregationAware.AggregationAwareSetImplementation;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.model.PureInstanceSetImplementation;
 import org.junit.Assert;
 import org.junit.Test;
 

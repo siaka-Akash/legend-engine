@@ -621,7 +621,7 @@ public class TestRelationalGrammarRoundtrip extends TestGrammarRoundtrip.TestGra
     public void testMappingWithRelationalTestSQL()
     {
         test("###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                 "(\n" +
                 "  MappingTests\n" +
                 "  [\n" +
@@ -647,7 +647,7 @@ public class TestRelationalGrammarRoundtrip extends TestGrammarRoundtrip.TestGra
     public void testMappingWithRelationalTestCSV()
     {
         test("###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                 "(\n" +
                 "  MappingTests\n" +
                 "  [\n" +

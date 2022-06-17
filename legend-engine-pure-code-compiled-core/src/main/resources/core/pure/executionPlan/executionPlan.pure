@@ -172,7 +172,7 @@ Class meta::pure::executionPlan::FunctionParameter
    multiplicity: Multiplicity[0..1];
 }
 
-Class meta::pure::mapping::aggregationAware::AggregationAwareExecutionNode extends ExecutionNode
+Class meta::external::store::aggregationAware::AggregationAwareExecutionNode extends ExecutionNode
 {
       aggregationAwareActivity: String[1];
 }

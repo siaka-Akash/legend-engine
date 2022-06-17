@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::pure::mapping::modelToModel::*;
+import meta::external::store::model::*;
 import meta::pure::runtime::*;
 
-function meta::pure::mapping::modelToModel::test::alloy::utils::testJsonRuntime(class:Class<Any>[1], json:String[1]) : Runtime[1]
+function meta::external::store::model::test::alloy::utils::testJsonRuntime(class:Class<Any>[1], json:String[1]) : Runtime[1]
 {
    ^Runtime(
       connections = ^JsonModelConnection(

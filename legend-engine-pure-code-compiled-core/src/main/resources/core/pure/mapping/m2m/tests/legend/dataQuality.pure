@@ -16,15 +16,15 @@ import meta::pure::executionPlan::engine::java::roadmap::*;
 import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::test::alloy::dataQuality::*;
-import meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::*;
-import meta::pure::mapping::modelToModel::test::alloy::dataQuality::mapping::*;
-import meta::pure::mapping::modelToModel::test::alloy::dataQuality::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::utils::*;
-import meta::pure::mapping::modelToModel::test::dataQuality::*;
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::*;
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::*;
-import meta::pure::mapping::modelToModel::*;
+import meta::external::store::model::test::alloy::dataQuality::*;
+import meta::external::store::model::test::alloy::dataQuality::dest::*;
+import meta::external::store::model::test::alloy::dataQuality::mapping::*;
+import meta::external::store::model::test::alloy::dataQuality::src::*;
+import meta::external::store::model::test::alloy::utils::*;
+import meta::external::store::model::test::dataQuality::*;
+import meta::external::store::model::test::dataQuality::graphFetch::dest::*;
+import meta::external::store::model::test::dataQuality::graphFetch::src::*;
+import meta::external::store::model::*;
 import meta::pure::runtime::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly, feature.DataQuality>>
@@ -33,7 +33,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the mapping completes without error and no defects are reported'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::canUseGraphFetchCheckedWhenNoConstraints() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::canUseGraphFetchCheckedWhenNoConstraints() : Boolean[1]
 {
    let tree = #{WithoutConstraints {i}}#;
    let func = {|WithoutConstraints.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -63,7 +63,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the mapping completes without error and no defects are reported'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::canUseGraphFetchCheckedWhenNoConstraintsInherited() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::canUseGraphFetchCheckedWhenNoConstraintsInherited() : Boolean[1]
 {
    let tree = #{WithoutConstraintsInheritsNoConstriants {i}}#;
    let func = {|WithoutConstraintsInheritsNoConstriants.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -92,7 +92,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch.',
    doc.doc='Then:  the mapping completes without error'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::constraintsPassWhenUsingGraphFetch() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::constraintsPassWhenUsingGraphFetch() : Boolean[1]
 {
    let tree = #{SomeDataConstrained {i, b, child {s}}}#;
    let func = {|SomeDataConstrained.all()->graphFetch($tree)->serialize($tree)};
@@ -116,7 +116,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the result is a Checked object containing the target and source along with no defects.'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::constraintsPassForValidData() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::constraintsPassForValidData() : Boolean[1]
 {
    let tree = #{WithConstraints {i, child {s}}}#;
    let func = {|WithConstraints.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -144,7 +144,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the result is a Checked object containing the target and source along with a defects.'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::unmappedConstraintPropertiesCauseDefects() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::unmappedConstraintPropertiesCauseDefects() : Boolean[1]
 {
    let tree = #{WithConstraints {child {s}}}#;
    let func = {|WithConstraints.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -162,7 +162,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::unmappedConstraintP
    '      "message"          : "Unable to evaluate constraint [TestConstraint]: No mapping for property \'i\'",'+
    '      "enforcementLevel" : "Error",'+
    '      "ruleType"         : "ClassConstraint",'+
-   '      "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::WithConstraints",' +
+   '      "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::dest::WithConstraints",' +
    '      "path"             : []' +
    '    },'+
    '    {'+
@@ -171,7 +171,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::unmappedConstraintP
    '      "message"          : "Unable to evaluate constraint [MoreThanOne]: No mapping for property \'i\'",'+
    '      "enforcementLevel" : "Warn",'+
    '      "ruleType"         : "ClassConstraint",'+
-   '      "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::WithConstraints",' +
+   '      "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::dest::WithConstraints",' +
    '      "path"             : []' +
    '    }'+
    '  ],'+
@@ -192,7 +192,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the result is a Checked object containing the target and source along with a defects.'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::unmappedConstraintPropertiesViaQualifierCauseDefects() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::unmappedConstraintPropertiesViaQualifierCauseDefects() : Boolean[1]
 {
    let tree = #{WithConstraintsViaQualifier {s}}#;
    let func = {|WithConstraintsViaQualifier.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -210,7 +210,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::unmappedConstraintP
    '      "message"          : "Unable to evaluate constraint [MoreThanOne]: No mapping for property \'i\'",'+
    '      "enforcementLevel" : "Warn",'+
    '      "ruleType"         : "ClassConstraint",'+
-   '      "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::WithConstraintsViaQualifier",' +
+   '      "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::dest::WithConstraintsViaQualifier",' +
    '      "path"             : []' +
    '    }'+
    '  ],'+
@@ -232,7 +232,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch.',
    doc.doc='Then:  the inherited constaints should be evaluated and a defect returned.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::constraintsFailForInvalidDataOneDefect() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::constraintsFailForInvalidDataOneDefect() : Boolean[1]
 {
    let tree = #{WithConstraints {i}}#;
    let func = {|WithConstraints.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -251,7 +251,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::constraintsFailForI
    '      "message"          : "Constraint :[TestConstraint] violated in the Class WithConstraints",'+
    '      "enforcementLevel" : "Error",'+
    '      "ruleType"         : "ClassConstraint",'+
-   '      "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::WithConstraints",' +
+   '      "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::dest::WithConstraints",' +
    '      "path"             : []' +
    '    }'+
    '  ],'+
@@ -272,7 +272,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch.',
    doc.doc='Then:  the inherited constaints should be evaluated and defects returned.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::constraintsFailForInvalidDataTwoDefects() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::constraintsFailForInvalidDataTwoDefects() : Boolean[1]
 {
    let tree = #{WithConstraints {i}}#;
    let func = {|WithConstraints.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -291,7 +291,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::constraintsFailForI
    '      "message"          : "Constraint :[TestConstraint] violated in the Class WithConstraints",'+
    '      "enforcementLevel" : "Error",'+
    '      "ruleType"         : "ClassConstraint",'+
-   '      "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::WithConstraints",' +
+   '      "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::dest::WithConstraints",' +
    '      "path"             : []' +
    '    },'+
    '    {'+
@@ -300,7 +300,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::constraintsFailForI
    '      "message"          : "1 <= 1",'+
    '      "enforcementLevel" : "Warn",'+
    '      "ruleType"         : "ClassConstraint",'+
-   '      "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::WithConstraints",' +
+   '      "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::dest::WithConstraints",' +
    '      "path"             : []' +
    '    }'+
    '  ],'+
@@ -322,7 +322,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch.',
    doc.doc='Then:  the inherited constaints should be evaluated and no defects returned.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::constraintsAreInheritedAndPassForValidData() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::constraintsAreInheritedAndPassForValidData() : Boolean[1]
 {
    let tree = #{InheritsConstriants {i}}#;
    let func = {|InheritsConstriants.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -352,7 +352,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch.',
    doc.doc='Then:  the inherited constaints should be evaluated and a defect returned.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::constraintsAreInheritedAndFailForInvalidData() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::constraintsAreInheritedAndFailForInvalidData() : Boolean[1]
 {
    let tree = #{InheritsConstriants {i}}#;
    let func = {|InheritsConstriants.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -371,7 +371,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::constraintsAreInher
    '      "message"          : "Constraint :[TestConstraint] violated in the Class WithConstraints",'+
    '      "enforcementLevel" : "Error",'+
    '      "ruleType"         : "ClassConstraint",'+
-   '      "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::WithConstraints",' +
+   '      "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::dest::WithConstraints",' +
    '      "path"             : []' +
    '    },'+
    '    {'+
@@ -380,7 +380,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::constraintsAreInher
    '      "message"          : "2 <= 2",'+
    '      "enforcementLevel" : "Warn",'+
    '      "ruleType"         : "ClassConstraint",'+
-   '      "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::InheritsConstriants",' +
+   '      "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::dest::InheritsConstriants",' +
    '      "path"             : []' +
    '    }'+
    '  ],'+
@@ -401,7 +401,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the result is a Checked object containing the target and source along with a defect explaining the error.'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWithDefectForConstraintViolationOnTarget() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::returnCheckResultWithDefectForConstraintViolationOnTarget() : Boolean[1]
 {
    let tree = #{SomeDataConstrained {i, b}}#;
    let func = {|SomeDataConstrained.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -418,7 +418,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '      "externalId":"extID",'+
    '       "message":"Expected value >= 5 but got 4",'+
    '       "enforcementLevel":"Warn",'+
-   '       "ruleDefinerPath":"meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::SomeDataConstrained",'+
+   '       "ruleDefinerPath":"meta::external::store::model::test::dataQuality::graphFetch::dest::SomeDataConstrained",'+
    '       "ruleType":"ClassConstraint",'+
    '       "path"             : []' +
    '    }'+
@@ -439,7 +439,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the result is a Checked object containing the target and source along with a defect explaining the error.  The defect should contain the path to the failing object including indexes in any intermediate collections.'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWithDefectForConstraintViolationOnChildOfTarget() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::returnCheckResultWithDefectForConstraintViolationOnChildOfTarget() : Boolean[1]
 {
    let tree = #{AuthorWithConstraints {name, books {title, pages, marketing {reviews {by}}}}}#;
    let func = {|AuthorWithConstraints.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -456,7 +456,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '      "externalId":null,'+
    '       "message":"Constraint :[nameParts] violated in the Class AuthorWithConstraints",'+
    '       "enforcementLevel":"Error",'+
-   '       "ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::AuthorWithConstraints",'+
+   '       "ruleDefinerPath":"meta::external::store::model::test::alloy::dataQuality::dest::AuthorWithConstraints",'+
    '       "ruleType":"ClassConstraint",'+
    '       "path": []'+
    '    },'+
@@ -465,7 +465,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '      "externalId":null,'+
    '       "message":"Constraint :[pageCount] violated in the Class BookWithConstraints",'+
    '       "enforcementLevel":"Error",'+
-   '       "ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::BookWithConstraints",'+
+   '       "ruleDefinerPath":"meta::external::store::model::test::alloy::dataQuality::dest::BookWithConstraints",'+
    '       "ruleType":"ClassConstraint",'+
    '       "path": ['+
    '         {'+
@@ -479,7 +479,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '      "externalId":null,'+
    '       "message":"Constraint :[noSelfReview] violated in the Class Review",'+
    '       "enforcementLevel":"Error",'+
-   '       "ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::Review",'+
+   '       "ruleDefinerPath":"meta::external::store::model::test::alloy::dataQuality::dest::Review",'+
    '       "ruleType":"ClassConstraint",'+
    '       "path": ['+
    '         {'+
@@ -501,7 +501,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '      "externalId":null,'+
    '       "message":"Constraint :[titleLength] violated in the Class BookWithConstraints",'+
    '       "enforcementLevel":"Error",'+
-   '       "ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::BookWithConstraints",'+
+   '       "ruleDefinerPath":"meta::external::store::model::test::alloy::dataQuality::dest::BookWithConstraints",'+
    '       "ruleType":"ClassConstraint",'+
    '       "path": ['+
    '         {'+
@@ -540,7 +540,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the result is a Checked object containing the target and source containing a Checked for the source which includes the defect.'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWithDefectForConstraintViolationOnSource() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::returnCheckResultWithDefectForConstraintViolationOnSource() : Boolean[1]
 {
    let tree = #{SomeDataConstrained {i, b}}#;
    let func = {|SomeDataConstrained.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -557,7 +557,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '      "externalId":"extID",'+
    '      "message":"Expected value >= 5 but got 1",'+
    '      "enforcementLevel":"Warn",'+
-   '      "ruleDefinerPath":"meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::SomeDataConstrained",'+
+   '      "ruleDefinerPath":"meta::external::store::model::test::dataQuality::graphFetch::dest::SomeDataConstrained",'+
    '      "ruleType":"ClassConstraint",'+
    '      "path"             : []' +
    '    }'+
@@ -570,7 +570,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '        "externalId":null,'+
    '        "message":"Constraint :[TestConstraint] violated in the Class _SomeDataConstrained",'+
    '        "enforcementLevel":"Error",'+
-   '        "ruleDefinerPath":"meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_SomeDataConstrained",'+
+   '        "ruleDefinerPath":"meta::external::store::model::test::dataQuality::graphFetch::src::_SomeDataConstrained",'+
    '        "ruleType":"ClassConstraint",'+
    '        "path"             : []' +
    '      }'+
@@ -590,7 +590,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch.',
    doc.doc='Then:  the constaint should be evaluated and no defects returned.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::canDefineConstraintAndInheritFromAClassThatDoesNotDefineConstraintsAndPassForValidData() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::canDefineConstraintAndInheritFromAClassThatDoesNotDefineConstraintsAndPassForValidData() : Boolean[1]
 {
    let tree = #{WithConstraintInheritsNoConstriants {i}}#;
    let func = {|WithConstraintInheritsNoConstriants.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -621,7 +621,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch.',
    doc.doc='Then:  the constaint should be evaluated and a defect returned.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::canDefineConstraintAndInheritFromAClassThatDoesNotDefineConstraintsAndFailForInvalidData() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::canDefineConstraintAndInheritFromAClassThatDoesNotDefineConstraintsAndFailForInvalidData() : Boolean[1]
 {
    let tree = #{WithConstraintInheritsNoConstriants {i}}#;
    let func = {|WithConstraintInheritsNoConstriants.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -640,7 +640,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::canDefineConstraint
    '      "message"          : "2 <= 2",'+
    '      "enforcementLevel" : "Warn",'+
    '      "ruleType"         : "ClassConstraint",'+
-   '      "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::WithConstraintInheritsNoConstriants",' +
+   '      "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::dest::WithConstraintInheritsNoConstriants",' +
    '      "path"             : []' +
    '    }'+
    '  ],'+
@@ -660,7 +660,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the result is a Checked object without a target and a no-source defect.  The source of the Checked will be another Checked containing the defect for the source and the offending source data.'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWithDefectForMultiplicityConstructionViolationOnSource() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::returnCheckResultWithDefectForMultiplicityConstructionViolationOnSource() : Boolean[1]
 {
    let tree = #{WithConstraints {i, child}}#;
    let func = {|WithConstraints.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -678,7 +678,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '      "message"          : "No Input Available",'+
    '      "enforcementLevel" : "Critical",'+
    '      "ruleType"         : "NoInput",'+
-   '      "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::WithConstraints",' +
+   '      "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::dest::WithConstraints",' +
    '      "path"             : []' +
    '    }'+
    '  ],'+
@@ -691,7 +691,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '        "message"          : "Invalid multiplicity for s: expected [1] found [0]",'+
    '        "enforcementLevel" : "Critical",'+
    '        "ruleType"         : "ClassStructure",'+
-   '        "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_SomeDataConstrainedChild",' +
+   '        "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::src::_SomeDataConstrainedChild",' +
    '        "path": ['+
    '          {'+
    '            "propertyName":"child",'+
@@ -705,7 +705,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '        "message"          : "Invalid multiplicity for i: expected [1] found [0]",'+
    '        "enforcementLevel" : "Critical",'+
    '        "ruleType"         : "ClassStructure",'+
-   '        "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_Num",' +
+   '        "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::src::_Num",' +
    '        "path"             : []' +
    '      }'+
    '    ],'+
@@ -722,7 +722,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When: the mapping is executed using graphFetchChecked.',
    doc.doc='Then: the result is a Checked object without a target and a no-source defect.  The source of the Checked will be another Checked containing the defect for the source and the offending source data.'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWithDefectForAParsingErrorWhichCausesMultiplicityConstructionViolationOnSource() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::returnCheckResultWithDefectForAParsingErrorWhichCausesMultiplicityConstructionViolationOnSource() : Boolean[1]
 {
    let tree = #{SomeDataConstrained {i, b, child {s, d}}}#;
    let func = {|SomeDataConstrained.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -741,7 +741,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '      "message"          : "No Input Available",'+
    '      "enforcementLevel" : "Critical",'+
    '      "ruleType"         : "NoInput",'+
-   '      "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::SomeDataConstrained",' +
+   '      "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::dest::SomeDataConstrained",' +
    '      "path"             : []' +
    '    }'+
    '  ],'+
@@ -754,7 +754,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '        "message"          : "i: Unexpected node type:STRING for PURE Integer",'+
    '        "enforcementLevel" : "Error",'+
    '        "ruleType"         : "InvalidInput",'+
-   '        "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_SomeDataConstrained",' +
+   '        "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::src::_SomeDataConstrained",' +
    '        "path": []'+
    '      },'+
    '      {'+
@@ -763,7 +763,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '        "message"          : "b: Unexpected node type:NUMBER for PURE Boolean",'+
    '        "enforcementLevel" : "Error",'+
    '        "ruleType"         : "InvalidInput",'+
-   '        "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_SomeDataConstrained",' +
+   '        "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::src::_SomeDataConstrained",' +
    '        "path": []'+
    '      },'+
    '      {'+
@@ -772,7 +772,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '        "message"          : "s: Unexpected node type:BOOLEAN for PURE String",'+
    '        "enforcementLevel" : "Error",'+
    '        "ruleType"         : "InvalidInput",'+
-   '        "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_SomeDataConstrainedChild",' +
+   '        "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::src::_SomeDataConstrainedChild",' +
    '        "path"             : ['+
    '          {'+
    '            "propertyName":"child",'+
@@ -786,7 +786,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '        "message"          : "d: Error parsing year: \'notadate\'",'+
    '        "enforcementLevel" : "Error",'+
    '        "ruleType"         : "InvalidInput",'+
-   '        "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_SomeDataConstrainedChild",' +
+   '        "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::src::_SomeDataConstrainedChild",' +
    '        "path"             : ['+
    '          {'+
    '            "propertyName":"child",'+
@@ -800,7 +800,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '        "message"          : "Invalid multiplicity for s: expected [1] found [0]",'+
    '        "enforcementLevel" : "Critical",'+
    '        "ruleType"         : "ClassStructure",'+
-   '        "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_SomeDataConstrainedChild",' +
+   '        "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::src::_SomeDataConstrainedChild",' +
    '        "path"             : ['+
    '          {'+
    '            "propertyName":"child",'+
@@ -814,7 +814,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWi
    '        "message"          : "Invalid multiplicity for i: expected [1] found [0]",'+
    '        "enforcementLevel" : "Critical",'+
    '        "ruleType"         : "ClassStructure",'+
-   '        "ruleDefinerPath"  : "meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_SomeDataConstrained",' +
+   '        "ruleDefinerPath"  : "meta::external::store::model::test::dataQuality::graphFetch::src::_SomeDataConstrained",' +
    '        "path"             : []' +
    '      }'+
    '    ],'+
@@ -832,7 +832,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the result is a Checked object containing the target and source containing a Checked for the source which does not includes the defect.'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWithoutDefectForConstraintViolationOnSourceWhenConstraintsSuppressed() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::returnCheckResultWithoutDefectForConstraintViolationOnSourceWhenConstraintsSuppressed() : Boolean[1]
 {
    let tree = #{SomeDataConstrained {i, b}}#;
    let func = {|SomeDataConstrained.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -861,7 +861,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch.',
    doc.doc='Then:  the execution succeeds to produce the target object.'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::executionSucceedsForConstraintViolationOnSourceWhenConstraintsSuppressed() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::executionSucceedsForConstraintViolationOnSourceWhenConstraintsSuppressed() : Boolean[1]
 {
    let tree = #{SomeDataConstrained {i, b}}#;
    let func = {|SomeDataConstrained.all()->graphFetch($tree)->serialize($tree)};
@@ -881,7 +881,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the result is a Checked object containing the target without defects and source (as a Checked).'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::returnCheckResultWithoutDefectForConstraintViolationOnTargetWhenConstraintsSuppressed() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::returnCheckResultWithoutDefectForConstraintViolationOnTargetWhenConstraintsSuppressed() : Boolean[1]
 {
    let tree = #{SomeDataConstrained {i, b}}#;
    let func = {|SomeDataConstrained.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -910,7 +910,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch.',
    doc.doc='Then:  the execution succeeds to produce the target object.'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::executionSucceedsForConstraintViolationOnTargetWhenConstraintsSuppressed() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::executionSucceedsForConstraintViolationOnTargetWhenConstraintsSuppressed() : Boolean[1]
 {
    let tree = #{SomeDataConstrained {i, b}}#;
    let func = {|SomeDataConstrained.all()->graphFetch($tree)->serialize($tree)};
@@ -930,7 +930,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the result is a Checked object containing the target and source along with a defect explaining the error.  The defect should contain the path to the failing object including indexes in any intermediate collections.'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::fetchGraphIsExpandedToAccomodateImplicitConstraintPropertiesOnTarget() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::fetchGraphIsExpandedToAccomodateImplicitConstraintPropertiesOnTarget() : Boolean[1]
 {
    let tree = #{AuthorWithConstraints {name, books {title}}}#;
    let func = {|AuthorWithConstraints.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -947,7 +947,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::fetchGraphIsExpande
    '      "externalId":null,'+
    '       "message":"Constraint :[nameParts] violated in the Class AuthorWithConstraints",'+
    '       "enforcementLevel":"Error",'+
-   '       "ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::AuthorWithConstraints",'+
+   '       "ruleDefinerPath":"meta::external::store::model::test::alloy::dataQuality::dest::AuthorWithConstraints",'+
    '       "ruleType":"ClassConstraint",'+
    '       "path": []'+
    '    },'+
@@ -956,7 +956,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::fetchGraphIsExpande
    '      "externalId":null,'+
    '       "message":"Constraint :[pageCount] violated in the Class BookWithConstraints",'+
    '       "enforcementLevel":"Error",'+
-   '       "ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::BookWithConstraints",'+
+   '       "ruleDefinerPath":"meta::external::store::model::test::alloy::dataQuality::dest::BookWithConstraints",'+
    '       "ruleType":"ClassConstraint",'+
    '       "path": ['+
    '         {'+
@@ -970,7 +970,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::fetchGraphIsExpande
    '      "externalId":null,'+
    '       "message":"Constraint :[titleLength] violated in the Class BookWithConstraints",'+
    '       "enforcementLevel":"Error",'+
-   '       "ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::BookWithConstraints",'+
+   '       "ruleDefinerPath":"meta::external::store::model::test::alloy::dataQuality::dest::BookWithConstraints",'+
    '       "ruleType":"ClassConstraint",'+
    '       "path": ['+
    '         {'+
@@ -1010,7 +1010,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the result is a Checked object containing the target and source containing a Checked for the source which includes the defect.'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::fetchGraphIsExpandedToAccomodateImplicitConstraintPropertiesOnSource() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::fetchGraphIsExpandedToAccomodateImplicitConstraintPropertiesOnSource() : Boolean[1]
 {
    let tree = #{SomeDataUnconstrained {b}}#;
    let func = {|SomeDataUnconstrained.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -1030,7 +1030,7 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::fetchGraphIsExpande
    '        "externalId":null,'+
    '        "message":"Constraint :[TestConstraint] violated in the Class _SomeDataConstrained",'+
    '        "enforcementLevel":"Error",'+
-   '        "ruleDefinerPath":"meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_SomeDataConstrained",'+
+   '        "ruleDefinerPath":"meta::external::store::model::test::dataQuality::graphFetch::src::_SomeDataConstrained",'+
    '        "ruleType":"ClassConstraint",'+
    '        "path"             : []' +
    '      }'+
@@ -1045,12 +1045,12 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::fetchGraphIsExpande
 
 
 ###Pure
-import meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::*;
-import meta::pure::mapping::modelToModel::test::alloy::dataQuality::src::*;
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::*;
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::*;
+import meta::external::store::model::test::alloy::dataQuality::dest::*;
+import meta::external::store::model::test::alloy::dataQuality::src::*;
+import meta::external::store::model::test::dataQuality::graphFetch::src::*;
+import meta::external::store::model::test::dataQuality::graphFetch::dest::*;
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_SomeDataConstrained
+Class meta::external::store::model::test::dataQuality::graphFetch::src::_SomeDataConstrained
 [
    TestConstraint(
       ~function:(1 < $this.i)
@@ -1062,19 +1062,19 @@ Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_So
    child : _SomeDataConstrainedChild[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_SomeDataConstrainedChild
+Class meta::external::store::model::test::dataQuality::graphFetch::src::_SomeDataConstrainedChild
 {
    s : String[1];
    d : StrictDate[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::SomeDataUnconstrained
+Class meta::external::store::model::test::dataQuality::graphFetch::dest::SomeDataUnconstrained
 {
    i : Integer[1];
    b : Boolean[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::SomeDataConstrained
+Class meta::external::store::model::test::dataQuality::graphFetch::dest::SomeDataConstrained
 [
    TestIConstraint(
       ~externalId       : 'extID'
@@ -1089,7 +1089,7 @@ Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::So
    child : SomeDataConstrainedChild[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::SomeDataConstrainedChild
+Class meta::external::store::model::test::dataQuality::graphFetch::dest::SomeDataConstrainedChild
 [
    TestChildConstraint : $this.s == 'Hello'
 ]
@@ -1098,21 +1098,21 @@ Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::So
    d : StrictDate[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_Num
+Class meta::external::store::model::test::dataQuality::graphFetch::src::_Num
 {
    i     :Integer[1];
    child : _SomeDataConstrainedChild[0..1];
 
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_Num2
+Class meta::external::store::model::test::dataQuality::graphFetch::src::_Num2
 {
    int   :Integer[1];
    child : _SomeDataConstrainedChild[0..1];
 
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_X
+Class meta::external::store::model::test::dataQuality::graphFetch::src::_X
 [
    TestConstraint(
       ~function:(1 < $this.i)
@@ -1122,7 +1122,7 @@ Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_X
    i:Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_Y extends _X
+Class meta::external::store::model::test::dataQuality::graphFetch::src::_Y extends _X
 [
    TestConstraintChild(
       ~function:(2 < $this.i && $this.b)
@@ -1132,12 +1132,12 @@ Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::_Y 
    b: Boolean[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::WithoutConstraints
+Class meta::external::store::model::test::dataQuality::graphFetch::dest::WithoutConstraints
 {
    i:Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::WithConstraints
+Class meta::external::store::model::test::dataQuality::graphFetch::dest::WithConstraints
 [
    TestConstraint(
       ~function:(3 < $this.i)
@@ -1155,7 +1155,7 @@ Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::Wi
    child : SomeDataConstrainedChild[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::WithConstraintsViaQualifier
+Class meta::external::store::model::test::dataQuality::graphFetch::dest::WithConstraintsViaQualifier
 [
    MoreThanOne(
       ~externalId: 'TEST'
@@ -1170,7 +1170,7 @@ Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::Wi
    number() {$this.i}: Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::InheritsConstriants extends WithConstraints
+Class meta::external::store::model::test::dataQuality::graphFetch::dest::InheritsConstriants extends WithConstraints
 [
    MoreThanTwo(
       ~externalId: 'TEST2'
@@ -1182,7 +1182,7 @@ Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::In
 {
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::WithConstraintInheritsNoConstriants extends WithoutConstraints
+Class meta::external::store::model::test::dataQuality::graphFetch::dest::WithConstraintInheritsNoConstriants extends WithoutConstraints
 [
    MoreThanTwo(
       ~externalId: 'TEST2'
@@ -1194,60 +1194,60 @@ Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::Wi
 {
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::WithoutConstraintsInheritsNoConstriants extends WithoutConstraints
+Class meta::external::store::model::test::dataQuality::graphFetch::dest::WithoutConstraintsInheritsNoConstriants extends WithoutConstraints
 {
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::Z
+Class meta::external::store::model::test::dataQuality::graphFetch::dest::Z
 {
    i:Integer[1];
    b:Boolean[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::dataQuality::src::_Author
+Class meta::external::store::model::test::alloy::dataQuality::src::_Author
 {
    name: String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::dataQuality::src::_Book
+Class meta::external::store::model::test::alloy::dataQuality::src::_Book
 {
    title : String[1];
    pages : Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::dataQuality::src::_Marketing
+Class meta::external::store::model::test::alloy::dataQuality::src::_Marketing
 {
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::dataQuality::src::_Review
+Class meta::external::store::model::test::alloy::dataQuality::src::_Review
 {
    by : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::dataQuality::src::_Author_Book
+Association meta::external::store::model::test::alloy::dataQuality::src::_Author_Book
 {
    author: _Author[1];
    books: _Book[*];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::dataQuality::src::_Book_Marketing
+Association meta::external::store::model::test::alloy::dataQuality::src::_Book_Marketing
 {
    book: _Book[1];
    marketing: _Marketing[0..1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::dataQuality::src::_Marketing_Review
+Association meta::external::store::model::test::alloy::dataQuality::src::_Marketing_Review
 {
    marketing: _Marketing[1];
    reviews: _Review[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::Author
+Class meta::external::store::model::test::alloy::dataQuality::dest::Author
 {
    name: String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::AuthorWithConstraints
+Class meta::external::store::model::test::alloy::dataQuality::dest::AuthorWithConstraints
 [
    nameParts: $this.name->split(' ')->size() > 1
 ]
@@ -1255,13 +1255,13 @@ Class meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::AuthorW
    name: String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::Book
+Class meta::external::store::model::test::alloy::dataQuality::dest::Book
 {
    title : String[1];
    pages : Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::BookWithConstraints
+Class meta::external::store::model::test::alloy::dataQuality::dest::BookWithConstraints
 [
    titleLength : $this.title->length() > 7,
    pageCount   : $this.pages > 50
@@ -1271,11 +1271,11 @@ Class meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::BookWit
    pages     : Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::Marketing
+Class meta::external::store::model::test::alloy::dataQuality::dest::Marketing
 {
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::Review
+Class meta::external::store::model::test::alloy::dataQuality::dest::Review
 [
    noSelfReview: $this.by != $this.marketing.book.author.name
 ]
@@ -1283,25 +1283,25 @@ Class meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::Review
    by : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::AuthorBook
+Association meta::external::store::model::test::alloy::dataQuality::dest::AuthorBook
 {
    author: Author[1];
    books: Book[*];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::AuthorBookConstraints
+Association meta::external::store::model::test::alloy::dataQuality::dest::AuthorBookConstraints
 {
    author: AuthorWithConstraints[1];
    books: BookWithConstraints[*];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::BookMarketingConstraints
+Association meta::external::store::model::test::alloy::dataQuality::dest::BookMarketingConstraints
 {
    book: BookWithConstraints[1];
    marketing: Marketing[0..1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::MarketingReviewConstraints
+Association meta::external::store::model::test::alloy::dataQuality::dest::MarketingReviewConstraints
 {
    marketing: Marketing[1];
    reviews: Review[*];
@@ -1309,10 +1309,10 @@ Association meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::M
 
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::dataQuality::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::*;
+import meta::external::store::model::test::alloy::dataQuality::src::*;
+import meta::external::store::model::test::alloy::dataQuality::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::dataQuality::mapping::simpleLiteratureMapping
+Mapping meta::external::store::model::test::alloy::dataQuality::mapping::simpleLiteratureMapping
 (
    Author : Pure 
       {
@@ -1330,10 +1330,10 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::dataQuality::mapping::si
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::dataQuality::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::dataQuality::dest::*;
+import meta::external::store::model::test::alloy::dataQuality::src::*;
+import meta::external::store::model::test::alloy::dataQuality::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::dataQuality::mapping::constraintsLiteratureMapping
+Mapping meta::external::store::model::test::alloy::dataQuality::mapping::constraintsLiteratureMapping
 (
    AuthorWithConstraints : Pure 
       {
@@ -1364,10 +1364,10 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::dataQuality::mapping::co
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::*;
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::*;
+import meta::external::store::model::test::dataQuality::graphFetch::src::*;
+import meta::external::store::model::test::dataQuality::graphFetch::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::dataQuality::simpleConstrainedDataMapping
+Mapping meta::external::store::model::test::dataQuality::simpleConstrainedDataMapping
 (
    SomeDataConstrained : Pure 
       {
@@ -1386,10 +1386,10 @@ Mapping meta::pure::mapping::modelToModel::test::dataQuality::simpleConstrainedD
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::*;
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::*;
+import meta::external::store::model::test::dataQuality::graphFetch::src::*;
+import meta::external::store::model::test::dataQuality::graphFetch::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::dataQuality::simpleUnconstrainedDataMapping
+Mapping meta::external::store::model::test::dataQuality::simpleUnconstrainedDataMapping
 (
    SomeDataUnconstrained : Pure 
       {
@@ -1400,10 +1400,10 @@ Mapping meta::pure::mapping::modelToModel::test::dataQuality::simpleUnconstraine
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::*;
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::*;
+import meta::external::store::model::test::dataQuality::graphFetch::src::*;
+import meta::external::store::model::test::dataQuality::graphFetch::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::dataQuality::copyIntegerMapping
+Mapping meta::external::store::model::test::dataQuality::copyIntegerMapping
 (
    InheritsConstriants : Pure
       {
@@ -1437,10 +1437,10 @@ Mapping meta::pure::mapping::modelToModel::test::dataQuality::copyIntegerMapping
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::*;
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::*;
+import meta::external::store::model::test::dataQuality::graphFetch::src::*;
+import meta::external::store::model::test::dataQuality::graphFetch::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::dataQuality::doubleIntegerMapping
+Mapping meta::external::store::model::test::dataQuality::doubleIntegerMapping
 (
    WithConstraints : Pure
       {
@@ -1458,10 +1458,10 @@ Mapping meta::pure::mapping::modelToModel::test::dataQuality::doubleIntegerMappi
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::*;
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::*;
+import meta::external::store::model::test::dataQuality::graphFetch::src::*;
+import meta::external::store::model::test::dataQuality::graphFetch::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::dataQuality::noIMapping
+Mapping meta::external::store::model::test::dataQuality::noIMapping
 (
    WithConstraints : Pure
       {
@@ -1477,7 +1477,7 @@ Mapping meta::pure::mapping::modelToModel::test::dataQuality::noIMapping
       }
 )
 
-Mapping meta::pure::mapping::modelToModel::test::dataQuality::noIViaQualifierMapping
+Mapping meta::external::store::model::test::dataQuality::noIViaQualifierMapping
 (
    WithConstraintsViaQualifier : Pure
       {
@@ -1487,10 +1487,10 @@ Mapping meta::pure::mapping::modelToModel::test::dataQuality::noIViaQualifierMap
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::src::*;
-import meta::pure::mapping::modelToModel::test::dataQuality::graphFetch::dest::*;
+import meta::external::store::model::test::dataQuality::graphFetch::src::*;
+import meta::external::store::model::test::dataQuality::graphFetch::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::dataQuality::simpleConstrainedWithInheritanceDataMapping
+Mapping meta::external::store::model::test::dataQuality::simpleConstrainedWithInheritanceDataMapping
 (
    Z : Pure
       {
@@ -1506,15 +1506,15 @@ import meta::pure::executionPlan::engine::java::roadmap::*;
 import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::test::alloy::utils::*;
-import meta::pure::mapping::modelToModel::test::dataQuality::*;
+import meta::external::store::model::test::alloy::utils::*;
+import meta::external::store::model::test::dataQuality::*;
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::SourceWidget
+Class meta::external::store::model::test::dataQuality::SourceWidget
 {
    name: String[0..1]; 
 } 
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::Parent
+Class meta::external::store::model::test::dataQuality::Parent
 [
 
   VALID_NAME
@@ -1529,7 +1529,7 @@ Class meta::pure::mapping::modelToModel::test::dataQuality::Parent
    isValid() {$this.name->isNotEmpty()}: Boolean[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::dataQuality::Widget extends Parent {}
+Class meta::external::store::model::test::dataQuality::Widget extends Parent {}
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly, feature.DataQuality>>
 {  serverVersion.start='v1_19_0',
@@ -1537,7 +1537,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  the result is a Checked object containing the target and source.'
 }
-meta::pure::mapping::modelToModel::test::alloy::dataQuality::fetchGraphIsExpandedfForInheritedConstraintWithQualifier() : Boolean[1]
+meta::external::store::model::test::alloy::dataQuality::fetchGraphIsExpandedfForInheritedConstraintWithQualifier() : Boolean[1]
 {
    let tree = #{Widget{name}}#;
    
@@ -1563,9 +1563,9 @@ meta::pure::mapping::modelToModel::test::alloy::dataQuality::fetchGraphIsExpande
 }
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::dataQuality::*;
+import meta::external::store::model::test::dataQuality::*;
 
-Mapping meta::pure::mapping::modelToModel::test::dataQuality::SourceWidgetToWidget
+Mapping meta::external::store::model::test::dataQuality::SourceWidgetToWidget
 (
    *Widget[alloy_mastery_sourcing_testModel_vendors_sourceCreate_Widget]: Pure
    {

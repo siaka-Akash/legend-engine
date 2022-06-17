@@ -12,29 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::mapping::inheritance::*;
-import meta::relational::tests::mapping::inheritance::cross::*;
-import meta::relational::tests::mapping::inheritance::relational::*;
-import meta::relational::tests::model::inheritance::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::tests::mapping::inheritance::*;
+import meta::external::store::relational::tests::mapping::inheritance::cross::*;
+import meta::external::store::relational::tests::mapping::inheritance::relational::*;
+import meta::external::store::relational::tests::model::inheritance::*;
+import meta::external::store::relational::tests::*;
 import meta::pure::profiles::*;
 import meta::pure::mapping::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::runtime::*;
 
-function <<test.BeforePackage>> meta::relational::tests::mapping::inheritance::relational::selfJoin::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::mapping::inheritance::relational::selfJoin::setUp():Boolean[1]
 {
-    meta::relational::tests::mapping::inheritance::createTablesAndFillDbSelfJoin();
+    meta::external::store::relational::tests::mapping::inheritance::createTablesAndFillDbSelfJoin();
 }
 
-function <<test.Test>> meta::relational::tests::mapping::inheritance::relational::selfJoin::testSubTypeProjectSharedNonDirectlyRouted():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::inheritance::relational::selfJoin::testSubTypeProjectSharedNonDirectlyRouted():Boolean[1]
 {
-   let result1 = execute(|Person.all().roadVehicles->project([p|$p.id, p|$p->subType(@Car).engineType], ['id', 'engine']), meta::relational::tests::mapping::inheritance::relational::selfJoin::inheritanceMappingDBSelfJoin, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values->at(0);
+   let result1 = execute(|Person.all().roadVehicles->project([p|$p.id, p|$p->subType(@Car).engineType], ['id', 'engine']), meta::external::store::relational::tests::mapping::inheritance::relational::selfJoin::inheritanceMappingDBSelfJoin, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values->at(0);
    assertEquals(5, $result1.rows->size());
    assertSameElements(['1 TDSNull', '1 V', '2 TDSNull', '2 U', '3 H'], $result1.rows->map(r|$r.get('id')->toString()+' '+$r.get('engine')->toString()));
 }
 
-function meta::relational::tests::mapping::inheritance::createTablesAndFillDbSelfJoin():Boolean[1]
+function meta::external::store::relational::tests::mapping::inheritance::createTablesAndFillDbSelfJoin():Boolean[1]
 {
    let connection = testRuntime().connectionByElement(db)->cast(@TestDatabaseConnection);
 
@@ -52,7 +52,7 @@ function meta::relational::tests::mapping::inheritance::createTablesAndFillDbSel
 }
 
 ###Relational
-Database meta::relational::tests::mapping::inheritance::relational::selfJoin::myDB
+Database meta::external::store::relational::tests::mapping::inheritance::relational::selfJoin::myDB
 (
     Table OneTable
     (
@@ -75,10 +75,10 @@ Database meta::relational::tests::mapping::inheritance::relational::selfJoin::my
 
 
 ###Mapping
-import meta::relational::tests::mapping::inheritance::relational::selfJoin::*;
-import meta::relational::tests::model::inheritance::*;
+import meta::external::store::relational::tests::mapping::inheritance::relational::selfJoin::*;
+import meta::external::store::relational::tests::model::inheritance::*;
 
-Mapping meta::relational::tests::mapping::inheritance::relational::selfJoin::inheritanceMappingDBSelfJoin
+Mapping meta::external::store::relational::tests::mapping::inheritance::relational::selfJoin::inheritanceMappingDBSelfJoin
 (
    Person : Relational
             {

@@ -15,23 +15,23 @@
 ###Pure
 
 import meta::pure::runtime::*;
-import meta::relational::runtime::*;
-import meta::relational::metamodel::execute::*;
-import meta::csv::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::mapping::*;
 
-import meta::relational::tests::mapping::embedded::advanced::model::*;
-import meta::relational::tests::mapping::embedded::advanced::mapping::*;
-import meta::relational::tests::mapping::embedded::advanced::store::*;
-import meta::relational::tests::mapping::embedded::advanced::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::model::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::mapping::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::store::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::*;
 
 
-function  meta::relational::tests::mapping::embedded::advanced::testRuntime():Runtime[1]
+function  meta::external::store::relational::tests::mapping::embedded::advanced::testRuntime():Runtime[1]
 {
-  meta::relational::tests::testRuntime(eDB);
+  meta::external::store::relational::tests::testRuntime(eDB);
 }
 
- function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::testProjection():Boolean[1]
+ function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::testProjection():Boolean[1]
  {
 
 
@@ -44,7 +44,7 @@ function  meta::relational::tests::mapping::embedded::advanced::testRuntime():Ru
    true;
  }
 
- function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::testFilter():Boolean[1]
+ function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::testFilter():Boolean[1]
  {
     let result = execute(|Product.all()->filter(p | $p.bondDetails.type == '7 weeks' )
                                      ->project( [p | $p.name, p | $p.bondDetails.type], ['name', 'type'])
@@ -55,7 +55,7 @@ function  meta::relational::tests::mapping::embedded::advanced::testRuntime():Ru
 
  }
 
- function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::testDenormWithComplexFilter():Boolean[1]
+ function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::testDenormWithComplexFilter():Boolean[1]
  {
    //filter with two embedded properties in the filter
    let result = execute(|Product.all()->filter(p | $p.bondDetails.type->startsWith('5') && $p.bondDetails.description->startsWith('Bond'))
@@ -68,7 +68,7 @@ function  meta::relational::tests::mapping::embedded::advanced::testRuntime():Ru
   }
 
 
- function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::testGroupBy():Boolean[1]
+ function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::testGroupBy():Boolean[1]
  {
    let result = execute(|Product.all()->groupBy( [p | $p.bondDetails.type] ,
                                   [agg(x|if ( $x.market == 'LSE' ,|5.0,|1.0),
@@ -82,7 +82,7 @@ function  meta::relational::tests::mapping::embedded::advanced::testRuntime():Ru
 
  }
 
- function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::testGroupByComplexAgg():Boolean[1]
+ function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::testGroupByComplexAgg():Boolean[1]
  {
    let result = execute(|Product.all()->groupBy( [p | $p.bondDetails.type] ,
                                   [agg(x|if($x.bondDetails.type->startsWith('5'),|5.0,|1.0),
@@ -96,7 +96,7 @@ function  meta::relational::tests::mapping::embedded::advanced::testRuntime():Ru
 
  }
 
- function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::testQualifierProperty():Boolean[1]
+ function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::testQualifierProperty():Boolean[1]
  {
     let result = execute(|Product.all()->filter(p | $p.bondDetails.duration == '5' )
                                        ->project( [p | $p.name, p | $p.bondDetails.duration], ['name', 'duration'])
@@ -107,14 +107,14 @@ function  meta::relational::tests::mapping::embedded::advanced::testRuntime():Ru
 
  }
 
- function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::testInlineEmbeddedMappingWithAssociationFromRootMapping():Boolean[1]
+ function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::testInlineEmbeddedMappingWithAssociationFromRootMapping():Boolean[1]
  {
    let result = execute(|Product.all()->filter(p|$p.name == 'Product 1')->project([p| $p.name, p| $p.bondDetails.bondClassification.type], ['name','bondClassification']), testMappingEmbeddedParent, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions(), noDebug());
    assertEquals('name,bondClassification\n' + 'Product 1,Corporate\n', $result.values->toOne()->toCSV());
    assertEquals('select "root".PRODUCT_NAME as "name", "bondclassificationtable_0".type as "bondClassification" from PRODUCT_DENORM as "root" left outer join BondClassificationTable as "bondclassificationtable_0" on ("root".PRODUCT_ID = "bondclassificationtable_0".PRODUCT_ID) where "root".PRODUCT_NAME = \'Product 1\'', $result->sqlRemoveFormatting());
  }
 
- function <<test.ToFix>> meta::relational::tests::mapping::embedded::advanced::testProjectionWithMultipleRootMappings():Boolean[1]
+ function <<test.ToFix>> meta::external::store::relational::tests::mapping::embedded::advanced::testProjectionWithMultipleRootMappings():Boolean[1]
  {
 
    let result = execute(|Product.all()->project([p| $p.name, p | $p.bondDetails.description], ['name', 'description'])
@@ -122,21 +122,21 @@ function  meta::relational::tests::mapping::embedded::advanced::testRuntime():Ru
    fail();
  }
 
-function <<test.BeforePackage>> meta::relational::tests::mapping::embedded::advanced::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::mapping::embedded::advanced::setUp():Boolean[1]
 {
-   meta::relational::tests::mapping::embedded::advanced::store::createTablesAndFillDb();
+   meta::external::store::relational::tests::mapping::embedded::advanced::store::createTablesAndFillDb();
 
 }
 
 
-function meta::relational::tests::mapping::embedded::advanced::store::createTablesAndFillDb():Boolean[1]
+function meta::external::store::relational::tests::mapping::embedded::advanced::store::createTablesAndFillDb():Boolean[1]
 {
   let connection = testRuntime().connectionByElement(eDB)->cast(@TestDatabaseConnection);
 
-  meta::relational::functions::toDDL::dropAndCreateTableInDb(eDB, 'PRODUCT_DENORM', $connection);
-  meta::relational::functions::toDDL::dropAndCreateTableInDb(eDB, 'BOND_DETAIL', $connection);
-  meta::relational::functions::toDDL::dropAndCreateTableInDb(eDB, 'Party', $connection);
-  meta::relational::functions::toDDL::dropAndCreateTableInDb(eDB, 'BondClassificationTable', $connection);
+  meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(eDB, 'PRODUCT_DENORM', $connection);
+  meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(eDB, 'BOND_DETAIL', $connection);
+  meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(eDB, 'Party', $connection);
+  meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(eDB, 'BondClassificationTable', $connection);
 
   let s = 'insert into PRODUCT_DENORM (PRODUCT_ID, PRODUCT_NAME, MARKET_NAME, BOND_DETAILS, BOND_TYPE,BOND_STATUS,ISSUER,HOLDER,ISSUER_ADDRESS_NAME,HOLDER_ADDRESS_NAME,SUBPRODUCT_ID,SUBPRODUCT_NAME ) values ';
 
@@ -168,20 +168,20 @@ function meta::relational::tests::mapping::embedded::advanced::store::createTabl
 
 
 ###Pure
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::embedded::advanced::model::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::model::*;
 
-Enum meta::relational::tests::mapping::embedded::advanced::model::Status
+Enum meta::external::store::relational::tests::mapping::embedded::advanced::model::Status
 {
     Pending, Open, Closed
 }
 
-Enum meta::relational::tests::mapping::embedded::advanced::model::PartyType
+Enum meta::external::store::relational::tests::mapping::embedded::advanced::model::PartyType
 {
    Company, Bearer, Goverment
 }
 
-Class meta::relational::tests::mapping::embedded::advanced::model::Party
+Class meta::external::store::relational::tests::mapping::embedded::advanced::model::Party
 {
   name : String[1];
   type:  PartyType[1]; 
@@ -193,7 +193,7 @@ Class meta::relational::tests::mapping::embedded::advanced::model::Party
 }
 
 
-Class meta::relational::tests::mapping::embedded::advanced::model::BondDetail
+Class meta::external::store::relational::tests::mapping::embedded::advanced::model::BondDetail
 {
   description : String[1];
   type : String[1];
@@ -208,30 +208,30 @@ Class meta::relational::tests::mapping::embedded::advanced::model::BondDetail
   prefixedDescription(prefix:String[1]){ $prefix + $this.description }:String[1];
 }
 
-Class meta::relational::tests::mapping::embedded::advanced::model::Product
+Class meta::external::store::relational::tests::mapping::embedded::advanced::model::Product
 {
   name : String[1];
   market: String [1];
   bondDetails : BondDetail[1];
-  subProduct : meta::relational::tests::mapping::embedded::advanced::model::Product[1] ;
+  subProduct : meta::external::store::relational::tests::mapping::embedded::advanced::model::Product[1] ;
 }
 
 
-Class meta::relational::tests::mapping::embedded::advanced::model::BondClassification
+Class meta::external::store::relational::tests::mapping::embedded::advanced::model::BondClassification
 {
    type : String[1];  
 }
 
-Association meta::relational::tests::mapping::embedded::advanced::model::BondDetailBondClassification
+Association meta::external::store::relational::tests::mapping::embedded::advanced::model::BondDetailBondClassification
 {
-    bondDetail : meta::relational::tests::mapping::embedded::advanced::model::BondDetail[*];
-    bondClassification : meta::relational::tests::mapping::embedded::advanced::model::BondClassification[*];
+    bondDetail : meta::external::store::relational::tests::mapping::embedded::advanced::model::BondDetail[*];
+    bondClassification : meta::external::store::relational::tests::mapping::embedded::advanced::model::BondClassification[*];
 }
 
 
 ###Relational
 
-Database meta::relational::tests::mapping::embedded::advanced::store::eDB
+Database meta::external::store::relational::tests::mapping::embedded::advanced::store::eDB
 (
 
   Table PRODUCT_DENORM
@@ -289,11 +289,11 @@ Database meta::relational::tests::mapping::embedded::advanced::store::eDB
 
 ###Mapping
 
-import meta::relational::tests::mapping::embedded::advanced::store::*;
-import meta::relational::tests::mapping::embedded::advanced::model::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::store::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::model::*;
 
 
-Mapping meta::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbedded
+Mapping meta::external::store::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbedded
 (
 
  //USE CASE 1: Embedded Reference mapping
@@ -319,18 +319,18 @@ Mapping meta::relational::tests::mapping::embedded::advanced::mapping::testMappi
       )
    }
      
-   meta::relational::tests::mapping::embedded::advanced::model::BondClassification[BondClassification] : Relational
+   meta::external::store::relational::tests::mapping::embedded::advanced::model::BondClassification[BondClassification] : Relational
    {
       type : [eDB]BondClassificationTable.type
    }
       
 )
 
-Mapping meta::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedParent
+Mapping meta::external::store::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbeddedParent
 (
-   include meta::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbedded
+   include meta::external::store::relational::tests::mapping::embedded::advanced::mapping::testMappingEmbedded
    
-   meta::relational::tests::mapping::embedded::advanced::model::BondDetailBondClassification : Relational
+   meta::external::store::relational::tests::mapping::embedded::advanced::model::BondDetailBondClassification : Relational
    {
       AssociationMapping
       (

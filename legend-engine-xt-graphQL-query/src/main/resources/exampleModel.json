@@ -6,7 +6,7 @@
       "version": "none",
       "packageableElementPointers": [
         {
-          "path": "meta::relational::graphFetch::tests::domain::TestMapping",
+          "path": "meta::external::store::relational::graphFetch::tests::domain::TestMapping",
           "type": "MAPPING"
         }
       ]
@@ -312,16 +312,16 @@
       ]
     },
     {
-      "package": "meta::relational::graphFetch::tests::domain",
+      "package": "meta::external::store::relational::graphFetch::tests::domain",
       "_type": "mapping",
       "name": "TestMapping",
       "classMappings": [
         {
           "mainTable": {
             "schema": "default",
-            "database": "meta::relational::graphFetch::tests::domain::TestStore",
+            "database": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
             "_type": "table",
-            "mainTableDb": "meta::relational::graphFetch::tests::domain::TestStore",
+            "mainTableDb": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
             "table": "PersonTable"
           },
           "root": true,
@@ -333,9 +333,9 @@
                 "tableAlias": "PersonTable",
                 "table": {
                   "schema": "default",
-                  "database": "meta::relational::graphFetch::tests::domain::TestStore",
+                  "database": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                   "_type": "table",
-                  "mainTableDb": "meta::relational::graphFetch::tests::domain::TestStore",
+                  "mainTableDb": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                   "table": "PersonTable"
                 }
               },
@@ -358,9 +358,9 @@
               "tableAlias": "",
               "table": {
                 "schema": "default",
-                "database": "meta::relational::graphFetch::tests::domain::TestStore",
+                "database": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                 "_type": "table",
-                "mainTableDb": "meta::relational::graphFetch::tests::domain::TestStore",
+                "mainTableDb": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                 "table": "PersonTable"
               }
             }
@@ -369,9 +369,9 @@
         {
           "mainTable": {
             "schema": "default",
-            "database": "meta::relational::graphFetch::tests::domain::TestStore",
+            "database": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
             "_type": "table",
-            "mainTableDb": "meta::relational::graphFetch::tests::domain::TestStore",
+            "mainTableDb": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
             "table": "PersonTable"
           },
           "root": true,
@@ -383,9 +383,9 @@
                 "tableAlias": "PersonTable",
                 "table": {
                   "schema": "default",
-                  "database": "meta::relational::graphFetch::tests::domain::TestStore",
+                  "database": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                   "_type": "table",
-                  "mainTableDb": "meta::relational::graphFetch::tests::domain::TestStore",
+                  "mainTableDb": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                   "table": "PersonTable"
                 }
               },
@@ -403,9 +403,9 @@
                 "tableAlias": "PersonTable",
                 "table": {
                   "schema": "default",
-                  "database": "meta::relational::graphFetch::tests::domain::TestStore",
+                  "database": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                   "_type": "table",
-                  "mainTableDb": "meta::relational::graphFetch::tests::domain::TestStore",
+                  "mainTableDb": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                   "table": "PersonTable"
                 }
               },
@@ -428,9 +428,9 @@
               "tableAlias": "",
               "table": {
                 "schema": "default",
-                "database": "meta::relational::graphFetch::tests::domain::TestStore",
+                "database": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                 "_type": "table",
-                "mainTableDb": "meta::relational::graphFetch::tests::domain::TestStore",
+                "mainTableDb": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                 "table": "PersonTable"
               }
             }
@@ -439,9 +439,9 @@
         {
           "mainTable": {
             "schema": "default",
-            "database": "meta::relational::graphFetch::tests::domain::TestStore",
+            "database": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
             "_type": "table",
-            "mainTableDb": "meta::relational::graphFetch::tests::domain::TestStore",
+            "mainTableDb": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
             "table": "FirmTable"
           },
           "root": true,
@@ -453,9 +453,9 @@
                 "tableAlias": "FirmTable",
                 "table": {
                   "schema": "default",
-                  "database": "meta::relational::graphFetch::tests::domain::TestStore",
+                  "database": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                   "_type": "table",
-                  "mainTableDb": "meta::relational::graphFetch::tests::domain::TestStore",
+                  "mainTableDb": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                   "table": "FirmTable"
                 }
               },
@@ -471,7 +471,7 @@
                 "joins": [
                   {
                     "name": "Firm_Person",
-                    "db": "meta::relational::graphFetch::tests::domain::TestStore"
+                    "db": "meta::external::store::relational::graphFetch::tests::domain::TestStore"
                   }
                 ],
                 "_type": "elemtWithJoins"
@@ -495,9 +495,9 @@
               "tableAlias": "",
               "table": {
                 "schema": "default",
-                "database": "meta::relational::graphFetch::tests::domain::TestStore",
+                "database": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                 "_type": "table",
-                "mainTableDb": "meta::relational::graphFetch::tests::domain::TestStore",
+                "mainTableDb": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                 "table": "FirmTable"
               }
             }
@@ -519,9 +519,9 @@
                 "tableAlias": "FirmTable",
                 "table": {
                   "schema": "default",
-                  "database": "meta::relational::graphFetch::tests::domain::TestStore",
+                  "database": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                   "_type": "table",
-                  "mainTableDb": "meta::relational::graphFetch::tests::domain::TestStore",
+                  "mainTableDb": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                   "table": "FirmTable"
                 }
               },
@@ -531,9 +531,9 @@
                 "tableAlias": "PersonTable",
                 "table": {
                   "schema": "default",
-                  "database": "meta::relational::graphFetch::tests::domain::TestStore",
+                  "database": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                   "_type": "table",
-                  "mainTableDb": "meta::relational::graphFetch::tests::domain::TestStore",
+                  "mainTableDb": "meta::external::store::relational::graphFetch::tests::domain::TestStore",
                   "table": "PersonTable"
                 }
               }
@@ -541,7 +541,7 @@
           }
         }
       ],
-      "package": "meta::relational::graphFetch::tests::domain",
+      "package": "meta::external::store::relational::graphFetch::tests::domain",
       "schemas": [
         {
           "tables": [

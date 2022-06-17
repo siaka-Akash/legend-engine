@@ -17,8 +17,8 @@
                 "column": "full_name",
                 "table": {
                   "_type": "Table",
-                  "database": "meta::relational::db",
-                  "mainTableDb": "meta::relational::db",
+                  "database": "meta::external::store::relational::db",
+                  "mainTableDb": "meta::external::store::relational::db",
                   "schema": "default_schema",
                   "table": "Person_View"
                 },
@@ -29,8 +29,8 @@
                 "column": "full_name",
                 "table": {
                   "_type": "Table",
-                  "database": "meta::relational::db",
-                  "mainTableDb": "meta::relational::db",
+                  "database": "meta::external::store::relational::db",
+                  "mainTableDb": "meta::external::store::relational::db",
                   "schema": "default_schema",
                   "table": "Person_Table"
                 },
@@ -50,8 +50,8 @@
                 "column": "ROLE_ID",
                 "table": {
                   "_type": "Table",
-                  "database": "meta::relational::db",
-                  "mainTableDb": "meta::relational::db",
+                  "database": "meta::external::store::relational::db",
+                  "mainTableDb": "meta::external::store::relational::db",
                   "schema": "default_schema",
                   "table": "Person_Table"
                 },
@@ -62,8 +62,8 @@
                 "column": "ROLE_ID",
                 "table": {
                   "_type": "Table",
-                  "database": "meta::relational::db",
-                  "mainTableDb": "meta::relational::db",
+                  "database": "meta::external::store::relational::db",
+                  "mainTableDb": "meta::external::store::relational::db",
                   "schema": "default_schema",
                   "table": "Role_Table"
                 },
@@ -74,7 +74,7 @@
         }
       ],
       "name": "db",
-      "package": "meta::relational",
+      "package": "meta::external::store::relational",
       "schemas": [
         {
           "name": "default_schema",
@@ -139,8 +139,8 @@
                     "column": "full_name",
                     "table": {
                       "_type": "Table",
-                      "database": "meta::relational::db",
-                      "mainTableDb": "meta::relational::db",
+                      "database": "meta::external::store::relational::db",
+                      "mainTableDb": "meta::external::store::relational::db",
                       "schema": "default_schema",
                       "table": "Person_Table"
                     },
@@ -164,7 +164,7 @@
       "constraints": [],
       "name": "PeopleRolesView",
       "originalMilestonedProperties": [],
-      "package": "meta::relational",
+      "package": "meta::external::store::relational",
       "properties": [
         {
           "multiplicity": {
@@ -173,7 +173,7 @@
           "name": "users",
           "stereotypes": [],
           "taggedValues": [],
-          "type": "meta::relational::Person"
+          "type": "meta::external::store::relational::Person"
         },
         {
           "multiplicity": {
@@ -182,7 +182,7 @@
           "name": "roles",
           "stereotypes": [],
           "taggedValues": [],
-          "type": "meta::relational::Role"
+          "type": "meta::external::store::relational::Role"
         }
       ],
       "qualifiedProperties": [],
@@ -195,7 +195,7 @@
       "constraints": [],
       "name": "Role",
       "originalMilestonedProperties": [],
-      "package": "meta::relational",
+      "package": "meta::external::store::relational",
       "properties": [
         {
           "multiplicity": {
@@ -228,7 +228,7 @@
       "constraints": [],
       "name": "Person",
       "originalMilestonedProperties": [],
-      "package": "meta::relational",
+      "package": "meta::external::store::relational",
       "properties": [
         {
           "multiplicity": {
@@ -250,7 +250,7 @@
       "_type": "association",
       "name": "PeopleRolesAssociation",
       "originalMilestonedProperties": [],
-      "package": "meta::relational",
+      "package": "meta::external::store::relational",
       "properties": [
         {
           "multiplicity": {
@@ -259,7 +259,7 @@
           "name": "users",
           "stereotypes": [],
           "taggedValues": [],
-          "type": "meta::relational::Person"
+          "type": "meta::external::store::relational::Person"
         },
         {
           "multiplicity": {
@@ -268,7 +268,7 @@
           "name": "roles",
           "stereotypes": [],
           "taggedValues": [],
-          "type": "meta::relational::Role"
+          "type": "meta::external::store::relational::Role"
         }
       ],
       "qualifiedProperties": [],
@@ -281,13 +281,13 @@
       "classMappings": [
         {
           "_type": "relational",
-          "class": "meta::relational::Person",
+          "class": "meta::external::store::relational::Person",
           "distinct": false,
           "groupBy": [],
           "mainTable": {
             "_type": "Table",
-            "database": "meta::relational::db",
-            "mainTableDb": "meta::relational::db",
+            "database": "meta::external::store::relational::db",
+            "mainTableDb": "meta::external::store::relational::db",
             "schema": "default_schema",
             "table": "Person_View"
           },
@@ -297,8 +297,8 @@
               "column": "full_name",
               "table": {
                 "_type": "Table",
-                "database": "meta::relational::db",
-                "mainTableDb": "meta::relational::db",
+                "database": "meta::external::store::relational::db",
+                "mainTableDb": "meta::external::store::relational::db",
                 "schema": "default_schema",
                 "table": "Person_View"
               },
@@ -309,7 +309,7 @@
             {
               "_type": "relationalPropertyMapping",
               "property": {
-                "class": "meta::relational::Person",
+                "class": "meta::external::store::relational::Person",
                 "property": "name"
               },
               "relationalOperation": {
@@ -317,8 +317,8 @@
                 "column": "full_name",
                 "table": {
                   "_type": "Table",
-                  "database": "meta::relational::db",
-                  "mainTableDb": "meta::relational::db",
+                  "database": "meta::external::store::relational::db",
+                  "mainTableDb": "meta::external::store::relational::db",
                   "schema": "default_schema",
                   "table": "Person_View"
                 },
@@ -328,36 +328,36 @@
             {
               "_type": "relationalPropertyMapping",
               "property": {
-                "class": "meta::relational::Person",
+                "class": "meta::external::store::relational::Person",
                 "property": "roles"
               },
               "relationalOperation": {
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::db",
+                    "db": "meta::external::store::relational::db",
                     "name": "Person_Join"
                   },
                   {
-                    "db": "meta::relational::db",
+                    "db": "meta::external::store::relational::db",
                     "name": "Person_Role_Join"
                   }
                 ]
               },
-              "target": "meta_relational_Role"
+              "target": "meta_external_store_relational_Role"
             }
           ],
           "root": false
         },
         {
           "_type": "relational",
-          "class": "meta::relational::Role",
+          "class": "meta::external::store::relational::Role",
           "distinct": false,
           "groupBy": [],
           "mainTable": {
             "_type": "Table",
-            "database": "meta::relational::db",
-            "mainTableDb": "meta::relational::db",
+            "database": "meta::external::store::relational::db",
+            "mainTableDb": "meta::external::store::relational::db",
             "schema": "default_schema",
             "table": "Role_Table"
           },
@@ -367,8 +367,8 @@
               "column": "ID",
               "table": {
                 "_type": "Table",
-                "database": "meta::relational::db",
-                "mainTableDb": "meta::relational::db",
+                "database": "meta::external::store::relational::db",
+                "mainTableDb": "meta::external::store::relational::db",
                 "schema": "default_schema",
                 "table": "Role_Table"
               },
@@ -379,7 +379,7 @@
             {
               "_type": "relationalPropertyMapping",
               "property": {
-                "class": "meta::relational::Role",
+                "class": "meta::external::store::relational::Role",
                 "property": "id"
               },
               "relationalOperation": {
@@ -387,8 +387,8 @@
                 "column": "ID",
                 "table": {
                   "_type": "Table",
-                  "database": "meta::relational::db",
-                  "mainTableDb": "meta::relational::db",
+                  "database": "meta::external::store::relational::db",
+                  "mainTableDb": "meta::external::store::relational::db",
                   "schema": "default_schema",
                   "table": "Role_Table"
                 },
@@ -398,36 +398,36 @@
             {
               "_type": "relationalPropertyMapping",
               "property": {
-                "class": "meta::relational::Role",
+                "class": "meta::external::store::relational::Role",
                 "property": "users"
               },
               "relationalOperation": {
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::db",
+                    "db": "meta::external::store::relational::db",
                     "name": "Person_Role_Join"
                   },
                   {
-                    "db": "meta::relational::db",
+                    "db": "meta::external::store::relational::db",
                     "name": "Person_Join"
                   }
                 ]
               },
-              "target": "meta_relational_Person"
+              "target": "meta_external_store_relational_Person"
             }
           ],
           "root": false
         },
         {
           "_type": "relational",
-          "class": "meta::relational::PeopleRolesView",
+          "class": "meta::external::store::relational::PeopleRolesView",
           "distinct": false,
           "groupBy": [],
           "mainTable": {
             "_type": "Table",
-            "database": "meta::relational::db",
-            "mainTableDb": "meta::relational::db",
+            "database": "meta::external::store::relational::db",
+            "mainTableDb": "meta::external::store::relational::db",
             "schema": "default_schema",
             "table": "Person_Table"
           },
@@ -437,8 +437,8 @@
               "column": "full_name",
               "table": {
                 "_type": "Table",
-                "database": "meta::relational::db",
-                "mainTableDb": "meta::relational::db",
+                "database": "meta::external::store::relational::db",
+                "mainTableDb": "meta::external::store::relational::db",
                 "schema": "default_schema",
                 "table": "Person_Table"
               },
@@ -449,8 +449,8 @@
               "column": "ROLE_ID",
               "table": {
                 "_type": "Table",
-                "database": "meta::relational::db",
-                "mainTableDb": "meta::relational::db",
+                "database": "meta::external::store::relational::db",
+                "mainTableDb": "meta::external::store::relational::db",
                 "schema": "default_schema",
                 "table": "Person_Table"
               },
@@ -462,7 +462,7 @@
               "_type": "embeddedPropertyMapping",
               "classMapping": {
                 "_type": "embedded",
-                "class": "meta::relational::Person",
+                "class": "meta::external::store::relational::Person",
                 "primaryKey": [],
                 "propertyMappings": [
                   {
@@ -475,8 +475,8 @@
                       "column": "full_name",
                       "table": {
                         "_type": "Table",
-                        "database": "meta::relational::db",
-                        "mainTableDb": "meta::relational::db",
+                        "database": "meta::external::store::relational::db",
+                        "mainTableDb": "meta::external::store::relational::db",
                         "schema": "default_schema",
                         "table": "Person_Table"
                       },
@@ -487,26 +487,26 @@
                 "root": false
               },
               "property": {
-                "class": "meta::relational::PeopleRolesView",
+                "class": "meta::external::store::relational::PeopleRolesView",
                 "property": "users"
               }
             },
             {
               "_type": "relationalPropertyMapping",
               "property": {
-                "class": "meta::relational::PeopleRolesView",
+                "class": "meta::external::store::relational::PeopleRolesView",
                 "property": "roles"
               },
               "relationalOperation": {
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::db",
+                    "db": "meta::external::store::relational::db",
                     "name": "Person_Role_Join"
                   }
                 ]
               },
-              "target": "meta_relational_Role"
+              "target": "meta_external_store_relational_Role"
             }
           ],
           "root": false
@@ -515,7 +515,7 @@
       "enumerationMappings": [],
       "includedMappings": [],
       "name": "exampleMapping",
-      "package": "meta::relational::mapping",
+      "package": "meta::external::store::relational::mapping",
       "tests": []
     },
     {
@@ -532,17 +532,17 @@
         {
           "_type": "default",
           "elements": [
-            "meta::relational::db"
+            "meta::external::store::relational::db"
           ],
           "parserName": "Relational"
         },
         {
           "_type": "importAware",
           "elements": [
-            "meta::relational::PeopleRolesView",
-            "meta::relational::Role",
-            "meta::relational::Person",
-            "meta::relational::PeopleRolesAssociation"
+            "meta::external::store::relational::PeopleRolesView",
+            "meta::external::store::relational::Role",
+            "meta::external::store::relational::Person",
+            "meta::external::store::relational::PeopleRolesAssociation"
           ],
           "imports": [],
           "parserName": "Pure"
@@ -550,7 +550,7 @@
         {
           "_type": "importAware",
           "elements": [
-            "meta::relational::example"
+            "meta::external::store::relational::example"
           ],
           "imports": [],
           "parserName": "Mapping"

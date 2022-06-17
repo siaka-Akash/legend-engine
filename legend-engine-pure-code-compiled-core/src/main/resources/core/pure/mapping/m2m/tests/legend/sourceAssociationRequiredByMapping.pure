@@ -16,9 +16,9 @@ import meta::pure::executionPlan::engine::java::roadmap::*;
 import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::alloy::simple::sourceAssociationRequiredByMapping::mapping::*;
-import meta::pure::mapping::modelToModel::test::alloy::simple::sourceAssociationRequiredByMapping::model::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::alloy::simple::sourceAssociationRequiredByMapping::mapping::*;
+import meta::external::store::model::test::alloy::simple::sourceAssociationRequiredByMapping::model::*;
 import meta::pure::runtime::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly, feature.M2MBasics>> 
@@ -27,7 +27,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  a mapping is executed using graphFetch and serialize.',
    doc.doc='Then:  the data is correctly transformed.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::simple::canNavigateSourceAssociationToClassNotSeparatelyMapped() : Boolean[1]
+meta::external::store::model::test::alloy::simple::canNavigateSourceAssociationToClassNotSeparatelyMapped() : Boolean[1]
 {
    let tree = #{NameList {names} }#;
 
@@ -46,34 +46,34 @@ meta::pure::mapping::modelToModel::test::alloy::simple::canNavigateSourceAssocia
 }
 
 ###Pure
-import meta::pure::mapping::modelToModel::test::alloy::simple::sourceAssociationRequiredByMapping::model::*;
+import meta::external::store::model::test::alloy::simple::sourceAssociationRequiredByMapping::model::*;
 
-Class meta::pure::mapping::modelToModel::test::alloy::simple::sourceAssociationRequiredByMapping::model::Firm
+Class meta::external::store::model::test::alloy::simple::sourceAssociationRequiredByMapping::model::Firm
 {
    name      : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::simple::sourceAssociationRequiredByMapping::model::Person
+Class meta::external::store::model::test::alloy::simple::sourceAssociationRequiredByMapping::model::Person
 {
    firstName : String[1];
    lastName  : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::simple::sourceAssociationRequiredByMapping::model::FirmPerson
+Association meta::external::store::model::test::alloy::simple::sourceAssociationRequiredByMapping::model::FirmPerson
 {
    firm      : Firm[1];        
    employees : Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::simple::sourceAssociationRequiredByMapping::model::NameList
+Class meta::external::store::model::test::alloy::simple::sourceAssociationRequiredByMapping::model::NameList
 {
    names: String[1];
 }
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::simple::sourceAssociationRequiredByMapping::model::*;
+import meta::external::store::model::test::alloy::simple::sourceAssociationRequiredByMapping::model::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::simple::sourceAssociationRequiredByMapping::mapping::employeeNames
+Mapping meta::external::store::model::test::alloy::simple::sourceAssociationRequiredByMapping::mapping::employeeNames
 (
    NameList : Pure
             {

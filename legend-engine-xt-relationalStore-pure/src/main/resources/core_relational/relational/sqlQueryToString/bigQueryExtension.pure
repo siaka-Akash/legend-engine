@@ -1,18 +1,18 @@
-import meta::relational::functions::sqlQueryToString::bigQuery::*;
-import meta::relational::functions::sqlQueryToString::default::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::functions::sqlQueryToString::bigQuery::*;
+import meta::external::store::relational::functions::sqlQueryToString::default::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::router::extension::*;
 
-function <<db.ExtensionLoader>> meta::relational::functions::sqlQueryToString::bigQuery::dbExtensionLoaderForBigQuery():DbExtensionLoader[1]
+function <<db.ExtensionLoader>> meta::external::store::relational::functions::sqlQueryToString::bigQuery::dbExtensionLoaderForBigQuery():DbExtensionLoader[1]
 {
   ^DbExtensionLoader(dbType = DatabaseType.BigQuery, loader = createDbExtensionForBigQuery__DbExtension_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::bigQuery::createDbExtensionForBigQuery():DbExtension[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::bigQuery::createDbExtensionForBigQuery():DbExtension[1]
 {
    let reservedWords = defaultReservedWords();
    let literalProcessors = getDefaultLiteralProcessors()->putAll(getLiteralProcessorsForBigQuery());
@@ -33,7 +33,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::bigQu
    );
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::bigQuery::getLiteralProcessorsForBigQuery():Map<Type,LiteralProcessor>[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::bigQuery::getLiteralProcessorsForBigQuery():Map<Type,LiteralProcessor>[1]
 {
    newMap([
       pair(StrictDate,     ^LiteralProcessor(format = 'PARSE_DATE(\'%%Y-%%m-%%d\', \'%s\')',   transform = {d:StrictDate[1], dbTimeZone:String[0..1] | $d->convertDateToSqlString($dbTimeZone)})),
@@ -42,7 +42,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::bigQu
    ])
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::bigQuery::getDynaFunctionToSqlForBigQuery(): DynaFunctionToSql[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::bigQuery::getDynaFunctionToSqlForBigQuery(): DynaFunctionToSql[*]
 {
   let allStates = allGenerationStates();
 
@@ -77,12 +77,12 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::bigQu
   ];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::bigQuery::processSelectSQLQueryForBigQuery(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::bigQuery::processSelectSQLQueryForBigQuery(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
 {
    $s->processSelectSQLQueryForBigQuery($sgc.dbConfig, $sgc.format, $sgc.config, $isSubSelect, $sgc.extensions);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::bigQuery::processSelectSQLQueryForBigQuery(s:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::bigQuery::processSelectSQLQueryForBigQuery(s:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
 {
   let opStr = if($s.filteringOperation->isEmpty(), |'', |$s.filteringOperation->map(s|$s->processOperation($dbConfig, $format->indent(), ^$config(callingFromFilter = true), $extensions))->filter(s|$s != '')->joinStrings(' <||> '));
   let havingStr = if($s.havingOperation->isEmpty(), |'', |$s.havingOperation->map(s|$s->processOperation($dbConfig, $format->indent(), $config, $extensions))->filter(s|$s != '')->joinStrings(' <||> '));

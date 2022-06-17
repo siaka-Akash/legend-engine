@@ -12,24 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::runtime::*;
-import meta::relational::dbTestRunner::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::dbTestRunner::*;
 import meta::pure::alloy::connections::*;
 import meta::pure::functions::meta::*;
 import meta::pure::test::*;
 
-function <<test.TestCollection>> meta::relational::tests::dbSpecificTests::redshift::runSQLQueryTestsParam(): PureTestCollection[1]
+function <<test.TestCollection>> meta::external::store::relational::tests::dbSpecificTests::redshift::runSQLQueryTestsParam(): PureTestCollection[1]
 {
-  let connection = meta::relational::dbTestRunner::getTestConnection(DatabaseType.Redshift, meta::pure::router::extension::defaultRelationalExtensions());
+  let connection = meta::external::store::relational::dbTestRunner::getTestConnection(DatabaseType.Redshift, meta::pure::router::extension::defaultRelationalExtensions());
   
-  meta::relational::tests::dbSpecificTests::sqlQueryTests::dynaFunctions
+  meta::external::store::relational::tests::dbSpecificTests::sqlQueryTests::dynaFunctions
           ->collectParameterizedTests('Redshift',
                 ^DbTestConfig(dbType=DatabaseType.Redshift, connection=$connection), [],
-                meta::relational::tests::dbSpecificTests::redshift::runSQLQueryTestsParamFilter_FunctionDefinition_1__Boolean_1_
+                meta::external::store::relational::tests::dbSpecificTests::redshift::runSQLQueryTestsParamFilter_FunctionDefinition_1__Boolean_1_
                 );
 }
 
-function meta::relational::tests::dbSpecificTests::redshift::runSQLQueryTestsParamFilter(f:FunctionDefinition<Any>[1]):Boolean[1]
+function meta::external::store::relational::tests::dbSpecificTests::redshift::runSQLQueryTestsParamFilter(f:FunctionDefinition<Any>[1]):Boolean[1]
 {
   // currently hardcoding unsupported funcs, In future fetch this from db extensions and skip
   let unsupportedDynaFunctions = [ 'adjust', 'dateDiff', 'datePart','dayOfMonth', 'dayOfWeekNumber', 
@@ -42,7 +42,7 @@ function meta::relational::tests::dbSpecificTests::redshift::runSQLQueryTestsPar
   let failingSupportedDynaFunctions = ['joinStrings'];
 
   let ignoredTests= $unsupportedDynaFunctions->concatenate($failingSupportedDynaFunctions)->map(dynaFuncName |
-              let dynaFuncPackageName = 'meta::relational::tests::dbSpecificTests::sqlQueryTests::dynaFunctions::' + $dynaFuncName;
+              let dynaFuncPackageName = 'meta::external::store::relational::tests::dbSpecificTests::sqlQueryTests::dynaFunctions::' + $dynaFuncName;
               $dynaFuncPackageName->pathToElement()->cast(@Package)->collectTests(););
 
   !$ignoredTests->contains($f);

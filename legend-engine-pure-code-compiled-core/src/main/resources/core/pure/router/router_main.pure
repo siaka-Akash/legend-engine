@@ -14,7 +14,7 @@
 
 import meta::pure::executionPlan::*;
 import meta::pure::router::extension::*;
-import meta::pure::router::systemMapping::*;
+import meta::pure::store::contract::*;
 import meta::pure::deepfetch::execution::*;
 import meta::pure::deepfetch::builder::*;
 import meta::pure::metamodel::serialization::grammar::*;
@@ -64,7 +64,7 @@ Class meta::pure::router::ExtendedRoutedValueSpecification extends RoutedValueSp
 Class meta::pure::router::TDSRoutedValueSpecification extends RoutedValueSpecification
 {
    id:String[1];
-   store:meta::pure::store::Store[1];
+   store:meta::pure::store::metamodel::Store[1];
    runtime:Runtime[1];
    mapping:Mapping[1];
    executionContext:ExecutionContext[1];
@@ -91,7 +91,7 @@ Class meta::pure::router::routing::PropertyMap
    v:Pair<String,Any>[*];
 }
 
-Class meta::pure::router::store::embedded::EmbeddedStore extends meta::pure::store::Store
+Class meta::pure::router::store::embedded::EmbeddedStore extends meta::pure::store::metamodel::Store
 {
 }
 

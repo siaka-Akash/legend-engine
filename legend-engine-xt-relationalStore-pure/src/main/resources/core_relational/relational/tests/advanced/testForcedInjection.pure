@@ -12,27 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::injection::model::*;
-import meta::relational::tests::injection::store::*;
-import meta::relational::tests::injection::mapping::*;
-import meta::relational::runtime::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::functions::toDDL::*;
-import meta::relational::functions::*;
-import meta::relational::functions::pureToSqlQuery::*;
+import meta::external::store::relational::tests::injection::model::*;
+import meta::external::store::relational::tests::injection::store::*;
+import meta::external::store::relational::tests::injection::mapping::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::functions::toDDL::*;
+import meta::external::store::relational::functions::*;
+import meta::external::store::relational::functions::pureToSqlQuery::*;
 import meta::pure::mapping::*;
 
-function <<test.BeforePackage>> meta::relational::tests::advanced::forced::injection::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::advanced::forced::injection::setUp():Boolean[1]
 {
-    meta::relational::tests::injection::createTablesAndInsert();
+    meta::external::store::relational::tests::injection::createTablesAndInsert();
     true;
 }
 
-function <<test.Test>>  meta::relational::tests::advanced::forced::injection::testProject():Boolean[1]
+function <<test.Test>>  meta::external::store::relational::tests::advanced::forced::injection::testProject():Boolean[1]
 {
    let tds = execute(|Trade.all()->project([t|$t.name, t|$t.productAtTimeOfTrade.name], ['a','b']),
                       myMapping,
-                      meta::relational::tests::injection::testRuntime(), meta::pure::router::extension::defaultRelationalExtensions(),
+                      meta::external::store::relational::tests::injection::testRuntime(), meta::pure::router::extension::defaultRelationalExtensions(),
                       ^RelationalDebugContext(debug=false, space='', forcedIsolation = IsolationStrategy.BuildCorrelatedSubQuery)).values->toOne();
    assertEquals(4, $tds.rows->size());
    assertSameElements(['Trade 1 prod 1 V2','Trade 2 prod 2 V1','Trade 3 prod 3 V1','Trade 4 prod 4 V2'], $tds.rows->map(r|$r.get('a')->toString()+' '+$r.get('b')->toString()));

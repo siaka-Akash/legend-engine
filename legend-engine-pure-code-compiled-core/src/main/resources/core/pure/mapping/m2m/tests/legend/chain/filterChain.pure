@@ -16,15 +16,15 @@ import meta::pure::executionPlan::engine::java::roadmap::*;
 import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::filter::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::filter::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::filter::bridge::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::filter::dest::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::alloy::chain::filter::*;
+import meta::external::store::model::test::alloy::chain::filter::src::*;
+import meta::external::store::model::test::alloy::chain::filter::bridge::*;
+import meta::external::store::model::test::alloy::chain::filter::dest::*;
 import meta::pure::runtime::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'}
-meta::pure::mapping::modelToModel::test::alloy::chain::filter::filterOnSourceToBridgeMapping(): Boolean[1]
+meta::external::store::model::test::alloy::chain::filter::filterOnSourceToBridgeMapping(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -76,7 +76,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::filter::filterOnSourceToB
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'}
-meta::pure::mapping::modelToModel::test::alloy::chain::filter::filterOnBridgeToDestMapping(): Boolean[1]
+meta::external::store::model::test::alloy::chain::filter::filterOnBridgeToDestMapping(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -191,7 +191,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::filter::filterOnBridgeToD
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'}
-meta::pure::mapping::modelToModel::test::alloy::chain::filter::filterOnBothMappings(): Boolean[1]
+meta::external::store::model::test::alloy::chain::filter::filterOnBothMappings(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -267,64 +267,64 @@ meta::pure::mapping::modelToModel::test::alloy::chain::filter::filterOnBothMappi
 }
 
 ###Pure
-import meta::pure::mapping::modelToModel::test::alloy::chain::filter::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::filter::bridge::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::filter::dest::*;
+import meta::external::store::model::test::alloy::chain::filter::src::*;
+import meta::external::store::model::test::alloy::chain::filter::bridge::*;
+import meta::external::store::model::test::alloy::chain::filter::dest::*;
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::filter::src::__Firm
+Class meta::external::store::model::test::alloy::chain::filter::src::__Firm
 {
    name      : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::filter::src::__Person
+Class meta::external::store::model::test::alloy::chain::filter::src::__Person
 {
    fullName  : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::chain::filter::src::__Firm___Person
+Association meta::external::store::model::test::alloy::chain::filter::src::__Firm___Person
 {
    firm      : __Firm[1];        
    employees : __Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::filter::bridge::_Firm
+Class meta::external::store::model::test::alloy::chain::filter::bridge::_Firm
 {
    name      : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::filter::bridge::_Person
+Class meta::external::store::model::test::alloy::chain::filter::bridge::_Person
 {
    fullName  : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::chain::filter::bridge::_Firm__Person
+Association meta::external::store::model::test::alloy::chain::filter::bridge::_Firm__Person
 {
    firm      : _Firm[1];        
    employees : _Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::filter::dest::Firm
+Class meta::external::store::model::test::alloy::chain::filter::dest::Firm
 {
    name      : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::filter::dest::Person
+Class meta::external::store::model::test::alloy::chain::filter::dest::Person
 {
    fullName  : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::chain::filter::dest::Firm_Person
+Association meta::external::store::model::test::alloy::chain::filter::dest::Firm_Person
 {
    firm      : Firm[1];        
    employees : Person[*];
 }
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::chain::filter::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::filter::bridge::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::filter::dest::*;
+import meta::external::store::model::test::alloy::chain::filter::src::*;
+import meta::external::store::model::test::alloy::chain::filter::bridge::*;
+import meta::external::store::model::test::alloy::chain::filter::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::chain::filter::BridgeToDestMapping
+Mapping meta::external::store::model::test::alloy::chain::filter::BridgeToDestMapping
 (
    Firm: Pure {
       ~src _Firm
@@ -338,7 +338,7 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::chain::filter::BridgeToD
    }
 )
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::chain::filter::BridgeToDestMappingWithFilter
+Mapping meta::external::store::model::test::alloy::chain::filter::BridgeToDestMappingWithFilter
 (
    Firm: Pure {
       ~src _Firm
@@ -353,7 +353,7 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::chain::filter::BridgeToD
    }
 )
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::chain::filter::SrcToBridgeMapping
+Mapping meta::external::store::model::test::alloy::chain::filter::SrcToBridgeMapping
 (
    _Firm: Pure {
       ~src __Firm
@@ -367,7 +367,7 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::chain::filter::SrcToBrid
    }
 )
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::chain::filter::SrcToBridgeMappingWithFilter
+Mapping meta::external::store::model::test::alloy::chain::filter::SrcToBridgeMappingWithFilter
 (
    _Firm: Pure {
       ~src __Firm

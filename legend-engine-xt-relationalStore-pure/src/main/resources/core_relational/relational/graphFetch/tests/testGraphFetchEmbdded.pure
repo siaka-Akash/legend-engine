@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::model::simple::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
 
-function <<test.BeforePackage>> meta::relational::graphFetch::tests::embedded::setup(): Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::graphFetch::tests::embedded::setup(): Boolean[1]
 {
-   meta::relational::tests::mapping::embedded::setUp();
+   meta::external::store::relational::tests::mapping::embedded::setUp();
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::embedded::testSimpleEmbeddedMapping(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::embedded::testSimpleEmbeddedMapping(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -32,8 +32,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Person.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::mapping::embedded::model::mapping::testMappingEmbedded;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::mapping::embedded::model::mapping::testMappingEmbedded;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -43,7 +43,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::embedded::testMultiLevelEmbeddedMapping(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::embedded::testMultiLevelEmbeddedMapping(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -57,8 +57,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Person.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::mapping::embedded::model::mapping::testMappingEmbedded;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::mapping::embedded::model::mapping::testMappingEmbedded;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -68,7 +68,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::embedded::testEmbeddedToRootMapping(): Boolean[1]
+function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::embedded::testEmbeddedToRootMapping(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -82,8 +82,8 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
       }
    }#;
    let query = {|Person.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::mapping::embedded::model::mapping::testMappingEmbedded;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::mapping::embedded::model::mapping::testMappingEmbedded;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 
@@ -93,7 +93,7 @@ function <<test.Test, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::rel
    );
 }
 
-function <<test.Test, test.ToFix, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::relational::graphFetch::tests::embedded::testEmbeddedMappingQualifiedPropertyAccess(): Boolean[1]
+function <<test.Test, test.ToFix, test.AlloyOnly>> {serverVersion.start='v1_19_0'} meta::external::store::relational::graphFetch::tests::embedded::testEmbeddedMappingQualifiedPropertyAccess(): Boolean[1]
 {
    let tree = #{
       Person {
@@ -105,8 +105,8 @@ function <<test.Test, test.ToFix, test.AlloyOnly>> {serverVersion.start='v1_19_0
       }
    }#;
    let query = {|Person.all()->graphFetch($tree)->serialize($tree)};
-   let mapping = meta::relational::tests::mapping::embedded::model::mapping::testMappingEmbedded;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::mapping::embedded::model::mapping::testMappingEmbedded;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let result = execute($query, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions()).values;
 

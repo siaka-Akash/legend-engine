@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import meta::pure::tds::extensions::*;
-import meta::relational::metamodel::join::*;
+import meta::external::store::relational::metamodel::join::*;
 
 
 

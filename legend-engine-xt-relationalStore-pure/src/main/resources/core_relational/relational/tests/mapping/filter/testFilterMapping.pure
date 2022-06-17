@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::mapping::*;
-import meta::relational::tests::*;
-import meta::relational::tests::mapping::filter::*;
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::mapping::filter::*;
+import meta::external::store::relational::tests::model::simple::*;
 
-function <<test.Test>> meta::relational::tests::mapping::filter::filterMappingWithJoinInFilterAndPropertyGetAll():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::filter::filterMappingWithJoinInFilterAndPropertyGetAll():Boolean[1]
 {
    let result1 = execute(|Person.all()
                          , filterMappingWithJoinInFilterAndProperty, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -28,11 +28,11 @@ function <<test.Test>> meta::relational::tests::mapping::filter::filterMappingWi
 
 
 ###Mapping
-import meta::relational::tests::*;
-import meta::relational::tests::mapping::filter::*;
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::mapping::filter::*;
+import meta::external::store::relational::tests::model::simple::*;
 
-Mapping meta::relational::tests::mapping::filter::filterMappingWithJoinInFilterAndProperty
+Mapping meta::external::store::relational::tests::mapping::filter::filterMappingWithJoinInFilterAndProperty
 (
 
    Person : Relational

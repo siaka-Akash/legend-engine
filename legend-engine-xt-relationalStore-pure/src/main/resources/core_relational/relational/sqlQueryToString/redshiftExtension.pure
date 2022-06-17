@@ -1,18 +1,18 @@
-import meta::relational::functions::sqlQueryToString::redshift::*;
-import meta::relational::functions::sqlQueryToString::default::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::functions::sqlQueryToString::redshift::*;
+import meta::external::store::relational::functions::sqlQueryToString::default::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::router::extension::*;
 
-function <<db.ExtensionLoader>> meta::relational::functions::sqlQueryToString::redshift::dbExtensionLoaderForRedshift():DbExtensionLoader[1]
+function <<db.ExtensionLoader>> meta::external::store::relational::functions::sqlQueryToString::redshift::dbExtensionLoaderForRedshift():DbExtensionLoader[1]
 {
   ^DbExtensionLoader(dbType = DatabaseType.Redshift, loader = createDbExtensionForRedshift__DbExtension_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::redshift::createDbExtensionForRedshift():DbExtension[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::redshift::createDbExtensionForRedshift():DbExtension[1]
 {
    let reservedWords = defaultReservedWords();
    let literalProcessors = getDefaultLiteralProcessors()->putAll(getLiteralProcessorsForRedshift());
@@ -33,7 +33,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::redsh
    );
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::redshift::getLiteralProcessorsForRedshift():Map<Type,LiteralProcessor>[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::redshift::getLiteralProcessorsForRedshift():Map<Type,LiteralProcessor>[1]
 {
    newMap([
       pair(StrictDate,     ^LiteralProcessor(format = 'Date\'%s\'',      transform = {d:StrictDate[1], dbTimeZone:String[0..1] | $d->convertDateToSqlString($dbTimeZone)})),
@@ -42,7 +42,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::redsh
    ])
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::redshift::getDynaFunctionToSqlForRedshift(): DynaFunctionToSql[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::redshift::getDynaFunctionToSqlForRedshift(): DynaFunctionToSql[*]
 {
   let allStates = allGenerationStates();
 

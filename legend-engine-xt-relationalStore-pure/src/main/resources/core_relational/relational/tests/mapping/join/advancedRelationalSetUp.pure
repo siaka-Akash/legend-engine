@@ -13,7 +13,7 @@
 // limitations under the License.
 
 ###Relational
-Database meta::relational::tests::mapping::join::model::store::db
+Database meta::external::store::relational::tests::mapping::join::model::store::db
 (
     Table personTable (ID INT PRIMARY KEY, FIRSTNAME VARCHAR(200), LASTNAME VARCHAR(200), ADDRESSID INT, FIRMID INT, FLAG INT,AGE INT)
     Table personExtensionTable (ID INT PRIMARY KEY, PERSON_ID INT, EXTRAINFO VARCHAR(200), NUMBER INT,AGE INT)
@@ -68,11 +68,11 @@ Database meta::relational::tests::mapping::join::model::store::db
 
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::join::model::store::*;
-import meta::relational::tests::mapping::join::model::domain::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::join::model::store::*;
+import meta::external::store::relational::tests::mapping::join::model::domain::*;
 
-Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelationalMapping
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::advancedRelationalMapping
 (
    Person : Relational
             {
@@ -100,12 +100,12 @@ Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelation
 )
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::join::model::store::*;
-import meta::relational::tests::mapping::join::model::domain::*;
-import meta::relational::tests::mapping::join::model::mapping::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::join::model::store::*;
+import meta::external::store::relational::tests::mapping::join::model::domain::*;
+import meta::external::store::relational::tests::mapping::join::model::mapping::*;
 
-Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelationalMappingForPerson
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::advancedRelationalMappingForPerson
 (
    Person : Relational
             {
@@ -119,7 +119,7 @@ Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelation
             }
 )
 
-Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelationalMappingForFirm
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::advancedRelationalMappingForFirm
 (
    Firm : Relational
           {
@@ -129,10 +129,10 @@ Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelation
           
 )
 
-Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelationalMappingIncludePersonAndFirm
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::advancedRelationalMappingIncludePersonAndFirm
 (
    include advancedRelationalMappingForPerson
-   include meta::relational::tests::mapping::join::model::mapping::advancedRelationalMappingForFirm
+   include meta::external::store::relational::tests::mapping::join::model::mapping::advancedRelationalMappingForFirm
    
    TypeBuiltOutOfMultipleJoins : Relational
                                  {
@@ -143,12 +143,12 @@ Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelation
 )
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::join::model::store::*;
-import meta::relational::tests::mapping::join::model::domain::*;
-import meta::relational::tests::mapping::join::model::mapping::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::join::model::store::*;
+import meta::external::store::relational::tests::mapping::join::model::domain::*;
+import meta::external::store::relational::tests::mapping::join::model::mapping::*;
 
-Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelationalMappingForFirmIncludePerson
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::advancedRelationalMappingForFirmIncludePerson
 (
    include advancedRelationalMappingForPerson
    Firm : Relational
@@ -159,9 +159,9 @@ Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelation
 
 )
 
-Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelationalMappingIncludeFirmIncludePerson
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::advancedRelationalMappingIncludeFirmIncludePerson
 (
-   include meta::relational::tests::mapping::join::model::mapping::advancedRelationalMappingForFirmIncludePerson
+   include meta::external::store::relational::tests::mapping::join::model::mapping::advancedRelationalMappingForFirmIncludePerson
 
    TypeBuiltOutOfMultipleJoins : Relational
                                  {
@@ -172,11 +172,11 @@ Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelation
 )
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::join::model::store::*;
-import meta::relational::tests::mapping::join::model::domain::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::join::model::store::*;
+import meta::external::store::relational::tests::mapping::join::model::domain::*;
 
-Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelationalMapping2
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::advancedRelationalMapping2
 (
    Person : Relational
             {
@@ -204,11 +204,11 @@ Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelation
 )
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::join::model::store::*;
-import meta::relational::tests::mapping::join::model::domain::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::join::model::store::*;
+import meta::external::store::relational::tests::mapping::join::model::domain::*;
 
-Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelationalMapping3
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::advancedRelationalMapping3
 (
    Person : Relational
             {
@@ -239,11 +239,11 @@ Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelation
 )
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::join::model::store::*;
-import meta::relational::tests::mapping::join::model::domain::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::join::model::store::*;
+import meta::external::store::relational::tests::mapping::join::model::domain::*;
 
-Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelationalMapping4
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::advancedRelationalMapping4
 (
    Person : Relational {
       scope([db]default.personTable)
@@ -261,11 +261,11 @@ Mapping meta::relational::tests::mapping::join::model::mapping::advancedRelation
 )
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::join::model::store::*;
-import meta::relational::tests::mapping::join::model::domain::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::join::model::store::*;
+import meta::external::store::relational::tests::mapping::join::model::domain::*;
 
-Mapping meta::relational::tests::mapping::join::model::mapping::chainedJoins
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::chainedJoins
 (
    Person : Relational
             {
@@ -288,7 +288,7 @@ Mapping meta::relational::tests::mapping::join::model::mapping::chainedJoins
    
 )
 
-Mapping meta::relational::tests::mapping::join::model::mapping::chainedJoinsInner
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::chainedJoinsInner
 (
    Person : Relational
             {
@@ -312,7 +312,7 @@ Mapping meta::relational::tests::mapping::join::model::mapping::chainedJoinsInne
    
 )
 
-Mapping meta::relational::tests::mapping::join::model::mapping::chainedInnerJoinsForPrimitive
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::chainedInnerJoinsForPrimitive
 (
    Person : Relational
             {
@@ -327,11 +327,11 @@ Mapping meta::relational::tests::mapping::join::model::mapping::chainedInnerJoin
 )
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::join::model::store::*;
-import meta::relational::tests::mapping::join::model::domain::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::join::model::store::*;
+import meta::external::store::relational::tests::mapping::join::model::domain::*;
 
-Mapping meta::relational::tests::mapping::join::model::mapping::MappingForAccountAndTrade
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::MappingForAccountAndTrade
 (   
 
    Trade : Relational
@@ -350,11 +350,11 @@ Mapping meta::relational::tests::mapping::join::model::mapping::MappingForAccoun
 )
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::join::model::store::*;
-import meta::relational::tests::mapping::join::model::domain::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::join::model::store::*;
+import meta::external::store::relational::tests::mapping::join::model::domain::*;
 
-Mapping meta::relational::tests::mapping::join::model::mapping::JoinSchemaBWithDefaultPersonMainTable
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::JoinSchemaBWithDefaultPersonMainTable
 (
    Person : Relational
             {
@@ -368,11 +368,11 @@ Mapping meta::relational::tests::mapping::join::model::mapping::JoinSchemaBWithD
 )
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::join::model::store::*;
-import meta::relational::tests::mapping::join::model::domain::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::join::model::store::*;
+import meta::external::store::relational::tests::mapping::join::model::domain::*;
 
-Mapping meta::relational::tests::mapping::join::model::mapping::JoinSchemaBWithSchemaBPersonMainTable
+Mapping meta::external::store::relational::tests::mapping::join::model::mapping::JoinSchemaBWithSchemaBPersonMainTable
 (
    Person : Relational
             {
@@ -386,28 +386,28 @@ Mapping meta::relational::tests::mapping::join::model::mapping::JoinSchemaBWithS
 )
 
 ###Pure
-import meta::relational::tests::mapping::join::model::store::*;
+import meta::external::store::relational::tests::mapping::join::model::store::*;
 import meta::pure::profiles::*;
 import meta::pure::runtime::*;
-import meta::relational::metamodel::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::runtime::*;
 
-function meta::relational::tests::mapping::join::model::store::testRuntime():Runtime[1]
+function meta::external::store::relational::tests::mapping::join::model::store::testRuntime():Runtime[1]
 {
-   meta::relational::tests::testRuntime(db);
+   meta::external::store::relational::tests::testRuntime(db);
 }
 
-function <<test.BeforePackage>> meta::relational::tests::mapping::join::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::mapping::join::setUp():Boolean[1]
 {
     createTablesAndFillDb();
 }
 
-function meta::relational::tests::mapping::join::model::store::createTablesAndFillDb():Boolean[1]
+function meta::external::store::relational::tests::mapping::join::model::store::createTablesAndFillDb():Boolean[1]
 {
    let connection = testRuntime().connectionByElement(db)->cast(@TestDatabaseConnection);
 
-   meta::relational::functions::toDDL::dropAndCreateSchemaInDb('schemaB', $connection);
+   meta::external::store::relational::functions::toDDL::dropAndCreateSchemaInDb('schemaB', $connection);
 
    executeInDb('Drop table if exists PersonTable;', $connection);
    executeInDb('Create Table PersonTable(id INT, firstName VARCHAR(200), lastName VARCHAR(200), addressId INT, firmId INT, flag INT,AGE INT);', $connection);
@@ -429,7 +429,7 @@ function meta::relational::tests::mapping::join::model::store::createTablesAndFi
    executeInDb('insert into PersonExtensionTable (id, person_id, extraInfo,age) values (6, 6, \'extra 6\',22);', $connection);
    executeInDb('insert into PersonExtensionTable (id, person_id, extraInfo,age) values (7, 7, \'extra 7\',23);', $connection);
    
-   meta::relational::functions::toDDL::dropAndCreateTableInDb(db, 'firmPersonBridgeTable', $connection);
+   meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(db, 'firmPersonBridgeTable', $connection);
    executeInDb('insert into firmPersonBridgeTable (FIRM_ID, PERSON_ID) values (1, 1);', $connection);
    executeInDb('insert into firmPersonBridgeTable (FIRM_ID, PERSON_ID) values (1, 2);', $connection);
    executeInDb('insert into firmPersonBridgeTable (FIRM_ID, PERSON_ID) values (1, 3);', $connection);

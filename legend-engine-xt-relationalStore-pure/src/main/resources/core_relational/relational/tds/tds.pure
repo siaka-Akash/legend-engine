@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::metamodel::join::*;
+import meta::external::store::relational::metamodel::join::*;
 import meta::pure::metamodel::path::*;
 import meta::pure::profiles::*;
 

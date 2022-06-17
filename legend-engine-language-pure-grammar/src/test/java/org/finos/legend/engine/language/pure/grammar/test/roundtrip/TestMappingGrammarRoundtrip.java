@@ -23,18 +23,18 @@ public class TestMappingGrammarRoundtrip extends TestGrammarRoundtrip.TestGramma
     public void testSimpleModelMapping()
     {
         test("###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                 "(\n" +
-                "  *meta::pure::mapping::modelToModel::test::shared::dest::Person[meta_pure_mapping_modelToModel_test_shared_dest_Person]: Pure\n" +
+                "  *meta::external::store::model::test::shared::dest::Person[meta_pure_mapping_modelToModel_test_shared_dest_Person]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_S_Person\n" +
+                "    ~src meta::external::store::model::test::shared::src::_S_Person\n" +
                 "    firstName: $src.fullName->substring(0, $src.fullName->indexOf(' ')),\n" +
                 "    lastName: $src.fullName->substring($src.fullName->indexOf(' ') + 1, $src.fullName->length()),\n" +
                 "    testing: if($src.fullName == 'johndoe', |if($src.lastName == 'good', |'true', |'maybe'), |'false')\n" +
                 "  }\n" +
-                "  *meta::pure::mapping::modelToModel::test::shared::dest::Product2Simple[meta_pure_mapping_modelToModel_test_shared_dest_Product2Simple]: Pure\n" +
+                "  *meta::external::store::model::test::shared::dest::Product2Simple[meta_pure_mapping_modelToModel_test_shared_dest_Product2Simple]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_Product2\n" +
+                "    ~src meta::external::store::model::test::shared::src::_Product2\n" +
                 "    ~filter if($src.fullName == 'johndoe', |if($src.lastName == 'good', |true, |true), |false)\n" +
                 "    name: $src.name,\n" +
                 "    region: $src.region\n" +
@@ -46,11 +46,11 @@ public class TestMappingGrammarRoundtrip extends TestGrammarRoundtrip.TestGramma
     public void testMappingWithTests()
     {
         test("###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                 "(\n" +
-                "  *meta::pure::mapping::modelToModel::test::shared::dest::Person[meta_pure_mapping_modelToModel_test_shared_dest_Person]: Pure\n" +
+                "  *meta::external::store::model::test::shared::dest::Person[meta_pure_mapping_modelToModel_test_shared_dest_Person]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_S_Person\n" +
+                "    ~src meta::external::store::model::test::shared::src::_S_Person\n" +
                 "    firstName: $src.fullName->substring(0, $src.fullName->indexOf(' ')),\n" +
                 "    lastName: $src.fullName->substring($src.fullName->indexOf(' ') + 1, $src.fullName->length()),\n" +
                 "    testing: if($src.fullName == 'johndoe', |if($src.lastName == 'good', |'true', |'maybe'), |'false')\n" +
@@ -85,47 +85,47 @@ public class TestMappingGrammarRoundtrip extends TestGrammarRoundtrip.TestGramma
     public void testEnumerationMapping()
     {
         test("###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::mapping::enumerationMapping\n" +
+                "Mapping meta::external::store::model::test::enumerationMapping::enumToEnum::mapping::enumerationMapping\n" +
                 "(\n" +
-                "  meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model::TargetProductType: EnumerationMapping TargetProductTypeMapping\n" +
+                "  meta::external::store::model::test::enumerationMapping::enumToEnum::model::TargetProductType: EnumerationMapping TargetProductTypeMapping\n" +
                 "  {\n" +
                 "    TP1: ['MP1'],\n" +
                 "    TP2: ['MP2', 'MP3']\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model::TargetProductType: EnumerationMapping TargetProductTypeMapping2\n" +
+                "  meta::external::store::model::test::enumerationMapping::enumToEnum::model::TargetProductType: EnumerationMapping TargetProductTypeMapping2\n" +
                 "  {\n" +
                 "    TP3: ['MP21'],\n" +
                 "    TP4: ['MP22', 'MP23']\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model::TargetTradeType: EnumerationMapping TargetTradeTypeMapping\n" +
+                "  meta::external::store::model::test::enumerationMapping::enumToEnum::model::TargetTradeType: EnumerationMapping TargetTradeTypeMapping\n" +
                 "  {\n" +
                 "    TT1: [Enum.MT1],\n" +
                 "    TT2: [Enum.MT2, Enum.MT3]\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model::TargetTradeType: EnumerationMapping TargetTradeTypeMapping2\n" +
+                "  meta::external::store::model::test::enumerationMapping::enumToEnum::model::TargetTradeType: EnumerationMapping TargetTradeTypeMapping2\n" +
                 "  {\n" +
                 "    TT3: [My::Enum.MT21],\n" +
                 "    TT4: [My::Enum.MT22, My::Enum.MT23]\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model::MiddleProductType: EnumerationMapping MiddleProductTypeMapping\n" +
+                "  meta::external::store::model::test::enumerationMapping::enumToEnum::model::MiddleProductType: EnumerationMapping MiddleProductTypeMapping\n" +
                 "  {\n" +
                 "    MP1: [10],\n" +
                 "    MP2: [20],\n" +
                 "    MP3: [30, 40]\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model::MiddleTradeType: EnumerationMapping MiddleTradeTypeMapping\n" +
+                "  meta::external::store::model::test::enumerationMapping::enumToEnum::model::MiddleTradeType: EnumerationMapping MiddleTradeTypeMapping\n" +
                 "  {\n" +
                 "    MT1: [100],\n" +
                 "    MT2: [200],\n" +
                 "    MT3: [300, 400]\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model::MiddleProductType2: EnumerationMapping MiddleProductType2Mapping\n" +
+                "  meta::external::store::model::test::enumerationMapping::enumToEnum::model::MiddleProductType2: EnumerationMapping MiddleProductType2Mapping\n" +
                 "  {\n" +
                 "    MP21: [10],\n" +
                 "    MP22: [20],\n" +
                 "    MP23: [30, 40]\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model::MiddleTradeType2: EnumerationMapping MiddleTradeType2Mapping\n" +
+                "  meta::external::store::model::test::enumerationMapping::enumToEnum::model::MiddleTradeType2: EnumerationMapping MiddleTradeType2Mapping\n" +
                 "  {\n" +
                 "    MT21: [100],\n" +
                 "    MT22: [200],\n" +
@@ -164,42 +164,42 @@ public class TestMappingGrammarRoundtrip extends TestGrammarRoundtrip.TestGramma
     public void testUnionModelMapping()
     {
         test("###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::union::unionModelMapping\n" +
+                "Mapping meta::external::store::model::test::union::unionModelMapping\n" +
                 "(\n" +
-                "  *meta::pure::mapping::modelToModel::test::shared::dest::Person[meta_pure_mapping_modelToModel_test_shared_dest_Person]: Operation\n" +
+                "  *meta::external::store::model::test::shared::dest::Person[meta_pure_mapping_modelToModel_test_shared_dest_Person]: Operation\n" +
                 "  {\n" +
                 "    meta::pure::router::operations::union_OperationSetImplementation_1__SetImplementation_MANY_(p1,p2)\n" +
                 "  }\n" +
-                "  *meta::pure::mapping::modelToModel::test::shared::dest::Firm[meta_pure_mapping_modelToModel_test_shared_dest_Firm]: Operation\n" +
+                "  *meta::external::store::model::test::shared::dest::Firm[meta_pure_mapping_modelToModel_test_shared_dest_Firm]: Operation\n" +
                 "  {\n" +
                 "    meta::pure::router::operations::union_OperationSetImplementation_1__SetImplementation_MANY_(f1,f2)\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::shared::dest::Firm[f1]: Pure\n" +
+                "  meta::external::store::model::test::shared::dest::Firm[f1]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_Firm\n" +
+                "    ~src meta::external::store::model::test::shared::src::_Firm\n" +
                 "    legalName: 'f1 / ' + $src.name\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::shared::dest::Firm[f2]: Pure\n" +
+                "  meta::external::store::model::test::shared::dest::Firm[f2]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_Firm\n" +
+                "    ~src meta::external::store::model::test::shared::src::_Firm\n" +
                 "    legalName: 'f2 / ' + $src.name\n" +
                 "  }\n" +
-                "  *meta::pure::mapping::modelToModel::test::shared::dest::Address[meta_pure_mapping_modelToModel_test_shared_dest_Address]: Pure\n" +
+                "  *meta::external::store::model::test::shared::dest::Address[meta_pure_mapping_modelToModel_test_shared_dest_Address]: Pure\n" +
                 "  {\n" +
                 "    street: 'streetConstant'\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::shared::dest::Person[p1]: Pure\n" +
+                "  meta::external::store::model::test::shared::dest::Person[p1]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_Person\n" +
+                "    ~src meta::external::store::model::test::shared::src::_Person\n" +
                 "    ~filter $src.fullName->startsWith('Johny')\n" +
                 "    firstName: $src.fullName->substring(0, $src.fullName->indexOf(' ')),\n" +
                 "    lastName: $src.fullName->substring($src.fullName->indexOf(' ') + 1, $src.fullName->length()),\n" +
                 "    addresses[meta_pure_mapping_modelToModel_test_shared_dest_Address]: $src.addresses,\n" +
                 "    firm[f1]: $src.firm\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::shared::dest::Person[p2]: Pure\n" +
+                "  meta::external::store::model::test::shared::dest::Person[p2]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_Person\n" +
+                "    ~src meta::external::store::model::test::shared::src::_Person\n" +
                 "    ~filter $src.fullName->startsWith('_')\n" +
                 "    firstName: 'N/A',\n" +
                 "    lastName: 'N/A',\n" +
@@ -213,31 +213,31 @@ public class TestMappingGrammarRoundtrip extends TestGrammarRoundtrip.TestGramma
     public void testMergeModelMapping()
     {
         test("###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::alloy::merge::SimpleMergeModelMapping\n" +
+                "Mapping meta::external::store::model::test::alloy::merge::SimpleMergeModelMapping\n" +
                 "(\n" +
-                "  *meta::pure::mapping::modelToModel::test::alloy::merge::Person: Operation\n" +
+                "  *meta::external::store::model::test::alloy::merge::Person: Operation\n" +
                 "  {\n" +
-                "    meta::pure::router::operations::merge_OperationSetImplementation_1__SetImplementation_MANY_([p1,p2,p3],{s1: meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithFirstName[1],s2: meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithLastName[1],s3: meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithAge[1]|($s1.id == $s2.id) && ($s1.id == $s3.id)})\n" +
+                "    meta::pure::router::operations::merge_OperationSetImplementation_1__SetImplementation_MANY_([p1,p2,p3],{s1: meta::external::store::model::test::alloy::merge::SourcePersonWithFirstName[1],s2: meta::external::store::model::test::alloy::merge::SourcePersonWithLastName[1],s3: meta::external::store::model::test::alloy::merge::SourcePersonWithAge[1]|($s1.id == $s2.id) && ($s1.id == $s3.id)})\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::alloy::merge::Person[p1]: Pure\n" +
+                "  meta::external::store::model::test::alloy::merge::Person[p1]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithFirstName\n" +
+                "    ~src meta::external::store::model::test::alloy::merge::SourcePersonWithFirstName\n" +
                 "    firstName: $src.sourceFirstName,\n" +
                 "    address: $src.sourceAddress\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::alloy::merge::Person[p2]: Pure\n" +
+                "  meta::external::store::model::test::alloy::merge::Person[p2]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithLastName\n" +
+                "    ~src meta::external::store::model::test::alloy::merge::SourcePersonWithLastName\n" +
                 "    lastName: $src.sourceLastName\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::alloy::merge::Person[p3]: Pure\n" +
+                "  meta::external::store::model::test::alloy::merge::Person[p3]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithAge\n" +
+                "    ~src meta::external::store::model::test::alloy::merge::SourcePersonWithAge\n" +
                 "    age: $src.sourceAge\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::alloy::merge::Address: Pure\n" +
+                "  meta::external::store::model::test::alloy::merge::Address: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::alloy::merge::SourceAddress\n" +
+                "    ~src meta::external::store::model::test::alloy::merge::SourceAddress\n" +
                 "    street: $src.sourceStreet\n" +
                 "  }\n" +
                 ")\n");
@@ -299,11 +299,11 @@ public class TestMappingGrammarRoundtrip extends TestGrammarRoundtrip.TestGramma
     public void testModelMappingWithLocalProperties()
     {
         test("###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                 "(\n" +
-                "  *meta::pure::mapping::modelToModel::test::shared::dest::Person[meta_pure_mapping_modelToModel_test_shared_dest_Person]: Pure\n" +
+                "  *meta::external::store::model::test::shared::dest::Person[meta_pure_mapping_modelToModel_test_shared_dest_Person]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_S_Person\n" +
+                "    ~src meta::external::store::model::test::shared::src::_S_Person\n" +
                 "    +prop1: String[1]: $src.fullName->substring(0, $src.fullName->indexOf(' ')),\n" +
                 "    firstName: $src.fullName->substring(0, $src.fullName->indexOf(' ')),\n" +
                 "    lastName: $src.fullName->substring($src.fullName->indexOf(' ') + 1, $src.fullName->length()),\n" +
@@ -312,11 +312,11 @@ public class TestMappingGrammarRoundtrip extends TestGrammarRoundtrip.TestGramma
                 ")\n");
 
         test("###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                 "(\n" +
-                "  *meta::pure::mapping::modelToModel::test::shared::dest::Person[meta_pure_mapping_modelToModel_test_shared_dest_Person]: Pure\n" +
+                "  *meta::external::store::model::test::shared::dest::Person[meta_pure_mapping_modelToModel_test_shared_dest_Person]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_S_Person\n" +
+                "    ~src meta::external::store::model::test::shared::src::_S_Person\n" +
                 "    +prop1: String[1]: $src.fullName->substring(0, $src.fullName->indexOf(' ')),\n" +
                 "    +prop2: Integer[1]: 1,\n" +
                 "    +prop3: Float[1]: 1.0,\n" +

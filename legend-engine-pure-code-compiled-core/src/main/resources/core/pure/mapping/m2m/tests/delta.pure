@@ -12,30 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::delta::v1::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::delta::v1::*;
 import meta::pure::runtime::*;
-import meta::pure::mapping::modelToModel::test::delta::*;
+import meta::external::store::model::test::delta::*;
 
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::delta::testSimpleDelta():Any[*]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::delta::testSimpleDelta():Any[*]
 {
     let res = execute(
-            |meta::pure::mapping::modelToModel::test::delta::v2::Firm.all()->filter(f|$f.newLegalName == 'GS'),
+            |meta::external::store::model::test::delta::v2::Firm.all()->filter(f|$f.newLegalName == 'GS'),
             simpleDeltaMapping,
             ^Runtime(connections = ^ModelConnection(element=^ModelStore(), instances= newMap(
-                                                                                                      pair(meta::pure::mapping::modelToModel::test::delta::v1::Firm , list([
-                                                                                                                        ^meta::pure::mapping::modelToModel::test::delta::v1::Firm (legalName='GS',
-                                                                                                                                                                                   region = meta::pure::mapping::modelToModel::test::delta::v1::RegionEnumToString.NewYork,
+                                                                                                      pair(meta::external::store::model::test::delta::v1::Firm , list([
+                                                                                                                        ^meta::external::store::model::test::delta::v1::Firm (legalName='GS',
+                                                                                                                                                                                   region = meta::external::store::model::test::delta::v1::RegionEnumToString.NewYork,
                                                                                                                                                                                    region2 = 'NewYork',
                                                                                                                                                                                    count=10,
                                                                                                                                                                                    nameNoSubsume='empty',
-                                                                                                                                                                                   employees=^meta::pure::mapping::modelToModel::test::delta::v1::Person(
-                                                                                                                                                                                                           region = meta::pure::mapping::modelToModel::test::delta::v1::RegionEnumToString.NewYork,
+                                                                                                                                                                                   employees=^meta::external::store::model::test::delta::v1::Person(
+                                                                                                                                                                                                           region = meta::external::store::model::test::delta::v1::RegionEnumToString.NewYork,
                                                                                                                                                                                                            region2 = 'NewYork',
                                                                                                                                                                                                            nameNoSubsume='empty',
                                                                                                                                                                                                            name='ok',
-                                                                                                                                                                                                           address= ^meta::pure::mapping::modelToModel::test::delta::v1::Address(add='bla'),
-                                                                                                                                                                                                           more = ^meta::pure::mapping::modelToModel::test::delta::v1::More(name='aaa')
+                                                                                                                                                                                                           address= ^meta::external::store::model::test::delta::v1::Address(add='bla'),
+                                                                                                                                                                                                           more = ^meta::external::store::model::test::delta::v1::More(name='aaa')
                                                                                                                                                                                              )
                                                                                                                                                                              )
                                                                                                                     ])
@@ -64,107 +64,107 @@ function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::
 }
 
 
-Class meta::pure::mapping::modelToModel::test::delta::v1::Firm
+Class meta::external::store::model::test::delta::v1::Firm
 {
    legalName : String[1];
    nameNoSubsume : String[0..1];
-   employees : meta::pure::mapping::modelToModel::test::delta::v1::Person[*];
+   employees : meta::external::store::model::test::delta::v1::Person[*];
    count : Integer[1];
-   region: meta::pure::mapping::modelToModel::test::delta::v1::RegionEnumToString[1];
+   region: meta::external::store::model::test::delta::v1::RegionEnumToString[1];
    region2: String[1];
    
 }
 
-Class meta::pure::mapping::modelToModel::test::delta::v1::Person
+Class meta::external::store::model::test::delta::v1::Person
 {
    name : String[1];
    nameNoSubsume : String[0..1];
-   address : meta::pure::mapping::modelToModel::test::delta::v1::Address[1];
-   more : meta::pure::mapping::modelToModel::test::delta::v1::More[1];
-   region: meta::pure::mapping::modelToModel::test::delta::v1::RegionEnumToString[1];
+   address : meta::external::store::model::test::delta::v1::Address[1];
+   more : meta::external::store::model::test::delta::v1::More[1];
+   region: meta::external::store::model::test::delta::v1::RegionEnumToString[1];
    region2: String[1];
 
 }
 
-Enum meta::pure::mapping::modelToModel::test::delta::v1::RegionEnumToString
+Enum meta::external::store::model::test::delta::v1::RegionEnumToString
 {
         NewYork
 }
 
-Enum meta::pure::mapping::modelToModel::test::delta::v2::RegionEnumToString
+Enum meta::external::store::model::test::delta::v2::RegionEnumToString
 {
         NewYork
 }
 
 
-Class meta::pure::mapping::modelToModel::test::delta::v1::Address
+Class meta::external::store::model::test::delta::v1::Address
 {
    add : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::delta::v1::More
+Class meta::external::store::model::test::delta::v1::More
 {
    name : String[1];
 }
 
 
-Class meta::pure::mapping::modelToModel::test::delta::v2::Firm
+Class meta::external::store::model::test::delta::v2::Firm
 {
    newLegalName : String[1];
    nameNoSubsume : String[1];
-   employees : meta::pure::mapping::modelToModel::test::delta::v2::Person[*];
+   employees : meta::external::store::model::test::delta::v2::Person[*];
    count : Number[1];
    new : Integer[0..1];
-   useless : meta::pure::mapping::modelToModel::test::delta::v2::Useless[0..1];
+   useless : meta::external::store::model::test::delta::v2::Useless[0..1];
    region: String[1];
-   region2: meta::pure::mapping::modelToModel::test::delta::v2::RegionEnumToString[1];
+   region2: meta::external::store::model::test::delta::v2::RegionEnumToString[1];
 
 }
 
-Class meta::pure::mapping::modelToModel::test::delta::v2::Person
+Class meta::external::store::model::test::delta::v2::Person
 {
    name : String[1];
    nameNoSubsume : String[1];
-   address : meta::pure::mapping::modelToModel::test::delta::v2::Address[1];
-   more : meta::pure::mapping::modelToModel::test::delta::v2::More[1];
-   useless : meta::pure::mapping::modelToModel::test::delta::v2::Useless[0..1];
+   address : meta::external::store::model::test::delta::v2::Address[1];
+   more : meta::external::store::model::test::delta::v2::More[1];
+   useless : meta::external::store::model::test::delta::v2::Useless[0..1];
    region: String[1];
-   region2: meta::pure::mapping::modelToModel::test::delta::v2::RegionEnumToString[1];
+   region2: meta::external::store::model::test::delta::v2::RegionEnumToString[1];
 
 
 }
 
-Class meta::pure::mapping::modelToModel::test::delta::v2::Address
+Class meta::external::store::model::test::delta::v2::Address
 {
    newAdd : String[1];
-   useless : meta::pure::mapping::modelToModel::test::delta::v2::Useless[0..1];
+   useless : meta::external::store::model::test::delta::v2::Useless[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::delta::v2::More
+Class meta::external::store::model::test::delta::v2::More
 {
    name : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::delta::v2::Useless
+Class meta::external::store::model::test::delta::v2::Useless
 {
 }
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::src::*;
-import meta::pure::mapping::modelToModel::test::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::src::*;
+import meta::external::store::model::test::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::delta::simpleDeltaMapping
+Mapping meta::external::store::model::test::delta::simpleDeltaMapping
 (
-   meta::pure::mapping::modelToModel::test::delta::v2::Firm : Pure
+   meta::external::store::model::test::delta::v2::Firm : Pure
    {
-      ~src meta::pure::mapping::modelToModel::test::delta::v1::Firm
+      ~src meta::external::store::model::test::delta::v1::Firm
       newLegalName : $src.legalName
    }
    
-   meta::pure::mapping::modelToModel::test::delta::v2::Address : Pure
+   meta::external::store::model::test::delta::v2::Address : Pure
    {
-      ~src meta::pure::mapping::modelToModel::test::delta::v1::Address
+      ~src meta::external::store::model::test::delta::v1::Address
       newAdd : $src.add+'ok'
    }
 )

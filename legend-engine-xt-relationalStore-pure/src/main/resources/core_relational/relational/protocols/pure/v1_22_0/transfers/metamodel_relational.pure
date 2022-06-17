@@ -18,23 +18,23 @@ import meta::protocols::pure::v1_22_0::transformation::fromPureGraph::*;
 import meta::protocols::pure::v1_22_0::transformation::fromPureGraph::mapping::modelToModel::*;
 import meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::*;
 import meta::protocols::pure::v1_22_0::transformation::fromPureGraph::modelToModel::*;
-import meta::pure::mapping::modelToModel::*;
+import meta::external::store::model::*;
 import meta::protocols::pure::v1_22_0::transformation::fromPureGraph::domain::*;
 import meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::csv::*;
 import meta::pure::mapping::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::mapping::*;
 import meta::protocols::pure::v1_22_0::metamodel::store::relational::mapping::*;
-import meta::relational::metamodel::datatype::*;
-import meta::relational::functions::pureToSqlQuery::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::datatype::*;
+import meta::external::store::relational::functions::pureToSqlQuery::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::relation::*;
 import meta::protocols::pure::v1_22_0::transformation::fromPureGraph::mapping::csv::*;
 import meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::*;
-import meta::relational::metamodel::*;
-import meta::pure::store::set::*;
+import meta::external::store::relational::metamodel::*;
+import meta::pure::store::metamodel::set::*;
 
 
-function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformDatabase(db:meta::relational::metamodel::Database[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::store::relational::Database[1]
+function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformDatabase(db:meta::external::store::relational::metamodel::Database[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::store::relational::Database[1]
 {
    ^meta::protocols::pure::v1_22_0::metamodel::store::relational::Database
    (
@@ -78,7 +78,7 @@ function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::r
 }
 
 
-function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformAggregationAwareSetImplementation(a:	meta::pure::mapping::aggregationAware::AggregationAwareSetImplementation[1], mapping:Mapping[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::mapping::AggregationAwareClassMapping[1]
+function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformAggregationAwareSetImplementation(a:	meta::external::store::aggregationAware::AggregationAwareSetImplementation[1], mapping:Mapping[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::mapping::AggregationAwareClassMapping[1]
 {
    ^meta::protocols::pure::v1_22_0::metamodel::mapping::AggregationAwareClassMapping
    (
@@ -94,7 +94,7 @@ function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::r
    );
 }
 
-function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformAggSetImplContainer(a:	meta::pure::mapping::aggregationAware::AggregateSetImplementationContainer[1], mapping:Mapping[1], extensions:meta::pure::router::extension::RouterExtension[*]): meta::protocols::pure::v1_22_0::metamodel::mapping::AggregateSetImplementationContainer[1]
+function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformAggSetImplContainer(a:	meta::external::store::aggregationAware::AggregateSetImplementationContainer[1], mapping:Mapping[1], extensions:meta::pure::router::extension::RouterExtension[*]): meta::protocols::pure::v1_22_0::metamodel::mapping::AggregateSetImplementationContainer[1]
 {
    ^meta::protocols::pure::v1_22_0::metamodel::mapping::AggregateSetImplementationContainer
    (
@@ -104,7 +104,7 @@ function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::r
    )
 }
 
-function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformAggregateSpecification(a:	meta::pure::mapping::aggregationAware::AggregateSpecification[1], extensions:meta::pure::router::extension::RouterExtension[*]): meta::protocols::pure::v1_22_0::metamodel::mapping::AggregateSpecification[1]
+function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformAggregateSpecification(a:	meta::external::store::aggregationAware::AggregateSpecification[1], extensions:meta::pure::router::extension::RouterExtension[*]): meta::protocols::pure::v1_22_0::metamodel::mapping::AggregateSpecification[1]
 {
    ^meta::protocols::pure::v1_22_0::metamodel::mapping::AggregateSpecification
    (
@@ -114,19 +114,19 @@ function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::r
    )
 }
 
-function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformGroupByFunctionSpec(gb:meta::pure::mapping::aggregationAware::GroupByFunctionSpecification[*], extensions:meta::pure::router::extension::RouterExtension[*]): meta::protocols::pure::v1_22_0::metamodel::mapping::GroupByFunctions[*]
+function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformGroupByFunctionSpec(gb:meta::external::store::aggregationAware::GroupByFunctionSpecification[*], extensions:meta::pure::router::extension::RouterExtension[*]): meta::protocols::pure::v1_22_0::metamodel::mapping::GroupByFunctions[*]
 {
   $gb->map(g| ^meta::protocols::pure::v1_22_0::metamodel::mapping::GroupByFunctions(groupByFn = $g.groupByFn->meta::protocols::pure::v1_22_0::transformation::fromPureGraph::transformLambda($extensions)))
 }
 
-function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformAggregationFunctionSpecification(ag:meta::pure::mapping::aggregationAware::AggregationFunctionSpecification[*], extensions:meta::pure::router::extension::RouterExtension[*]): meta::protocols::pure::v1_22_0::metamodel::mapping::AggregateFunctions[*]
+function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformAggregationFunctionSpecification(ag:meta::external::store::aggregationAware::AggregationFunctionSpecification[*], extensions:meta::pure::router::extension::RouterExtension[*]): meta::protocols::pure::v1_22_0::metamodel::mapping::AggregateFunctions[*]
 {
    $ag->map(a|^meta::protocols::pure::v1_22_0::metamodel::mapping::AggregateFunctions(mapFn = $a.mapFn->meta::protocols::pure::v1_22_0::transformation::fromPureGraph::transformLambda($extensions), aggregateFn = $a.aggregateFn->meta::protocols::pure::v1_22_0::transformation::fromPureGraph::transformLambda($extensions)))
 }
 
 function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformRelationalAssociationImplementation(r:RelationalAssociationImplementation[1], mapping:Mapping[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::store::relational::mapping::RelationalAssociationMapping[1]
 {
-   let db = $r.stores->at(0)->cast(@meta::relational::metamodel::Database);
+   let db = $r.stores->at(0)->cast(@meta::external::store::relational::metamodel::Database);
    ^meta::protocols::pure::v1_22_0::metamodel::store::relational::mapping::RelationalAssociationMapping
    (
       id = $r.id,
@@ -139,7 +139,7 @@ function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::r
 }
 
 
-function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformEmbeddedRelationalInstanceSetImplementation(r:EmbeddedRelationalInstanceSetImplementation[1], db: meta::relational::metamodel::Database[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::store::relational::mapping::RelationalClassMapping[1]
+function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformEmbeddedRelationalInstanceSetImplementation(r:EmbeddedRelationalInstanceSetImplementation[1], db: meta::external::store::relational::metamodel::Database[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::store::relational::mapping::RelationalClassMapping[1]
 {
    let mapping = $r.parent;
    ^meta::protocols::pure::v1_22_0::metamodel::store::relational::mapping::RelationalClassMapping
@@ -153,10 +153,10 @@ function <<access.private>> meta::protocols::pure::v1_22_0::transformation::from
    );
 }
 
-function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformRelationalPropertyMapping(pm:PropertyMapping[1], topDatabase:meta::relational::metamodel::Database[1], mapping : Mapping[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::mapping::PropertyMapping[1]
+function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformRelationalPropertyMapping(pm:PropertyMapping[1], topDatabase:meta::external::store::relational::metamodel::Database[1], mapping : Mapping[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::mapping::PropertyMapping[1]
 {
    $pm->match([
-      r:meta::relational::mapping::RelationalPropertyMapping[1]|
+      r:meta::external::store::relational::mapping::RelationalPropertyMapping[1]|
          ^meta::protocols::pure::v1_22_0::metamodel::store::relational::mapping::RelationalPropertyMapping
          (
             _type = 'relationalPropertyMapping',
@@ -207,7 +207,7 @@ function <<access.private>> meta::protocols::pure::v1_22_0::transformation::from
    ]);
 }
 
-function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformSchema(schema:meta::relational::metamodel::Schema[1], topDatabase: meta::relational::metamodel::Database[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::store::relational::Schema[1]
+function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformSchema(schema:meta::external::store::relational::metamodel::Schema[1], topDatabase: meta::external::store::relational::metamodel::Database[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::store::relational::Schema[1]
 {
    ^meta::protocols::pure::v1_22_0::metamodel::store::relational::Schema
    (
@@ -218,7 +218,7 @@ function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::r
 }
 
 
-function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformJoin(j:meta::relational::metamodel::join::Join[1], topDatabase:meta::relational::metamodel::Database[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::Join[1]
+function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformJoin(j:meta::external::store::relational::metamodel::join::Join[1], topDatabase:meta::external::store::relational::metamodel::Database[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::Join[1]
 {
    let r = ^meta::protocols::pure::v1_22_0::metamodel::store::relational::Join
    (
@@ -231,7 +231,7 @@ function <<access.private>> meta::protocols::pure::v1_22_0::transformation::from
    );
 }
 
-function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformFilter(j:meta::relational::metamodel::Filter[1], topDatabase:meta::relational::metamodel::Database[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::Filter[1]
+function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformFilter(j:meta::external::store::relational::metamodel::Filter[1], topDatabase:meta::external::store::relational::metamodel::Database[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::Filter[1]
 {
    ^meta::protocols::pure::v1_22_0::metamodel::store::relational::Filter
    (
@@ -242,7 +242,7 @@ function <<access.private>> meta::protocols::pure::v1_22_0::transformation::from
 }
 
 
-function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformRelationalOperationElement(re:meta::relational::metamodel::RelationalOperationElement[1], topDatabase:meta::relational::metamodel::Database[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::element::RelationalElement[1]
+function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformRelationalOperationElement(re:meta::external::store::relational::metamodel::RelationalOperationElement[1], topDatabase:meta::external::store::relational::metamodel::Database[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::element::RelationalElement[1]
 {
    $re->match(
       [
@@ -298,7 +298,7 @@ function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::r
    );
 }
 
-function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformJoinTreeNode(joinTreeNode: meta::relational::metamodel::join::JoinTreeNode[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::mapping::JoinPtr[*]
+function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformJoinTreeNode(joinTreeNode: meta::external::store::relational::metamodel::join::JoinTreeNode[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::mapping::JoinPtr[*]
 {
    $joinTreeNode->extractLine()->map(j|
                                      ^meta::protocols::pure::v1_22_0::metamodel::store::relational::mapping::JoinPtr(
@@ -330,7 +330,7 @@ function <<access.private>> meta::protocols::pure::v1_22_0::transformation::from
    );
 }
 
-function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformTable(table:meta::relational::metamodel::relation::Table[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::store::relational::Table[1]
+function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformTable(table:meta::external::store::relational::metamodel::relation::Table[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::store::relational::Table[1]
 {
    ^meta::protocols::pure::v1_22_0::metamodel::store::relational::Table
    (
@@ -341,7 +341,7 @@ function <<access.private>> meta::protocols::pure::v1_22_0::transformation::from
    )
 }
 
-function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformColumn(c:meta::relational::metamodel::RelationalOperationElement[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::Column[1]
+function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformColumn(c:meta::external::store::relational::metamodel::RelationalOperationElement[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::Column[1]
 {
    $c->match([
                 c:Column[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Column
@@ -353,13 +353,13 @@ function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::r
              ])
 }
 
-function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::pureDataTypeToAlloyDataType(c:meta::relational::metamodel::datatype::DataType[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::DataType[1]
+function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::pureDataTypeToAlloyDataType(c:meta::external::store::relational::metamodel::datatype::DataType[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::DataType[1]
 {
    $c->match(
                [
                   r:Varchar[1]|  ^meta::protocols::pure::v1_22_0::metamodel::store::relational::Varchar(_type='Varchar', size=$r.size),
                   r:Char[1]|  ^meta::protocols::pure::v1_22_0::metamodel::store::relational::Char(_type='Char', size=$r.size),
-                  d:meta::relational::metamodel::datatype::Decimal[1]|  ^meta::protocols::pure::v1_22_0::metamodel::store::relational::Decimal(_type='Decimal', precision=$d.precision, scale=$d.scale),
+                  d:meta::external::store::relational::metamodel::datatype::Decimal[1]|  ^meta::protocols::pure::v1_22_0::metamodel::store::relational::Decimal(_type='Decimal', precision=$d.precision, scale=$d.scale),
                   r:Numeric[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Numeric(_type='Numeric', precision=$r.precision,scale=$r.scale),
                   r:Double[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Double(_type='Double'),
                   r:Bit[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Bit(_type='Bit' ),
@@ -367,26 +367,26 @@ function <<access.private>> meta::protocols::pure::v1_22_0::transformation::from
                   t:TinyInt[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::TinyInt(_type='TinyInt'),
                   s:SmallInt[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::SmallInt(_type='SmallInt'),
                   v:Varbinary[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Varbinary(_type='Varbinary', size=$v.size),
-                  b:meta::relational::metamodel::datatype::Binary[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Binary(_type='Binary', size=$b.size),
-                  i:meta::relational::metamodel::datatype::Integer[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Integer(_type='Integer'),
-                  d:meta::relational::metamodel::datatype::Date[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Date(_type='Date'),
-                  d:meta::relational::metamodel::datatype::Timestamp[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Timestamp(_type='Timestamp'),
-                  d:meta::relational::metamodel::datatype::Float[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Float(_type='Float'),
-                  r:meta::relational::metamodel::datatype::Real[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Real(_type='Real'),
-                  o:meta::relational::metamodel::datatype::Other[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Other(_type='Other'),
-                  a:meta::relational::metamodel::datatype::Array[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Array(_type='Array')
+                  b:meta::external::store::relational::metamodel::datatype::Binary[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Binary(_type='Binary', size=$b.size),
+                  i:meta::external::store::relational::metamodel::datatype::Integer[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Integer(_type='Integer'),
+                  d:meta::external::store::relational::metamodel::datatype::Date[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Date(_type='Date'),
+                  d:meta::external::store::relational::metamodel::datatype::Timestamp[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Timestamp(_type='Timestamp'),
+                  d:meta::external::store::relational::metamodel::datatype::Float[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Float(_type='Float'),
+                  r:meta::external::store::relational::metamodel::datatype::Real[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Real(_type='Real'),
+                  o:meta::external::store::relational::metamodel::datatype::Other[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Other(_type='Other'),
+                  a:meta::external::store::relational::metamodel::datatype::Array[1]|^meta::protocols::pure::v1_22_0::metamodel::store::relational::Array(_type='Array')
 
                 ]
    )
 }
 
-function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::alloyTypeToString(c:meta::relational::metamodel::datatype::DataType[1]):String[1]
+function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::alloyTypeToString(c:meta::external::store::relational::metamodel::datatype::DataType[1]):String[1]
 {
    $c->match(
                [
                   r:Varchar[1]|'VARCHAR('+$r.size->toString()+')',
                   r:Char[1]|'CHAR('+$r.size->toString()+')',
-                  d:meta::relational::metamodel::datatype::Decimal[1]|'DECIMAL('+$d.precision->toString()+','+$d.scale->toString()+')',
+                  d:meta::external::store::relational::metamodel::datatype::Decimal[1]|'DECIMAL('+$d.precision->toString()+','+$d.scale->toString()+')',
                   r:Numeric[1]|'NUMERIC('+$r.precision->toString()+','+$r.scale->toString()+')',
                   r:Double[1]|'DOUBLE',
                   r:Bit[1]|'BIT',
@@ -394,20 +394,20 @@ function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::r
                   t:TinyInt[1]|'TINYINT',
                   s:SmallInt[1]|'SMALLINT',
                   v:Varbinary[1]|'VARBINARY('+$v.size->toString()+')',
-                  b:meta::relational::metamodel::datatype::Binary[1]|'BINARY('+$b.size->toString()+')',
-                  i:meta::relational::metamodel::datatype::Integer[1]|'INTEGER',
-                  d:meta::relational::metamodel::datatype::Date[1]|'DATE',
-                  d:meta::relational::metamodel::datatype::Timestamp[1]|'TIMESTAMP',
-                  d:meta::relational::metamodel::datatype::Float[1]|'FLOAT',
-                  r:meta::relational::metamodel::datatype::Real[1]|'REAL',
-                  r:meta::relational::metamodel::datatype::Other[1]|'OTHER',
-                  r:meta::relational::metamodel::datatype::Array[1]|'ARRAY',
-                  d:meta::relational::metamodel::datatype::DataType[1]|'' //columns mapped to functions do not yet support specific DataTypes
+                  b:meta::external::store::relational::metamodel::datatype::Binary[1]|'BINARY('+$b.size->toString()+')',
+                  i:meta::external::store::relational::metamodel::datatype::Integer[1]|'INTEGER',
+                  d:meta::external::store::relational::metamodel::datatype::Date[1]|'DATE',
+                  d:meta::external::store::relational::metamodel::datatype::Timestamp[1]|'TIMESTAMP',
+                  d:meta::external::store::relational::metamodel::datatype::Float[1]|'FLOAT',
+                  r:meta::external::store::relational::metamodel::datatype::Real[1]|'REAL',
+                  r:meta::external::store::relational::metamodel::datatype::Other[1]|'OTHER',
+                  r:meta::external::store::relational::metamodel::datatype::Array[1]|'ARRAY',
+                  d:meta::external::store::relational::metamodel::datatype::DataType[1]|'' //columns mapped to functions do not yet support specific DataTypes
                 ]
    );
 }
 
-function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::tableToTablePtr(table:meta::relational::metamodel::relation::Table[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::element::TablePtr[1]
+function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::tableToTablePtr(table:meta::external::store::relational::metamodel::relation::Table[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::element::TablePtr[1]
 {
     ^meta::protocols::pure::v1_22_0::metamodel::store::relational::element::TablePtr(
        _type = 'table',
@@ -418,29 +418,29 @@ function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::r
     )
 }
 
-function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::setRelationToTablePtr(s:meta::pure::store::set::SetRelation[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::element::TablePtr[1]
+function meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::setRelationToTablePtr(s:meta::pure::store::metamodel::set::SetRelation[1]):meta::protocols::pure::v1_22_0::metamodel::store::relational::element::TablePtr[1]
 {
    $s->match([
-      t:meta::relational::metamodel::relation::Table[1]|
+      t:meta::external::store::relational::metamodel::relation::Table[1]|
           ^meta::protocols::pure::v1_22_0::metamodel::store::relational::element::TablePtr(
                                        _type = 'Table',
                                        table = $t.name,
                                        database = $t.schema.database->elementToPath(),
                                        mainTableDb = $t.schema.database->elementToPath(),
                                        schema = $t.schema.name);,
-      v:meta::relational::metamodel::relation::View[1]|
+      v:meta::external::store::relational::metamodel::relation::View[1]|
           ^meta::protocols::pure::v1_22_0::metamodel::store::relational::element::TablePtr(
                                        _type = 'View',
                                        table = $v.name,
                                        database = $v.schema.database->elementToPath(),
                                        mainTableDb = $v.schema.database->elementToPath(),
                                        schema = $v.schema.name);,
-      s:meta::pure::store::set::SetRelation[1]| fail('not implemented');
+      s:meta::pure::store::metamodel::set::SetRelation[1]| fail('not implemented');
            ^meta::protocols::pure::v1_22_0::metamodel::store::relational::element::TablePtr(_type = 'Table',table = 'table',database = 'db',mainTableDb = 'db',schema = 'schema');
    ])
 }
 
-function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformMilestoning(m:meta::relational::metamodel::relation::Milestoning[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::store::relational::Milestoning[1]
+function <<access.private>> meta::protocols::pure::v1_22_0::transformation::fromPureGraph::store::relational::transformMilestoning(m:meta::external::store::relational::metamodel::relation::Milestoning[1], extensions:meta::pure::router::extension::RouterExtension[*]):meta::protocols::pure::v1_22_0::metamodel::store::relational::Milestoning[1]
 {
    let open = newMap([]->cast(@Pair<String,List<Any>>));
    let transformInfinityDate = {m:TemporalMilestoning[0..1]|if($m.infinityDate->isEmpty(),|[],|$m.infinityDate->meta::protocols::pure::v1_22_0::transformation::fromPureGraph::valueSpecification::transformAny([], $open, PureOne, $extensions)->cast(@meta::protocols::pure::v1_22_0::metamodel::valueSpecification::raw::CDate))};

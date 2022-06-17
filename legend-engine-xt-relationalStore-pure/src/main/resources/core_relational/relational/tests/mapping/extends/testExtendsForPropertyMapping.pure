@@ -13,10 +13,10 @@
 // limitations under the License.
 
 ###Mapping
-import meta::relational::tests::mapping::extend::store::*;
-import meta::relational::tests::mapping::extend::model::*;
+import meta::external::store::relational::tests::mapping::extend::store::*;
+import meta::external::store::relational::tests::mapping::extend::model::*;
 
-Mapping meta::relational::tests::mapping::extend::propertyMapping::testMapping
+Mapping meta::external::store::relational::tests::mapping::extend::propertyMapping::testMapping
 (
    A[a] : Relational
    {
@@ -123,18 +123,18 @@ Mapping meta::relational::tests::mapping::extend::propertyMapping::testMapping
 )
 
 ###Pure
-import meta::relational::mapping::*;
-import meta::relational::tests::mapping::extend::*;
-import meta::relational::tests::mapping::extend::propertyMapping::*;
-import meta::relational::tests::mapping::extend::model::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::mapping::extend::*;
+import meta::external::store::relational::tests::mapping::extend::propertyMapping::*;
+import meta::external::store::relational::tests::mapping::extend::model::*;
 
 ###Pure
-import meta::relational::mapping::*;
-import meta::relational::tests::mapping::extend::*;
-import meta::relational::tests::mapping::extend::propertyMapping::*;
-import meta::relational::tests::mapping::extend::model::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::mapping::extend::*;
+import meta::external::store::relational::tests::mapping::extend::propertyMapping::*;
+import meta::external::store::relational::tests::mapping::extend::model::*;
 
-function <<test.Test>> meta::relational::tests::mapping::extend::propertyMapping::testPropertyMappingsForA():Any[*]
+function <<test.Test>> meta::external::store::relational::tests::mapping::extend::propertyMapping::testPropertyMappingsForA():Any[*]
 {
    let result1 = execute(|A.all()->filter(a|$a.aName == 'aName1'), testMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    let expectedSQL1 = 'select "root".id as "pk_0", "root".id as "id", "root".aName as "aName" from ABC as "root" where "root".aName = \'aName1\'';
@@ -157,7 +157,7 @@ function <<test.Test>> meta::relational::tests::mapping::extend::propertyMapping
    assertSameElements([1, 3], $result4.values.id);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::extend::propertyMapping::testPropertyMappingsForB():Any[*]
+function <<test.Test>> meta::external::store::relational::tests::mapping::extend::propertyMapping::testPropertyMappingsForB():Any[*]
 {
    let result1 = execute(|B.all()->filter(b|$b.aName == 'bName_aName1'), testMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    let expectedSQL1 =  'select "root".id as "pk_0", concat(\'bName_\', "root".aName) as "aName", "root".bName as "bName", "root".id as "id" from ABC as "root" where concat(\'bName_\', "root".aName) = \'bName_aName1\'';
@@ -200,7 +200,7 @@ function <<test.Test>> meta::relational::tests::mapping::extend::propertyMapping
    assertSameElements([1, 3], $result8.values.id);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::extend::propertyMapping::testPropertyMappingsForC():Any[*]
+function <<test.Test>> meta::external::store::relational::tests::mapping::extend::propertyMapping::testPropertyMappingsForC():Any[*]
 {
    let result1 = execute(|C.all()->filter(c|$c.aName == 'cName_aName1'), testMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    let expectedSQL1 = 'select "root".id as "pk_0", concat(\'cName_\', "root".aName) as "aName", concat(\'cName_\', "root".bName) as "bName", "root".cName as "cName", "root".id as "id" from ABC as "root" where concat(\'cName_\', "root".aName) = \'cName_aName1\'';

@@ -13,21 +13,21 @@
 // limitations under the License.
 
 import meta::pure::mapping::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::postProcessor::*;
-import meta::relational::metamodel::join::*;
-import meta::relational::metamodel::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::postProcessor::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::metamodel::*;
 import meta::pure::router::extension::*;
-import meta::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::relation::*;
 
-function meta::relational::postProcessor::nonExecutable(selectSQLQuery:SelectSQLQuery[1], extensions:RouterExtension[*]):Result<SelectSQLQuery|1>[1]
+function meta::external::store::relational::postProcessor::nonExecutable(selectSQLQuery:SelectSQLQuery[1], extensions:RouterExtension[*]):Result<SelectSQLQuery|1>[1]
 {
    ^Result<SelectSQLQuery|1>(values=$selectSQLQuery->processRelationalOperationForNonExecutable($extensions)->cast(@SelectSQLQuery))
 }
 
 
 
-function meta::relational::postProcessor::processRelationalOperationForNonExecutable(relationalOperationElement:RelationalOperationElement[1], extensions:RouterExtension[*]):RelationalOperationElement[1]
+function meta::external::store::relational::postProcessor::processRelationalOperationForNonExecutable(relationalOperationElement:RelationalOperationElement[1], extensions:RouterExtension[*]):RelationalOperationElement[1]
 {
    $relationalOperationElement->match([
                     u:Union[1] | ^$u(queries = $u.queries->map(q|$q->processRelationalOperationForNonExecutable($extensions))->cast(@SelectSQLQuery)),
@@ -40,7 +40,7 @@ function meta::relational::postProcessor::processRelationalOperationForNonExecut
                                                                                                         ]),
                                                                                        a:RelationalOperationElement[1] | $a])
                                                                      ),
-                                                filteringOperation= if($s.filteringOperation->isEmpty(), | $nonExecutableOperation, | meta::relational::functions::pureToSqlQuery::andFilters($nonExecutableOperation->concatenate($s.filteringOperation), $extensions))
+                                                filteringOperation= if($s.filteringOperation->isEmpty(), | $nonExecutableOperation, | meta::external::store::relational::functions::pureToSqlQuery::andFilters($nonExecutableOperation->concatenate($s.filteringOperation), $extensions))
                                              );,
                     a:Alias[1] | ^$a(relationalElement=$a.relationalElement->processRelationalOperationForNonExecutable($extensions)),
                     t:Table[1] | $t,
@@ -55,7 +55,7 @@ function meta::relational::postProcessor::processRelationalOperationForNonExecut
                   ]);
 }
 
-function meta::relational::postProcessor::joinNonExecutable(r:RelationalTreeNode[1], extensions:RouterExtension[*]):RelationalTreeNode[1]
+function meta::external::store::relational::postProcessor::joinNonExecutable(r:RelationalTreeNode[1], extensions:RouterExtension[*]):RelationalTreeNode[1]
 {
    ^$r
    (

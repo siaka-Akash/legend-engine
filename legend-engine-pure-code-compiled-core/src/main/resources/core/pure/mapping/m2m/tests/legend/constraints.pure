@@ -15,15 +15,15 @@
 
 import meta::pure::executionPlan::engine::java::roadmap::*;
 import meta::json::*;
-import meta::pure::mapping::modelToModel::*;
+import meta::external::store::model::*;
 import meta::pure::runtime::*;
 import meta::pure::graphFetch::execution::*;
 import meta::pure::executionPlan::profiles::*;
-import meta::pure::mapping::modelToModel::test::alloy::constraints::*;
+import meta::external::store::model::test::alloy::constraints::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> 
 {  serverVersion.start='v1_19_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::testTargetConstraintsWhenRequiredPropertiesAreNotSpecifiedOnGraphFetchTree():Boolean[1]
+meta::external::store::model::test::alloy::constraints::testTargetConstraintsWhenRequiredPropertiesAreNotSpecifiedOnGraphFetchTree():Boolean[1]
 {
     let result = execute( |Firm.all()->graphFetchChecked(#{Firm {name} }#)->serialize(#{Firm {name} }#),
                            m2mconstraintmapping1,
@@ -36,12 +36,12 @@ meta::pure::mapping::modelToModel::test::alloy::constraints::testTargetConstrain
       []
    );
 
-   assert(jsonEquivalent('{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"0","ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::constraints::Firm","message":"Constraint :[0] violated in the Class Firm"}],"source":{"defects":[],"source":{"number":1,"record":"{\\"name\\":\\"FirmX\\"}"},"value":{"name":"FirmX","employees":[]}},"value":{"name":"FirmX"}}'->parseJSON(), $result.values->toOne()->parseJSON()));
+   assert(jsonEquivalent('{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"0","ruleDefinerPath":"meta::external::store::model::test::alloy::constraints::Firm","message":"Constraint :[0] violated in the Class Firm"}],"source":{"defects":[],"source":{"number":1,"record":"{\\"name\\":\\"FirmX\\"}"},"value":{"name":"FirmX","employees":[]}},"value":{"name":"FirmX"}}'->parseJSON(), $result.values->toOne()->parseJSON()));
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> 
 {  serverVersion.start='v1_19_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::testQueryOnTypeWithFailingConstraintSucceedsWithConstraintsDisabled():Boolean[1]
+meta::external::store::model::test::alloy::constraints::testQueryOnTypeWithFailingConstraintSucceedsWithConstraintsDisabled():Boolean[1]
 {
     let result = execute( |Firm.all()->graphFetch(#{Firm {name} }#)->serialize(#{Firm {name} }#),
                            m2mconstraintmapping1,
@@ -58,7 +58,7 @@ meta::pure::mapping::modelToModel::test::alloy::constraints::testQueryOnTypeWith
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> 
 {  serverVersion.start='v1_19_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::testQueryOnSourceTypeWithFailingConstraintSucceedsWithConstraintsDisabled():Boolean[1]
+meta::external::store::model::test::alloy::constraints::testQueryOnSourceTypeWithFailingConstraintSucceedsWithConstraintsDisabled():Boolean[1]
 {
    let result = execute( |Firm2.all()->graphFetch(#{Firm2 {name} }#)->serialize(#{Firm2 {name} }#),
                           m2mconstraintmapping2,
@@ -75,7 +75,7 @@ meta::pure::mapping::modelToModel::test::alloy::constraints::testQueryOnSourceTy
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> 
 {  serverVersion.start='v1_19_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::testSourceConstraintsWhenRelatedTargetPropertiesAreNotSpecifiedOnGraphFetchTree():Boolean[1]
+meta::external::store::model::test::alloy::constraints::testSourceConstraintsWhenRelatedTargetPropertiesAreNotSpecifiedOnGraphFetchTree():Boolean[1]
 {
     let result = execute( |Firm2.all()->graphFetchChecked(#{Firm2 {name} }#)->serialize(#{Firm2 {name} }#),
                            m2mconstraintmapping2,
@@ -88,12 +88,12 @@ meta::pure::mapping::modelToModel::test::alloy::constraints::testSourceConstrain
                          []
                   );
    
-   assert(jsonEquivalent('{"defects":[],"source":{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"0","ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::constraints::_Firm2","message":"Constraint :[0] violated in the Class _Firm2"},{"path":[{"propertyName":"employees","index":0}],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"0","ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::constraints::_Person2","message":"Constraint :[0] violated in the Class _Person2"}],"source":{"number":1,"record":"{\\"name\\":\\"FirmX\\",\\"employees\\":[{\\"firstName\\":\\"David\\",\\"lastName\\":\\"Roe\\"}]}"},"value":{"name":"FirmX","employees":[{"firm":null,"address":null}]}},"value":{"name":"FirmX"}}'->parseJSON(), $result.values->toOne()->parseJSON()));
+   assert(jsonEquivalent('{"defects":[],"source":{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"0","ruleDefinerPath":"meta::external::store::model::test::alloy::constraints::_Firm2","message":"Constraint :[0] violated in the Class _Firm2"},{"path":[{"propertyName":"employees","index":0}],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"0","ruleDefinerPath":"meta::external::store::model::test::alloy::constraints::_Person2","message":"Constraint :[0] violated in the Class _Person2"}],"source":{"number":1,"record":"{\\"name\\":\\"FirmX\\",\\"employees\\":[{\\"firstName\\":\\"David\\",\\"lastName\\":\\"Roe\\"}]}"},"value":{"name":"FirmX","employees":[{"firm":null,"address":null}]}},"value":{"name":"FirmX"}}'->parseJSON(), $result.values->toOne()->parseJSON()));
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 {  serverVersion.start='v1_19_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::testSourceConstraintsWithNew():Boolean[1]
+meta::external::store::model::test::alloy::constraints::testSourceConstraintsWithNew():Boolean[1]
 {
    let result = execute( |Car.all()->graphFetchChecked(#{Car {engineSize}}#)->serialize(#{Car {engineSize}}#),
                           m2mconstraintnewmapping,
@@ -111,7 +111,7 @@ meta::pure::mapping::modelToModel::test::alloy::constraints::testSourceConstrain
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 {  serverVersion.start='v1_19_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::testSourceConstraintsWithNewPropertyAssociation():Boolean[1]
+meta::external::store::model::test::alloy::constraints::testSourceConstraintsWithNewPropertyAssociation():Boolean[1]
 {
    let result = execute( |ProductTaxonomy.all()->graphFetchChecked(#{ProductTaxonomy {id}}#)->serialize(#{ProductTaxonomy {id}}#),
                           m2mconstraintnewmapping2,
@@ -129,10 +129,10 @@ meta::pure::mapping::modelToModel::test::alloy::constraints::testSourceConstrain
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 { serverVersion.start='v1_19_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::testIsEqualConstraint():Boolean[1]
+meta::external::store::model::test::alloy::constraints::testIsEqualConstraint():Boolean[1]
 {
    let result = execute(|B.all()->graphFetchChecked(#{B { b }}#)->serialize(#{B { b }}#),
-                        meta::pure::mapping::modelToModel::test::alloy::constraints::isEqualTest,
+                        meta::external::store::model::test::alloy::constraints::isEqualTest,
                          ^Runtime(connections = ^JsonModelConnection(
                                 element=^ModelStore(), 
                                 class=_B,
@@ -147,10 +147,10 @@ meta::pure::mapping::modelToModel::test::alloy::constraints::testIsEqualConstrai
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 { serverVersion.start='v1_19_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::testIsDistinctConstraint():Boolean[1]
+meta::external::store::model::test::alloy::constraints::testIsDistinctConstraint():Boolean[1]
 {
    let result = execute(|C.all()->graphFetchChecked(#{C { b }}#)->serialize(#{C { b }}#),
-                        meta::pure::mapping::modelToModel::test::alloy::constraints::isDistinctTest,
+                        meta::external::store::model::test::alloy::constraints::isDistinctTest,
                          ^Runtime(connections = ^JsonModelConnection(
                                 element=^ModelStore(), 
                                 class=_C,
@@ -165,10 +165,10 @@ meta::pure::mapping::modelToModel::test::alloy::constraints::testIsDistinctConst
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 { serverVersion.start='v1_20_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::constraintOnOptionalFieldCanSucceed():Boolean[1]
+meta::external::store::model::test::alloy::constraints::constraintOnOptionalFieldCanSucceed():Boolean[1]
 {
    let result = execute(|D.all()->graphFetchChecked(#{D { maybe, i }}#)->serialize(#{D { maybe, i }}#),
-                        meta::pure::mapping::modelToModel::test::alloy::constraints::n2dMaybeNotMapped,
+                        meta::external::store::model::test::alloy::constraints::n2dMaybeNotMapped,
                          ^Runtime(connections = ^JsonModelConnection(
                                 element=^ModelStore(),
                                 class=_Num,
@@ -183,10 +183,10 @@ meta::pure::mapping::modelToModel::test::alloy::constraints::constraintOnOptiona
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 { serverVersion.start='v1_20_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::constraintOnOptionalFieldCanFail():Boolean[1]
+meta::external::store::model::test::alloy::constraints::constraintOnOptionalFieldCanFail():Boolean[1]
 {
    let result = execute(|D.all()->graphFetchChecked(#{D { maybe, i }}#)->serialize(#{D { maybe, i }}#),
-                        meta::pure::mapping::modelToModel::test::alloy::constraints::n2dMaybeNotMapped,
+                        meta::external::store::model::test::alloy::constraints::n2dMaybeNotMapped,
                          ^Runtime(connections = ^JsonModelConnection(
                                 element=^ModelStore(),
                                 class=_Num,
@@ -196,15 +196,15 @@ meta::pure::mapping::modelToModel::test::alloy::constraints::constraintOnOptiona
                         []
                 );
 
-   assert(jsonEquivalent('{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"0","ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::constraints::D","message":"Constraint :[0] violated in the Class D"}],"source":{"defects":[],"source":{"number":1,"record":"{\\"n\\":20}"},"value":{"n":20}},"value":{"maybe":null,"i":20}}'->parseJSON(), $result.values->toOne()->parseJSON()));
+   assert(jsonEquivalent('{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"0","ruleDefinerPath":"meta::external::store::model::test::alloy::constraints::D","message":"Constraint :[0] violated in the Class D"}],"source":{"defects":[],"source":{"number":1,"record":"{\\"n\\":20}"},"value":{"n":20}},"value":{"maybe":null,"i":20}}'->parseJSON(), $result.values->toOne()->parseJSON()));
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 { serverVersion.start='v1_20_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::constraintOnUnmappedRequiredFieldCanSucceed():Boolean[1]
+meta::external::store::model::test::alloy::constraints::constraintOnUnmappedRequiredFieldCanSucceed():Boolean[1]
 {
    let result = execute(|E.all()->graphFetchChecked(#{E { i }}#)->serialize(#{E { i }}#),
-                        meta::pure::mapping::modelToModel::test::alloy::constraints::n2eExpectedNotMapped,
+                        meta::external::store::model::test::alloy::constraints::n2eExpectedNotMapped,
                          ^Runtime(connections = ^JsonModelConnection(
                                 element=^ModelStore(),
                                 class=_Num,
@@ -219,10 +219,10 @@ meta::pure::mapping::modelToModel::test::alloy::constraints::constraintOnUnmappe
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 { serverVersion.start='v1_20_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::constraintOnUnmappedRequiredFieldCanFail():Boolean[1]
+meta::external::store::model::test::alloy::constraints::constraintOnUnmappedRequiredFieldCanFail():Boolean[1]
 {
    let result = execute(|E.all()->graphFetchChecked(#{E { i }}#)->serialize(#{E { i }}#),
-                        meta::pure::mapping::modelToModel::test::alloy::constraints::n2eExpectedNotMapped,
+                        meta::external::store::model::test::alloy::constraints::n2eExpectedNotMapped,
                          ^Runtime(connections = ^JsonModelConnection(
                                 element=^ModelStore(),
                                 class=_Num,
@@ -232,16 +232,16 @@ meta::pure::mapping::modelToModel::test::alloy::constraints::constraintOnUnmappe
                         []
                 );
 
-   assert(jsonEquivalent('{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"0","ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::constraints::E","message":"Unable to evaluate constraint [0]: No mapping for property \'expected\'"}],"source":{"defects":[],"source":{"number":1,"record":"{\\"n\\":20}"},"value":{"n":20}},"value":{"i":20}}'->parseJSON(), $result.values->toOne()->parseJSON()));
+   assert(jsonEquivalent('{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"0","ruleDefinerPath":"meta::external::store::model::test::alloy::constraints::E","message":"Unable to evaluate constraint [0]: No mapping for property \'expected\'"}],"source":{"defects":[],"source":{"number":1,"record":"{\\"n\\":20}"},"value":{"n":20}},"value":{"i":20}}'->parseJSON(), $result.values->toOne()->parseJSON()));
 }
 
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 { serverVersion.start='v1_20_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::constraintOnUnmappedRequiredComplextTypeFieldCanFail():Boolean[1]
+meta::external::store::model::test::alloy::constraints::constraintOnUnmappedRequiredComplextTypeFieldCanFail():Boolean[1]
 {
    let result = execute(|F.all()->graphFetchChecked(#{F { i }}#)->serialize(#{F { i }}#),
-                        meta::pure::mapping::modelToModel::test::alloy::constraints::n2fExpectedNotMapped,
+                        meta::external::store::model::test::alloy::constraints::n2fExpectedNotMapped,
                          ^Runtime(connections = ^JsonModelConnection(
                                 element=^ModelStore(),
                                 class=_Num,
@@ -251,15 +251,15 @@ meta::pure::mapping::modelToModel::test::alloy::constraints::constraintOnUnmappe
                         []
                 );
 
-   assert(jsonEquivalent('{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"0","ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::constraints::F","message":"Unable to evaluate constraint [0]: data not available - check your mappings"}],"source":{"defects":[],"source":{"number":1,"record":"{\\"n\\":20}"},"value":{"n":20}},"value":{"i":20}}'->parseJSON(), $result.values->toOne()->parseJSON()));
+   assert(jsonEquivalent('{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"0","ruleDefinerPath":"meta::external::store::model::test::alloy::constraints::F","message":"Unable to evaluate constraint [0]: data not available - check your mappings"}],"source":{"defects":[],"source":{"number":1,"record":"{\\"n\\":20}"},"value":{"n":20}},"value":{"i":20}}'->parseJSON(), $result.values->toOne()->parseJSON()));
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 { serverVersion.start='v1_20_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::constraintOnUnmappedRequiredComplextTypeFieldCanSucceed():Boolean[1]
+meta::external::store::model::test::alloy::constraints::constraintOnUnmappedRequiredComplextTypeFieldCanSucceed():Boolean[1]
 {
    let result = execute(|F.all()->graphFetchChecked(#{F { i }}#)->serialize(#{F { i }}#),
-                        meta::pure::mapping::modelToModel::test::alloy::constraints::n2fExpectedNotMapped,
+                        meta::external::store::model::test::alloy::constraints::n2fExpectedNotMapped,
                          ^Runtime(connections = ^JsonModelConnection(
                                 element=^ModelStore(),
                                 class=_Num,
@@ -274,61 +274,61 @@ meta::pure::mapping::modelToModel::test::alloy::constraints::constraintOnUnmappe
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 { serverVersion.start='v1_20_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::constraintOnUnmappedRequiredComplextTypeViaQualifiedPropertyCanCompile():Boolean[1]
+meta::external::store::model::test::alloy::constraints::constraintOnUnmappedRequiredComplextTypeViaQualifiedPropertyCanCompile():Boolean[1]
 {
-  let result = execute(|meta::pure::mapping::modelToModel::test::alloy::constraints::Loan.all()->graphFetchChecked(#{meta::pure::mapping::modelToModel::test::alloy::constraints::Loan {id}}#)->serialize(#{meta::pure::mapping::modelToModel::test::alloy::constraints::Loan {id}}#),
-                      meta::pure::mapping::modelToModel::test::alloy::constraints::LoanMapping,
+  let result = execute(|meta::external::store::model::test::alloy::constraints::Loan.all()->graphFetchChecked(#{meta::external::store::model::test::alloy::constraints::Loan {id}}#)->serialize(#{meta::external::store::model::test::alloy::constraints::Loan {id}}#),
+                      meta::external::store::model::test::alloy::constraints::LoanMapping,
                       ^Runtime(connections = ^JsonModelConnection(
                         element = ^ModelStore(),
-                        class = meta::pure::mapping::modelToModel::test::alloy::constraints::From,
+                        class = meta::external::store::model::test::alloy::constraints::From,
                         url='data:application/json,{"id":20}'
                       )),
                       []
   );
 
-  assert(jsonEquivalent('{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"0","ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::constraints::Loan","message":"Constraint :[0] violated in the Class Loan"}],"source":{"defects":[],"source":{"number":1,"record":"{\\"id\\":20}"},"value":{"id":20}},"value":{"id":20}}'->parseJSON(),
+  assert(jsonEquivalent('{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"0","ruleDefinerPath":"meta::external::store::model::test::alloy::constraints::Loan","message":"Constraint :[0] violated in the Class Loan"}],"source":{"defects":[],"source":{"number":1,"record":"{\\"id\\":20}"},"value":{"id":20}},"value":{"id":20}}'->parseJSON(),
                         $result.values->toOne()->parseJSON()));
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>>
 { serverVersion.start='v1_20_0' }
-meta::pure::mapping::modelToModel::test::alloy::constraints::testIsDistinctConstraintWithPrimitiveValues():Boolean[1]
+meta::external::store::model::test::alloy::constraints::testIsDistinctConstraintWithPrimitiveValues():Boolean[1]
 {
    let inputData = '[{"idAndName":"1:Prod1","synonyms":[{"value":"Type1:Name1"},{"value":"Type2:Name2"}]},{"idAndName":"2:Prod2","synonyms":[{"value":"Type1:Name1"},{"value":"Type1:Name2"}]},{"idAndName":"2:Prod2","synonyms":[{"value":"Type1:Name1"},{"value":"Type1:Name1"}]}]';
    let result = execute(
       |Product.all()->graphFetchChecked(#{Product{id,name,synonyms{type,name}}}#)->serialize(#{Product{id,name,synonyms{type,name}}}#),
-      meta::pure::mapping::modelToModel::test::alloy::constraints::ProductMapping,
+      meta::external::store::model::test::alloy::constraints::ProductMapping,
       ^Runtime(connections = ^JsonModelConnection(element =^ ModelStore(), class = _Product, url = 'data:application/json,' + $inputData)),
       []
    );
 
    let expected = '['+
       '{"defects":[],"source":{"defects":[],"source":{"number":1,"record":"{\\"idAndName\\":\\"1:Prod1\\",\\"synonyms\\":[{\\"value\\":\\"Type1:Name1\\"},{\\"value\\":\\"Type2:Name2\\"}]}"},"value":{"idAndName":"1:Prod1","synonyms":[{"value":"Type1:Name1"},{"value":"Type2:Name2"}]}},"value":{"synonyms":[{"name":"Name1","type":"Type1"},{"name":"Name2","type":"Type2"}],"name":"Prod1","id":1}},'+
-      '{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"distinctId","ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::constraints::Product","message":"Constraint :[distinctId] violated in the Class Product"}],"source":{"defects":[],"source":{"number":2,"record":"{\\"idAndName\\":\\"2:Prod2\\",\\"synonyms\\":[{\\"value\\":\\"Type1:Name1\\"},{\\"value\\":\\"Type1:Name2\\"}]}"},"value":{"idAndName":"2:Prod2","synonyms":[{"value":"Type1:Name1"},{"value":"Type1:Name2"}]}},"value":{"synonyms":[{"name":"Name1","type":"Type1"},{"name":"Name2","type":"Type1"}],"name":"Prod2","id":2}},'+
-      '{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"distinctId","ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::constraints::Product","message":"Constraint :[distinctId] violated in the Class Product"},{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"distinctIdAndNames","ruleDefinerPath":"meta::pure::mapping::modelToModel::test::alloy::constraints::Product","message":"Constraint :[distinctIdAndNames] violated in the Class Product"}],"source":{"defects":[],"source":{"number":3,"record":"{\\"idAndName\\":\\"2:Prod2\\",\\"synonyms\\":[{\\"value\\":\\"Type1:Name1\\"},{\\"value\\":\\"Type1:Name1\\"}]}"},"value":{"idAndName":"2:Prod2","synonyms":[{"value":"Type1:Name1"},{"value":"Type1:Name1"}]}},"value":{"synonyms":[{"name":"Name1","type":"Type1"},{"name":"Name1","type":"Type1"}],"name":"Prod2","id":2}}'+
+      '{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"distinctId","ruleDefinerPath":"meta::external::store::model::test::alloy::constraints::Product","message":"Constraint :[distinctId] violated in the Class Product"}],"source":{"defects":[],"source":{"number":2,"record":"{\\"idAndName\\":\\"2:Prod2\\",\\"synonyms\\":[{\\"value\\":\\"Type1:Name1\\"},{\\"value\\":\\"Type1:Name2\\"}]}"},"value":{"idAndName":"2:Prod2","synonyms":[{"value":"Type1:Name1"},{"value":"Type1:Name2"}]}},"value":{"synonyms":[{"name":"Name1","type":"Type1"},{"name":"Name2","type":"Type1"}],"name":"Prod2","id":2}},'+
+      '{"defects":[{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"distinctId","ruleDefinerPath":"meta::external::store::model::test::alloy::constraints::Product","message":"Constraint :[distinctId] violated in the Class Product"},{"path":[],"enforcementLevel":"Error","ruleType":"ClassConstraint","externalId":null,"id":"distinctIdAndNames","ruleDefinerPath":"meta::external::store::model::test::alloy::constraints::Product","message":"Constraint :[distinctIdAndNames] violated in the Class Product"}],"source":{"defects":[],"source":{"number":3,"record":"{\\"idAndName\\":\\"2:Prod2\\",\\"synonyms\\":[{\\"value\\":\\"Type1:Name1\\"},{\\"value\\":\\"Type1:Name1\\"}]}"},"value":{"idAndName":"2:Prod2","synonyms":[{"value":"Type1:Name1"},{"value":"Type1:Name1"}]}},"value":{"synonyms":[{"name":"Name1","type":"Type1"},{"name":"Name1","type":"Type1"}],"name":"Prod2","id":2}}'+
    ']';
    assert(jsonEquivalent($expected->parseJSON(), $result.values->toOne()->parseJSON()));
 }
 
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::TaxonomyValue
+Class meta::external::store::model::test::alloy::constraints::TaxonomyValue
 {
    id : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::Taxonomy
+Class meta::external::store::model::test::alloy::constraints::Taxonomy
 {
    id : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::constraints::Taxonomy_TaxonomyValue
+Association meta::external::store::model::test::alloy::constraints::Taxonomy_TaxonomyValue
 {
-   taxonomy:meta::pure::mapping::modelToModel::test::alloy::constraints::Taxonomy[1];
-   taxonomyValue:meta::pure::mapping::modelToModel::test::alloy::constraints::TaxonomyValue[*];
+   taxonomy:meta::external::store::model::test::alloy::constraints::Taxonomy[1];
+   taxonomyValue:meta::external::store::model::test::alloy::constraints::TaxonomyValue[*];
 }
 
 // Test new in M2M execution with properties from associations
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::ProductTaxonomy
+Class meta::external::store::model::test::alloy::constraints::ProductTaxonomy
 [
    [^Taxonomy(id='1', taxonomyValue=[^TaxonomyValue(id='t1')]),^Taxonomy(id='2', taxonomyValue=[^TaxonomyValue(id='t2')])]->filter(t | $t.id == $this.id)->isNotEmpty()
 ]
@@ -336,42 +336,42 @@ Class meta::pure::mapping::modelToModel::test::alloy::constraints::ProductTaxono
    id: String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::Firm
+Class meta::external::store::model::test::alloy::constraints::Firm
 [
    $this.employees->isNotEmpty()
 ]
 {
   name: String[1];
-  employees: meta::pure::mapping::modelToModel::test::alloy::constraints::Person[*];
+  employees: meta::external::store::model::test::alloy::constraints::Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::Firm2
+Class meta::external::store::model::test::alloy::constraints::Firm2
 {
   name: String[1];
-  employees: meta::pure::mapping::modelToModel::test::alloy::constraints::Person[*];
+  employees: meta::external::store::model::test::alloy::constraints::Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::Person
+Class meta::external::store::model::test::alloy::constraints::Person
 {
   fullName: String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::_Firm
+Class meta::external::store::model::test::alloy::constraints::_Firm
 {   
   name: String[1];
-  employees:meta::pure::mapping::modelToModel::test::alloy::constraints::_Person[*];
+  employees:meta::external::store::model::test::alloy::constraints::_Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::_Firm2
+Class meta::external::store::model::test::alloy::constraints::_Firm2
 [
    $this.employees.address.street->isNotEmpty()
 ]
 {   
   name: String[1];
-  employees:meta::pure::mapping::modelToModel::test::alloy::constraints::_Person2[*];
+  employees:meta::external::store::model::test::alloy::constraints::_Person2[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::_Person2
+Class meta::external::store::model::test::alloy::constraints::_Person2
 [
    $this.firm->isNotEmpty()
 ]
@@ -382,25 +382,25 @@ Class meta::pure::mapping::modelToModel::test::alloy::constraints::_Person2
   firm: _Firm2[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::_Person
+Class meta::external::store::model::test::alloy::constraints::_Person
 {
   firstName: String[1];
   lastName: String[1];
   address: _Address[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::_Address
+Class meta::external::store::model::test::alloy::constraints::_Address
 {
   street: String[1];
 }
 
 
-Enum meta::pure::mapping::modelToModel::test::alloy::constraints::CarManufacturer
+Enum meta::external::store::model::test::alloy::constraints::CarManufacturer
 {
    Ford, Vauxhall, Peugeot, BadCarCo1, BadCarCo2
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::CurrentCarData
+Class meta::external::store::model::test::alloy::constraints::CurrentCarData
 {
    allowed : CarManufacturer[*];
    numAllowed(){$this.allowed->size();}:Integer[1];
@@ -408,7 +408,7 @@ Class meta::pure::mapping::modelToModel::test::alloy::constraints::CurrentCarDat
 }
 
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::_Car
+Class meta::external::store::model::test::alloy::constraints::_Car
 [
   $this.qp1() || $this.make->in(^CurrentCarData(allowed=[CarManufacturer.Ford]).allowed)
 ]
@@ -419,25 +419,25 @@ Class meta::pure::mapping::modelToModel::test::alloy::constraints::_Car
    qp1() {$this.make->in(^CurrentCarData(allowed=[CarManufacturer.Peugeot]).allowed)}:Boolean[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::Car
+Class meta::external::store::model::test::alloy::constraints::Car
 {
    make:CarManufacturer[1];
    engineSize : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::A
+Class meta::external::store::model::test::alloy::constraints::A
 {
    s:String[1];
    b:Boolean[1];
    i:Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::B
+Class meta::external::store::model::test::alloy::constraints::B
 {
    b:Boolean[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::_B
+Class meta::external::store::model::test::alloy::constraints::_B
 [
    isEqual(^A(s='blah', b=true, i=10), ^A(s='blah', b=true, i=10), #{A {b}}#)
 
@@ -446,12 +446,12 @@ Class meta::pure::mapping::modelToModel::test::alloy::constraints::_B
    b:Boolean[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::C
+Class meta::external::store::model::test::alloy::constraints::C
 {
    b:Boolean[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::_C
+Class meta::external::store::model::test::alloy::constraints::_C
 [
    isDistinct([^A(s='blah', b=false, i=10), ^A(s='blah', b=true, i=10)], #{A {b}}#)
 ]
@@ -459,7 +459,7 @@ Class meta::pure::mapping::modelToModel::test::alloy::constraints::_C
    b:Boolean[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::D
+Class meta::external::store::model::test::alloy::constraints::D
 [
    if($this.i < 10, |$this.maybe->isEmpty(), |$this.maybe->isNotEmpty())
 ]
@@ -468,12 +468,12 @@ Class meta::pure::mapping::modelToModel::test::alloy::constraints::D
    i: Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::Blah2
+Class meta::external::store::model::test::alloy::constraints::Blah2
 {
   i:Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::E
+Class meta::external::store::model::test::alloy::constraints::E
 [
    $this.i < 10 || $this.expected == 'Hello'
 ]
@@ -482,7 +482,7 @@ Class meta::pure::mapping::modelToModel::test::alloy::constraints::E
    i: Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::F
+Class meta::external::store::model::test::alloy::constraints::F
 [
    $this.i < 10 || $this.c.b == true
 ]
@@ -491,43 +491,43 @@ Class meta::pure::mapping::modelToModel::test::alloy::constraints::F
    i : Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::_Num
+Class meta::external::store::model::test::alloy::constraints::_Num
 {
    n: Integer[1];
 }
 
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::Loan
+Class meta::external::store::model::test::alloy::constraints::Loan
 [
   $this.collateral(today()).collateralAddress.country.countryName == 'US6'
 ]
 {
   id:Integer[1];
-  collateral : meta::pure::mapping::modelToModel::test::alloy::constraints::Collateral[*];
+  collateral : meta::external::store::model::test::alloy::constraints::Collateral[*];
 }
 
-Class <<temporal.businesstemporal>> meta::pure::mapping::modelToModel::test::alloy::constraints::Collateral
+Class <<temporal.businesstemporal>> meta::external::store::model::test::alloy::constraints::Collateral
 {
-  collateralAddress : meta::pure::mapping::modelToModel::test::alloy::constraints::Address[1];
+  collateralAddress : meta::external::store::model::test::alloy::constraints::Address[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::Address
+Class meta::external::store::model::test::alloy::constraints::Address
 {
   county : String[1];
-  country : meta::pure::mapping::modelToModel::test::alloy::constraints::Country[1];
+  country : meta::external::store::model::test::alloy::constraints::Country[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::Country
+Class meta::external::store::model::test::alloy::constraints::Country
 {
   countryName : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::From
+Class meta::external::store::model::test::alloy::constraints::From
 {
   id:Integer[1];
 } 
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::Product
+Class meta::external::store::model::test::alloy::constraints::Product
 [
    distinctId: $this.synonyms.type->isDistinct(),
    distinctIdAndNames: $this.synonyms->map(x | $x.type + '$' + $x.name)->isDistinct()
@@ -539,91 +539,91 @@ Class meta::pure::mapping::modelToModel::test::alloy::constraints::Product
    synonyms: Synonym[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::Synonym
+Class meta::external::store::model::test::alloy::constraints::Synonym
 {
    type: String[1];
    name: String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::_Product
+Class meta::external::store::model::test::alloy::constraints::_Product
 {
    idAndName: String[1];
    synonyms: _Synonym[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::constraints::_Synonym
+Class meta::external::store::model::test::alloy::constraints::_Synonym
 {
    value: String[1];
 } 
 
 ###Mapping
-Mapping meta::pure::mapping::modelToModel::test::alloy::constraints::isEqualTest
+Mapping meta::external::store::model::test::alloy::constraints::isEqualTest
 (
-   meta::pure::mapping::modelToModel::test::alloy::constraints::B : Pure
+   meta::external::store::model::test::alloy::constraints::B : Pure
    {
-      ~src meta::pure::mapping::modelToModel::test::alloy::constraints::_B
+      ~src meta::external::store::model::test::alloy::constraints::_B
       b: $src.b
    }
 )
 
 ###Mapping
-Mapping meta::pure::mapping::modelToModel::test::alloy::constraints::isDistinctTest
+Mapping meta::external::store::model::test::alloy::constraints::isDistinctTest
 (
-   meta::pure::mapping::modelToModel::test::alloy::constraints::C : Pure
+   meta::external::store::model::test::alloy::constraints::C : Pure
    {
-      ~src meta::pure::mapping::modelToModel::test::alloy::constraints::_C
+      ~src meta::external::store::model::test::alloy::constraints::_C
       b: $src.b
    }
 )
 
 ###Mapping
-Mapping meta::pure::mapping::modelToModel::test::alloy::constraints::n2dMaybeNotMapped
+Mapping meta::external::store::model::test::alloy::constraints::n2dMaybeNotMapped
 (
-   meta::pure::mapping::modelToModel::test::alloy::constraints::D : Pure
+   meta::external::store::model::test::alloy::constraints::D : Pure
    {
-      ~src meta::pure::mapping::modelToModel::test::alloy::constraints::_Num
+      ~src meta::external::store::model::test::alloy::constraints::_Num
       i: $src.n
    }
 )
 
 ###Mapping
-Mapping meta::pure::mapping::modelToModel::test::alloy::constraints::n2eExpectedNotMapped
+Mapping meta::external::store::model::test::alloy::constraints::n2eExpectedNotMapped
 (
-   meta::pure::mapping::modelToModel::test::alloy::constraints::E : Pure
+   meta::external::store::model::test::alloy::constraints::E : Pure
    {
-      ~src meta::pure::mapping::modelToModel::test::alloy::constraints::_Num
+      ~src meta::external::store::model::test::alloy::constraints::_Num
       i: $src.n
    }
 )
 
 ###Mapping
-Mapping meta::pure::mapping::modelToModel::test::alloy::constraints::n2fExpectedNotMapped
+Mapping meta::external::store::model::test::alloy::constraints::n2fExpectedNotMapped
 (
-   meta::pure::mapping::modelToModel::test::alloy::constraints::F : Pure
+   meta::external::store::model::test::alloy::constraints::F : Pure
    {
-      ~src meta::pure::mapping::modelToModel::test::alloy::constraints::_Num
+      ~src meta::external::store::model::test::alloy::constraints::_Num
       i: $src.n
    }
 )
 
 
 ###Mapping
-Mapping meta::pure::mapping::modelToModel::test::alloy::constraints::m2mconstraintnewmapping
+Mapping meta::external::store::model::test::alloy::constraints::m2mconstraintnewmapping
 (
-  meta::pure::mapping::modelToModel::test::alloy::constraints::Car : Pure
+  meta::external::store::model::test::alloy::constraints::Car : Pure
    {
-      ~src meta::pure::mapping::modelToModel::test::alloy::constraints::_Car
+      ~src meta::external::store::model::test::alloy::constraints::_Car
       make : $src.make,
       engineSize : $src.engineSize
   }
 )
 
 ###Mapping
-Mapping meta::pure::mapping::modelToModel::test::alloy::constraints::m2mconstraintnewmapping2
+Mapping meta::external::store::model::test::alloy::constraints::m2mconstraintnewmapping2
 (
-  meta::pure::mapping::modelToModel::test::alloy::constraints::ProductTaxonomy : Pure
+  meta::external::store::model::test::alloy::constraints::ProductTaxonomy : Pure
    {
-      ~src meta::pure::mapping::modelToModel::test::alloy::constraints::ProductTaxonomy
+      ~src meta::external::store::model::test::alloy::constraints::ProductTaxonomy
       id : $src.id
   }   
 )
@@ -631,64 +631,64 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::constraints::m2mconstrai
 
 
 ###Mapping
-Mapping meta::pure::mapping::modelToModel::test::alloy::constraints::m2mconstraintmapping1
+Mapping meta::external::store::model::test::alloy::constraints::m2mconstraintmapping1
 (
-  meta::pure::mapping::modelToModel::test::alloy::constraints::Firm : Pure
+  meta::external::store::model::test::alloy::constraints::Firm : Pure
   {
-    ~src meta::pure::mapping::modelToModel::test::alloy::constraints::_Firm
+    ~src meta::external::store::model::test::alloy::constraints::_Firm
     name: $src.name,
     employees: $src.employees
   }
 
-  meta::pure::mapping::modelToModel::test::alloy::constraints::Person: Pure
+  meta::external::store::model::test::alloy::constraints::Person: Pure
   {
-    ~src meta::pure::mapping::modelToModel::test::alloy::constraints::_Person
+    ~src meta::external::store::model::test::alloy::constraints::_Person
     fullName: $src.firstName + ' ' + $src.lastName
   }
 )
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::constraints::m2mconstraintmapping2
+Mapping meta::external::store::model::test::alloy::constraints::m2mconstraintmapping2
 (
-  meta::pure::mapping::modelToModel::test::alloy::constraints::Firm2 : Pure
+  meta::external::store::model::test::alloy::constraints::Firm2 : Pure
   {
-    ~src meta::pure::mapping::modelToModel::test::alloy::constraints::_Firm2
+    ~src meta::external::store::model::test::alloy::constraints::_Firm2
     name: $src.name,
     employees: $src.employees
   }
 
-  meta::pure::mapping::modelToModel::test::alloy::constraints::Person: Pure
+  meta::external::store::model::test::alloy::constraints::Person: Pure
   {
-    ~src meta::pure::mapping::modelToModel::test::alloy::constraints::_Person2
+    ~src meta::external::store::model::test::alloy::constraints::_Person2
     fullName: $src.firstName + ' ' + $src.lastName
   }
 )
 
 
 ###Mapping
-Mapping meta::pure::mapping::modelToModel::test::alloy::constraints::LoanMapping
+Mapping meta::external::store::model::test::alloy::constraints::LoanMapping
 (
-  meta::pure::mapping::modelToModel::test::alloy::constraints::Loan : Pure
+  meta::external::store::model::test::alloy::constraints::Loan : Pure
   {
-    ~src meta::pure::mapping::modelToModel::test::alloy::constraints::From
+    ~src meta::external::store::model::test::alloy::constraints::From
     id : $src.id
   }
 )
 
 
 ###Mapping
-Mapping meta::pure::mapping::modelToModel::test::alloy::constraints::ProductMapping
+Mapping meta::external::store::model::test::alloy::constraints::ProductMapping
 (
-   meta::pure::mapping::modelToModel::test::alloy::constraints::Product : Pure
+   meta::external::store::model::test::alloy::constraints::Product : Pure
    {
-      ~src meta::pure::mapping::modelToModel::test::alloy::constraints::_Product
+      ~src meta::external::store::model::test::alloy::constraints::_Product
       id: $src.idAndName->split(':')->at(0)->parseInteger(),
       name: $src.idAndName->split(':')->at(1),
       synonyms: $src.synonyms
    }
 
-   meta::pure::mapping::modelToModel::test::alloy::constraints::Synonym : Pure
+   meta::external::store::model::test::alloy::constraints::Synonym : Pure
    {
-      ~src meta::pure::mapping::modelToModel::test::alloy::constraints::_Synonym
+      ~src meta::external::store::model::test::alloy::constraints::_Synonym
       type: $src.value->split(':')->at(0),
       name: $src.value->split(':')->at(1)
    }

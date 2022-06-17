@@ -30,8 +30,8 @@ import org.finos.legend.engine.shared.core.operational.errorManagement.EngineExc
 import org.finos.legend.pure.generated.Root_meta_pure_alloy_connections_PostProcessor;
 import org.finos.legend.pure.generated.Root_meta_pure_alloy_connections_alloy_authentication_AuthenticationStrategy;
 import org.finos.legend.pure.generated.Root_meta_pure_alloy_connections_alloy_specification_DatasourceSpecification;
-import org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.Column;
-import org.finos.legend.pure.m3.coreinstance.meta.relational.runtime.PostProcessorWithParameter;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.Column;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.runtime.PostProcessorWithParameter;
 
 import java.util.List;
 import java.util.Objects;
@@ -63,7 +63,7 @@ public interface IRelationalCompilerExtension extends CompilerExtension
         return process(postProcessorWithParameter, processors, context, "Post Processor With Parameter", null);
     }
 
-    static org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.relation.Milestoning process(org.finos.legend.engine.protocol.pure.v1.model.packageableElement.store.relational.model.milestoning.Milestoning milestoning, List<Function3<org.finos.legend.engine.protocol.pure.v1.model.packageableElement.store.relational.model.milestoning.Milestoning, CompileContext, Multimap<String, Column>, org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.relation.Milestoning>> processors, Multimap<String, Column> columnMap, CompileContext context)
+    static org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.relation.Milestoning process(org.finos.legend.engine.protocol.pure.v1.model.packageableElement.store.relational.model.milestoning.Milestoning milestoning, List<Function3<org.finos.legend.engine.protocol.pure.v1.model.packageableElement.store.relational.model.milestoning.Milestoning, CompileContext, Multimap<String, Column>, org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.relation.Milestoning>> processors, Multimap<String, Column> columnMap, CompileContext context)
     {
         return process(milestoning, processors, context, columnMap, "Milestoning", milestoning.sourceInformation);
     }
@@ -106,7 +106,7 @@ public interface IRelationalCompilerExtension extends CompilerExtension
         return FastList.newList();
     }
 
-    default List<Function3<org.finos.legend.engine.protocol.pure.v1.model.packageableElement.store.relational.model.milestoning.Milestoning, CompileContext, Multimap<String, Column>, org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.relation.Milestoning>> getExtraMilestoningProcessors()
+    default List<Function3<org.finos.legend.engine.protocol.pure.v1.model.packageableElement.store.relational.model.milestoning.Milestoning, CompileContext, Multimap<String, Column>, org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.relation.Milestoning>> getExtraMilestoningProcessors()
     {
         return FastList.newList();
     }

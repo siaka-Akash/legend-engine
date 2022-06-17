@@ -12,44 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::runtime::*;
-import meta::relational::translation::*;
-import meta::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::translation::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
 import meta::pure::executionPlan::*;
 import meta::pure::mapping::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::functions::pureToSqlQuery::*;
-import meta::relational::functions::pureToSqlQuery::metamodel::*;
-import meta::relational::postProcessor::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::functions::pureToSqlQuery::*;
+import meta::external::store::relational::functions::pureToSqlQuery::metamodel::*;
+import meta::external::store::relational::postProcessor::*;
 import meta::pure::router::extension::*;
 import meta::pure::runtime::*;
-import meta::relational::metamodel::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::mapping::*;
 import meta::pure::alloy::connections::*;
 import meta::pure::alloy::connections::alloy::specification::*;
 
-function meta::relational::postProcessor::getCollectionThresholdLimitForDatabaseType(dbType:DatabaseType[1], isTestRun:Boolean[1]):Integer[0..1]
+function meta::external::store::relational::postProcessor::getCollectionThresholdLimitForDatabaseType(dbType:DatabaseType[1], isTestRun:Boolean[1]):Integer[0..1]
 {
    let thresholdForTests = 50;
 
    if($isTestRun, | $thresholdForTests, | $dbType->createDbConfig([]).dbExtension.collectionThresholdLimit);
 }
 
-function <<access.private>> meta::relational::postProcessor::prefixForWrapperAllocationNodeName():String[1]
+function <<access.private>> meta::external::store::relational::postProcessor::prefixForWrapperAllocationNodeName():String[1]
 {
    'inFilterClause_';
 }
 
-function meta::relational::postProcessor::processInOperation(query:SQLQuery[1], runtime:Runtime[1], store:Database[0..1], exeCtx:ExecutionContext[1], extensions:RouterExtension[*]):PostProcessorResult[1]
+function meta::external::store::relational::postProcessor::processInOperation(query:SQLQuery[1], runtime:Runtime[1], store:Database[0..1], exeCtx:ExecutionContext[1], extensions:RouterExtension[*]):PostProcessorResult[1]
 {
-   let connection = $runtime->connectionByElement($store->toOne())->meta::relational::mapping::updateConnection($extensions)->cast(@DatabaseConnection);
+   let connection = $runtime->connectionByElement($store->toOne())->meta::external::store::relational::mapping::updateConnection($extensions)->cast(@DatabaseConnection);
    let dbThreshold = $connection.type->getCollectionThresholdLimitForDatabaseType(
                                                       $connection->instanceOf(TestDatabaseConnection) ||
                                                       ($connection->instanceOf(RelationalDatabaseConnection) && $connection->cast(@RelationalDatabaseConnection).datasourceSpecification->instanceOf(LocalH2DatasourceSpecification))
                                                     );
 
    if($dbThreshold->isEmpty(),
-      |^meta::relational::mapping::PostProcessorResult(query = $query),
+      |^meta::external::store::relational::mapping::PostProcessorResult(query = $query),
       |
       let transformNotRequiringConditionNode  =  {r: RelationalOperationElement[1], uniqueId: Integer[1] |
                                                       $r->match([
@@ -60,7 +60,7 @@ function meta::relational::postProcessor::processInOperation(query:SQLQuery[1], 
 
                                                                                    let firstLiteralValue    = $d.parameters->at(1)->cast(@LiteralList).values->map(l | $l.value)->at(0);
                                                                                    let collectionValueType  = if($firstLiteralValue->instanceOf(VarPlaceHolder), | $firstLiteralValue->cast(@VarPlaceHolder).type, | $firstLiteralValue->type());
-                                                                                   let selectSQLQuery       = generateTempTableSelectSQLQuery('default', $tempTableName, $tempTableColumnName, meta::relational::transform::fromPure::pureTypeToDataTypeMap()->get($collectionValueType)->translateCoreTypeToDbSpecificType(^TranslationContext(dbType=$connection.type))->toOne());
+                                                                                   let selectSQLQuery       = generateTempTableSelectSQLQuery('default', $tempTableName, $tempTableColumnName, meta::external::store::relational::transform::fromPure::pureTypeToDataTypeMap()->get($collectionValueType)->translateCoreTypeToDbSpecificType(^TranslationContext(dbType=$connection.type))->toOne());
 
                                                                                    ^$d(parameters           = [$d.parameters->at(0), $selectSQLQuery]);,
                                                                                    |$d);,
@@ -88,7 +88,7 @@ function meta::relational::postProcessor::processInOperation(query:SQLQuery[1], 
    );
 }
 
-function meta::relational::postProcessor::generatePostProcessorResult(changedFunctions:Pair<RelationalOperationElement, RelationalOperationElement>[*], query:SQLQuery[1], connection:DatabaseConnection[1], dbThreshold:Integer[1], runtime:Runtime[1], store:Database[1], exeCtx:ExecutionContext[1], extensions:RouterExtension[*]):PostProcessorResult[1]
+function meta::external::store::relational::postProcessor::generatePostProcessorResult(changedFunctions:Pair<RelationalOperationElement, RelationalOperationElement>[*], query:SQLQuery[1], connection:DatabaseConnection[1], dbThreshold:Integer[1], runtime:Runtime[1], store:Database[1], exeCtx:ExecutionContext[1], extensions:RouterExtension[*]):PostProcessorResult[1]
 {
    let getTypeLambda = {val:Any[1] |if($val->instanceOf(VarPlaceHolder), | $val->cast(@VarPlaceHolder).type, | $val->type())};
 
@@ -113,7 +113,7 @@ function meta::relational::postProcessor::generatePostProcessorResult(changedFun
                           let varPlaceHoldersInCollection           = $collectionValues->filter(val | $val->instanceOf(VarPlaceHolder))->cast(@VarPlaceHolder);
 
                           let translationContext = ^TranslationContext(dbType=$connection.type);
-                          let selectSqlQueryForTempTable            = generateTempTableSelectSQLQuery('default', $tempTableName, $tempTableColumnName, meta::relational::transform::fromPure::pureTypeToDataTypeMap()->get($collectionValueType)->translateCoreTypeToDbSpecificType($translationContext)->toOne());
+                          let selectSqlQueryForTempTable            = generateTempTableSelectSQLQuery('default', $tempTableName, $tempTableColumnName, meta::external::store::relational::transform::fromPure::pureTypeToDataTypeMap()->get($collectionValueType)->translateCoreTypeToDbSpecificType($translationContext)->toOne());
                           let processedResultForTempTable           = $selectSqlQueryForTempTable->postProcessSQLQuery($store->toOne(), [], ^Mapping(), $runtime, $exeCtx, $extensions);
 
                           let allocationNode                        = if($collectionValuesWithoutVarPlaceHolder->isNotEmpty(),
@@ -135,7 +135,7 @@ function meta::relational::postProcessor::generatePostProcessorResult(changedFun
                                                                           tempTableName           = $tempTableName,
                                                                           tempTableColumnMetaData = ^TempTableColumnMetaData(
                                                                                                         column = ^SQLResultColumn(label = $tempTableColumnName,
-                                                                                                                                  dataType = meta::relational::transform::fromPure::pureTypeToDataTypeMap()->get($collectionValueType)->toOne()->translateCoreTypeToDbSpecificType($translationContext))
+                                                                                                                                  dataType = meta::external::store::relational::transform::fromPure::pureTypeToDataTypeMap()->get($collectionValueType)->toOne()->translateCoreTypeToDbSpecificType($translationContext))
                                                                                                      ),
                                                                           connection              = $connection,
                                                                           resultType              = ^VoidResultType(type=Void)

@@ -1,18 +1,18 @@
-import meta::relational::functions::sqlQueryToString::snowflake::*;
-import meta::relational::functions::sqlQueryToString::default::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::functions::sqlQueryToString::snowflake::*;
+import meta::external::store::relational::functions::sqlQueryToString::default::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::router::extension::*;
 
-function <<db.ExtensionLoader>> meta::relational::functions::sqlQueryToString::snowflake::dbExtensionLoaderForSnowflake():DbExtensionLoader[1]
+function <<db.ExtensionLoader>> meta::external::store::relational::functions::sqlQueryToString::snowflake::dbExtensionLoaderForSnowflake():DbExtensionLoader[1]
 {
   ^DbExtensionLoader(dbType = DatabaseType.Snowflake, loader = createDbExtensionForSnowflake__DbExtension_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::createDbExtensionForSnowflake():DbExtension[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::createDbExtensionForSnowflake():DbExtension[1]
 {
    let reservedWords = defaultReservedWords();
    let literalProcessors = getDefaultLiteralProcessors();
@@ -36,7 +36,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::snowf
    );
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::getDynaFunctionToSqlForSnowflake(): DynaFunctionToSql[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::getDynaFunctionToSqlForSnowflake(): DynaFunctionToSql[*]
 {
   let allStates = allGenerationStates();
 
@@ -93,7 +93,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::snowf
   ];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::convertToDateSnowflake(params:String[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::convertToDateSnowflake(params:String[*]):String[1]
 {
    assert(2 - $params->size()  >= 0,'Incorrect number of parameters for convertDate: convertDate(column,[dateformat])');
    assert($params->size()==1 || dateFormatsSnowFlake()->contains($params->at(1)->replace('\'', '')) , | $params->at(1) +' not supported ');
@@ -102,7 +102,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::snowf
    'to_date('+$params->at(0)+','+$dateFormat +')';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::convertToDateTimeSnowflake(params:String[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::convertToDateTimeSnowflake(params:String[*]):String[1]
 {
    assert(2 - $params->size()  >= 0,'Incorrect number of parameters for convertDateTime: convertDateTime(column,[dateTimeformat])');
    let supportedDateTimeFormat = if($params->size() == 2, |dateTimeFormatsSnowFlake()->get($params->at(1)->replace('\'', '')), |[]);
@@ -112,13 +112,13 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::snowf
    'to_timestamp('+$params->at(0)+','+$dateTimeFormat +')';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::dateFormatsSnowFlake():String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::dateFormatsSnowFlake():String[*]
 {
    ['yyyy-MM-dd', 'MMMyyyy', 'yyyyMMdd','DD/MM/YYYY', 'YYYY/MM/DD'];
 }
 
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::dateTimeFormatsSnowFlake():Map<String,Integer>[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::dateTimeFormatsSnowFlake():Map<String,Integer>[1]
 {
    newMap([pair('yyyy-mm-dd hh:mi:ss',120),
            pair('yyyy-MM-dd hh:mm:ss',120),
@@ -127,21 +127,21 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::snowf
            pair('YYYY-MM-DDTHH:MI:SS.FF', 121)]);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::processDateDiffDurationUnitForSnowflake(durationUnit:String[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::processDateDiffDurationUnitForSnowflake(durationUnit:String[1]):String[1]
 {
    let durationEnumNames = [DurationUnit.YEARS,DurationUnit.MONTHS,DurationUnit.WEEKS,DurationUnit.DAYS,DurationUnit.HOURS,DurationUnit.MINUTES,DurationUnit.SECONDS,DurationUnit.MILLISECONDS]->map(e|$e->toString());
    let durationDbNames = ['year', 'month', 'week', 'day', 'hour', 'minute', 'second',''];
    $durationEnumNames->zip($durationDbNames)->filter(h | $h.first == $durationUnit).second->toOne();
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::formatMostRecentSnowflake(p:String[1..2], defaultDay:String[1]):String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::formatMostRecentSnowflake(p:String[1..2], defaultDay:String[1]):String[*]
 {
    let day = $p->last()->toOne()->mapToDBDayOfWeekNumber()->toString();
    let current = if ($p->size() == 2, | $p->first()->toOne(), | $defaultDay);
    [$day, $current, $day, $current, $day, $current, $current];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::processSemiStructuredElementForSnowflake(s:RelationalOperationElement[1], sgc:SqlGenerationContext[1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::processSemiStructuredElementForSnowflake(s:RelationalOperationElement[1], sgc:SqlGenerationContext[1]): String[1]
 {
    $s->match([
       o:SemiStructuredObjectNavigation[1] | $o->processSemiStructuredObjectNavigationForSnowflake($sgc),
@@ -150,7 +150,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::snowf
    ])  
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::processSemiStructuredObjectNavigationForSnowflake(s:SemiStructuredObjectNavigation[1], sgc:SqlGenerationContext[1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::processSemiStructuredObjectNavigationForSnowflake(s:SemiStructuredObjectNavigation[1], sgc:SqlGenerationContext[1]): String[1]
 {
    // https://docs.snowflake.com/en/user-guide/querying-semistructured.html
 
@@ -164,7 +164,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::snowf
    $elementAccess + castSuffixForSnowflakeSemiStructuredData($s.returnType);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::processSemiStructuredArrayFlattenForSnowflake(s:SemiStructuredArrayFlatten[1], sgc:SqlGenerationContext[1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::processSemiStructuredArrayFlattenForSnowflake(s:SemiStructuredArrayFlatten[1], sgc:SqlGenerationContext[1]): String[1]
 {
    // https://docs.snowflake.com/en/sql-reference/functions/flatten.html
 
@@ -172,7 +172,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::snowf
    'flatten(input => ' + $processedNavigation + ', outer => true, recursive => false, mode => \'array\')';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::processSemiStructuredArrayFlattenOutputForSnowflake(s:SemiStructuredArrayFlattenOutput[1], sgc:SqlGenerationContext[1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::processSemiStructuredArrayFlattenOutputForSnowflake(s:SemiStructuredArrayFlattenOutput[1], sgc:SqlGenerationContext[1]): String[1]
 {
    // https://docs.snowflake.com/en/sql-reference/functions/flatten.html
 
@@ -181,7 +181,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::snowf
    $processedIdentifier + '.' + processColumnName('value', $sgc.dbConfig) + castSuffixForSnowflakeSemiStructuredData($s.returnType);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::castSuffixForSnowflakeSemiStructuredData(type:Type[0..1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::castSuffixForSnowflakeSemiStructuredData(type:Type[0..1]): String[1]
 {
    if($type == String, | '::varchar', |
    if($type == StrictDate, | '::date', |
@@ -190,18 +190,18 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::snowf
    ''))));
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::processJoinStringsOperationForSnowflake(js:JoinStrings[1], sgc:SqlGenerationContext[1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::processJoinStringsOperationForSnowflake(js:JoinStrings[1], sgc:SqlGenerationContext[1]): String[1]
 {
    processJoinStringsOperation($js, $sgc, {col, sep| 'listagg(' + $col + if($sep == '\'\'', |'', |', ' + $sep) + ')'},
     {strs, sep| $strs->joinStrings('concat(', if('\'\'' == $sep, |', ', |', ' + $sep + ', ') , ')')});
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::processSelectSQLQueryForSnowflake(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::processSelectSQLQueryForSnowflake(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
 {
    $s->processSelectSQLQueryForSnowflake($sgc.dbConfig, $sgc.format, $sgc.config, $isSubSelect, $sgc.extensions);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::processSelectSQLQueryForSnowflake(s:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::processSelectSQLQueryForSnowflake(s:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
 {
   let opStr = if($s.filteringOperation->isEmpty(), |'', |$s.filteringOperation->map(s|$s->processOperation($dbConfig, $format->indent(), ^$config(callingFromFilter = true), $extensions))->filter(s|$s != '')->joinStrings(' <||> '));
   let havingStr = if($s.havingOperation->isEmpty(), |'', |$s.havingOperation->map(s|$s->processOperation($dbConfig, $format->indent(), $config, $extensions))->filter(s|$s != '')->joinStrings(' <||> '));
@@ -216,7 +216,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::snowf
   + processLimit($s, $format, processTakeDefault_SelectSQLQuery_1__Format_1__String_1_, processSliceOrDropForSnowflake_SelectSQLQuery_1__Format_1__Any_1__String_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::snowflake::processSliceOrDropForSnowflake(s:SelectSQLQuery[1], format:Format[1], size:Any[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::snowflake::processSliceOrDropForSnowflake(s:SelectSQLQuery[1], format:Format[1], size:Any[1]):String[1]
 {
    if ($s.fromRow->isNotEmpty(),
        | if ($size == -1,

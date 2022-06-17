@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import meta::pure::alloy::connections::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::runtime::*;
 import meta::protocols::pure::vX_X_X::invocation::execution::testConnection::*;
 import meta::json::*;
 import meta::pure::functions::io::http::*;
@@ -21,7 +21,7 @@ import meta::protocols::pure::vX_X_X::metamodel::store::relational::connection::
 import meta::protocols::pure::vX_X_X::metamodel::domain::*;
 import meta::protocols::pure::vX_X_X::metamodel::store::relational::mapping::*;
 import meta::protocols::pure::vX_X_X::metamodel::runtime::*;
-import meta::relational::metamodel::*;
+import meta::external::store::relational::metamodel::*;
 import meta::pure::functions::meta::*;
 import meta::protocols::pure::vX_X_X::transformation::toPureGraph::store::relational::*;
 import meta::protocols::pure::vX_X_X::transformation::toPureGraph::connection::*;
@@ -86,7 +86,7 @@ function meta::protocols::pure::vX_X_X::transformation::toPureGraph::connection:
                   | $conn.element->pathToElement()
                   );
 
-  let type =  extractEnumValue(meta::relational::runtime::DatabaseType, $conn.type);
+  let type =  extractEnumValue(meta::external::store::relational::runtime::DatabaseType, $conn.type);
   
   ^meta::pure::alloy::connections::RelationalDatabaseConnection(
               timeZone = $conn.timeZone,

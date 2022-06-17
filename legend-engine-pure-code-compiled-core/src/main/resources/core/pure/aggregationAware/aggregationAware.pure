@@ -17,42 +17,26 @@ import meta::pure::router::extension::*;
 import meta::pure::metamodel::path::*;
 import meta::pure::router::clustering::*;
 import meta::pure::router::printer::*;
-import meta::pure::mapping::aggregationAware::*;
+import meta::external::store::aggregationAware::*;
 import meta::pure::runtime::*;
 import meta::pure::mapping::*;
 
 
 
-Class meta::pure::mapping::aggregationAware::ProjectPath
+Class meta::external::store::aggregationAware::ProjectPath
 {
    <<equality.Key>> children: ProjectPath[*];
    <<equality.Key>> thisLevel: String[0..1];
 }
 
-Class meta::pure::mapping::aggregationAware::AggregationAwareActivity extends meta::pure::mapping::Activity
+Class meta::external::store::aggregationAware::AggregationAwareActivity extends meta::pure::mapping::Activity
 {
    rewrittenQuery: String[1];
 }
 
-function meta::pure::mapping::aggregationAware::planExecution(f:meta::pure::mapping::StoreQuery[1], e:RoutedValueSpecification[0..1], m:Mapping[0..1], runtime:Runtime[0..1], exeCtx:ExecutionContext[1], extensions:RouterExtension[*], debug:DebugContext[1]):ExecutionNode[1]
-{
-   let reprocessedFunction = reprocessFunction($f.fe->evaluateAndDeactivate(), $f.inScopeVars, $e, $m->toOne(), $debug);
-   let node = meta::pure::executionPlan::executionPlan($reprocessedFunction, $m->toOne(), $runtime->toOne(), $exeCtx, $extensions, $debug).rootExecutionNode;
-   ^AggregationAwareExecutionNode(executionNodes = $node, resultType = $node.resultType, aggregationAwareActivity = $reprocessedFunction->asString());
-}
 
-function meta::pure::mapping::aggregationAware::execution(f:meta::pure::mapping::StoreQuery[1], e:RoutedValueSpecification[0..1], m:Mapping[1], runtime:Runtime[1], exeCtx:ExecutionContext[1],  extensions:RouterExtension[*], debug:DebugContext[1]):Result<Any|*>[1]
-{
-   let reprocessedFunction = reprocessFunction($f.fe->evaluateAndDeactivate(), $f.inScopeVars, $e, $m, $debug);
-   let result = execute($reprocessedFunction, $m, $runtime, $exeCtx, $extensions, $debug);
-   let aggregationAwareActivity = ^AggregationAwareActivity(rewrittenQuery = $reprocessedFunction->asString());
-   ^$result
-    (
-       activities = $result.activities->add($aggregationAwareActivity)
-    );
-}
 
-function meta::pure::mapping::aggregationAware::reprocessFunction(f:FunctionExpression[1], openVars: Map<String, List<Any>>[1], e:RoutedValueSpecification[0..1], m:Mapping[1], debug:DebugContext[1]):LambdaFunction<{->Any[*]}>[1]
+function meta::external::store::aggregationAware::reprocessFunction(f:FunctionExpression[1], openVars: Map<String, List<Any>>[1], e:RoutedValueSpecification[0..1], m:Mapping[1], debug:DebugContext[1]):LambdaFunction<{->Any[*]}>[1]
 {
    let existingsVars = $openVars->keyValues()->filter(v|!$v.second.values->at(0)->instanceOf(PlanVarPlaceHolder)).first->map(k|
                                                 let inScopeVarValue = $openVars->get($k).values;
@@ -68,22 +52,19 @@ function meta::pure::mapping::aggregationAware::reprocessFunction(f:FunctionExpr
    let reprocessedFunction = ^LambdaFunction<{->Any[*]}>(expressionSequence =  $existingsVars->concatenate($f->rewriteQuery($openVars, $e, $m, $debug))->toOneMany());
 }
 
-function meta::pure::mapping::aggregationAware::supports(f:FunctionExpression[1]):Boolean[1]
-{
-   true;
-}
 
-function meta::pure::mapping::aggregationAware::rewriteQuery(f:FunctionExpression[1], inScopeVars: Map<String, List<Any>>[1], r:RoutedValueSpecification[0..1], mappings:Mapping[1], debug:DebugContext[1]):FunctionExpression[1]
+
+function meta::external::store::aggregationAware::rewriteQuery(f:FunctionExpression[1], inScopeVars: Map<String, List<Any>>[1], r:RoutedValueSpecification[0..1], mappings:Mapping[1], debug:DebugContext[1]):FunctionExpression[1]
 {
    $f->reprocessVS()->reprocessVSWithInScopeVars($inScopeVars)->rewriteValueSpecification($mappings, ^Map<String, ProjectPath>(), $inScopeVars, $debug)->cast(@FunctionExpression);
 }
 
-function meta::pure::mapping::aggregationAware::reprocessLambda(f:FunctionDefinition<Any>[1]):FunctionDefinition<Any>[1]
+function meta::external::store::aggregationAware::reprocessLambda(f:FunctionDefinition<Any>[1]):FunctionDefinition<Any>[1]
 {
    ^$f(expressionSequence = $f.expressionSequence->map(e|$e->reprocessVS()));
 }
 
-function meta::pure::mapping::aggregationAware::reprocessVS(vs:ValueSpecification[1]):ValueSpecification[1]
+function meta::external::store::aggregationAware::reprocessVS(vs:ValueSpecification[1]):ValueSpecification[1]
 {
    $vs->match([
       fe:FunctionExpression[1] | ^$fe
@@ -122,7 +103,7 @@ function meta::pure::mapping::aggregationAware::reprocessVS(vs:ValueSpecificatio
    ])
 }
 
-function meta::pure::mapping::aggregationAware::rewriteValueSpecification(vs: ValueSpecification[1], mapping: Mapping[1], vars: Map<String, ProjectPath>[1], inScopeVars: Map<String, List<Any>>[1], debug:DebugContext[1]): ValueSpecification[1]
+function meta::external::store::aggregationAware::rewriteValueSpecification(vs: ValueSpecification[1], mapping: Mapping[1], vars: Map<String, ProjectPath>[1], inScopeVars: Map<String, List<Any>>[1], debug:DebugContext[1]): ValueSpecification[1]
 {
    $vs->reprocessVS()->match([
       fe: FunctionExpression[1] | if($fe.func == groupBy_K_MANY__Function_MANY__AggregateValue_MANY__String_MANY__TabularDataSet_1_,
@@ -145,7 +126,7 @@ function meta::pure::mapping::aggregationAware::rewriteValueSpecification(vs: Va
    ]);
 }
 
-function meta::pure::mapping::aggregationAware::potentiallyRewriteObjectGroupBy(f:FunctionExpression[1], mapping:Mapping[1], vars: Map<String, ProjectPath>[1], inScopeVars: Map<String, List<Any>>[1], debug:DebugContext[1]):FunctionExpression[1]
+function meta::external::store::aggregationAware::potentiallyRewriteObjectGroupBy(f:FunctionExpression[1], mapping:Mapping[1], vars: Map<String, ProjectPath>[1], inScopeVars: Map<String, List<Any>>[1], debug:DebugContext[1]):FunctionExpression[1]
 {
    let params = $f->cast(@FunctionExpression).parametersValues->evaluateAndDeactivate();
    let collection = $params->at(0);
@@ -209,7 +190,7 @@ function meta::pure::mapping::aggregationAware::potentiallyRewriteObjectGroupBy(
    ]);
 }
 
-function meta::pure::mapping::aggregationAware::getSupportedTopLevelCollectionOperations():meta::pure::metamodel::function::Function<Any>[*]
+function meta::external::store::aggregationAware::getSupportedTopLevelCollectionOperations():meta::pure::metamodel::function::Function<Any>[*]
 {
    [
       meta::pure::functions::collection::getAll_Class_1__Date_1__Date_1__T_MANY_,
@@ -219,12 +200,12 @@ function meta::pure::mapping::aggregationAware::getSupportedTopLevelCollectionOp
    ]
 }
 
-function meta::pure::mapping::aggregationAware::getTopLevelFunctionsInQuery(vs: ValueSpecification[1]):meta::pure::metamodel::function::Function<Any>[*]
+function meta::external::store::aggregationAware::getTopLevelFunctionsInQuery(vs: ValueSpecification[1]):meta::pure::metamodel::function::Function<Any>[*]
 {
    $vs->match([fe: FunctionExpression[1] | $fe.func->concatenate($fe.parametersValues->evaluateAndDeactivate()->map(v | $v->getTopLevelFunctionsInQuery())), val: ValueSpecification[1] | []])
 }
 
-function meta::pure::mapping::aggregationAware::getNoOpFunctions():meta::pure::metamodel::function::Function<Any>[*]
+function meta::external::store::aggregationAware::getNoOpFunctions():meta::pure::metamodel::function::Function<Any>[*]
 {
    [
       meta::pure::functions::multiplicity::toOne_T_MANY__T_1_,
@@ -238,7 +219,7 @@ function meta::pure::mapping::aggregationAware::getNoOpFunctions():meta::pure::m
 ]
 }
 
-function meta::pure::mapping::aggregationAware::generateProjectPath(f: ValueSpecification[1], vars: Map<String, ProjectPath>[1], inScopeVars: Map<String, List<Any>>[1]) : ProjectPath[1]
+function meta::external::store::aggregationAware::generateProjectPath(f: ValueSpecification[1], vars: Map<String, ProjectPath>[1], inScopeVars: Map<String, List<Any>>[1]) : ProjectPath[1]
 {
    $f->match([
       fe: FunctionExpression[1] |
@@ -291,7 +272,7 @@ function meta::pure::mapping::aggregationAware::generateProjectPath(f: ValueSpec
    ]);
 }
 
-function meta::pure::mapping::aggregationAware::postProcessProjectPathForGenericFunctions(p: ProjectPath[1]):ProjectPath[1]
+function meta::external::store::aggregationAware::postProcessProjectPathForGenericFunctions(p: ProjectPath[1]):ProjectPath[1]
 {
    let replacementPairs = [
       pair(^ProjectPath(children = ^ProjectPath(thisLevel='Integer'), thisLevel='Function->meta::pure::functions::math::sum_Integer_MANY__Integer_1_'), ^ProjectPath(children = ^ProjectPath(thisLevel='Number'), thisLevel='Function->meta::pure::functions::math::sum_Number_MANY__Number_1_')),
@@ -315,7 +296,7 @@ function meta::pure::mapping::aggregationAware::postProcessProjectPathForGeneric
    $toReplace->isEmpty()->if(|$p, |$toReplace->at(0).second);
 }
 
-function meta::pure::mapping::aggregationAware::replaceLeftMostNodeInTree(root: ProjectPath[1], toReplace: ProjectPath[1]): ProjectPath[1]
+function meta::external::store::aggregationAware::replaceLeftMostNodeInTree(root: ProjectPath[1], toReplace: ProjectPath[1]): ProjectPath[1]
 {
    if ($root.children->isEmpty(),
        | $toReplace,
@@ -323,7 +304,7 @@ function meta::pure::mapping::aggregationAware::replaceLeftMostNodeInTree(root: 
    );
 }
 
-function meta::pure::mapping::aggregationAware::canRewrite(vs: ValueSpecification[1], mainClass: Class<Any>[1], aggregateClass: MappingClass<Any>[1], groupByProjectPaths: ProjectPath[*], vars: Map<String, ProjectPath>[1], inScopeVars: Map<String, List<Any>>[1]): Boolean[1]
+function meta::external::store::aggregationAware::canRewrite(vs: ValueSpecification[1], mainClass: Class<Any>[1], aggregateClass: MappingClass<Any>[1], groupByProjectPaths: ProjectPath[*], vars: Map<String, ProjectPath>[1], inScopeVars: Map<String, List<Any>>[1]): Boolean[1]
 {
    $vs->match([
       fe: FunctionExpression[1] | $groupByProjectPaths->contains($fe->generateProjectPath($vars, $inScopeVars)) ||
@@ -353,7 +334,7 @@ function meta::pure::mapping::aggregationAware::canRewrite(vs: ValueSpecificatio
    ])
 }
 
-function meta::pure::mapping::aggregationAware::doRewrite(vs: ValueSpecification[1], mainClass: Class<Any>[1], aggregateClass: Class<Any>[1], set: SetImplementation[1]): ValueSpecification[1]
+function meta::external::store::aggregationAware::doRewrite(vs: ValueSpecification[1], mainClass: Class<Any>[1], aggregateClass: Class<Any>[1], set: SetImplementation[1]): ValueSpecification[1]
 {
    $vs->match([
       fe: FunctionExpression[1] |
@@ -379,17 +360,17 @@ function meta::pure::mapping::aggregationAware::doRewrite(vs: ValueSpecification
    ])
 }
 
-function meta::pure::mapping::aggregationAware::printProjectPath(s:ProjectPath[1], debug: DebugContext[1]):Any[*]
+function meta::external::store::aggregationAware::printProjectPath(s:ProjectPath[1], debug: DebugContext[1]):Any[*]
 {
    $s->getProjectPathString($debug.space)->println();
 }
 
-function meta::pure::mapping::aggregationAware::printProjectPath(s:ProjectPath[1]):Any[*]
+function meta::external::store::aggregationAware::printProjectPath(s:ProjectPath[1]):Any[*]
 {
    $s->getProjectPathString('')->println();
 }
 
-function meta::pure::mapping::aggregationAware::getProjectPathString(s:ProjectPath[1], offset: String[1]):String[1]
+function meta::external::store::aggregationAware::getProjectPathString(s:ProjectPath[1], offset: String[1]):String[1]
 {
   $offset +  '['+
    $s.thisLevel->isNotEmpty()->if(

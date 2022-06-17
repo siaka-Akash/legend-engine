@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::model::simple::*;
-import meta::relational::mapping::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::*;
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testIn():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testIn():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|$p.firstName->in(['John', 'Peter']))
                                      ->project(#/Person/lastName#),
@@ -27,7 +27,7 @@ function <<test.Test>> meta::relational::tests::projection::filter::in::testIn()
    assertEquals('select "root".LASTNAME as "lastName" from personTable as "root" where "root".FIRSTNAME in (\'John\', \'Peter\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testContains():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testContains():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|['John', 'Peter']->contains($p.firstName))
                                      ->project(#/Person/lastName#),
@@ -38,7 +38,7 @@ function <<test.Test>> meta::relational::tests::projection::filter::in::testCont
    assertEquals('select "root".LASTNAME as "lastName" from personTable as "root" where "root".FIRSTNAME in (\'John\', \'Peter\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testDeepIn():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testDeepIn():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|$p.firm.address.name->toOne()->in(['New York', 'Tokyo']))
                                      ->project(#/Person/lastName#),
@@ -49,7 +49,7 @@ function <<test.Test>> meta::relational::tests::projection::filter::in::testDeep
    assertEquals('select "root".LASTNAME as "lastName" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID) left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "firmtable_0".ADDRESSID) where "addresstable_0".NAME in (\'New York\', \'Tokyo\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testDeepInWithMultipleProject():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testDeepInWithMultipleProject():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|$p.firm.address.name->toOne()->in(['New York', 'Tokyo']))
                                      ->project([#/Person/lastName#, #/Person/firstName#]),
@@ -60,7 +60,7 @@ function <<test.Test>> meta::relational::tests::projection::filter::in::testDeep
    assertEquals('select "root".LASTNAME as "lastName", "root".FIRSTNAME as "firstName" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID) left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "firmtable_0".ADDRESSID) where "addresstable_0".NAME in (\'New York\', \'Tokyo\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testDeepContains():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testDeepContains():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|['New York', 'Tokyo']->contains($p.firm.address.name->toOne()))
                                      ->project(#/Person/lastName#),
@@ -71,7 +71,7 @@ function <<test.Test>> meta::relational::tests::projection::filter::in::testDeep
    assertEquals('select "root".LASTNAME as "lastName" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID) left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "firmtable_0".ADDRESSID) where "addresstable_0".NAME in (\'New York\', \'Tokyo\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testDeepContainsWithMultipleProject():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testDeepContainsWithMultipleProject():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|['New York', 'Tokyo']->contains($p.firm.address.name->toOne()))
                                      ->project([#/Person/lastName#, #/Person/firstName#]),
@@ -82,7 +82,7 @@ function <<test.Test>> meta::relational::tests::projection::filter::in::testDeep
    assertEquals('select "root".LASTNAME as "lastName", "root".FIRSTNAME as "firstName" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID) left outer join addressTable as "addresstable_0" on ("addresstable_0".ID = "firmtable_0".ADDRESSID) where "addresstable_0".NAME in (\'New York\', \'Tokyo\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testInWithOneValue():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testInWithOneValue():Boolean[1]
 {
    let names = ['John']->cast(@Any);
    let result = execute(|Person.all()->filter(p|$p.firstName->in($names))
@@ -95,7 +95,7 @@ function <<test.Test>> meta::relational::tests::projection::filter::in::testInWi
 }
 
 // Alloy exclusion reason: 7. Primitive type casting
-function <<test.Test, test.ExcludeAlloy>>  meta::relational::tests::projection::filter::in::testContainsWithOneValue():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>>  meta::external::store::relational::tests::projection::filter::in::testContainsWithOneValue():Boolean[1]
 {
    let names = ['John']->cast(@Any);
    let result = execute(|Person.all()->filter(p|$names->contains($p.firstName))
@@ -107,7 +107,7 @@ function <<test.Test, test.ExcludeAlloy>>  meta::relational::tests::projection::
    assertEquals('select "root".LASTNAME as "lastName" from personTable as "root" where "root".FIRSTNAME = \'John\'', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testInWithVariables():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testInWithVariables():Boolean[1]
 {
    let john = 'John';
    let result = execute(|Person.all()->filter(p|$p.firstName->in([$john, 'Peter']))
@@ -119,7 +119,7 @@ function <<test.Test>> meta::relational::tests::projection::filter::in::testInWi
    assertEquals('select "root".LASTNAME as "lastName" from personTable as "root" where "root".FIRSTNAME in (\'John\', \'Peter\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testContainsWithVariables():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testContainsWithVariables():Boolean[1]
 {
    let john = 'John';
    let result = execute(|Person.all()->filter(p|[$john, 'Peter']->contains($p.firstName))
@@ -131,7 +131,7 @@ function <<test.Test>> meta::relational::tests::projection::filter::in::testCont
    assertEquals('select "root".LASTNAME as "lastName" from personTable as "root" where "root".FIRSTNAME in (\'John\', \'Peter\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testInWithListVariable():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testInWithListVariable():Boolean[1]
 {
    let names = ['John', 'Peter'];
    let result = execute(|Person.all()->filter(p|$p.firstName->in($names))
@@ -143,7 +143,7 @@ function <<test.Test>> meta::relational::tests::projection::filter::in::testInWi
    assertEquals('select "root".LASTNAME as "lastName" from personTable as "root" where "root".FIRSTNAME in (\'John\', \'Peter\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testContainsWithListVariable():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testContainsWithListVariable():Boolean[1]
 {
    let names = ['John', 'Peter'];
    let result = execute(|Person.all()->filter(p|$names->contains($p.firstName))
@@ -155,7 +155,7 @@ function <<test.Test>> meta::relational::tests::projection::filter::in::testCont
    assertEquals('select "root".LASTNAME as "lastName" from personTable as "root" where "root".FIRSTNAME in (\'John\', \'Peter\')', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testNotIn():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testNotIn():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|!$p.firstName->in(['John', 'Peter']))
                                      ->project(#/Person/lastName#),
@@ -166,7 +166,7 @@ function <<test.Test>> meta::relational::tests::projection::filter::in::testNotI
    assertEquals('select "root".LASTNAME as "lastName" from personTable as "root" where ("root".FIRSTNAME not in (\'John\', \'Peter\') OR "root".FIRSTNAME is null)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testNotContains():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testNotContains():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|!['John', 'Peter']->contains($p.firstName))
                                      ->project(#/Person/lastName#),
@@ -177,7 +177,7 @@ function <<test.Test>> meta::relational::tests::projection::filter::in::testNotC
    assertEquals('select "root".LASTNAME as "lastName" from personTable as "root" where ("root".FIRSTNAME not in (\'John\', \'Peter\') OR "root".FIRSTNAME is null)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testInWithDynaFunction():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testInWithDynaFunction():Boolean[1]
 {
    let result = execute(|Interaction.all()->filter(i| $i.active->in(['false', 'something']) && $i.id == 4)->project([i | $i.id, i | $i.active], ['id', 'active']),
                         simpleRelationalMapping,
@@ -188,7 +188,7 @@ function <<test.Test>> meta::relational::tests::projection::filter::in::testInWi
    assertEquals('select "root".ID as "id", case when "root".active = \'Y\' then \'true\' else \'false\' end as "active" from interactionTable as "root" where (case when "root".active = \'Y\' then \'true\' else \'false\' end in (\'false\', \'something\') and "root".ID = 4)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::filter::in::testQualifierWithInThroughJoin():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::filter::in::testQualifierWithInThroughJoin():Boolean[1]
 {
    let result = execute(|Trade.all()->filter(t | $t.id == 10 || $t.id == 11)->project([i | $i.account.name, i | $i.account.accountCategory], ['name', 'cat']),
                         simpleRelationalMapping,

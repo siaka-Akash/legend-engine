@@ -12,30 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::functions::pureToSqlQuery::union::*;
+import meta::external::store::relational::functions::pureToSqlQuery::union::*;
 import meta::pure::router::extension::*;
-import meta::relational::functions::pureToSqlQuery::*;
+import meta::external::store::relational::functions::pureToSqlQuery::*;
 import meta::pure::metamodel::valuespecification::*;
-import meta::relational::mapping::*;
-import meta::relational::metamodel::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::join::*;
-import meta::relational::functions::pureToSqlQuery::*;
-import meta::relational::functions::pureToSqlQuery::relationalmappingspecification::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::functions::pureToSqlQuery::*;
+import meta::external::store::relational::functions::pureToSqlQuery::relationalmappingspecification::*;
 import meta::pure::mapping::*;
 import meta::pure::metamodel::path::*;
 import meta::pure::metamodel::serialization::grammar::*;
 import meta::pure::milestoning::*;
 import meta::pure::tds::*;
-import meta::relational::functions::*;
-import meta::relational::milestoning::*;
+import meta::external::store::relational::functions::*;
+import meta::external::store::relational::milestoning::*;
 import meta::pure::router::clustering::*;
 import meta::pure::router::printer::*;
 import meta::pure::router::routing::*;
 import meta::pure::router::store::embedded::*;
 
-function meta::relational::functions::pureToSqlQuery::union::addMissingColumnToUnion(oldSrcOperation:SelectWithCursor[1], l:LambdaFunction<{SelectSQLQuery[1], Integer[1]->SelectSQLQuery[1]}>[1], nested:Boolean[1], propNames:String[*], extensions:RouterExtension[*]):SelectWithCursor[1]
+function meta::external::store::relational::functions::pureToSqlQuery::union::addMissingColumnToUnion(oldSrcOperation:SelectWithCursor[1], l:LambdaFunction<{SelectSQLQuery[1], Integer[1]->SelectSQLQuery[1]}>[1], nested:Boolean[1], propNames:String[*], extensions:RouterExtension[*]):SelectWithCursor[1]
 {
    let currentTreeNode = $oldSrcOperation.currentTreeNode->toOne();
    let currentAlias = $currentTreeNode.alias;
@@ -59,7 +59,7 @@ function meta::relational::functions::pureToSqlQuery::union::addMissingColumnToU
                                                                      | ^Alias
                                                                         (
                                                                           name = $propName,
-                                                                          relationalElement = ^TableAliasColumn(alias=$newAlias, column=^Column(name = $propName, type = $newAlias.relationalElement->cast(@Union).queries.columns->filter(x | $x->instanceOf(Alias) && $x->cast(@Alias).relationalElement->instanceOf(TableAliasColumn) && $x->cast(@Alias).name == $propName)->cast(@Alias).relationalElement->cast(@TableAliasColumn).column.type->defaultIfEmpty(^meta::relational::metamodel::datatype::Integer())->at(0)))
+                                                                          relationalElement = ^TableAliasColumn(alias=$newAlias, column=^Column(name = $propName, type = $newAlias.relationalElement->cast(@Union).queries.columns->filter(x | $x->instanceOf(Alias) && $x->cast(@Alias).relationalElement->instanceOf(TableAliasColumn) && $x->cast(@Alias).name == $propName)->cast(@Alias).relationalElement->cast(@TableAliasColumn).column.type->defaultIfEmpty(^meta::external::store::relational::metamodel::datatype::Integer())->at(0)))
                                                                         )
                                                                   )
                                                                 })
@@ -104,18 +104,18 @@ function meta::relational::functions::pureToSqlQuery::union::addMissingColumnToU
    $res;
 }
 
-function <<access.private>> meta::relational::functions::pureToSqlQuery::union::resolveUnion(relationalOperationElement:RelationalOperationElement[1]):Union[1]
+function <<access.private>> meta::external::store::relational::functions::pureToSqlQuery::union::resolveUnion(relationalOperationElement:RelationalOperationElement[1]):Union[1]
 {
    $relationalOperationElement->match([u:Union[1]          | $u,
                                        s:SelectSQLQuery[1] | $s.data.alias.relationalElement->cast(@Union)->toOne()]);
 }
 
-function <<access.private>> meta::relational::functions::pureToSqlQuery::union::isNestedUnion(relationalOperationElement:RelationalOperationElement[1]):Boolean[1]
+function <<access.private>> meta::external::store::relational::functions::pureToSqlQuery::union::isNestedUnion(relationalOperationElement:RelationalOperationElement[1]):Boolean[1]
 {
    $relationalOperationElement->instanceOf(SelectSQLQuery) && $relationalOperationElement->cast(@SelectSQLQuery).data.alias.relationalElement->toOne()->instanceOf(Union);
 }
 
-function meta::relational::functions::pureToSqlQuery::union::managePrimaryKeys(allQueries: SelectSQLQuery[*], setImpls:RootRelationalInstanceSetImplementation[*], state: State[1]): SelectSQLQuery[*]
+function meta::external::store::relational::functions::pureToSqlQuery::union::managePrimaryKeys(allQueries: SelectSQLQuery[*], setImpls:RootRelationalInstanceSetImplementation[*], state: State[1]): SelectSQLQuery[*]
 {
    $allQueries->map(q|let offset = $allQueries->indexOf($q);
                       let setImpl = $setImpls->at($offset);
@@ -137,7 +137,7 @@ function meta::relational::functions::pureToSqlQuery::union::managePrimaryKeys(a
                    );
 }
 
-function <<access.private>> meta::relational::functions::pureToSqlQuery::union::getDefaultLiteralValue(type: meta::relational::metamodel::datatype::DataType[1]): Literal[1]
+function <<access.private>> meta::external::store::relational::functions::pureToSqlQuery::union::getDefaultLiteralValue(type: meta::external::store::relational::metamodel::datatype::DataType[1]): Literal[1]
 {
   let pureTypeToDefaultValueMap = [
     pair(Integer, 0),
@@ -149,11 +149,11 @@ function <<access.private>> meta::relational::functions::pureToSqlQuery::union::
     pair(StrictDate, %9999-01-01),
     pair(Boolean, false)
   ]->newMap();
-  let value = $pureTypeToDefaultValueMap->get($type->meta::relational::metamodel::datatype::dataTypeToCompatiblePureType())->toOne();
+  let value = $pureTypeToDefaultValueMap->get($type->meta::external::store::relational::metamodel::datatype::dataTypeToCompatiblePureType())->toOne();
   ^Literal(value=$value);
 }
 
-function meta::relational::functions::pureToSqlQuery::union::buildUnion(setImpls:RootRelationalInstanceSetImplementation[*], relationalPropertyMappings:RelationalPropertyMapping[*], inAsso:Boolean[1], inProject:Boolean[1], milestoningContext: TemporalMilestoningContext[0..1], nodeId:String[1], state:State[1], context:DebugContext[1], extensions:RouterExtension[*]):Union[1]
+function meta::external::store::relational::functions::pureToSqlQuery::union::buildUnion(setImpls:RootRelationalInstanceSetImplementation[*], relationalPropertyMappings:RelationalPropertyMapping[*], inAsso:Boolean[1], inProject:Boolean[1], milestoningContext: TemporalMilestoningContext[0..1], nodeId:String[1], state:State[1], context:DebugContext[1], extensions:RouterExtension[*]):Union[1]
 {
    let fullGet = !($inAsso || $inProject) || ($state.insertDriverTablePkInTempTable->isNotEmpty());
    let simpleAllQueries = $setImpls->map(r| processGetAll($r, $r.class, $nodeId, $fullGet || $state.importDataFlow == true, $setImpls->indexOf($r), $fullGet, $milestoningContext, ^$state(importDataFlowAddFks=false), $context, $extensions));
@@ -231,7 +231,7 @@ function meta::relational::functions::pureToSqlQuery::union::buildUnion(setImpls
              setImplementations = $setImpls);
 }
 
-function meta::relational::functions::pureToSqlQuery::union::buildFKs(targetCols:FKListModeledAndNonModeled[*], missingFks:List<Pair<String,Column>>[*], mappedFkPropertyNames:String[*], q:SelectSQLQuery[1], offset:Integer[1]):Alias[*]
+function meta::external::store::relational::functions::pureToSqlQuery::union::buildFKs(targetCols:FKListModeledAndNonModeled[*], missingFks:List<Pair<String,Column>>[*], mappedFkPropertyNames:String[*], q:SelectSQLQuery[1], offset:Integer[1]):Alias[*]
 {
    let sqlNull = ^Literal(value=^SQLNull());
 
@@ -254,7 +254,7 @@ function meta::relational::functions::pureToSqlQuery::union::buildFKs(targetCols
    $mappedOnes->concatenate($fks);
 }
 
-function <<access.private>> meta::relational::functions::pureToSqlQuery::union::modifyColumnNameInOperation(element:RelationalOperationElement[1], sourceIndex:Integer[1], targetIndex:Integer[1], srcMap:Map<Column, String>[1], targetMap:Map<Column, String>[1], newSourceAlias:TableAlias[1], newTargetAlias:TableAlias[1], sourceTable:NamedRelation[1], targetTable:NamedRelation[1], targetForSelfJoinFromJoin:TableAlias[0..1], processingSide:ProcessingSide[1]):RelationalOperationElement[1]
+function <<access.private>> meta::external::store::relational::functions::pureToSqlQuery::union::modifyColumnNameInOperation(element:RelationalOperationElement[1], sourceIndex:Integer[1], targetIndex:Integer[1], srcMap:Map<Column, String>[1], targetMap:Map<Column, String>[1], newSourceAlias:TableAlias[1], newTargetAlias:TableAlias[1], sourceTable:NamedRelation[1], targetTable:NamedRelation[1], targetForSelfJoinFromJoin:TableAlias[0..1], processingSide:ProcessingSide[1]):RelationalOperationElement[1]
 {
   $element->match(   [
                         c:TableAliasColumn[1]|let col = $c.column;
@@ -290,13 +290,13 @@ function <<access.private>> meta::relational::functions::pureToSqlQuery::union::
                  )
 }
 
-Class meta::relational::functions::pureToSqlQuery::union::FKListModeledAndNonModeled
+Class meta::external::store::relational::functions::pureToSqlQuery::union::FKListModeledAndNonModeled
 {
    first : List<Pair<String,Column>>[1];
    second : List<Column>[1];
 }
 
-function meta::relational::functions::pureToSqlQuery::union::findFkListForEachSet(relationalPropertyMappings:RelationalPropertyMapping[*], source:Boolean[1], mapping:Mapping[1]):FKListModeledAndNonModeled[*]
+function meta::external::store::relational::functions::pureToSqlQuery::union::findFkListForEachSet(relationalPropertyMappings:RelationalPropertyMapping[*], source:Boolean[1], mapping:Mapping[1]):FKListModeledAndNonModeled[*]
 {
    let setImplementationId = if($source, |$relationalPropertyMappings.sourceSetImplementationId, |$relationalPropertyMappings.targetSetImplementationId)->removeDuplicates();
    let propertyMappingBySetIds = $relationalPropertyMappings->groupBy(r|if($source, |$r.sourceSetImplementationId, |$r.targetSetImplementationId));
@@ -326,13 +326,13 @@ function meta::relational::functions::pureToSqlQuery::union::findFkListForEachSe
    );
 }
 
-function meta::relational::functions::pureToSqlQuery::union::buildColumnToNameMapForMappedFks(extraColumns:FKListModeledAndNonModeled[*]):Map<Column, String>[1]
+function meta::external::store::relational::functions::pureToSqlQuery::union::buildColumnToNameMapForMappedFks(extraColumns:FKListModeledAndNonModeled[*]):Map<Column, String>[1]
 {
    $extraColumns.first.values->map(p|pair($p.second,$p.first))->newMap();
 }
 
 //XY
-function meta::relational::functions::pureToSqlQuery::union::buildSQLQueryOutManySetImplementations(srcOperation:SelectWithCursor[1], relationalPropertyMappings:RelationalPropertyMapping[*], sourceClass:Class<Any>[1], targetClass:Class<Any>[1], nodeId:String[1], state:State[1], context:DebugContext[1], extensions:RouterExtension[*]):Pair<JoinTreeNode, Pair<SelectWithCursor,Relation>>[1]
+function meta::external::store::relational::functions::pureToSqlQuery::union::buildSQLQueryOutManySetImplementations(srcOperation:SelectWithCursor[1], relationalPropertyMappings:RelationalPropertyMapping[*], sourceClass:Class<Any>[1], targetClass:Class<Any>[1], nodeId:String[1], state:State[1], context:DebugContext[1], extensions:RouterExtension[*]):Pair<JoinTreeNode, Pair<SelectWithCursor,Relation>>[1]
 {
    print(if(!$context.debug, |'', | $context.space+'*>Build SQL query out many set implementations (and join) (propertyMappings:'+$relationalPropertyMappings->size()->toString()+'):\n'));
 
@@ -422,7 +422,7 @@ function meta::relational::functions::pureToSqlQuery::union::buildSQLQueryOutMan
    pair($unionJoin.second, pair($updatedSrcOperation, $newTargetOperation));
 }
 
-function meta::relational::functions::pureToSqlQuery::union::buildUnionJoin(relationalPropertyMappings:RelationalPropertyMapping[*], mapping:Mapping[1], srcMap:Map<Column, String>[1], targetMap:Map<Column, String>[1], sourceAlias:TableAlias[1], targetAlias:TableAlias[1], parentSourceOperation:SelectWithCursor[0..1], nodeId:String[1], state:State[0..1], context:DebugContext[1], extensions:RouterExtension[*]):Pair<TableAlias, JoinTreeNode>[1]
+function meta::external::store::relational::functions::pureToSqlQuery::union::buildUnionJoin(relationalPropertyMappings:RelationalPropertyMapping[*], mapping:Mapping[1], srcMap:Map<Column, String>[1], targetMap:Map<Column, String>[1], sourceAlias:TableAlias[1], targetAlias:TableAlias[1], parentSourceOperation:SelectWithCursor[0..1], nodeId:String[1], state:State[0..1], context:DebugContext[1], extensions:RouterExtension[*]):Pair<TableAlias, JoinTreeNode>[1]
 {
    let sourceSetImplementationIds = $relationalPropertyMappings.sourceSetImplementationId->removeDuplicates();
    let targetSetImplementationIds = $relationalPropertyMappings.targetSetImplementationId->removeDuplicates();
@@ -471,7 +471,7 @@ function meta::relational::functions::pureToSqlQuery::union::buildUnionJoin(rela
    pair($reprocessedSourceAlias, $updatedJoinTreeNodes->simplyMergeJoinTreeNodeUsingOrOperation($extensions)->toOne());
 }
 
-function <<access.private>> meta::relational::functions::pureToSqlQuery::union::simplyMergeJoinTreeNodeUsingOrOperation(j:JoinTreeNode[*], extensions:RouterExtension[*]):JoinTreeNode[0..1]
+function <<access.private>> meta::external::store::relational::functions::pureToSqlQuery::union::simplyMergeJoinTreeNodeUsingOrOperation(j:JoinTreeNode[*], extensions:RouterExtension[*]):JoinTreeNode[0..1]
 {
     if($j->isEmpty(),
        |[],
@@ -503,7 +503,7 @@ function <<access.private>> meta::relational::functions::pureToSqlQuery::union::
     );
 }
 
-function meta::relational::functions::pureToSqlQuery::union::addPkForAggregationInUnion(currentQuery: SelectWithCursor[1], setImpls: RootRelationalInstanceSetImplementation[*], state: State[1], extensions:RouterExtension[*]):SelectWithCursor[1]
+function meta::external::store::relational::functions::pureToSqlQuery::union::addPkForAggregationInUnion(currentQuery: SelectWithCursor[1], setImpls: RootRelationalInstanceSetImplementation[*], state: State[1], extensions:RouterExtension[*]):SelectWithCursor[1]
 {
    let currentTreeNode = $currentQuery.currentTreeNode->toOne();
    let currentAlias = $currentTreeNode.alias;
@@ -546,12 +546,12 @@ function meta::relational::functions::pureToSqlQuery::union::addPkForAggregation
                                              )
                                    );
    let rebuiltSelect = $reBuiltQueryWithPksAdded.select;
-   let result = ^$reBuiltQueryWithPksAdded(select=^$rebuiltSelect(columns=$allQueriesWithManagedPks->at(0).columns->map(col | ^TableAliasColumn(alias = $newAlias, column=^Column(name=$col->cast(@Alias).name, type=^meta::relational::metamodel::datatype::Integer())))));
+   let result = ^$reBuiltQueryWithPksAdded(select=^$rebuiltSelect(columns=$allQueriesWithManagedPks->at(0).columns->map(col | ^TableAliasColumn(alias = $newAlias, column=^Column(name=$col->cast(@Alias).name, type=^meta::external::store::relational::metamodel::datatype::Integer())))));
    $result->validate([], $extensions);
    $result;
 }
 
-function <<access.private>> meta::relational::functions::pureToSqlQuery::union::pushChainedJoinsIntoSourceUnion(relationalPropertyMappings:RelationalPropertyMapping[*], mapping:Mapping[1], sourceAlias:TableAlias[1], sourceSetImplementationIds:String[*], parentSourceOperation:SelectWithCursor[0..1], nodeId:String[1], state:State[1], debugContext:DebugContext[1], extensions:RouterExtension[*]):Pair<TableAlias, List<RelationalPropertyMapping>>[1]
+function <<access.private>> meta::external::store::relational::functions::pureToSqlQuery::union::pushChainedJoinsIntoSourceUnion(relationalPropertyMappings:RelationalPropertyMapping[*], mapping:Mapping[1], sourceAlias:TableAlias[1], sourceSetImplementationIds:String[*], parentSourceOperation:SelectWithCursor[0..1], nodeId:String[1], state:State[1], debugContext:DebugContext[1], extensions:RouterExtension[*]):Pair<TableAlias, List<RelationalPropertyMapping>>[1]
 {
    let sourceRelationalElement = $sourceAlias.relationalElement;
    let updatedRelationalPropertyMappings = $relationalPropertyMappings->map(x | $x->replaceJoinTreeNodeWithLeafNode());
@@ -582,7 +582,7 @@ function <<access.private>> meta::relational::functions::pureToSqlQuery::union::
    pair($sourceAliasWithJoinsAppliedAndMissingColumnsAddedToQueries, $updatedRelationalPropertyMappings->list());
 }
 
-function <<access.private>> meta::relational::functions::pureToSqlQuery::union::applyChainedJoinsToUnionQueries(union:Union[1], relationalPropertyMappings:RelationalPropertyMapping[*], mapping:Mapping[1], missingColumns:List<TableAliasColumn>[*], parentSourceOperation:SelectWithCursor[0..1], nodeId:String[1], state:State[1], debugContext:DebugContext[1], extensions:RouterExtension[*]):Union[1]
+function <<access.private>> meta::external::store::relational::functions::pureToSqlQuery::union::applyChainedJoinsToUnionQueries(union:Union[1], relationalPropertyMappings:RelationalPropertyMapping[*], mapping:Mapping[1], missingColumns:List<TableAliasColumn>[*], parentSourceOperation:SelectWithCursor[0..1], nodeId:String[1], state:State[1], debugContext:DebugContext[1], extensions:RouterExtension[*]):Union[1]
 {
    let zippedInformation = $union.queries->zip($union.currentTreeNodes)->zip($relationalPropertyMappings)->zip($missingColumns);
    let selectWithCursorsWithJoinsApplied = $zippedInformation->map(x | let selectWithCursor = ^SelectWithCursor(select = $x.first.first.first, currentTreeNode = $x.first.first.second);
@@ -599,7 +599,7 @@ function <<access.private>> meta::relational::functions::pureToSqlQuery::union::
    ^$union(queries = $selectWithCursorsWithJoinsApplied.select, currentTreeNodes = $selectWithCursorsWithJoinsApplied.currentTreeNode);
 }
 
-function <<access.private>> meta::relational::functions::pureToSqlQuery::union::identifyMissingColumns(relationalPropertyMappings:RelationalPropertyMapping[*], mapping:Mapping[1]):Pair<List<TableAliasColumn>, String>[*]
+function <<access.private>> meta::external::store::relational::functions::pureToSqlQuery::union::identifyMissingColumns(relationalPropertyMappings:RelationalPropertyMapping[*], mapping:Mapping[1]):Pair<List<TableAliasColumn>, String>[*]
 {
    $relationalPropertyMappings->map(x | let sourceAndTargetRelations = concatenate($x.sourceSetImplementationId->getRelation($mapping), $x.targetSetImplementationId->getRelation($mapping));
                                         $x->getJoinTreeNode()
@@ -610,7 +610,7 @@ function <<access.private>> meta::relational::functions::pureToSqlQuery::union::
    );
 }
 
-function <<access.private>> meta::relational::functions::pureToSqlQuery::union::realiasMissingColumnsToAddToUnionQueries(tableAliasColumnsAndSourceSetImplementationId:Pair<List<TableAliasColumn>, String>[*], newAliasNames:String[*], sourceSetImplementationIds:String[*]):Pair<TableAliasColumn, Integer>[*]
+function <<access.private>> meta::external::store::relational::functions::pureToSqlQuery::union::realiasMissingColumnsToAddToUnionQueries(tableAliasColumnsAndSourceSetImplementationId:Pair<List<TableAliasColumn>, String>[*], newAliasNames:String[*], sourceSetImplementationIds:String[*]):Pair<TableAliasColumn, Integer>[*]
 {
    let zippedInformation = $tableAliasColumnsAndSourceSetImplementationId->zip($newAliasNames);
    $zippedInformation->map(x | let tableAliasColumns = $x.first.first.values;
@@ -625,7 +625,7 @@ function <<access.private>> meta::relational::functions::pureToSqlQuery::union::
    );
 }
 
-function <<access.private>> meta::relational::functions::pureToSqlQuery::union::createLambdaToAddMissingColumnsToUnionQueries(tableAliasColumnIndexPairs:Pair<TableAliasColumn, Integer>[*], sqlNull:Literal[1]):LambdaFunction<{SelectSQLQuery[1], Integer[1]->SelectSQLQuery[1]}>[1]
+function <<access.private>> meta::external::store::relational::functions::pureToSqlQuery::union::createLambdaToAddMissingColumnsToUnionQueries(tableAliasColumnIndexPairs:Pair<TableAliasColumn, Integer>[*], sqlNull:Literal[1]):LambdaFunction<{SelectSQLQuery[1], Integer[1]->SelectSQLQuery[1]}>[1]
 {
    {q:SelectSQLQuery[1],currentIndex:Integer[1] | let columns = $tableAliasColumnIndexPairs->map(x | let tableAliasColumn = $x.first;
                                                                                                      let index = $x.second;
@@ -637,7 +637,7 @@ function <<access.private>> meta::relational::functions::pureToSqlQuery::union::
    };
 }
 
-function <<access.private>> meta::relational::functions::pureToSqlQuery::union::canJoinTreeNodesBeSimplyMergedUsingOrOperation(relationalPropertyMappings:RelationalPropertyMapping[*], mapping:Mapping[1]):Boolean[1]
+function <<access.private>> meta::external::store::relational::functions::pureToSqlQuery::union::canJoinTreeNodesBeSimplyMergedUsingOrOperation(relationalPropertyMappings:RelationalPropertyMapping[*], mapping:Mapping[1]):Boolean[1]
 {
    let lists = $relationalPropertyMappings->map(x | let joinTreeNode = $x->getJoinTreeNode()->toOne();
                                                     let flattenedJoinTreeNodes = $joinTreeNode->extractLine();
@@ -649,12 +649,12 @@ function <<access.private>> meta::relational::functions::pureToSqlQuery::union::
    $sortedLists->tail()->fold({x,a | $a && $x.values->isOrderedSubsetOf($sortedLists->head().values)}, true);
 }
 
-function meta::relational::functions::pureToSqlQuery::buildUnionJoinName(relationalOperationElements:RelationalOperationElement[*]):String[1]
+function meta::external::store::relational::functions::pureToSqlQuery::buildUnionJoinName(relationalOperationElements:RelationalOperationElement[*]):String[1]
 {
    $relationalOperationElements->map(x|$x->buildUnionJoinName())->joinStrings(',')
 }
 
-function meta::relational::functions::pureToSqlQuery::buildUnionJoinName(relationalOperationElement:RelationalOperationElement[1]):String[1]
+function meta::external::store::relational::functions::pureToSqlQuery::buildUnionJoinName(relationalOperationElement:RelationalOperationElement[1]):String[1]
 {
    $relationalOperationElement->match([s : SelectSQLQuery[1]   | $s.data.alias->buildUnionJoinName(),
                                        u : UnaryOperation[1]   | $u->type().name->toOne() + '(' + $u.nested->buildUnionJoinName() + ')',
@@ -668,13 +668,13 @@ function meta::relational::functions::pureToSqlQuery::buildUnionJoinName(relatio
                                        d : DynaFunction[1]     | $d.name + '(' + $d.parameters->buildUnionJoinName() + ')'])->toOne();
 }
 
-Class meta::relational::metamodel::relation::Union extends Relation
+Class meta::external::store::relational::metamodel::relation::Union extends Relation
 {
    currentTreeNodes : RelationalTreeNode[*];
    setImplementations : SetImplementation[*];
    queries : SelectSQLQuery[*];
 }
 
-Class meta::relational::metamodel::relation::UnionAll extends Union
+Class meta::external::store::relational::metamodel::relation::UnionAll extends Union
 {
 }

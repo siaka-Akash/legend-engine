@@ -22,7 +22,7 @@ import meta::pure::executionPlan::engine::java::serialize::*;
 import meta::pure::executionPlan::engine::java::typeInfo::*;
 
 import meta::pure::graphFetch::*;
-import meta::pure::mapping::modelToModel::*;
+import meta::external::store::model::*;
 import meta::pure::router::extension::*;
 
 import meta::external::language::java::factory::*;

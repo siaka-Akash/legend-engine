@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::csv::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::mapping::*;
-import meta::relational::runtime::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::tests::*;
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testRenameColumns():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testRenameColumns():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -39,7 +39,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testRenameColum
 }
 
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testRenameColumnsAfterGroupBy():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testRenameColumnsAfterGroupBy():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -64,7 +64,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testRenameColum
 }
 
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testRenameColumnsAfterConcatenate():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testRenameColumnsAfterConcatenate():Boolean[1]
 {
    let result = execute(
       |Person.all()->project(col(p|$p.firstName,'firstName'))
@@ -85,9 +85,9 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testRenameColum
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsProject::testRenameColumnsWithQuotes():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsProject::testRenameColumnsWithQuotes():Boolean[1]
 {
-   let queryWithoutQuotes   = {|tableToTDS(meta::relational::functions::database::tableReference(meta::relational::tests::db,'default','tableWithQuotedColumns'))
+   let queryWithoutQuotes   = {|tableToTDS(meta::external::store::relational::functions::database::tableReference(meta::external::store::relational::tests::db,'default','tableWithQuotedColumns'))
        ->project([
                                col({r:TDSRow[1]|$r.getString('FIRST NAME')}, 'FIRST NAME'),
                                col({r:TDSRow[1]|$r.getString('LAST NAME')}, 'LAST NAME'),
@@ -97,8 +97,8 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testRenameColum
                  ->renameColumns([^Pair<String,String>(first = 'FIRST NAME', second = 'firstName')])
    };
 
-   let mapping = meta::relational::tests::tds::tabletds::EmptyMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::tds::tabletds::EmptyMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
 
    let resWithoutQuotes = execute($queryWithoutQuotes, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions());
    
@@ -106,7 +106,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsProject::testRenameColum
    
    assertEquals($expected, $resWithoutQuotes->sqlRemoveFormatting());
    
-   let queryWithQuotes   = {|tableToTDS(meta::relational::functions::database::tableReference(meta::relational::tests::db,'default','tableWithQuotedColumns'))
+   let queryWithQuotes   = {|tableToTDS(meta::external::store::relational::functions::database::tableReference(meta::external::store::relational::tests::db,'default','tableWithQuotedColumns'))
        ->project([
                                col({r:TDSRow[1]|$r.getString('FIRST NAME')}, 'FIRST NAME'),
                                col({r:TDSRow[1]|$r.getString('LAST NAME')}, 'LAST NAME'),

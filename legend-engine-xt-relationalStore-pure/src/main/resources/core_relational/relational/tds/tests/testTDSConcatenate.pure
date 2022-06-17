@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::metamodel::join::*;
-import meta::relational::functions::sqlstring::*;
-import meta::csv::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::mapping::*;
-import meta::relational::runtime::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::functions::sqlstring::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::tests::*;
 
-function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testSimpleConcatenate():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsConcatenate::testSimpleConcatenate():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -41,7 +41,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testSimpleC
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testConcatenateWithPreOperation1():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsConcatenate::testConcatenateWithPreOperation1():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -63,7 +63,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testConcate
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testConcatenateWithPreOperation2():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsConcatenate::testConcatenateWithPreOperation2():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -84,7 +84,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testConcate
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testConcatenateWithPreOperation3():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsConcatenate::testConcatenateWithPreOperation3():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -106,7 +106,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testConcate
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testConcatenateWithPreOperation4():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsConcatenate::testConcatenateWithPreOperation4():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -127,7 +127,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testConcate
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testConcatenateWithPostOperation1():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsConcatenate::testConcatenateWithPostOperation1():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -149,7 +149,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testConcate
       $result->sqlRemoveFormatting());   
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testConcatenateWithPostOperation2():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsConcatenate::testConcatenateWithPostOperation2():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -172,7 +172,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testConcate
 }
 
 
-function <<test.Test, test.ToFix>> meta::relational::tests::tds::tdsConcatenate::testConcatenateWithJoin():Boolean[1]
+function <<test.Test, test.ToFix>> meta::external::store::relational::tests::tds::tdsConcatenate::testConcatenateWithJoin():Boolean[1]
 {
    let result = execute(
       |Person.all()
@@ -197,7 +197,7 @@ function <<test.Test, test.ToFix>> meta::relational::tests::tds::tdsConcatenate:
    fail('Expectations need updating once it works');
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsConcatenate::testConcatenateWithDistinctAndGroupBy():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsConcatenate::testConcatenateWithDistinctAndGroupBy():Boolean[1]
 {
    let func = {|Person.all()
          ->project([col(p|$p.lastName, 'lastName')])

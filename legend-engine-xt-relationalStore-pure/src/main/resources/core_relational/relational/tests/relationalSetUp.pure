@@ -13,7 +13,7 @@
 // limitations under the License.
 
 ###Relational
-Database meta::relational::tests::dbInc
+Database meta::external::store::relational::tests::dbInc
 (
     Table personTable (ID INT PRIMARY KEY, FIRSTNAME VARCHAR(200), LASTNAME VARCHAR(200), AGE INT, ADDRESSID INT, FIRMID INT, MANAGERID INT)
     Table PersonTableExtension (ID INT PRIMARY KEY, FIRSTNAME VARCHAR(200), LASTNAME VARCHAR(200), AGE INT, ADDRESSID INT, FIRMID INT, MANAGERID INT, birthDate DATE)
@@ -82,7 +82,7 @@ Database meta::relational::tests::dbInc
 )
 
 ###Relational
-Database meta::relational::tests::dbIncWithStoreFilter
+Database meta::external::store::relational::tests::dbIncWithStoreFilter
 (
    Table personTable (ID INT PRIMARY KEY, FIRSTNAME VARCHAR(200), LASTNAME VARCHAR(200), AGE INT, ADDRESSID INT, FIRMID INT, MANAGERID INT)
 
@@ -99,9 +99,9 @@ Database meta::relational::tests::dbIncWithStoreFilter
 )
 
 ###Relational
-Database meta::relational::tests::db
+Database meta::external::store::relational::tests::db
 (
-    include meta::relational::tests::dbInc
+    include meta::external::store::relational::tests::dbInc
 
     Table interactionTable(ID INT PRIMARY KEY, sourceId INT, targetId INT, time INT, active VARCHAR(1))
     Table tradeTable(ID INT PRIMARY KEY, prodId INT, accountID INT, quantity FLOAT, tradeDate DATE, settlementDateTime TIMESTAMP)
@@ -205,7 +205,7 @@ Database meta::relational::tests::db
 )
 
 ###Relational
-Database meta::relational::tests::dbForPresto
+Database meta::external::store::relational::tests::dbForPresto
 (
    Schema catalog$schema
    (
@@ -214,21 +214,21 @@ Database meta::relational::tests::dbForPresto
 )
 
 ###Relational
-Database meta::relational::tests::dbForMemSQL
+Database meta::external::store::relational::tests::dbForMemSQL
 (
    Table personTable (ID INT PRIMARY KEY, firstName VARCHAR(200), lastName VARCHAR(200), age INT, key INT)
    Join Person_Person(personTable.key = {target}.key)
 )
 
 ###Relational
-Database meta::relational::tests::dbForBQ
+Database meta::external::store::relational::tests::dbForBQ
 (
    Table personTable (ID INT PRIMARY KEY, firstName VARCHAR(200), lastName VARCHAR(200), age INT, key INT)
    Join Person_Person(personTable.key = {target}.key)
 )
 
 ###Relational
-Database meta::relational::tests::caseSensitiveTableNames
+Database meta::external::store::relational::tests::caseSensitiveTableNames
 (
    Schema schemaA
    (
@@ -263,9 +263,9 @@ Database meta::relational::tests::caseSensitiveTableNames
 )
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
-Mapping meta::relational::tests::caseSentitiveMapping
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
+Mapping meta::external::store::relational::tests::caseSentitiveMapping
 (
    Firm: Relational
    {
@@ -287,9 +287,9 @@ Mapping meta::relational::tests::caseSentitiveMapping
    }
 )
 
-Mapping meta::relational::tests::MappingWithInnerJoinAndEmbeddedMapping
+Mapping meta::external::store::relational::tests::MappingWithInnerJoinAndEmbeddedMapping
 (
-   include meta::relational::tests::MappingWithInnerJoinAndEmbeddedMappingSub[dbInc->db]
+   include meta::external::store::relational::tests::MappingWithInnerJoinAndEmbeddedMappingSub[dbInc->db]
 
     Order : Relational
              {
@@ -301,7 +301,7 @@ Mapping meta::relational::tests::MappingWithInnerJoinAndEmbeddedMapping
              }
 )
 
-Mapping meta::relational::tests::MappingWithInnerJoinAndEmbeddedMappingSub
+Mapping meta::external::store::relational::tests::MappingWithInnerJoinAndEmbeddedMappingSub
 (
     Person : Relational
             {
@@ -314,10 +314,10 @@ Mapping meta::relational::tests::MappingWithInnerJoinAndEmbeddedMappingSub
 )
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
 
-Mapping meta::relational::tests::simpleRelationalMappingWithChainedUnions
+Mapping meta::external::store::relational::tests::simpleRelationalMappingWithChainedUnions
 (
    *Firm[firm1] : Operation
       {
@@ -407,7 +407,7 @@ Mapping meta::relational::tests::simpleRelationalMappingWithChainedUnions
 )
 
 
-Mapping meta::relational::tests::simpleRelationalMappingIncWithStoreFilter
+Mapping meta::external::store::relational::tests::simpleRelationalMappingIncWithStoreFilter
 (
    Person : Relational
             {
@@ -424,7 +424,7 @@ Mapping meta::relational::tests::simpleRelationalMappingIncWithStoreFilter
             }
 )
 
-Mapping meta::relational::tests::simpleRelationalMappingPersonForPresto
+Mapping meta::external::store::relational::tests::simpleRelationalMappingPersonForPresto
 (
    Person : Relational
    {
@@ -437,7 +437,7 @@ Mapping meta::relational::tests::simpleRelationalMappingPersonForPresto
    }
 )
 
-Mapping meta::relational::tests::simpleRelationalMappingPersonForMemSQL
+Mapping meta::external::store::relational::tests::simpleRelationalMappingPersonForMemSQL
 (
    Person : Relational
    {
@@ -450,7 +450,7 @@ Mapping meta::relational::tests::simpleRelationalMappingPersonForMemSQL
    }
 )
 
-Mapping meta::relational::tests::simpleRelationalMappingPersonForBQ
+Mapping meta::external::store::relational::tests::simpleRelationalMappingPersonForBQ
 (
    Person : Relational
    {
@@ -465,7 +465,7 @@ Mapping meta::relational::tests::simpleRelationalMappingPersonForBQ
 
 
 
-Mapping meta::relational::tests::simpleRelationalMappingInc
+Mapping meta::external::store::relational::tests::simpleRelationalMappingInc
 (
    GeographicEntityType: EnumerationMapping GE
     {
@@ -556,7 +556,7 @@ Mapping meta::relational::tests::simpleRelationalMappingInc
    }
 )
 
-Mapping meta::relational::tests::simpleRelationalMappingWithEnumConstant
+Mapping meta::external::store::relational::tests::simpleRelationalMappingWithEnumConstant
 (
    Synonym : Relational
              {
@@ -571,7 +571,7 @@ Mapping meta::relational::tests::simpleRelationalMappingWithEnumConstant
    }
 )
 
-Mapping meta::relational::tests::simpleRelationalMapping
+Mapping meta::external::store::relational::tests::simpleRelationalMapping
 (
    include simpleRelationalMappingInc[dbInc->db]
 
@@ -663,7 +663,7 @@ Mapping meta::relational::tests::simpleRelationalMapping
 )
 
 
-Mapping meta::relational::tests::simpleRelationalMappingWithConstraints
+Mapping meta::external::store::relational::tests::simpleRelationalMappingWithConstraints
 (
    Trade : Relational
              {
@@ -678,7 +678,7 @@ Mapping meta::relational::tests::simpleRelationalMappingWithConstraints
              }
 )
 
-Mapping meta::relational::tests::simpleRelationalMappingWithBooleanExpression
+Mapping meta::external::store::relational::tests::simpleRelationalMappingWithBooleanExpression
 (
     Person : Relational
             {
@@ -742,7 +742,7 @@ Mapping meta::relational::tests::simpleRelationalMappingWithBooleanExpression
                       }
 )
 
-Mapping meta::relational::tests::simpleRelationalMappingWithFilter
+Mapping meta::external::store::relational::tests::simpleRelationalMappingWithFilter
 (
    Person : Relational
             {
@@ -771,7 +771,7 @@ Mapping meta::relational::tests::simpleRelationalMappingWithFilter
              }
 )
 
-Mapping meta::relational::tests::simpleRelationalMappingWithClassFilterAndEmbeddedProperty
+Mapping meta::external::store::relational::tests::simpleRelationalMappingWithClassFilterAndEmbeddedProperty
 (
    Person : Relational
             {
@@ -800,7 +800,7 @@ Mapping meta::relational::tests::simpleRelationalMappingWithClassFilterAndEmbedd
              }
 )
 
-Mapping meta::relational::tests::simpleRelationalMappingWithNestedAdd
+Mapping meta::external::store::relational::tests::simpleRelationalMappingWithNestedAdd
 (
    include simpleRelationalMappingInc[dbInc->db]
 
@@ -813,7 +813,7 @@ Mapping meta::relational::tests::simpleRelationalMappingWithNestedAdd
 
 )
 
-Mapping meta::relational::tests::simpleRelationalMappingWithNestedPlus
+Mapping meta::external::store::relational::tests::simpleRelationalMappingWithNestedPlus
 (
    include simpleRelationalMappingInc[dbInc->db]
 
@@ -826,7 +826,7 @@ Mapping meta::relational::tests::simpleRelationalMappingWithNestedPlus
 
 )
 
-Mapping meta::relational::tests::simpleRelationalMappingWithPlus
+Mapping meta::external::store::relational::tests::simpleRelationalMappingWithPlus
 (
    include simpleRelationalMappingInc[dbInc->db]
 
@@ -837,7 +837,7 @@ Mapping meta::relational::tests::simpleRelationalMappingWithPlus
              }
 )
 
-Mapping meta::relational::tests::simpleRelationalMappingWithConcat
+Mapping meta::external::store::relational::tests::simpleRelationalMappingWithConcat
 (
    include simpleRelationalMappingInc[dbInc->db]
 
@@ -847,9 +847,9 @@ Mapping meta::relational::tests::simpleRelationalMappingWithConcat
              }
 )
 
-Mapping meta::relational::tests::TestMappingOfSubtypeClass
+Mapping meta::external::store::relational::tests::TestMappingOfSubtypeClass
 (
-   include meta::relational::tests::simpleRelationalMapping
+   include meta::external::store::relational::tests::simpleRelationalMapping
 
    PersonExtension : Relational
    {
@@ -870,7 +870,7 @@ Mapping meta::relational::tests::TestMappingOfSubtypeClass
 
 )
 
-Mapping meta::relational::tests::TestMappingWithViewJoins
+Mapping meta::external::store::relational::tests::TestMappingWithViewJoins
 (
    Person : Relational
    {
@@ -881,7 +881,7 @@ Mapping meta::relational::tests::TestMappingWithViewJoins
    }
 )
 
-Mapping meta::relational::tests::TestViewWithDistinctAndJoins
+Mapping meta::external::store::relational::tests::TestViewWithDistinctAndJoins
 (
    Person : Relational
    {
@@ -891,10 +891,10 @@ Mapping meta::relational::tests::TestViewWithDistinctAndJoins
 )
 
 ###Mapping
-import meta::relational::tests::*;
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::model::simple::*;
 
-Mapping meta::relational::tests::PersonOtherNamesMapping
+Mapping meta::external::store::relational::tests::PersonOtherNamesMapping
 (
    Person : Relational
    {
@@ -907,42 +907,42 @@ Mapping meta::relational::tests::PersonOtherNamesMapping
 )
 
 ###Pure
-import meta::relational::metamodel::*;
+import meta::external::store::relational::metamodel::*;
 import meta::json::*;
 import meta::json::tests::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::tests::*;
 import meta::pure::profiles::*;
-import meta::relational::metamodel::execute::*;
+import meta::external::store::relational::metamodel::execute::*;
 import meta::pure::runtime::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::runtime::*;
 
 
-function meta::relational::tests::testRuntime():Runtime[1]
+function meta::external::store::relational::tests::testRuntime():Runtime[1]
 {
    testRuntime(db);
 }
 
-function meta::relational::tests::testRuntimeForBQ():Runtime[1]
+function meta::external::store::relational::tests::testRuntimeForBQ():Runtime[1]
 {
    testRuntime(dbForBQ);
 }
 
-function meta::relational::tests::testRuntime(timeZone:String[1]):Runtime[1]
+function meta::external::store::relational::tests::testRuntime(timeZone:String[1]):Runtime[1]
 {
    testRuntime(testDatabaseConnection(db, $timeZone))
 }
 
-function meta::relational::tests::testRuntime(db:Database[1]):Runtime[1]
+function meta::external::store::relational::tests::testRuntime(db:Database[1]):Runtime[1]
 {
    testRuntime(testDatabaseConnection($db, []))
 }
 
-function <<access.private>> meta::relational::tests::testRuntime(testConnection:TestDatabaseConnection[1]):Runtime[1]
+function <<access.private>> meta::external::store::relational::tests::testRuntime(testConnection:TestDatabaseConnection[1]):Runtime[1]
 {
    ^Runtime(connections = $testConnection)
 }
 
-function <<access.private>> meta::relational::tests::testDatabaseConnection(db:Database[1], timeZone:String[0..1]):TestDatabaseConnection[1]
+function <<access.private>> meta::external::store::relational::tests::testDatabaseConnection(db:Database[1], timeZone:String[0..1]):TestDatabaseConnection[1]
 {
     ^TestDatabaseConnection(
         element = $db,
@@ -952,7 +952,7 @@ function <<access.private>> meta::relational::tests::testDatabaseConnection(db:D
 }
 
 
-function meta::relational::tests::createPersonTableAndFillDb(connection : DatabaseConnection[1]) : Boolean[1]
+function meta::external::store::relational::tests::createPersonTableAndFillDb(connection : DatabaseConnection[1]) : Boolean[1]
 {
 
    executeInDb('Drop table if exists PersonTable;', $connection);
@@ -967,7 +967,7 @@ function meta::relational::tests::createPersonTableAndFillDb(connection : Databa
    true;
 }
 
-function meta::relational::tests::createFirmTableAndFillDb(connection : DatabaseConnection[1]) : Boolean[1]
+function meta::external::store::relational::tests::createFirmTableAndFillDb(connection : DatabaseConnection[1]) : Boolean[1]
 {
    executeInDb('Drop table if exists FirmTable;', $connection);
    executeInDb('Create Table FirmTable(id INT, legalName VARCHAR(200), addressId INT, ceoId INT);', $connection);
@@ -978,7 +978,7 @@ function meta::relational::tests::createFirmTableAndFillDb(connection : Database
    true;
 }
 
-function meta::relational::tests::createTradeTableAndFillDb(connection : DatabaseConnection[1]) : Boolean[1]
+function meta::external::store::relational::tests::createTradeTableAndFillDb(connection : DatabaseConnection[1]) : Boolean[1]
 {
    executeInDb('Drop table if exists tradeTable;', $connection);
    executeInDb('Create Table tradeTable(id INT, prodid INT, accountId INT, quantity FLOAT, tradeDate DATE, settlementDateTime TIMESTAMP(9));', $connection);
@@ -998,7 +998,7 @@ function meta::relational::tests::createTradeTableAndFillDb(connection : Databas
    true;
 }
 
-function meta::relational::tests::createProductSchemaTablesAndFillDb(connection : DatabaseConnection[1]) : Boolean[1]
+function meta::external::store::relational::tests::createProductSchemaTablesAndFillDb(connection : DatabaseConnection[1]) : Boolean[1]
 {
    executeInDb('Drop schema if exists productSchema cascade;', $connection);
    executeInDb('Create schema productSchema;', $connection);
@@ -1021,7 +1021,7 @@ function meta::relational::tests::createProductSchemaTablesAndFillDb(connection 
    true;
 }
 
-function meta::relational::tests::createTablesAndFillDb():Boolean[1]
+function meta::external::store::relational::tests::createTablesAndFillDb():Boolean[1]
 {
    let connection = testRuntime().connectionByElement(db)->cast(@TestDatabaseConnection);
 
@@ -1029,7 +1029,7 @@ function meta::relational::tests::createTablesAndFillDb():Boolean[1]
    executeInDb('Create Table PersonNameParameter(id INT, lastNameFirst VARCHAR(200), title VARCHAR(200));', $connection);
    executeInDb('insert into PersonNameParameter (id, lastNameFirst, title) values (1, true, \'eee\');', $connection);
 
-   meta::relational::tests::createPersonTableAndFillDb($connection);
+   meta::external::store::relational::tests::createPersonTableAndFillDb($connection);
 
    executeInDb('Drop table if exists tableWithQuotedColumns;', $connection);
    executeInDb('Create Table tableWithQuotedColumns(ID INT, "FIRST NAME" VARCHAR(200), "LAST NAME" VARCHAR(200), "1columnStartsWithNumber" VARCHAR(200));', $connection);
@@ -1048,7 +1048,7 @@ function meta::relational::tests::createTablesAndFillDb():Boolean[1]
    executeInDb('insert into PersonTableExtension (id, firstName, lastName, age, addressId, firmId, managerId, birthDate) values (6, \'Oliver\', \'Hill\',32, 6,2,null,\'2013-12-02\');', $connection);
    executeInDb('insert into PersonTableExtension (id, firstName, lastName, age, addressId, firmId, managerId, birthDate) values (7, \'David\', \'Harris\',35, 7,3,null,\'2013-12-01\');', $connection);
 
-   meta::relational::functions::toDDL::dropAndCreateTableInDb(db, 'differentPersonTable', $connection);
+   meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(db, 'differentPersonTable', $connection);
 
    executeInDb('Drop table if exists InteractionTable;', $connection);
    executeInDb('Create Table InteractionTable(id VARCHAR(200), sourceId INT, targetId INT, time INT, active VARCHAR(1));', $connection);
@@ -1067,7 +1067,7 @@ function meta::relational::tests::createTablesAndFillDb():Boolean[1]
    executeInDb('insert into InteractionTable (id, sourceId, targetId, time, active) values (7, 4, 1, 14, \'N\');', $connection);
    executeInDb('insert into InteractionTable (id, sourceId, targetId, time, active) values (7, 4, 2, 11, \'Y\');', $connection);
 
-   meta::relational::tests::createFirmTableAndFillDb($connection);
+   meta::external::store::relational::tests::createFirmTableAndFillDb($connection);
 
    executeInDb('Drop table if exists firmExtensionTable;', $connection);
    executeInDb('create Table firmExtensionTable (firmId INT, legalName VARCHAR(200), establishedDate DATE)', $connection);
@@ -1075,9 +1075,9 @@ function meta::relational::tests::createTablesAndFillDb():Boolean[1]
    executeInDb('insert into firmExtensionTable(firmId, legalName, establishedDate) values(2,\'FirmB\',\'2013-12-01\')', $connection);
    executeInDb('insert into firmExtensionTable(firmId, legalName, establishedDate) values(3,\'FirmC\',\'2013-12-02\')', $connection);
    
-   meta::relational::functions::toDDL::dropAndCreateTableInDb(db, 'otherFirmTable', $connection);
+   meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(db, 'otherFirmTable', $connection);
 
-   meta::relational::functions::toDDL::dropAndCreateTableInDb(db, 'addressTable', $connection);
+   meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(db, 'addressTable', $connection);
    executeInDb('insert into addressTable (id, type, name, street, comments) values (1,1,\'Hoboken\', null, \'A comment with a % in the middle\');', $connection);
    executeInDb('insert into addressTable (id, type, name, street, comments) values (2,1,\'New York\', null, \'A comment with a _ in the middle\');', $connection);
    executeInDb('insert into addressTable (id, type, name, street) values (3,1,\'New York\', null);', $connection);
@@ -1115,7 +1115,7 @@ function meta::relational::tests::createTablesAndFillDb():Boolean[1]
    executeInDb('insert into  placeOfInterestTable (id, locationId, name) values (4, 2,\'Hoboken City Hall\');', $connection);
    executeInDb('insert into  placeOfInterestTable (id, locationId, name) values (5, 3,\'Empire State Building\');', $connection);
 
-   meta::relational::tests::createProductSchemaTablesAndFillDb($connection);
+   meta::external::store::relational::tests::createProductSchemaTablesAndFillDb($connection);
 
    executeInDb('Drop table if exists accountTable;', $connection);
    executeInDb('Create Table accountTable(ID INT, name VARCHAR(200), createDate DATE);', $connection);
@@ -1129,7 +1129,7 @@ function meta::relational::tests::createTablesAndFillDb():Boolean[1]
    executeInDb('insert into orderTable (id, prodid, accountId, quantity, orderDate, settlementDateTime) values (3, 2, 1, 11, \'2014-12-01\', \'2014-12-02 21:00:00\');', $connection);
    executeInDb('insert into orderTable (id, prodid, accountId, quantity, orderDate, settlementDateTime) values (4, 1, 2, 300, \'2014-12-02\', \'2014-12-03 21:00:00\');', $connection);
 
-   meta::relational::tests::createTradeTableAndFillDb($connection);
+   meta::external::store::relational::tests::createTradeTableAndFillDb($connection);
 
    executeInDb('Drop table if exists orderPnlTable;', $connection);
    executeInDb('Create Table orderPnlTable(ORDER_ID INT, pnl FLOAT);', $connection);
@@ -1199,7 +1199,7 @@ function meta::relational::tests::createTablesAndFillDb():Boolean[1]
    true;
 }
 
-function <<test.Test>> meta::relational::tests::json::testResultToJsonStream():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::json::testResultToJsonStream():Boolean[1]
 {
    let result = ^meta::pure::mapping::Result<TabularDataSet|1>(
                    values = [
@@ -1220,24 +1220,24 @@ function <<test.Test>> meta::relational::tests::json::testResultToJsonStream():B
                            )
                   ],
                   activities = [
-                     ^meta::relational::mapping::RelationalActivity(
+                     ^meta::external::store::relational::mapping::RelationalActivity(
                         sql = 'select * from abc',
                         executionTimeInNanoSecond = 1,
                         sqlGenerationTimeInNanoSecond = 1,
                         connectionAcquisitionTimeInNanoSecond = 1,
                         executionPlanInformation = '',
-                        dataSource = ^meta::relational::runtime::DataSource(
-                           host = 'somehost', port = 8080, name = 'testdb', type = meta::relational::runtime::DatabaseType.H2
+                        dataSource = ^meta::external::store::relational::runtime::DataSource(
+                           host = 'somehost', port = 8080, name = 'testdb', type = meta::external::store::relational::runtime::DatabaseType.H2
                         )
                      ),
-                     ^meta::relational::mapping::RelationalActivity(
+                     ^meta::external::store::relational::mapping::RelationalActivity(
                         sql = 'select * from abc',
                         executionTimeInNanoSecond = 1,
                         sqlGenerationTimeInNanoSecond = 1,
                         connectionAcquisitionTimeInNanoSecond = 1,
                         executionPlanInformation = '',
-                        dataSource = ^meta::relational::runtime::DataSource(
-                           host = 'somehost', port = 8080, name = 'testdb', type = meta::relational::runtime::DatabaseType.H2
+                        dataSource = ^meta::external::store::relational::runtime::DataSource(
+                           host = 'somehost', port = 8080, name = 'testdb', type = meta::external::store::relational::runtime::DatabaseType.H2
                         )
                      )
                   ]
@@ -1246,7 +1246,7 @@ function <<test.Test>> meta::relational::tests::json::testResultToJsonStream():B
    println($result->toJSONStringStream([],true)->makeString());
    
   assert( 
-          or( $result->toJSONStringStream([],true)->makeString() == '{"values": [{"columns":[{"name":"id","type":"String","metaType":"PrimitiveType"},{"name":"name","type":"","metaType":""},{"name":"value","type":"","metaType":""},{"name":"date","type":"","metaType":""},{"name":"Location","type":"meta::json::tests::GeographicEntityType","metaType":"Enumeration"}],"rows":[{"values":[1,"Hello",2.2,"2015-04-15","CITY"]},{"values":[2,"Geoff",3.2,"2015-02-15","CITY"]}], "__TYPE": "meta::pure::tds::TabularDataSet"}], "activities": [{"__TYPE":"meta::relational::mapping::RelationalActivity","sql":"select * from abc","executionTimeInNanoSecond":1,"sqlGenerationTimeInNanoSecond":1,"connectionAcquisitionTimeInNanoSecond":1,"executionPlanInformation":"","dataSource":{"__TYPE":"meta::relational::runtime::DataSource","host":"somehost","port":8080,"name":"testdb","type":"H2"}}, {"__TYPE":"meta::relational::mapping::RelationalActivity","sql":"select * from abc","executionTimeInNanoSecond":1,"sqlGenerationTimeInNanoSecond":1,"connectionAcquisitionTimeInNanoSecond":1,"executionPlanInformation":"","dataSource":{"__TYPE":"meta::relational::runtime::DataSource","host":"somehost","port":8080,"name":"testdb","type":"H2"}}], "__TYPE": "meta::pure::mapping::Result"}',
-              $result->toJSONStringStream([],true)->makeString() == '{"values": [{"columns":[{"name":"id","type":"String","metaType":"PrimitiveType"},{"name":"name","type":"","metaType":""},{"name":"value","type":"","metaType":""},{"name":"date","type":"","metaType":""},{"name":"Location","type":"meta::json::tests::GeographicEntityType","metaType":"Enumeration"}],"rows":[{"values":[1,"Hello",2.2,"2015-04-15","CITY"]},{"values":[2,"Geoff",3.2,"2015-02-15","CITY"]}], "__TYPE": "meta::pure::tds::TabularDataSet"}], "activities": [{"__TYPE":"meta::relational::mapping::RelationalActivity","sql":"select * from abc","executionTimeInNanoSecond":1,"sqlGenerationTimeInNanoSecond":1,"connectionAcquisitionTimeInNanoSecond":1,"executionPlanInformation":"","dataSource":{"__TYPE":"meta::relational::runtime::DataSource","host":"somehost","port":8080,"name":"testdb","type":"H2","serverPrincipal":null}}, {"__TYPE":"meta::relational::mapping::RelationalActivity","sql":"select * from abc","executionTimeInNanoSecond":1,"sqlGenerationTimeInNanoSecond":1,"connectionAcquisitionTimeInNanoSecond":1,"executionPlanInformation":"","dataSource":{"__TYPE":"meta::relational::runtime::DataSource","host":"somehost","port":8080,"name":"testdb","type":"H2","serverPrincipal":null}}], "__TYPE": "meta::pure::mapping::Result"}'));
+          or( $result->toJSONStringStream([],true)->makeString() == '{"values": [{"columns":[{"name":"id","type":"String","metaType":"PrimitiveType"},{"name":"name","type":"","metaType":""},{"name":"value","type":"","metaType":""},{"name":"date","type":"","metaType":""},{"name":"Location","type":"meta::json::tests::GeographicEntityType","metaType":"Enumeration"}],"rows":[{"values":[1,"Hello",2.2,"2015-04-15","CITY"]},{"values":[2,"Geoff",3.2,"2015-02-15","CITY"]}], "__TYPE": "meta::pure::tds::TabularDataSet"}], "activities": [{"__TYPE":"meta::external::store::relational::mapping::RelationalActivity","sql":"select * from abc","executionTimeInNanoSecond":1,"sqlGenerationTimeInNanoSecond":1,"connectionAcquisitionTimeInNanoSecond":1,"executionPlanInformation":"","dataSource":{"__TYPE":"meta::external::store::relational::runtime::DataSource","host":"somehost","port":8080,"name":"testdb","type":"H2"}}, {"__TYPE":"meta::external::store::relational::mapping::RelationalActivity","sql":"select * from abc","executionTimeInNanoSecond":1,"sqlGenerationTimeInNanoSecond":1,"connectionAcquisitionTimeInNanoSecond":1,"executionPlanInformation":"","dataSource":{"__TYPE":"meta::external::store::relational::runtime::DataSource","host":"somehost","port":8080,"name":"testdb","type":"H2"}}], "__TYPE": "meta::pure::mapping::Result"}',
+              $result->toJSONStringStream([],true)->makeString() == '{"values": [{"columns":[{"name":"id","type":"String","metaType":"PrimitiveType"},{"name":"name","type":"","metaType":""},{"name":"value","type":"","metaType":""},{"name":"date","type":"","metaType":""},{"name":"Location","type":"meta::json::tests::GeographicEntityType","metaType":"Enumeration"}],"rows":[{"values":[1,"Hello",2.2,"2015-04-15","CITY"]},{"values":[2,"Geoff",3.2,"2015-02-15","CITY"]}], "__TYPE": "meta::pure::tds::TabularDataSet"}], "activities": [{"__TYPE":"meta::external::store::relational::mapping::RelationalActivity","sql":"select * from abc","executionTimeInNanoSecond":1,"sqlGenerationTimeInNanoSecond":1,"connectionAcquisitionTimeInNanoSecond":1,"executionPlanInformation":"","dataSource":{"__TYPE":"meta::external::store::relational::runtime::DataSource","host":"somehost","port":8080,"name":"testdb","type":"H2","serverPrincipal":null}}, {"__TYPE":"meta::external::store::relational::mapping::RelationalActivity","sql":"select * from abc","executionTimeInNanoSecond":1,"sqlGenerationTimeInNanoSecond":1,"connectionAcquisitionTimeInNanoSecond":1,"executionPlanInformation":"","dataSource":{"__TYPE":"meta::external::store::relational::runtime::DataSource","host":"somehost","port":8080,"name":"testdb","type":"H2","serverPrincipal":null}}], "__TYPE": "meta::pure::mapping::Result"}'));
  }
 

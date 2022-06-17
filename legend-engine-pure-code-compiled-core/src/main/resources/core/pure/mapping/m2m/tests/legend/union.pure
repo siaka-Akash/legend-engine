@@ -17,7 +17,7 @@ import meta::pure::executionPlan::profiles::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.ToFix, meta::pure::profiles::test.AlloyOnly, feature.Advanced>> 
 {  serverVersion.start='v1_11_0' }
-meta::pure::mapping::modelToModel::test::alloy::union::specialUnion():Any[*]
+meta::external::store::model::test::alloy::union::specialUnion():Any[*]
 {
    fail('Ensure equivalent behaviour with Alloy');
 //    testUnion(specialUnionModelMapping);
@@ -25,7 +25,7 @@ meta::pure::mapping::modelToModel::test::alloy::union::specialUnion():Any[*]
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.ToFix, meta::pure::profiles::test.AlloyOnly, feature.Advanced>> 
 {  serverVersion.start='v1_11_0' }
-meta::pure::mapping::modelToModel::test::alloy::union::union():Any[*]
+meta::external::store::model::test::alloy::union::union():Any[*]
 {
    fail('Ensure equivalent behaviour with Alloy');
 //    testUnion(unionModelMapping);
@@ -33,7 +33,7 @@ meta::pure::mapping::modelToModel::test::alloy::union::union():Any[*]
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.ToFix, meta::pure::profiles::test.AlloyOnly, feature.Advanced>> 
 {  serverVersion.start='v1_11_0' }
-meta::pure::mapping::modelToModel::test::alloy::union::multiPathSpecialUnion():Any[*]
+meta::external::store::model::test::alloy::union::multiPathSpecialUnion():Any[*]
 {
    fail('Ensure equivalent behaviour with Alloy');
 //    testMultiPathUnion(multiPathSpecialUnionModelMapping);
@@ -41,7 +41,7 @@ meta::pure::mapping::modelToModel::test::alloy::union::multiPathSpecialUnion():A
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.ToFix, meta::pure::profiles::test.AlloyOnly, feature.Advanced>> 
 {  serverVersion.start='v1_11_0' }
-meta::pure::mapping::modelToModel::test::alloy::union::multiPathUnion():Any[*]
+meta::external::store::model::test::alloy::union::multiPathUnion():Any[*]
 {
    fail('Ensure equivalent behaviour with Alloy');
 //    testMultiPathUnion(multiPathUnionModelMapping);

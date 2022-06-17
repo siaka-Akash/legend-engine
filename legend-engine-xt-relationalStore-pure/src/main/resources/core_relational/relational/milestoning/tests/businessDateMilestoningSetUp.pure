@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::milestoning::*;
-import meta::relational::runtime::*;
-import meta::relational::metamodel::execute::*;
+import meta::external::store::relational::tests::milestoning::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::metamodel::execute::*;
 import meta::pure::runtime::*;
 
 
-function meta::relational::tests::milestoning::initSimpleRelationalDbWithMilestoningColumns():Any[0..1]
+function meta::external::store::relational::tests::milestoning::initSimpleRelationalDbWithMilestoningColumns():Any[0..1]
 {
-   let connection = meta::relational::tests::testRuntime(db).connections->toOne()->cast(@TestDatabaseConnection);
+   let connection = meta::external::store::relational::tests::testRuntime(db).connections->toOne()->cast(@TestDatabaseConnection);
 
    executeInDb('Drop schema if exists productSchema cascade;', $connection);
    executeInDb('Create schema productSchema;', $connection);
@@ -40,9 +40,9 @@ function meta::relational::tests::milestoning::initSimpleRelationalDbWithMilesto
    executeInDb('insert into productSchema.SynonymTable (id, prodid, type, name, from_z, thru_z) values (4, 2, \'CUSIP\', \'ISIN2\', \'2015-10-26 00:00:00\', \'9999-12-31 00:00:00\');', $connection);
 } 
 
-function meta::relational::tests::milestoning::initDatabase():Runtime[1]
+function meta::external::store::relational::tests::milestoning::initDatabase():Runtime[1]
 {
-   let connection = meta::relational::tests::testRuntime(db).connections->toOne()->cast(@TestDatabaseConnection);
+   let connection = meta::external::store::relational::tests::testRuntime(db).connections->toOne()->cast(@TestDatabaseConnection);
   
    executeInDb('drop table if exists OrderTable;',$connection);
    executeInDb('create table OrderTable (orderDate TIMESTAMP, id Integer, prodFk Integer)',$connection);
@@ -327,9 +327,9 @@ function meta::relational::tests::milestoning::initDatabase():Runtime[1]
 
 
 ###Mapping
-import meta::relational::tests::milestoning::*;
+import meta::external::store::relational::tests::milestoning::*;
 
-Mapping meta::relational::tests::milestoning::milestoningmapWithViewUsingViewColumns
+Mapping meta::external::store::relational::tests::milestoning::milestoningmapWithViewUsingViewColumns
 (
    TradePnl : Relational{             
       pnl : [db]tradePnlViewUsingView.pnl,
@@ -337,7 +337,7 @@ Mapping meta::relational::tests::milestoning::milestoningmapWithViewUsingViewCol
    } 
 )
 
-Mapping meta::relational::tests::milestoning::ViewChainMapping
+Mapping meta::external::store::relational::tests::milestoning::ViewChainMapping
 (
    OrderPnl: Relational
    {
@@ -372,9 +372,9 @@ Mapping meta::relational::tests::milestoning::ViewChainMapping
 )
 
 ###Mapping
-import meta::relational::tests::milestoning::*;
+import meta::external::store::relational::tests::milestoning::*;
 
-Mapping meta::relational::tests::milestoning::milestoningmapWithNestedView
+Mapping meta::external::store::relational::tests::milestoning::milestoningmapWithNestedView
 (
    TradePnl : Relational{             
       pnl : [db]tradePnlSuperView.pnl,
@@ -382,17 +382,17 @@ Mapping meta::relational::tests::milestoning::milestoningmapWithNestedView
    } 
 )
 
-Mapping meta::relational::tests::milestoning::milestoningmap2
+Mapping meta::external::store::relational::tests::milestoning::milestoningmap2
 (
-   meta::relational::tests::milestoning::Product : Relational{
+   meta::external::store::relational::tests::milestoning::Product : Relational{
       id : [db]ProductTable.id, 
       isBrexitClassificationTypeExchange : [db]@Product_Classification > [db]@Classification_Exchange| case(equal([db]ProductExchangeTable.city,'London'), 'true', 'false')
    }    
 )
 
-Mapping meta::relational::tests::milestoning::milestoningmap
+Mapping meta::external::store::relational::tests::milestoning::milestoningmap
 (
-   meta::relational::tests::milestoning::Order : Relational{
+   meta::external::store::relational::tests::milestoning::Order : Relational{
       id : [db]OrderTable.id,
       orderDate : [db]OrderTable.orderDate,
       product : [db]@Order_Product,
@@ -405,29 +405,29 @@ Mapping meta::relational::tests::milestoning::milestoningmap
       cusipProduct : [db]@Order_CusipSynonym > [db]@Product_Synonym
    } 
    
-   meta::relational::tests::milestoning::OrderWithConstraint : Relational{
+   meta::external::store::relational::tests::milestoning::OrderWithConstraint : Relational{
       orderDate : [db]OrderTable.orderDate,
       product : [db]@Order_Product
    }
 
-   meta::relational::tests::milestoning::OrderWithProductWithConstraints : Relational{
+   meta::external::store::relational::tests::milestoning::OrderWithProductWithConstraints : Relational{
       orderDate : [db]OrderTable.orderDate,
       product : [db]@Order_Product
    }
    
-   meta::relational::tests::milestoning::OrderDescription : Relational{
+   meta::external::store::relational::tests::milestoning::OrderDescription : Relational{
       description : [db]OrderDescriptionTable.description      
    }  
    
-   meta::relational::tests::milestoning::OrderDetails : Relational{
+   meta::external::store::relational::tests::milestoning::OrderDetails : Relational{
       settlementDate : [db]OrderDetailsTable.settlementDate      
    }  
    
-   meta::relational::tests::milestoning::SystemAOrderDescription : Relational{
+   meta::external::store::relational::tests::milestoning::SystemAOrderDescription : Relational{
       description : [db]SystemAOrderDescriptionTable.description      
    }  
    
-   meta::relational::tests::milestoning::Product : Relational{
+   meta::external::store::relational::tests::milestoning::Product : Relational{
       id : [db]ProductTable.id, 
       name : [db]ProductTable.name,
       type : [db]ProductTable.type,
@@ -441,33 +441,33 @@ Mapping meta::relational::tests::milestoning::milestoningmap
       biTemporalClassification : [db]@Product_BiTemporalClassification
    }  
    
-   meta::relational::tests::milestoning::ProductWithConstraint1 : Relational{
+   meta::external::store::relational::tests::milestoning::ProductWithConstraint1 : Relational{
       name : [db]ProductTable.name,
       referenceSystem : [db]@Product_System
    }  
 
-   meta::relational::tests::milestoning::ProductWithConstraint1b : Relational{
+   meta::external::store::relational::tests::milestoning::ProductWithConstraint1b : Relational{
       name : [db]ProductTable.name,
       referenceSystems : [db]@Product_System
    } 
    
-   meta::relational::tests::milestoning::ProductWithConstraint2 : Relational{
+   meta::external::store::relational::tests::milestoning::ProductWithConstraint2 : Relational{
       name : [db]ProductTable.name,
       referenceSystem : [db]@Product_System
    } 
       
-   meta::relational::tests::milestoning::ProductWithConstraint3 : Relational{
+   meta::external::store::relational::tests::milestoning::ProductWithConstraint3 : Relational{
       name : [db]ProductTable.name,
       referenceSystem : [db]@Product_System
    }    
    
-   meta::relational::tests::milestoning::BiTemporalProduct : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProduct : Relational{
       id : [db]BiTemporalProductTable.id,
       biTemporalClassification : [db]@BiTemporalProduct_BiTemporalClassification,
       classification : [db]@BiTemporalProduct_Classification
    }  
       
-   meta::relational::tests::milestoning::StockProduct : Relational{
+   meta::external::store::relational::tests::milestoning::StockProduct : Relational{
       ~filter [db] IsStockType
       id : [db]ProductTable.id, 
       name : [db]ProductTable.name,
@@ -478,12 +478,12 @@ Mapping meta::relational::tests::milestoning::milestoningmap
       orders : [db]@Order_Product
    }  
    
-   meta::relational::tests::milestoning::ProductSynonym : Relational{
+   meta::external::store::relational::tests::milestoning::ProductSynonym : Relational{
       synonym : [db]ProductSynonymTable.synonym,
       type : [db]ProductSynonymTable.type
    }  
    
-    meta::relational::tests::milestoning::ProductClassification : Relational{
+    meta::external::store::relational::tests::milestoning::ProductClassification : Relational{
       type : [db]ProductClassificationTable.type,
       description : [db]ProductClassificationTable.type_description,
       system : [db]@Classification_System,
@@ -492,7 +492,7 @@ Mapping meta::relational::tests::milestoning::milestoningmap
       product : [db]@Product_Classification
    }  
    
-   meta::relational::tests::milestoning::BiTemporalProductClassification : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProductClassification : Relational{
       type : [db]BiTemporalProductClassificationTable.type
    } 
       
@@ -501,16 +501,16 @@ Mapping meta::relational::tests::milestoning::milestoningmap
       STOCK: ['STOCK']
    }
    
-   meta::relational::tests::milestoning::Exchange : Relational{
+   meta::external::store::relational::tests::milestoning::Exchange : Relational{
       name : [db]ProductExchangeTable.name
    }  
    
-   meta::relational::tests::milestoning::System : Relational{
+   meta::external::store::relational::tests::milestoning::System : Relational{
       name : [db]SystemTable.name,
       systemDescription : [db]@System_SystemDescrption
    }
    
-   meta::relational::tests::milestoning::SystemDescription : Relational{
+   meta::external::store::relational::tests::milestoning::SystemDescription : Relational{
          description : [db]SystemDescriptionTable.description
    }
       
@@ -520,7 +520,7 @@ Mapping meta::relational::tests::milestoning::milestoningmap
       //trade: [db]@TradePnlView_Trade
    }      
       
-   meta::relational::tests::milestoning::Trader : Relational {
+   meta::external::store::relational::tests::milestoning::Trader : Relational {
       kerberos : [db]TraderTable.kerberos,
       certifications : [db]@Trader_Certifications,
       location : [db]@Trader_BiTemporalLocation
@@ -532,7 +532,7 @@ Mapping meta::relational::tests::milestoning::milestoningmap
    }
       
    
-   meta::relational::tests::milestoning::Trader_AccreditedCertification : Relational
+   meta::external::store::relational::tests::milestoning::Trader_AccreditedCertification : Relational
    {
       AssociationMapping
       (
@@ -541,40 +541,40 @@ Mapping meta::relational::tests::milestoning::milestoningmap
       )
    }
    
-   meta::relational::tests::milestoning::Certification : Relational {
+   meta::external::store::relational::tests::milestoning::Certification : Relational {
       name : [db]CertificationTable.name
    }
 )
 
-Mapping meta::relational::tests::milestoning::milestoningmapwithconstraints
+Mapping meta::external::store::relational::tests::milestoning::milestoningmapwithconstraints
 (
-   include meta::relational::tests::milestoning::milestoningmap
+   include meta::external::store::relational::tests::milestoning::milestoningmap
    
-   meta::relational::tests::milestoning::ProductWithConstraint1c : Relational{
+   meta::external::store::relational::tests::milestoning::ProductWithConstraint1c : Relational{
       name : [db]ProductTable.name,
       referenceSystem : [db]@Product_System
    }  
 )
 
 ###Mapping
-import meta::relational::tests::milestoning::*;
+import meta::external::store::relational::tests::milestoning::*;
 
-Mapping meta::relational::tests::milestoning::milestoningmapMultipleJoinOperations
+Mapping meta::external::store::relational::tests::milestoning::milestoningmapMultipleJoinOperations
 (
-   meta::relational::tests::milestoning::Order : Relational{
+   meta::external::store::relational::tests::milestoning::Order : Relational{
       id : [db]OrderTable.id,
       orderDate : [db]OrderTable.orderDate,
       product : [db]@Order_Product
    } 
     
-   meta::relational::tests::milestoning::Product : Relational{
+   meta::external::store::relational::tests::milestoning::Product : Relational{
       id : [db]ProductTable.id, 
       name : [db]ProductTable.name,
       type : [db]ProductTable.type,
       classification : [db]@Product_Classification
    }  
    
-   meta::relational::tests::milestoning::ProductClassification : Relational{
+   meta::external::store::relational::tests::milestoning::ProductClassification : Relational{
       type : [db]ProductClassificationTable.type,
       description : [db]ProductClassificationTable.type_description,
       system : [db]@Classification_System,
@@ -584,69 +584,69 @@ Mapping meta::relational::tests::milestoning::milestoningmapMultipleJoinOperatio
    }    
 )
 
-Mapping meta::relational::tests::milestoning::noMilestoningMap
+Mapping meta::external::store::relational::tests::milestoning::noMilestoningMap
 (
    
-   meta::relational::tests::milestoning::ProductWithConstraint2 : Relational{
+   meta::external::store::relational::tests::milestoning::ProductWithConstraint2 : Relational{
       name : [db]ProductTableNoMilestoning.name,
       classification : [db]@ProductTableNoMilestoning_ProductClassificationTableNoMilestoning
    }  
    
-   meta::relational::tests::milestoning::Order : Relational{
+   meta::external::store::relational::tests::milestoning::Order : Relational{
       id : [db]OrderTable.id,
       product : [db]@Order_ProductNoMilestoning,
       biTemporalProduct : [db]@Order_ProductNoMilestoning
    }
    
-   meta::relational::tests::milestoning::Product : Relational{
+   meta::external::store::relational::tests::milestoning::Product : Relational{
          id : [db]ProductTableNoMilestoning.id,
          type : [db]ProductTableNoMilestoning.type
    } 
    
-   meta::relational::tests::milestoning::BiTemporalProduct : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProduct : Relational{
       id : [db]ProductTableNoMilestoning.id,
       name : [db]ProductTableNoMilestoning.name,
       type : [db]ProductTableNoMilestoning.type,
       biTemporalClassification : [db]@ProductTableNoMilestoning_ProductClassificationTableNoMilestoning
    }     
    
-   meta::relational::tests::milestoning::ProductClassification : Relational{
+   meta::external::store::relational::tests::milestoning::ProductClassification : Relational{
       type : [db]ProductClassificationTableNoMilestoning.type,
       exchange : [db]@ProductClassificationTableNoMilestoning_ExchangeNoMilestoning
    } 
    
-   meta::relational::tests::milestoning::Exchange : Relational{
+   meta::external::store::relational::tests::milestoning::Exchange : Relational{
       name : [db]ProductExchangeTableNoMilestoning.name
    }  
       
-   meta::relational::tests::milestoning::BiTemporalProductClassification : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProductClassification : Relational{
       type : [db]ProductClassificationTableNoMilestoning.type
    } 
 )
 
-Mapping meta::relational::tests::milestoning::singleTemporalMappingForBiTemporalTypes
+Mapping meta::external::store::relational::tests::milestoning::singleTemporalMappingForBiTemporalTypes
 (
-   meta::relational::tests::milestoning::BiTemporalProduct : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProduct : Relational{
       id : [db]ProductTable.id, 
       name : [db]ProductTable.name,
       biTemporalClassification : [db]@Product_Classification
    }  
    
-    meta::relational::tests::milestoning::BiTemporalProductClassification : Relational{
+    meta::external::store::relational::tests::milestoning::BiTemporalProductClassification : Relational{
       type : [db]ProductClassificationTable.type
    }     
    
 )
 
-Mapping meta::relational::tests::milestoning::propagationMapping
+Mapping meta::external::store::relational::tests::milestoning::propagationMapping
 (
 
-   meta::relational::tests::milestoning::Order : Relational{
+   meta::external::store::relational::tests::milestoning::Order : Relational{
       id : [db]OrderTable.id,
       product : [db]@Order_Product
    }
    
-   meta::relational::tests::milestoning::Product : Relational{
+   meta::external::store::relational::tests::milestoning::Product : Relational{
          id : [db]ProductTable.id, 
          newActivity : [db]@Product_NewActivityInfo,
          cancelActivity : [db]@Product_CancelActivities > [db]@CancelActivities_NewActivityInfo,
@@ -655,38 +655,38 @@ Mapping meta::relational::tests::milestoning::propagationMapping
          referenceSystem : [db]@Product_System
    }  
    
-   meta::relational::tests::milestoning::Exchange : Relational{
+   meta::external::store::relational::tests::milestoning::Exchange : Relational{
       name : [db]ProductExchangeTable.name
    }
 
-    meta::relational::tests::milestoning::ProductClassification : Relational{
+    meta::external::store::relational::tests::milestoning::ProductClassification : Relational{
       type : [db]ProductClassificationTable.type,
       exchange : [db]@Classification_Exchange
    }
    
-   meta::relational::tests::milestoning::NewActivityInfo : Relational{
+   meta::external::store::relational::tests::milestoning::NewActivityInfo : Relational{
          createdBy : [db]NewActivityInfoTable.created_by
    }
    
-   meta::relational::tests::milestoning::NewProductActivityInfo : Relational{
+   meta::external::store::relational::tests::milestoning::NewProductActivityInfo : Relational{
       ~filter [db] NewActivityWithValidProduct
       createdBy : [db]NewActivityInfoTable.created_by
    }
    
-   meta::relational::tests::milestoning::System : Relational{
+   meta::external::store::relational::tests::milestoning::System : Relational{
          name : [db]SystemTable.name,
          systemDescription : [db]@System_SystemDescrption
    }
    
-   meta::relational::tests::milestoning::SystemDescription : Relational{
+   meta::external::store::relational::tests::milestoning::SystemDescription : Relational{
          description : [db]SystemDescriptionTable.description
    }
 )
 
-Mapping meta::relational::tests::milestoning::milestoningMapWithEmbedded
+Mapping meta::external::store::relational::tests::milestoning::milestoningMapWithEmbedded
 (
    
-   meta::relational::tests::milestoning::StockProduct[StockProduct] : Relational{
+   meta::external::store::relational::tests::milestoning::StockProduct[StockProduct] : Relational{
      
         id : [db]ProductTable.id, 
         name : [db]ProductTable.name,
@@ -697,21 +697,21 @@ Mapping meta::relational::tests::milestoning::milestoningMapWithEmbedded
         )       
    }  
    
-   meta::relational::tests::milestoning::ProductClassification[ProductClassification] : Relational{
+   meta::external::store::relational::tests::milestoning::ProductClassification[ProductClassification] : Relational{
       type : [db]ProductClassificationTable.type,
       description : [db]ProductClassificationTable.type_description
    } 
    
-   meta::relational::tests::milestoning::System : Relational{
+   meta::external::store::relational::tests::milestoning::System : Relational{
       name : [db]SystemTable.name
    }
    
 )
 
-Mapping meta::relational::tests::milestoning::milestoningMapWithEmbeddedSimple
+Mapping meta::external::store::relational::tests::milestoning::milestoningMapWithEmbeddedSimple
 (
    
-   meta::relational::tests::milestoning::StockProduct[StockProduct] : Relational{
+   meta::external::store::relational::tests::milestoning::StockProduct[StockProduct] : Relational{
      
         id : [db]ProductTable.id, 
         name : [db]ProductTable.name,
@@ -722,7 +722,7 @@ Mapping meta::relational::tests::milestoning::milestoningMapWithEmbeddedSimple
         )       
    }  
    
-   meta::relational::tests::milestoning::Product : Relational{
+   meta::external::store::relational::tests::milestoning::Product : Relational{
      
         id : [db]ProductTable.id, 
         name : [db]ProductTable.name,
@@ -735,20 +735,20 @@ Mapping meta::relational::tests::milestoning::milestoningMapWithEmbeddedSimple
         exchange() Inline[exchange]
    }  
    
-   meta::relational::tests::milestoning::Exchange[exchange] : Relational{
+   meta::external::store::relational::tests::milestoning::Exchange[exchange] : Relational{
       name : [db]ProductTable.exchange
    }
    
-   meta::relational::tests::milestoning::System : Relational{
+   meta::external::store::relational::tests::milestoning::System : Relational{
       name : [db]SystemTable.name
    }
    
 )
 
-Mapping meta::relational::tests::milestoning::isolationFocusedMapping
+Mapping meta::external::store::relational::tests::milestoning::isolationFocusedMapping
 (
    
-   meta::relational::tests::milestoning::StockProduct[StockProduct] : Relational{
+   meta::external::store::relational::tests::milestoning::StockProduct[StockProduct] : Relational{
         ~filter [db]IsStockType 
         //~filter [db]@Product_Exchange | [db]LNSEProducts
       
@@ -766,21 +766,21 @@ Mapping meta::relational::tests::milestoning::isolationFocusedMapping
         )
    }  
 
-   meta::relational::tests::milestoning::ProductClassification[ProductClassification] : Relational{
+   meta::external::store::relational::tests::milestoning::ProductClassification[ProductClassification] : Relational{
       type : [db]ProductClassificationTable.type,
       description : [db]ProductClassificationTable.type_description
    } 
    
-   meta::relational::tests::milestoning::System : Relational{
+   meta::external::store::relational::tests::milestoning::System : Relational{
       name : [db]SystemTable.name
    }
    
 )
 
-Mapping meta::relational::tests::milestoning::otherwiseMapping
+Mapping meta::external::store::relational::tests::milestoning::otherwiseMapping
 (
    
-   meta::relational::tests::milestoning::StockProduct[StockProduct] : Relational
+   meta::external::store::relational::tests::milestoning::StockProduct[StockProduct] : Relational
    {
         ~filter [db]IsStockType 
       
@@ -791,39 +791,39 @@ Mapping meta::relational::tests::milestoning::otherwiseMapping
         ) Otherwise([ProductClassification]:[db]@Product_Classification)
    }  
 
-   meta::relational::tests::milestoning::ProductClassification[ProductClassification] : Relational
+   meta::external::store::relational::tests::milestoning::ProductClassification[ProductClassification] : Relational
    {
       type : [db]ProductClassificationTable.type,
       description : [db]ProductClassificationTable.type_description,
       exchange : [db]@Classification_Exchange
    } 
 
-   meta::relational::tests::milestoning::Exchange : Relational
+   meta::external::store::relational::tests::milestoning::Exchange : Relational
    {
       name : [db]ProductExchangeTable.name
    }  
 
 )
 
-Mapping meta::relational::tests::milestoning::latestbitemporalmap
+Mapping meta::external::store::relational::tests::milestoning::latestbitemporalmap
 (
-   meta::relational::tests::milestoning::Order : Relational{
+   meta::external::store::relational::tests::milestoning::Order : Relational{
       id : [db]OrderTable.id,
       biTemporalProduct : [db]@Order_BiTemporalProductWithLatest
    } 
    
-   meta::relational::tests::milestoning::BiTemporalProduct : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProduct : Relational{
       id : [db]BiTemporalProductTableWithLatest.id,
       biTemporalClassification : [db]@BiTemporalProductWithLatest_BiTemporalClassificationWithLatest
    } 
    
-   meta::relational::tests::milestoning::BiTemporalProductClassification : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProductClassification : Relational{
       type : [db]BiTemporalProductClassificationTableWithLatest.type
    } 
       
 )
 
-Mapping meta::relational::tests::milestoning::InFromInclusiveMapping
+Mapping meta::external::store::relational::tests::milestoning::InFromInclusiveMapping
 (
    BiTemporalProduct[pInFrom] : Relational
    {
@@ -838,7 +838,7 @@ Mapping meta::relational::tests::milestoning::InFromInclusiveMapping
    }
 )
 
-Mapping meta::relational::tests::milestoning::InThruInclusiveMapping
+Mapping meta::external::store::relational::tests::milestoning::InThruInclusiveMapping
 (
    BiTemporalProduct[pInThru] : Relational
    {
@@ -853,7 +853,7 @@ Mapping meta::relational::tests::milestoning::InThruInclusiveMapping
    }
 )
 
-Mapping meta::relational::tests::milestoning::OutFromInclusiveMapping
+Mapping meta::external::store::relational::tests::milestoning::OutFromInclusiveMapping
 (
    BiTemporalProduct[pOutFrom] : Relational
    {
@@ -868,7 +868,7 @@ Mapping meta::relational::tests::milestoning::OutFromInclusiveMapping
    }
 )
 
-Mapping meta::relational::tests::milestoning::OutThruInclusiveMapping
+Mapping meta::external::store::relational::tests::milestoning::OutThruInclusiveMapping
 (
    BiTemporalProduct[pOutThru] : Relational
    {
@@ -883,10 +883,10 @@ Mapping meta::relational::tests::milestoning::OutThruInclusiveMapping
    }
 )
 
-Mapping meta::relational::tests::milestoning::InThruInclusiveUnionOutFromInclusiveMapping
+Mapping meta::external::store::relational::tests::milestoning::InThruInclusiveUnionOutFromInclusiveMapping
 (
-   include meta::relational::tests::milestoning::InThruInclusiveMapping
-   include meta::relational::tests::milestoning::OutFromInclusiveMapping
+   include meta::external::store::relational::tests::milestoning::InThruInclusiveMapping
+   include meta::external::store::relational::tests::milestoning::OutFromInclusiveMapping
    
    *BiTemporalProduct : Operation
    {
@@ -894,10 +894,10 @@ Mapping meta::relational::tests::milestoning::InThruInclusiveUnionOutFromInclusi
    }
 )
 
-Mapping meta::relational::tests::milestoning::OutFromInclusiveUnionInThruInclusiveMapping
+Mapping meta::external::store::relational::tests::milestoning::OutFromInclusiveUnionInThruInclusiveMapping
 (
-   include meta::relational::tests::milestoning::OutFromInclusiveMapping
-   include meta::relational::tests::milestoning::InThruInclusiveMapping
+   include meta::external::store::relational::tests::milestoning::OutFromInclusiveMapping
+   include meta::external::store::relational::tests::milestoning::InThruInclusiveMapping
    
    *BiTemporalProduct : Operation
    {
@@ -905,9 +905,9 @@ Mapping meta::relational::tests::milestoning::OutFromInclusiveUnionInThruInclusi
    }
 )
 
-Mapping meta::relational::tests::milestoning::InThruInclusiveUnionInThruInclusiveMapping
+Mapping meta::external::store::relational::tests::milestoning::InThruInclusiveUnionInThruInclusiveMapping
 (
-   include meta::relational::tests::milestoning::InThruInclusiveMapping
+   include meta::external::store::relational::tests::milestoning::InThruInclusiveMapping
    
    BiTemporalProduct[pInThru2] : Relational
    {
@@ -927,9 +927,9 @@ Mapping meta::relational::tests::milestoning::InThruInclusiveUnionInThruInclusiv
    }
 )
 
-Mapping meta::relational::tests::milestoning::OutFromInclusiveUnionOutFromInclusiveMapping
+Mapping meta::external::store::relational::tests::milestoning::OutFromInclusiveUnionOutFromInclusiveMapping
 (
-   include meta::relational::tests::milestoning::OutFromInclusiveMapping
+   include meta::external::store::relational::tests::milestoning::OutFromInclusiveMapping
    
    BiTemporalProduct[pOutFrom2] : Relational
    {
@@ -949,47 +949,47 @@ Mapping meta::relational::tests::milestoning::OutFromInclusiveUnionOutFromInclus
    }
 )
 
-Mapping meta::relational::tests::milestoning::businessSnapshotMilestoningMap
+Mapping meta::external::store::relational::tests::milestoning::businessSnapshotMilestoningMap
 (
-   meta::relational::tests::milestoning::Order[o] : Relational{
+   meta::external::store::relational::tests::milestoning::Order[o] : Relational{
       id : [db]OrderTable.id,
       product[p] : [db]@Order_ProductWithBusinessSnapshotMilestoning
    }
    
-   meta::relational::tests::milestoning::Product[p] : Relational{
+   meta::external::store::relational::tests::milestoning::Product[p] : Relational{
       id : [db]ProductTableWithBusinessSnapshotMilestoning.id, 
       name : [db]ProductTableWithBusinessSnapshotMilestoning.name,
       classification[c] : [db]@ProductWithBusinessSnapshotMilestoning_ClassificationWithBusinessSnapshotMilestoning
    }
    
-   meta::relational::tests::milestoning::ProductClassification[c] : Relational{
+   meta::external::store::relational::tests::milestoning::ProductClassification[c] : Relational{
       type : [db]ProductClassificationTableWithBusinessSnapshotMilestoning.type,
       description : [db]ProductClassificationTableWithBusinessSnapshotMilestoning.type_description
    }
 )
 
-Mapping meta::relational::tests::milestoning::businessSnapshotMilestoningMapWithDynaFunction
+Mapping meta::external::store::relational::tests::milestoning::businessSnapshotMilestoningMapWithDynaFunction
 (
-   meta::relational::tests::milestoning::Order[o] : Relational{
+   meta::external::store::relational::tests::milestoning::Order[o] : Relational{
       id : [db]OrderTable.id,
       product[p] : [db]@Order_ProductWithBusinessSnapshotMilestoning
    }
 
-   meta::relational::tests::milestoning::Product[p] : Relational{
+   meta::external::store::relational::tests::milestoning::Product[p] : Relational{
       id : plus([db]ProductTableWithBusinessSnapshotMilestoning.id, [db]ProductTableWithBusinessSnapshotMilestoning.id),
       name : [db]ProductTableWithBusinessSnapshotMilestoning.name,
       classification[c] : [db]@ProductWithBusinessSnapshotMilestoning_ClassificationWithBusinessSnapshotMilestoning
    }
 
-   meta::relational::tests::milestoning::ProductClassification[c] : Relational{
+   meta::external::store::relational::tests::milestoning::ProductClassification[c] : Relational{
       type : [db]ProductClassificationTableWithBusinessSnapshotMilestoning.type,
       description : [db]ProductClassificationTableWithBusinessSnapshotMilestoning.type_description
    }
 )
 
-Mapping meta::relational::tests::milestoning::businessSnapshotMilestoningUnionMap
+Mapping meta::external::store::relational::tests::milestoning::businessSnapshotMilestoningUnionMap
 (
-   include meta::relational::tests::milestoning::businessSnapshotMilestoningMap
+   include meta::external::store::relational::tests::milestoning::businessSnapshotMilestoningMap
    
    *Order : Operation
    {
@@ -1006,24 +1006,24 @@ Mapping meta::relational::tests::milestoning::businessSnapshotMilestoningUnionMa
       meta::pure::router::operations::union_OperationSetImplementation_1__SetImplementation_MANY_(c, c2)
    }
    
-   meta::relational::tests::milestoning::Order[o2] : Relational{
+   meta::external::store::relational::tests::milestoning::Order[o2] : Relational{
       id : [db]OrderTable.id,
       product[p2] : [db]@Order_ProductWithBusinessSnapshotMilestoning
    }
    
-   meta::relational::tests::milestoning::Product[p2] : Relational{
+   meta::external::store::relational::tests::milestoning::Product[p2] : Relational{
       id : [db]ProductTableWithBusinessSnapshotMilestoning.id, 
       name : [db]ProductTableWithBusinessSnapshotMilestoning.name,
       classification[c2] : [db]@ProductWithBusinessSnapshotMilestoning_ClassificationWithBusinessSnapshotMilestoning
    }
    
-   meta::relational::tests::milestoning::ProductClassification[c2] : Relational{
+   meta::external::store::relational::tests::milestoning::ProductClassification[c2] : Relational{
       type : [db]ProductClassificationTableWithBusinessSnapshotMilestoning.type,
       description : [db]ProductClassificationTableWithBusinessSnapshotMilestoning.type_description
    }
 )
 
-Mapping meta::relational::tests::milestoning::partiallyMilestoningUnionMap
+Mapping meta::external::store::relational::tests::milestoning::partiallyMilestoningUnionMap
 (  
    *Order : Operation
    {
@@ -1040,40 +1040,40 @@ Mapping meta::relational::tests::milestoning::partiallyMilestoningUnionMap
       meta::pure::router::operations::union_OperationSetImplementation_1__SetImplementation_MANY_(c1, c2)
    }
    
-   meta::relational::tests::milestoning::Order[o1] : Relational{
+   meta::external::store::relational::tests::milestoning::Order[o1] : Relational{
       id : [db]OrderTable.id,
       product[p1] : [db]@Order_Product
    }
    
-   meta::relational::tests::milestoning::Product[p1] : Relational{
+   meta::external::store::relational::tests::milestoning::Product[p1] : Relational{
       id : [db]ProductTable.id, 
       name : [db]ProductTable.name,
       classification[c1] : [db]@Product_Classification
    }
    
-   meta::relational::tests::milestoning::ProductClassification[c1] : Relational{
+   meta::external::store::relational::tests::milestoning::ProductClassification[c1] : Relational{
       type : [db]ProductClassificationTable.type,
       description : [db]ProductClassificationTable.type_description
    }
    
-   meta::relational::tests::milestoning::Order[o2] : Relational{
+   meta::external::store::relational::tests::milestoning::Order[o2] : Relational{
       id : [db]OrderTable.id,
       product[p2] : [db]@Order_ProductNoMilestoning
    }
    
-   meta::relational::tests::milestoning::Product[p2] : Relational{
+   meta::external::store::relational::tests::milestoning::Product[p2] : Relational{
       id : [db]ProductTableNoMilestoning.id, 
       name : [db]ProductTableNoMilestoning.name,
       classification[c2] : [db]@ProductTableNoMilestoning_ProductClassificationTableNoMilestoning
    }
    
-   meta::relational::tests::milestoning::ProductClassification[c2] : Relational{
+   meta::external::store::relational::tests::milestoning::ProductClassification[c2] : Relational{
       type : [db]ProductClassificationTableNoMilestoning.type,
       description : [db]ProductClassificationTableNoMilestoning.type_description
    }
 )
 
-Mapping meta::relational::tests::milestoning::hybridMilestoningUnionMap
+Mapping meta::external::store::relational::tests::milestoning::hybridMilestoningUnionMap
 (  
    *Order : Operation
    {
@@ -1090,75 +1090,75 @@ Mapping meta::relational::tests::milestoning::hybridMilestoningUnionMap
       meta::pure::router::operations::union_OperationSetImplementation_1__SetImplementation_MANY_(c1, c2, c3, c4)
    }
    
-   meta::relational::tests::milestoning::Order[o1] : Relational{
+   meta::external::store::relational::tests::milestoning::Order[o1] : Relational{
       id : [db]OrderTable.id,
       biTemporalProduct[p1] : [db]@Order_BiTemporalProductWithBusinessMilestoning
    }
    
-   meta::relational::tests::milestoning::Order[o2] : Relational{
+   meta::external::store::relational::tests::milestoning::Order[o2] : Relational{
       id : [db]OrderTable.id,
       biTemporalProduct[p2] : [db]@Order_BiTemporalProductWithBusinessSnapshotMilestoning
    }
    
-   meta::relational::tests::milestoning::Order[o3] : Relational{
+   meta::external::store::relational::tests::milestoning::Order[o3] : Relational{
       id : [db]OrderTable.id,
       biTemporalProduct[p3] : [db]@Order_BiTemporalProductWithProcessingMilestoning
    }
    
-   meta::relational::tests::milestoning::Order[o4] : Relational{
+   meta::external::store::relational::tests::milestoning::Order[o4] : Relational{
       id : [db]OrderTable.id,
       biTemporalProduct[p4] : [db]@Order_BiTemporalProductWithNoMilestoning
    }
    
-   meta::relational::tests::milestoning::BiTemporalProduct[p1] : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProduct[p1] : Relational{
       id : [db]BiTemporalProductTableWithBusinessMilestoning.id, 
       name : [db]BiTemporalProductTableWithBusinessMilestoning.name,
       biTemporalClassification[c1] : [db]@BiTemporalProductWithBusinessMilestoning_BiTemporalClassificationWithBusinessMilestoning
    }
    
-   meta::relational::tests::milestoning::BiTemporalProduct[p2] : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProduct[p2] : Relational{
       id : [db]BiTemporalProductTableWithBusinessSnapshotMilestoning.id, 
       name : [db]BiTemporalProductTableWithBusinessSnapshotMilestoning.name,
       biTemporalClassification[c2] : [db]@BiTemporalProductWithBusinessSnapshotMilestoning_BiTemporalClassificationWithBusinessSnapshotMilestoning
    }
    
-   meta::relational::tests::milestoning::BiTemporalProduct[p3] : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProduct[p3] : Relational{
       id : [db]BiTemporalProductTableWithProcessingMilestoning.id, 
       name : [db]BiTemporalProductTableWithProcessingMilestoning.name,
       biTemporalClassification[c3] : [db]@BiTemporalProductWithProcessingMilestoning_BiTemporalClassificationWithProcessingMilestoning
    }
    
-   meta::relational::tests::milestoning::BiTemporalProduct[p4] : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProduct[p4] : Relational{
       id : [db]BiTemporalProductTableWithNoMilestoning.id, 
       name : [db]BiTemporalProductTableWithNoMilestoning.name,
       biTemporalClassification[c4] : [db]@BiTemporalProductWithNoMilestoning_BiTemporalClassificationWithNoMilestoning
    }
    
-   meta::relational::tests::milestoning::BiTemporalProductClassification[c1] : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProductClassification[c1] : Relational{
       type : [db]BiTemporalProductClassificationTableWithBusinessMilestoning.type,
       description : [db]BiTemporalProductClassificationTableWithBusinessMilestoning.type_description
    }
    
-   meta::relational::tests::milestoning::BiTemporalProductClassification[c2] : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProductClassification[c2] : Relational{
       type : [db]BiTemporalProductClassificationTableWithBusinessSnapshotMilestoning.type,
       description : [db]BiTemporalProductClassificationTableWithBusinessSnapshotMilestoning.type_description
    }
    
-   meta::relational::tests::milestoning::BiTemporalProductClassification[c3] : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProductClassification[c3] : Relational{
       type : [db]BiTemporalProductClassificationTableWithProcessingMilestoning.type,
       description : [db]BiTemporalProductClassificationTableWithProcessingMilestoning.type_description
    }
    
-   meta::relational::tests::milestoning::BiTemporalProductClassification[c4] : Relational{
+   meta::external::store::relational::tests::milestoning::BiTemporalProductClassification[c4] : Relational{
       type : [db]BiTemporalProductClassificationTableWithNoMilestoning.type,
       description : [db]BiTemporalProductClassificationTableWithNoMilestoning.type_description
    }
 )
 ###Mapping
 import testIsolation::*;
-import meta::relational::tests::milestoning::*;
+import meta::external::store::relational::tests::milestoning::*;
 
-Mapping meta::relational::tests::milestoning::TestMapping
+Mapping meta::external::store::relational::tests::milestoning::TestMapping
 (
    Order: Relational
    {
@@ -1177,9 +1177,9 @@ Mapping meta::relational::tests::milestoning::TestMapping
 )
 
 ###Mapping
-import meta::relational::tests::milestoning::*;
+import meta::external::store::relational::tests::milestoning::*;
 
-Mapping meta::relational::tests::milestoning::milestoningUnionMapWithOrderNonUnion
+Mapping meta::external::store::relational::tests::milestoning::milestoningUnionMapWithOrderNonUnion
 (  
    
    Order : Relational{
@@ -1198,25 +1198,25 @@ Mapping meta::relational::tests::milestoning::milestoningUnionMapWithOrderNonUni
       meta::pure::router::operations::union_OperationSetImplementation_1__SetImplementation_MANY_(c1, c2)
    }
    
-   meta::relational::tests::milestoning::Product[p1] : Relational{
+   meta::external::store::relational::tests::milestoning::Product[p1] : Relational{
       id : [db]ProductTable.id, 
       name : [db]ProductTable.name,
       classification[c1] : [db]@Product_Classification
    }
    
-   meta::relational::tests::milestoning::ProductClassification[c1] : Relational{
+   meta::external::store::relational::tests::milestoning::ProductClassification[c1] : Relational{
       type : [db]ProductClassificationTable.type,
       description : [db]ProductClassificationTable.type_description,
       product[p1] : [db]@Product_Classification
    }
    
-   meta::relational::tests::milestoning::Product[p2] : Relational{
+   meta::external::store::relational::tests::milestoning::Product[p2] : Relational{
       id : [db]ProductTable.id, 
       name : [db]ProductTable.name,
       classification[c2] : [db]@Product_Classification
    }
    
-   meta::relational::tests::milestoning::ProductClassification[c2] : Relational{
+   meta::external::store::relational::tests::milestoning::ProductClassification[c2] : Relational{
       type : [db]ProductClassificationTable.type,
       description : [db]ProductClassificationTable.type_description,
       product[p2] : [db]@Product_Classification
@@ -1224,7 +1224,7 @@ Mapping meta::relational::tests::milestoning::milestoningUnionMapWithOrderNonUni
 )
 
 ###Relational
-Database meta::relational::tests::milestoning::ViewChainDb
+Database meta::external::store::relational::tests::milestoning::ViewChainDb
 (
    Table orderPNL (ID INT PRIMARY KEY, pnl INT, pName VARCHAR(200), linktoProduct INT)
    Table ProductTable(ID INT PRIMARY KEY, name VARCHAR(200), type VARCHAR(200), linkToOrder INTEGER)
@@ -1264,7 +1264,7 @@ Database meta::relational::tests::milestoning::ViewChainDb
 
 
 ###Relational
-Database meta::relational::tests::milestoning::db(
+Database meta::external::store::relational::tests::milestoning::db(
    Table OrderTable(id Integer PRIMARY KEY, orderDate DATE, prodFk Integer)
    Table OrderDescriptionTable(id Integer PRIMARY KEY, description VARCHAR(200))
    Table OrderDetailsTable(id Integer PRIMARY KEY, settlementDate Date)

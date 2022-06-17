@@ -13,41 +13,41 @@
 // limitations under the License.
 
 import meta::pure::executionPlan::profiles::*;
-import meta::pure::mapping::modelToModel::*;
+import meta::external::store::model::*;
 import meta::pure::runtime::*;
 import meta::json::*;
-import meta::pure::mapping::modelToModel::test::alloy::utils::*;
+import meta::external::store::model::test::alloy::utils::*;
 import meta::pure::graphFetch::execution::*;
-Class meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithFirstName
+Class meta::external::store::model::test::alloy::merge::SourcePersonWithFirstName
 {
    id:Integer[1];
    sourceFirstName:String[1];
    nickName:String[*];
-   sourceAddress: meta::pure::mapping::modelToModel::test::alloy::merge::SourceAddress[1];
+   sourceAddress: meta::external::store::model::test::alloy::merge::SourceAddress[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithLastName
+Class meta::external::store::model::test::alloy::merge::SourcePersonWithLastName
 {
    id:Integer[1];
    sourceLastName:String[0..1];
-   sourceAddress: meta::pure::mapping::modelToModel::test::alloy::merge::SourceAddressWithPostCode[0..1];
+   sourceAddress: meta::external::store::model::test::alloy::merge::SourceAddressWithPostCode[0..1];
 
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithAge
+Class meta::external::store::model::test::alloy::merge::SourcePersonWithAge
 {
    id:Integer[1];
    sourceAge:Integer[1];
 }
 
 
-Class meta::pure::mapping::modelToModel::test::alloy::merge::SourceAddress
+Class meta::external::store::model::test::alloy::merge::SourceAddress
 {
    id:Integer[1];
    sourceStreet:String[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::merge::SourceAddressWithPostCode
+Class meta::external::store::model::test::alloy::merge::SourceAddressWithPostCode
 {
    id:Integer[1];
    sourcePostCode:String[0..1];
@@ -55,57 +55,57 @@ Class meta::pure::mapping::modelToModel::test::alloy::merge::SourceAddressWithPo
 
 
 
-Class meta::pure::mapping::modelToModel::test::alloy::merge::Address
+Class meta::external::store::model::test::alloy::merge::Address
 {
    street:String[0..1];
    postCode:String[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::merge::Firm
+Class meta::external::store::model::test::alloy::merge::Firm
 {
-   ceo : meta::pure::mapping::modelToModel::test::alloy::merge::Person[1];
-   address: meta::pure::mapping::modelToModel::test::alloy::merge::Address[0..1];
+   ceo : meta::external::store::model::test::alloy::merge::Person[1];
+   address: meta::external::store::model::test::alloy::merge::Address[0..1];
 }
 
 
-Class meta::pure::mapping::modelToModel::test::alloy::merge::PersonCombined
+Class meta::external::store::model::test::alloy::merge::PersonCombined
 {
    fullName : String[0..1];
 }
 
 
-Class meta::pure::mapping::modelToModel::test::alloy::merge::Person
+Class meta::external::store::model::test::alloy::merge::Person
 {
    firstName : String[1];
    lastName : String[0..1];
    age:Integer[1]; 
-   address:meta::pure::mapping::modelToModel::test::alloy::merge::Address[0..1]; 
+   address:meta::external::store::model::test::alloy::merge::Address[0..1];
    nickName:String[*];
 }
 
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='vX_X_X'}
-meta::pure::mapping::modelToModel::test::alloy::merge::testSimplemerge():Any[*]
+meta::external::store::model::test::alloy::merge::testSimplemerge():Any[*]
 {
-   let tree = #{meta::pure::mapping::modelToModel::test::alloy::merge::Person {firstName,lastName,address{street},age}}#;
+   let tree = #{meta::external::store::model::test::alloy::merge::Person {firstName,lastName,address{street},age}}#;
 
    let result = execute(
-      |meta::pure::mapping::modelToModel::test::alloy::merge::Person.all()->graphFetch($tree)->serialize($tree),
-      meta::pure::mapping::modelToModel::test::alloy::merge::SimpleMergeModelMapping,
+      |meta::external::store::model::test::alloy::merge::Person.all()->graphFetch($tree)->serialize($tree),
+      meta::external::store::model::test::alloy::merge::SimpleMergeModelMapping,
          ^Runtime(
                connections =[ ^JsonModelConnection(
                   element=^ModelStore(),
-                  class = meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithFirstName,
+                  class = meta::external::store::model::test::alloy::merge::SourcePersonWithFirstName,
                   url = 'data:application/json,{"id":1,"sourceFirstName":"John","nickName":["Jo","Johnny"],"sourceAddress":{"id":1, "sourceStreet":"Main st"}}'
                                  ),
                         ^JsonModelConnection(
                      element=^ModelStore(),
-                     class = meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithLastName,
+                     class = meta::external::store::model::test::alloy::merge::SourcePersonWithLastName,
                      url = 'data:application/json,{"id":1,"sourceLastName":"Smith"}'
                   ),
                  ^JsonModelConnection(
                      element=^ModelStore(),
-                     class = meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithAge,
+                     class = meta::external::store::model::test::alloy::merge::SourcePersonWithAge,
                      url = 'data:application/json,{"id":1,"sourceAge":10}'
                   )
 
@@ -119,27 +119,27 @@ meta::pure::mapping::modelToModel::test::alloy::merge::testSimplemerge():Any[*]
    assert(jsonEquivalent($expected->parseJSON(), $json->parseJSON()));
 }
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='vX_X_X'}
-meta::pure::mapping::modelToModel::test::alloy::merge::testMergeNonRoot():Any[*]
+meta::external::store::model::test::alloy::merge::testMergeNonRoot():Any[*]
 {
-   let tree = #{meta::pure::mapping::modelToModel::test::alloy::merge::Firm {ceo{firstName,lastName,address{street,postCode}}}}#; 
+   let tree = #{meta::external::store::model::test::alloy::merge::Firm {ceo{firstName,lastName,address{street,postCode}}}}#;
 
    let result = execute(
-      |meta::pure::mapping::modelToModel::test::alloy::merge::Firm.all()->graphFetch($tree)->serialize($tree),
-      meta::pure::mapping::modelToModel::test::alloy::merge::SimpleMergeModelMappingNonRoot,
+      |meta::external::store::model::test::alloy::merge::Firm.all()->graphFetch($tree)->serialize($tree),
+      meta::external::store::model::test::alloy::merge::SimpleMergeModelMappingNonRoot,
          ^Runtime(
                connections =[ ^JsonModelConnection(
                   element=^ModelStore(),
-                  class = meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithFirstName,
+                  class = meta::external::store::model::test::alloy::merge::SourcePersonWithFirstName,
                   url = 'data:application/json,{"id":1,"sourceFirstName":"John","sourceAddress":{"id":1, "sourceStreet":"Main st"}}'
                                  ),
                         ^JsonModelConnection(
                      element=^ModelStore(),
-                     class = meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithLastName,
+                     class = meta::external::store::model::test::alloy::merge::SourcePersonWithLastName,
                      url = 'data:application/json,{"id":1,"sourceLastName":"Smith","sourceAddress":{"id":1, "sourcePostCode":"ABCD"}}'
                   ),
                  ^JsonModelConnection(
                      element=^ModelStore(),
-                     class = meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithAge,
+                     class = meta::external::store::model::test::alloy::merge::SourcePersonWithAge,
                      url = 'data:application/json,{"id":1,"sourceAge":10}'
                   )
 
@@ -156,30 +156,30 @@ meta::pure::mapping::modelToModel::test::alloy::merge::testMergeNonRoot():Any[*]
 
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> { serverVersion.start='vX_X_X'}
-meta::pure::mapping::modelToModel::test::alloy::merge::mergeObjectsModelChainMapping():Any[*]
+meta::external::store::model::test::alloy::merge::mergeObjectsModelChainMapping():Any[*]
 {
-   let tree = #{meta::pure::mapping::modelToModel::test::alloy::merge::PersonCombined {fullName}}#;
+   let tree = #{meta::external::store::model::test::alloy::merge::PersonCombined {fullName}}#;
 
    let result = execute(
-      |meta::pure::mapping::modelToModel::test::alloy::merge::PersonCombined.all()->graphFetch($tree)->serialize($tree),
-      meta::pure::mapping::modelToModel::test::alloy::merge::MergeObjectsModelMappingChain,
+      |meta::external::store::model::test::alloy::merge::PersonCombined.all()->graphFetch($tree)->serialize($tree),
+      meta::external::store::model::test::alloy::merge::MergeObjectsModelMappingChain,
          ^Runtime(
                connections =[ 
-               ^ModelChainConnection(element = ^ModelStore(), mappings = [meta::pure::mapping::modelToModel::test::alloy::merge::SimpleMergeModelMappingNonRoot]),
+               ^ModelChainConnection(element = ^ModelStore(), mappings = [meta::external::store::model::test::alloy::merge::SimpleMergeModelMappingNonRoot]),
 
                    ^JsonModelConnection(
                   element=^ModelStore(),
-                  class = meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithFirstName,
+                  class = meta::external::store::model::test::alloy::merge::SourcePersonWithFirstName,
                   url = 'data:application/json,{"id":1,"sourceFirstName":"John","sourceAddress":{"id":1, "sourceStreet":"Main st"}}'
                                  ),
                         ^JsonModelConnection(
                      element=^ModelStore(),
-                     class = meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithLastName,
+                     class = meta::external::store::model::test::alloy::merge::SourcePersonWithLastName,
                      url = 'data:application/json,{"id":1,"sourceLastName":"Smith","sourceAddress":{"id":1, "sourcePostCode":"ABCD"}}'
                   ),
                  ^JsonModelConnection(
                      element=^ModelStore(),
-                     class = meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithAge,
+                     class = meta::external::store::model::test::alloy::merge::SourcePersonWithAge,
                      url = 'data:application/json,{"id":1,"sourceAge":10}'
                   )
       ]
@@ -193,39 +193,39 @@ meta::pure::mapping::modelToModel::test::alloy::merge::mergeObjectsModelChainMap
 
 
 ###Mapping
-Mapping meta::pure::mapping::modelToModel::test::alloy::merge::SimpleMergeModelMapping
+Mapping meta::external::store::model::test::alloy::merge::SimpleMergeModelMapping
 (
-   *meta::pure::mapping::modelToModel::test::alloy::merge::Person : Operation
+   *meta::external::store::model::test::alloy::merge::Person : Operation
            {
-                          meta::pure::router::operations::merge_OperationSetImplementation_1__SetImplementation_MANY_([p1,p2,p3],{s1:meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithFirstName[1],
-                                                                                                                                  s2:meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithLastName[1],
-                                                                                                                                  s3:meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithAge[1]| $s1.id ==  $s2.id  &&  $s1.id == $s3.id   
+                          meta::pure::router::operations::merge_OperationSetImplementation_1__SetImplementation_MANY_([p1,p2,p3],{s1:meta::external::store::model::test::alloy::merge::SourcePersonWithFirstName[1],
+                                                                                                                                  s2:meta::external::store::model::test::alloy::merge::SourcePersonWithLastName[1],
+                                                                                                                                  s3:meta::external::store::model::test::alloy::merge::SourcePersonWithAge[1]| $s1.id ==  $s2.id  &&  $s1.id == $s3.id
                                                                                                                                  })
            }
 
-   meta::pure::mapping::modelToModel::test::alloy::merge::Person[p1] : Pure
+   meta::external::store::model::test::alloy::merge::Person[p1] : Pure
             {
-               ~src 	meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithFirstName
+               ~src 	meta::external::store::model::test::alloy::merge::SourcePersonWithFirstName
                firstName : $src.sourceFirstName,
                address : $src.sourceAddress,
                nickName: $src.nickName
            }
 
-   meta::pure::mapping::modelToModel::test::alloy::merge::Person[p2] : Pure
+   meta::external::store::model::test::alloy::merge::Person[p2] : Pure
             {
-               ~src 	meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithLastName
+               ~src 	meta::external::store::model::test::alloy::merge::SourcePersonWithLastName
                lastName :  $src.sourceLastName
             }
    
-      meta::pure::mapping::modelToModel::test::alloy::merge::Person[p3] : Pure
+      meta::external::store::model::test::alloy::merge::Person[p3] : Pure
             {
-               ~src 	meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithAge
+               ~src 	meta::external::store::model::test::alloy::merge::SourcePersonWithAge
                age :  $src.sourceAge
 
             }
-       meta::pure::mapping::modelToModel::test::alloy::merge::Address : Pure
+       meta::external::store::model::test::alloy::merge::Address : Pure
             {
-               ~src 	meta::pure::mapping::modelToModel::test::alloy::merge::SourceAddress
+               ~src 	meta::external::store::model::test::alloy::merge::SourceAddress
                street :  $src.sourceStreet
             }
    
@@ -234,75 +234,75 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::merge::SimpleMergeModelM
 
 
 ###Mapping
-Mapping meta::pure::mapping::modelToModel::test::alloy::merge::SimpleMergeModelMappingNonRoot
+Mapping meta::external::store::model::test::alloy::merge::SimpleMergeModelMappingNonRoot
 (
-   *meta::pure::mapping::modelToModel::test::alloy::merge::Firm : Operation
+   *meta::external::store::model::test::alloy::merge::Firm : Operation
            {
-            meta::pure::router::operations::merge_OperationSetImplementation_1__SetImplementation_MANY_([f1,f2],{s1:meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithFirstName[1],
-                                                                                                                 s2:meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithLastName[1]| $s1.id ==  $s2.id }) 
+            meta::pure::router::operations::merge_OperationSetImplementation_1__SetImplementation_MANY_([f1,f2],{s1:meta::external::store::model::test::alloy::merge::SourcePersonWithFirstName[1],
+                                                                                                                 s2:meta::external::store::model::test::alloy::merge::SourcePersonWithLastName[1]| $s1.id ==  $s2.id })
            }
-   *meta::pure::mapping::modelToModel::test::alloy::merge::Person : Operation
+   *meta::external::store::model::test::alloy::merge::Person : Operation
            {
-            meta::pure::router::operations::merge_OperationSetImplementation_1__SetImplementation_MANY_([p1,p2],{s1:meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithFirstName[1],
-                                                                                                                 s2:meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithLastName[1]| $s1.id ==  $s2.id }) 
+            meta::pure::router::operations::merge_OperationSetImplementation_1__SetImplementation_MANY_([p1,p2],{s1:meta::external::store::model::test::alloy::merge::SourcePersonWithFirstName[1],
+                                                                                                                 s2:meta::external::store::model::test::alloy::merge::SourcePersonWithLastName[1]| $s1.id ==  $s2.id })
            }
    
               
-   *meta::pure::mapping::modelToModel::test::alloy::merge::Address : Operation
+   *meta::external::store::model::test::alloy::merge::Address : Operation
            {
-            meta::pure::router::operations::merge_OperationSetImplementation_1__SetImplementation_MANY_([a1,a2],{s1:meta::pure::mapping::modelToModel::test::alloy::merge::SourceAddress[1],
-                                                                                                                 s2:meta::pure::mapping::modelToModel::test::alloy::merge::SourceAddressWithPostCode[1]| $s1.id ==  $s2.id }) 
+            meta::pure::router::operations::merge_OperationSetImplementation_1__SetImplementation_MANY_([a1,a2],{s1:meta::external::store::model::test::alloy::merge::SourceAddress[1],
+                                                                                                                 s2:meta::external::store::model::test::alloy::merge::SourceAddressWithPostCode[1]| $s1.id ==  $s2.id })
            }
    
 
-    meta::pure::mapping::modelToModel::test::alloy::merge::Firm[f1] : Pure
+    meta::external::store::model::test::alloy::merge::Firm[f1] : Pure
    {
-      ~src meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithFirstName
+      ~src meta::external::store::model::test::alloy::merge::SourcePersonWithFirstName
        ceo[p1]:$src
       
    }  
-   meta::pure::mapping::modelToModel::test::alloy::merge::Person[p1] : Pure
+   meta::external::store::model::test::alloy::merge::Person[p1] : Pure
             {
-               ~src 	meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithFirstName
+               ~src 	meta::external::store::model::test::alloy::merge::SourcePersonWithFirstName
                firstName : $src.sourceFirstName,
                address[a1] : $src.sourceAddress
             }
 
   
-       meta::pure::mapping::modelToModel::test::alloy::merge::Address[a1] : Pure
+       meta::external::store::model::test::alloy::merge::Address[a1] : Pure
             {
-               ~src 	meta::pure::mapping::modelToModel::test::alloy::merge::SourceAddress
+               ~src 	meta::external::store::model::test::alloy::merge::SourceAddress
                street :  $src.sourceStreet
             }
 
-      meta::pure::mapping::modelToModel::test::alloy::merge::Firm[f2] : Pure
+      meta::external::store::model::test::alloy::merge::Firm[f2] : Pure
    {
-      ~src meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithLastName
+      ~src meta::external::store::model::test::alloy::merge::SourcePersonWithLastName
        ceo[p2]:$src
       
    }
-    meta::pure::mapping::modelToModel::test::alloy::merge::Person[p2] : Pure
+    meta::external::store::model::test::alloy::merge::Person[p2] : Pure
             {
-               ~src 	meta::pure::mapping::modelToModel::test::alloy::merge::SourcePersonWithLastName
+               ~src 	meta::external::store::model::test::alloy::merge::SourcePersonWithLastName
                lastName :  $src.sourceLastName,
                address[a2] : $src.sourceAddress
 
             }
 
-     meta::pure::mapping::modelToModel::test::alloy::merge::Address[a2] : Pure
+     meta::external::store::model::test::alloy::merge::Address[a2] : Pure
             {
-               ~src 	meta::pure::mapping::modelToModel::test::alloy::merge::SourceAddressWithPostCode
+               ~src 	meta::external::store::model::test::alloy::merge::SourceAddressWithPostCode
                postCode :  $src.sourcePostCode
             }
 )
 
 
 ###Mapping
-Mapping meta::pure::mapping::modelToModel::test::alloy::merge::MergeObjectsModelMappingChain
+Mapping meta::external::store::model::test::alloy::merge::MergeObjectsModelMappingChain
 (
-   meta::pure::mapping::modelToModel::test::alloy::merge::PersonCombined : Pure
+   meta::external::store::model::test::alloy::merge::PersonCombined : Pure
             {
-               ~src 	meta::pure::mapping::modelToModel::test::alloy::merge::Person
+               ~src 	meta::external::store::model::test::alloy::merge::Person
                fullName : $src.firstName->toOne() + ' ' + $src.lastName->toOne()
             }
 

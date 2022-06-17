@@ -16,8 +16,8 @@ import meta::pure::executionPlan::engine::java::roadmap::*;
 import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::alloy::utils::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::alloy::utils::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly, feature.M2MBasics>> 
 {  serverVersion.start='v1_19_0',
@@ -26,14 +26,14 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  a mapping is executed using graphFetch and serialize.',
    doc.doc='Then:  the mapping conversion should succeed.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::simple::canMapBetweenClassesWithTheSameName() : Boolean[1]
+meta::external::store::model::test::alloy::simple::canMapBetweenClassesWithTheSameName() : Boolean[1]
 {
-   let tree = #{meta::pure::mapping::modelToModel::test::alloy::simple::toFromSameName::dest::domain::Person {newFirstName, newLastName, age}}#;
+   let tree = #{meta::external::store::model::test::alloy::simple::toFromSameName::dest::domain::Person {newFirstName, newLastName, age}}#;
 
    let result = execute(
-      |meta::pure::mapping::modelToModel::test::alloy::simple::toFromSameName::dest::domain::Person.all()->graphFetch($tree)->serialize($tree),
-      meta::pure::mapping::modelToModel::test::alloy::simple::toFromSameName::personMapping,
-      testJsonRuntime(meta::pure::mapping::modelToModel::test::alloy::simple::toFromSameName::src::domain::Person, '{"firstName":"Dave", "lastName":"Miles"}'),
+      |meta::external::store::model::test::alloy::simple::toFromSameName::dest::domain::Person.all()->graphFetch($tree)->serialize($tree),
+      meta::external::store::model::test::alloy::simple::toFromSameName::personMapping,
+      testJsonRuntime(meta::external::store::model::test::alloy::simple::toFromSameName::src::domain::Person, '{"firstName":"Dave", "lastName":"Miles"}'),
       []
    );
    let json = $result.values->toOne();
@@ -48,14 +48,14 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  a mapping is executed using graphFetchChecked and serialize.',
    doc.doc='Then:  the mapping conversion should succeed.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::simple::canMapBetweenClassesWithTheSameNameChecked() : Boolean[1]
+meta::external::store::model::test::alloy::simple::canMapBetweenClassesWithTheSameNameChecked() : Boolean[1]
 {
-   let tree = #{meta::pure::mapping::modelToModel::test::alloy::simple::toFromSameName::dest::domain::Person {newFirstName, newLastName, age}}#;
+   let tree = #{meta::external::store::model::test::alloy::simple::toFromSameName::dest::domain::Person {newFirstName, newLastName, age}}#;
 
    let result = execute(
-      |meta::pure::mapping::modelToModel::test::alloy::simple::toFromSameName::dest::domain::Person.all()->graphFetchChecked($tree)->serialize($tree),
-      meta::pure::mapping::modelToModel::test::alloy::simple::toFromSameName::personMapping,
-      testJsonRuntime(meta::pure::mapping::modelToModel::test::alloy::simple::toFromSameName::src::domain::Person, '{"firstName":"Dave", "lastName":"Miles"}'),
+      |meta::external::store::model::test::alloy::simple::toFromSameName::dest::domain::Person.all()->graphFetchChecked($tree)->serialize($tree),
+      meta::external::store::model::test::alloy::simple::toFromSameName::personMapping,
+      testJsonRuntime(meta::external::store::model::test::alloy::simple::toFromSameName::src::domain::Person, '{"firstName":"Dave", "lastName":"Miles"}'),
       []
    );
 
@@ -74,13 +74,13 @@ meta::pure::mapping::modelToModel::test::alloy::simple::canMapBetweenClassesWith
 }
 
 ###Pure
-Class meta::pure::mapping::modelToModel::test::alloy::simple::toFromSameName::src::domain::Person
+Class meta::external::store::model::test::alloy::simple::toFromSameName::src::domain::Person
 {
    firstName : String[1];
    lastName  : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::simple::toFromSameName::dest::domain::Person
+Class meta::external::store::model::test::alloy::simple::toFromSameName::dest::domain::Person
 {
    newFirstName : String[1];
    newLastName  : String[1];
@@ -89,11 +89,11 @@ Class meta::pure::mapping::modelToModel::test::alloy::simple::toFromSameName::de
 
 ###Mapping
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::simple::toFromSameName::personMapping
+Mapping meta::external::store::model::test::alloy::simple::toFromSameName::personMapping
 (
-   *meta::pure::mapping::modelToModel::test::alloy::simple::toFromSameName::dest::domain::Person[dest_Person] : Pure
+   *meta::external::store::model::test::alloy::simple::toFromSameName::dest::domain::Person[dest_Person] : Pure
       {
-         ~src meta::pure::mapping::modelToModel::test::alloy::simple::toFromSameName::src::domain::Person
+         ~src meta::external::store::model::test::alloy::simple::toFromSameName::src::domain::Person
          newFirstName : $src.firstName,
          newLastName  : $src.lastName,
          age          : 25

@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::pure::mapping::modelToModel::test::primitives::*;
-import meta::pure::mapping::modelToModel::test::filter::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::primitives::*;
+import meta::external::store::model::test::filter::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::*;
 import meta::pure::runtime::*;
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
 
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::primitives::testWithPrimitiveTypes():Any[*]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::primitives::testWithPrimitiveTypes():Any[*]
 {
     let res = execute(
             |Person.all()->filter(f|$f.addresses->exists(a|$a.street == 'MyStreet')),
@@ -42,11 +42,11 @@ function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::
 
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::primitives::primitiveModelMapping
+Mapping meta::external::store::model::test::primitives::primitiveModelMapping
 (
    Person : Pure
             {

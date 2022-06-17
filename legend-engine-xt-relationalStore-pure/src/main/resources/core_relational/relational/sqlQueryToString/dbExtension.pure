@@ -1,25 +1,25 @@
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::functions::pureToSqlQuery::metamodel::*;
-import meta::relational::runtime::*;
-import meta::relational::metamodel::*;
-import meta::relational::metamodel::datatype::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::relation::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::functions::pureToSqlQuery::metamodel::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::metamodel::datatype::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::relation::*;
 import meta::pure::router::extension::*;
 
-Enum meta::relational::functions::sqlQueryToString::GenerationSide
+Enum meta::external::store::relational::functions::sqlQueryToString::GenerationSide
 {
    Select,
    Where
 }
 
-Class meta::relational::functions::sqlQueryToString::GenerationState
+Class meta::external::store::relational::functions::sqlQueryToString::GenerationState
 {
   <<equality.Key>> generationSide : GenerationSide[1];
   <<equality.Key>> withinWhenClause : Boolean[0..1];
 }
 
-Class meta::relational::functions::sqlQueryToString::Config
+Class meta::external::store::relational::functions::sqlQueryToString::Config
 {
    callingFromFilter : Boolean[0..1];
    useQuotesForTableAliasColumn : Boolean[0..1];
@@ -27,7 +27,7 @@ Class meta::relational::functions::sqlQueryToString::Config
    generateJoinTarget : TableAlias[0..1];
 }
 
-Class meta::relational::functions::sqlQueryToString::Format
+Class meta::external::store::relational::functions::sqlQueryToString::Format
 {
    newLine:String[1];
    indent:String[1];
@@ -39,7 +39,7 @@ Class meta::relational::functions::sqlQueryToString::Format
    }:String[1];
 }
 
-Class meta::relational::functions::sqlQueryToString::DbConfig
+Class meta::external::store::relational::functions::sqlQueryToString::DbConfig
 {
    dbType:DatabaseType[1];
    dbTimeZone:String[0..1];
@@ -147,17 +147,17 @@ Class meta::relational::functions::sqlQueryToString::DbConfig
    }: String[*];
 }
 
-function meta::relational::functions::sqlQueryToString::createDbConfig(dbType:DatabaseType[1]):DbConfig[1]
+function meta::external::store::relational::functions::sqlQueryToString::createDbConfig(dbType:DatabaseType[1]):DbConfig[1]
 {
    createDbConfig($dbType, []);
 }
 
-function meta::relational::functions::sqlQueryToString::createDbConfig( dbType:DatabaseType[1], dbTimeZone:String[0..1]):DbConfig[1]
+function meta::external::store::relational::functions::sqlQueryToString::createDbConfig( dbType:DatabaseType[1], dbTimeZone:String[0..1]):DbConfig[1]
 {
    createDbConfig($dbType, $dbTimeZone, []);
 }
 
-function meta::relational::functions::sqlQueryToString::createDbConfig( dbType:DatabaseType[1], dbTimeZone:String[0..1], quoteIdentifiers:Boolean[0..1]):DbConfig[1]
+function meta::external::store::relational::functions::sqlQueryToString::createDbConfig( dbType:DatabaseType[1], dbTimeZone:String[0..1], quoteIdentifiers:Boolean[0..1]):DbConfig[1]
 {
    ^DbConfig(
       dbType = $dbType,
@@ -167,7 +167,7 @@ function meta::relational::functions::sqlQueryToString::createDbConfig( dbType:D
    );
 }
 
-Class meta::relational::functions::sqlQueryToString::DbExtension
+Class meta::external::store::relational::functions::sqlQueryToString::DbExtension
 {
    isBooleanLiteralSupported: Boolean[1];
    collectionThresholdLimit: Integer[0..1];
@@ -187,7 +187,7 @@ Class meta::relational::functions::sqlQueryToString::DbExtension
    ddlCommandsTranslator : RelationalDDLCommandsTranslator[0..1];
 }
 
-Class meta::relational::functions::sqlQueryToString::RelationalDDLCommandsTranslator
+Class meta::external::store::relational::functions::sqlQueryToString::RelationalDDLCommandsTranslator
 {
   createSchema: meta::pure::metamodel::function::Function<{CreateSchemaSQL[1]->String[*]}>[0..1];
   dropSchema : meta::pure::metamodel::function::Function<{DropSchemaSQL[1]->String[*]}>[0..1];
@@ -196,13 +196,13 @@ Class meta::relational::functions::sqlQueryToString::RelationalDDLCommandsTransl
   loadTable: meta::pure::metamodel::function::Function<{LoadTableSQL[1], DbConfig[1] ->  String[*]}>[0..1];
 }
 
-Class meta::relational::functions::sqlQueryToString::DbExtensionLoader
+Class meta::external::store::relational::functions::sqlQueryToString::DbExtensionLoader
 {
    dbType: DatabaseType[1];
    loader: meta::pure::metamodel::function::Function<{->DbExtension[1]}>[1];
 }
 
-Class meta::relational::functions::sqlQueryToString::SqlGenerationContext
+Class meta::external::store::relational::functions::sqlQueryToString::SqlGenerationContext
 {
    dbConfig: DbConfig[1];
    format: Format[1];
@@ -211,12 +211,12 @@ Class meta::relational::functions::sqlQueryToString::SqlGenerationContext
    extensions: RouterExtension[*];
 }
 
-function meta::relational::functions::sqlQueryToString::literalTransform<K>(t: meta::pure::metamodel::function::Function<{K[1] -> String[1]}>[1]): meta::pure::metamodel::function::Function<{K[1], String[0..1] -> String[1]}>[1]
+function meta::external::store::relational::functions::sqlQueryToString::literalTransform<K>(t: meta::pure::metamodel::function::Function<{K[1] -> String[1]}>[1]): meta::pure::metamodel::function::Function<{K[1], String[0..1] -> String[1]}>[1]
 {
   {x:K[1], dbTimeZone:String[0..1]| $t->eval($x)};
 }
 
-Class meta::relational::functions::sqlQueryToString::LiteralProcessor
+Class meta::external::store::relational::functions::sqlQueryToString::LiteralProcessor
 {
    types:Type[*];
    format: String[1];
@@ -231,17 +231,17 @@ Class meta::relational::functions::sqlQueryToString::LiteralProcessor
    }:String[1];
 }
 
-Profile meta::relational::functions::sqlQueryToString::db
+Profile meta::external::store::relational::functions::sqlQueryToString::db
 {
    stereotypes: [ExtensionLoader];
 }
 
-function meta::relational::functions::sqlQueryToString::getDatabaseTypes():DatabaseType[*]
+function meta::external::store::relational::functions::sqlQueryToString::getDatabaseTypes():DatabaseType[*]
 {
   getDbExtensionLoaders().dbType;
 }
 
-function meta::relational::functions::sqlQueryToString::loadDbExtension(dbType: DatabaseType[1]):DbExtension[1]
+function meta::external::store::relational::functions::sqlQueryToString::loadDbExtension(dbType: DatabaseType[1]):DbExtension[1]
 {
   let loader = getDbExtensionLoaders()->filter(l| $l.dbType == $dbType);
   assert($loader->size() > 0, 'No extension loaders found for dbType ' + $dbType->toString());
@@ -249,68 +249,68 @@ function meta::relational::functions::sqlQueryToString::loadDbExtension(dbType: 
   $loader->toOne().loader->eval();
 }
 
-function meta::relational::functions::sqlQueryToString::getDbExtensionLoaders():DbExtensionLoader[*]
+function meta::external::store::relational::functions::sqlQueryToString::getDbExtensionLoaders():DbExtensionLoader[*]
 {
   db->stereotype('ExtensionLoader').modelElements->cast(@meta::pure::metamodel::function::Function<{->DbExtensionLoader[1]}>)
     ->map(f| $f->eval())->sortBy(l| $l.dbType.name);
 }
 
-function meta::relational::functions::sqlQueryToString::sqlQueryToString(sqlQuery:SQLQuery[1], dbType:DatabaseType[1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::sqlQueryToString(sqlQuery:SQLQuery[1], dbType:DatabaseType[1], extensions:RouterExtension[*]):String[1]
 {
    sqlQueryToString($sqlQuery, $dbType, [], [], $extensions);
 }
 
-function meta::relational::functions::sqlQueryToString::sqlQueryToString(sqlQuery:SQLQuery[1], dbType:DatabaseType[1], dbTimeZone:String[0..1], quoteIdentifiers:Boolean[0..1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::sqlQueryToString(sqlQuery:SQLQuery[1], dbType:DatabaseType[1], dbTimeZone:String[0..1], quoteIdentifiers:Boolean[0..1], extensions:RouterExtension[*]):String[1]
 {
    sqlQueryToString($sqlQuery, $dbType, $dbTimeZone, $quoteIdentifiers, ^Format(newLine='', indent=''), $extensions);
 }
 
-function meta::relational::functions::sqlQueryToString::sqlQueryToStringPretty(sqlQuery:SQLQuery[1], dbType:DatabaseType[1], dbTimeZone:String[0..1], quoteIdentifiers:Boolean[0..1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::sqlQueryToStringPretty(sqlQuery:SQLQuery[1], dbType:DatabaseType[1], dbTimeZone:String[0..1], quoteIdentifiers:Boolean[0..1], extensions:RouterExtension[*]):String[1]
 {
    sqlQueryToString($sqlQuery, $dbType, $dbTimeZone, $quoteIdentifiers, ^Format(newLine='\n', indent='\t'), $extensions);
 }
 
-function meta::relational::functions::sqlQueryToString::sqlQueryToString(sqlQuery:SQLQuery[1], dbType:DatabaseType[1], dbTimeZone:String[0..1], quoteIdentifiers:Boolean[0..1], format:Format[1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::sqlQueryToString(sqlQuery:SQLQuery[1], dbType:DatabaseType[1], dbTimeZone:String[0..1], quoteIdentifiers:Boolean[0..1], format:Format[1], extensions:RouterExtension[*]):String[1]
 {
    processOperation($sqlQuery, createDbConfig($dbType, $dbTimeZone, $quoteIdentifiers), $format, ^Config(), $extensions);
 }
 
-function meta::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], dbType:DatabaseType[1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], dbType:DatabaseType[1], extensions:RouterExtension[*]):String[1]
 {
    processOperation($relationalOperationElement, createDbConfig($dbType, []), ^Format(newLine='', indent=''), ^Config(), $extensions);
 }
 
-function meta::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], dbType:DatabaseType[1], dbTimeZone:String[0..1], quoteIdentifiers:Boolean[0..1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], dbType:DatabaseType[1], dbTimeZone:String[0..1], quoteIdentifiers:Boolean[0..1], extensions:RouterExtension[*]):String[1]
 {
    processOperation($relationalOperationElement, createDbConfig($dbType, $dbTimeZone, $quoteIdentifiers), ^Format(newLine='', indent=''), ^Config(), $extensions);
 }
 
-function meta::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], dbType:DatabaseType[1], config:Config[1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], dbType:DatabaseType[1], config:Config[1], extensions:RouterExtension[*]):String[1]
 {
    processOperation($relationalOperationElement, createDbConfig($dbType, []), ^Format(newLine='', indent=''), $config, $extensions);
 }
 
-function meta::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], dbConfig : DbConfig[1], format:Format[1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], dbConfig : DbConfig[1], format:Format[1], extensions:RouterExtension[*]):String[1]
 {
    processOperation($relationalOperationElement, $dbConfig, $format, ^GenerationState(generationSide = GenerationSide.Where, withinWhenClause = false), ^Config(), $extensions);
 }
 
-function meta::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], extensions:RouterExtension[*]):String[1]
 {
    processOperation($relationalOperationElement, $dbConfig, $format, ^GenerationState(generationSide = GenerationSide.Where, withinWhenClause = false), $config, $extensions);
 }
 
-function meta::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], dbConfig : DbConfig[1], format:Format[1], generationState:GenerationState[1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], dbConfig : DbConfig[1], format:Format[1], generationState:GenerationState[1], extensions:RouterExtension[*]):String[1]
 {
    processOperation($relationalOperationElement, $dbConfig, $format, $generationState, ^Config(), $extensions);
 }
 
-function meta::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], sgc:SqlGenerationContext[1]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], sgc:SqlGenerationContext[1]):String[1]
 {
    $relationalOperationElement->processOperation($sgc.dbConfig, $sgc.format, $sgc.generationState, $sgc.config, $sgc.extensions);
 }
 
-function meta::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], dbConfig : DbConfig[1], format:Format[1], generationState:GenerationState[1], config:Config[1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::processOperation(relationalOperationElement:RelationalOperationElement[1], dbConfig : DbConfig[1], format:Format[1], generationState:GenerationState[1], config:Config[1], extensions:RouterExtension[*]):String[1]
 {
    let sgc = ^SqlGenerationContext(dbConfig=$dbConfig, format=$format, generationState=$generationState, config=$config, extensions=$extensions);
    $relationalOperationElement->match($extensions->map(e|$e.moduleExtension('relational')->cast(@RelationalExtension).sqlQueryToString_processOperation)->map(f | $f->eval($dbConfig, $format, $generationState, $config, $extensions))->concatenate(
@@ -359,24 +359,24 @@ function meta::relational::functions::sqlQueryToString::processOperation(relatio
                                           s:SemiStructuredObjectNavigation[1]|$dbConfig.semiStructuredElementProcessor($s, $sgc),
                                           s:SemiStructuredArrayFlatten[1]|$dbConfig.semiStructuredElementProcessor($s, $sgc),
                                           s:SemiStructuredArrayFlattenOutput[1]|$dbConfig.semiStructuredElementProcessor($s, $sgc),
-                                          {f:meta::relational::metamodel::operation::Function[1]| assert(false, 'Don\'t know how to handle %s', $f->type()); 'TO DO'; }
+                                          {f:meta::external::store::relational::metamodel::operation::Function[1]| assert(false, 'Don\'t know how to handle %s', $f->type()); 'TO DO'; }
                                        ])->toOneMany()
                                      );
 }
 
-function meta::relational::functions::sqlQueryToString::tableToString(table:Table[1], dbConfig : DbConfig[1]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::tableToString(table:Table[1], dbConfig : DbConfig[1]):String[1]
 {
    let schemaName = $dbConfig.schemaNameToIdentifier($table.schema.name);
    let tableName = $dbConfig.tableNameToIdentifier($table.name);
    if($schemaName == 'default', | $dbConfig.identifierProcessor($tableName), | $dbConfig.identifierProcessor($schemaName) + '.' + $dbConfig.identifierProcessor($tableName));
 }
 
-function meta::relational::functions::sqlQueryToString::indent(d:Format[1]):Format[1]
+function meta::external::store::relational::functions::sqlQueryToString::indent(d:Format[1]):Format[1]
 {
    ^$d(indentStack += $d.indent);
 }
 
-function meta::relational::functions::sqlQueryToString::processSelectSQLQuery(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::processSelectSQLQuery(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
 {
    if ($s.columns->isEmpty() && !$s.data->isEmpty() && $s.data.alias.relationalElement->toOne()->instanceOf(Union) && $s.data.children->isEmpty(),
       | $s.data.alias.relationalElement->toOne()->processOperation($sgc.dbConfig, $sgc.format->indent(), $sgc.config, $sgc.extensions),
@@ -384,40 +384,40 @@ function meta::relational::functions::sqlQueryToString::processSelectSQLQuery(s:
    );
 }
 
-function meta::relational::functions::sqlQueryToString::processColumnName(name:String[1], dbConfig:DbConfig[1]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::processColumnName(name:String[1], dbConfig:DbConfig[1]):String[1]
 {
    $dbConfig.identifierProcessor($dbConfig.columnNameToIdentifier($name));
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::processLiteral(literal:Literal[1], dbConfig : DbConfig[1]) : String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::processLiteral(literal:Literal[1], dbConfig : DbConfig[1]) : String[1]
 {
    $literal.value->processLiteralValue($dbConfig);
 }
 
-function meta::relational::functions::sqlQueryToString::processLiteralValue(a:Any[1], dbConfig : DbConfig[1]) : String[1]
+function meta::external::store::relational::functions::sqlQueryToString::processLiteralValue(a:Any[1], dbConfig : DbConfig[1]) : String[1]
 {
    let processor = $dbConfig.literalProcessor($a->type());
    $processor.formatValue($a, $dbConfig.dbTimeZone);
 }
 
-function meta::relational::functions::sqlQueryToString::getLiteralProcessorForType(type:Type[1], literalProcessor: meta::pure::metamodel::function::Function<{Type[1] -> LiteralProcessor[1]}>[1]): LiteralProcessor[1]
+function meta::external::store::relational::functions::sqlQueryToString::getLiteralProcessorForType(type:Type[1], literalProcessor: meta::pure::metamodel::function::Function<{Type[1] -> LiteralProcessor[1]}>[1]): LiteralProcessor[1]
 {
    if($type->equal(VarPlaceHolder),
       |^LiteralProcessor(format = '%s', transform = {v:VarPlaceHolder[1], dbTimeZone:String[0..1] | convertPlaceHolderToSQLString($v, $literalProcessor, $dbTimeZone)}),
       |$literalProcessor->eval($type));
 }
 
-function meta::relational::functions::sqlQueryToString::maybeWrapAsBooleanOperation(e:RelationalOperationElement[1], sgc:SqlGenerationContext[1]):RelationalOperationElement[1]
+function meta::external::store::relational::functions::sqlQueryToString::maybeWrapAsBooleanOperation(e:RelationalOperationElement[1], sgc:SqlGenerationContext[1]):RelationalOperationElement[1]
 {
    if ($sgc.dbConfig.dbExtension.isBooleanLiteralSupported, |$e, |$e->wrapAsBooleanOperation($sgc.extensions));
 }
 
-function meta::relational::functions::sqlQueryToString::wrapAsBooleanOperation(e:RelationalOperationElement[1], extensions:RouterExtension[*]):RelationalOperationElement[1]
+function meta::external::store::relational::functions::sqlQueryToString::wrapAsBooleanOperation(e:RelationalOperationElement[1], extensions:RouterExtension[*]):RelationalOperationElement[1]
 {
    if ($e->isBooleanOperation($extensions), | $e, | ^DynaFunction(name ='equal', parameters=[$e, ^Literal(value=true)]));
 }
 
-function meta::relational::functions::sqlQueryToString::isBooleanOperation(relationalElement:RelationalOperationElement[1], extensions:RouterExtension[*]):Boolean[1]
+function meta::external::store::relational::functions::sqlQueryToString::isBooleanOperation(relationalElement:RelationalOperationElement[1], extensions:RouterExtension[*]):Boolean[1]
 {
    $relationalElement->match($extensions.moduleExtension('relational')->cast(@RelationalExtension).sqlQueryToString_isBooleanOperation->concatenate([
       d:DynaFunction[1] | $d.name->in(['or', 'and', 'lessThan', 'lessThanEqual', 'greaterThan', 'greaterThanEqual', 'equal', 'notEqual', 'notEqualAnsi', 'startsWith', 'endsWith', 'contains', 'isEmpty', 'isNotEmpty', 'isNull', 'isNotNull','isAlphaNumeric', 'exists', 'not', 'in', 'isNumeric', 'matches', 'isDistinct'])
@@ -428,7 +428,7 @@ function meta::relational::functions::sqlQueryToString::isBooleanOperation(relat
    )
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::processDynaFunction(func:DynaFunction[1], sgc:SqlGenerationContext[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::processDynaFunction(func:DynaFunction[1], sgc:SqlGenerationContext[1]):String[1]
 {
    if ($func->isEqualsFromFilter($sgc.config),
       | processEqualFromFilter($func,$sgc),
@@ -455,7 +455,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::proce
    )));
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::processCase(func:DynaFunction[1], sgc:SqlGenerationContext[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::processCase(func:DynaFunction[1], sgc:SqlGenerationContext[1]):String[1]
 {
    let params = $func.parameters;
    let size = ($params->size()-1)/2;
@@ -466,23 +466,23 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::proce
    'case '+ $range->map(o| $sgc.format.separator + 'when '+$params->at($o)->processOperation($sgcWithinWhen)+ ' ' + $sgc.format.separator + 'then '+$params->at($o+1)->processOperation($sgcNoConfig))->makeString(' ')+ ' ' + $sgc.format.separator + 'else '+$params->at($params->size()-1)->processOperation($sgcNoConfig)+' end';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::isEqualsFromFilter(func:DynaFunction[1], config: Config[1]):Boolean[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::isEqualsFromFilter(func:DynaFunction[1], config: Config[1]):Boolean[1]
 {
    $func.name == 'equal' && $config.callingFromFilter == true &&
       $func.parameters->forAll(p | $p->instanceOf(TableAliasColumn) && $p->cast(@TableAliasColumn).column.nullable != false);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::isAndOr(func:DynaFunction[1]):Boolean[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::isAndOr(func:DynaFunction[1]):Boolean[1]
 {
    $func.name == 'and' || $func.name == 'or';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::isNot(func:DynaFunction[1]):Boolean[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::isNot(func:DynaFunction[1]):Boolean[1]
 {
    $func.name == 'not';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::processEqualFromFilter(func:DynaFunction[1], sgc:SqlGenerationContext[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::processEqualFromFilter(func:DynaFunction[1], sgc:SqlGenerationContext[1]):String[1]
 {
    let params = $func.parameters->map(p | $p->processOperation($sgc));
    let left = $params->at(0);
@@ -490,7 +490,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::proce
    '(' + $left + ' = ' + $right + ' OR (' + $left + ' is null AND ' + $right + ' is null))';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::processNot(func:DynaFunction[1], sgc:SqlGenerationContext[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::processNot(func:DynaFunction[1], sgc:SqlGenerationContext[1]):String[1]
 {
    let parameter = $func.parameters->at(0);
    $parameter->match([
@@ -506,7 +506,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::proce
                     ]);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::processNotEqual(func:DynaFunction[1], sgc:SqlGenerationContext[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::processNotEqual(func:DynaFunction[1], sgc:SqlGenerationContext[1]):String[1]
 {
    let processedParams = $func.parameters->map(p | $p->processOperation($sgc));
    let left = $func.parameters->at(0);
@@ -526,7 +526,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::proce
    '(' + $processedLeft + ' <> ' + $processedRight + $orNull + ')';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::processNotIn(func:DynaFunction[1], sgc:SqlGenerationContext[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::processNotIn(func:DynaFunction[1], sgc:SqlGenerationContext[1]):String[1]
 {
    let processedParams = $func.parameters->map(p | $p->processOperation($sgc));
    let processedLeft = $processedParams->at(0);
@@ -534,22 +534,22 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::proce
    '(' + $processedLeft + ' not in ' + if($processedRight->startsWith('(') && $processedRight->endsWith(')'), | $processedRight, | '(' + $processedRight + ')') + ' OR ' + $processedLeft + ' is null)';
 }
 
-function meta::relational::functions::sqlQueryToString::sqlNull():SQLNull[1]
+function meta::external::store::relational::functions::sqlQueryToString::sqlNull():SQLNull[1]
 {
     ^SQLNull();
 }
 
-function meta::relational::functions::sqlQueryToString::sqlTrue():Boolean[1]
+function meta::external::store::relational::functions::sqlQueryToString::sqlTrue():Boolean[1]
 {
     true;
 }
 
-function meta::relational::functions::sqlQueryToString::sqlFalse():Boolean[1]
+function meta::external::store::relational::functions::sqlQueryToString::sqlFalse():Boolean[1]
 {
     false;
 }
 
-function meta::relational::functions::sqlQueryToString::allGenerationStates(): GenerationState[*]
+function meta::external::store::relational::functions::sqlQueryToString::allGenerationStates(): GenerationState[*]
 {
   let selectInsideWhen  = ^GenerationState(generationSide=GenerationSide.Select, withinWhenClause=true);
   let selectOutsideWhen = ^GenerationState(generationSide=GenerationSide.Select, withinWhenClause=false);
@@ -558,12 +558,12 @@ function meta::relational::functions::sqlQueryToString::allGenerationStates(): G
   [$selectInsideWhen, $selectOutsideWhen, $whereInsideWhen, $whereOutsideWhen];
 }
 
-function meta::relational::functions::sqlQueryToString::selectOutsideWhenGenerationState(): GenerationState[1]
+function meta::external::store::relational::functions::sqlQueryToString::selectOutsideWhenGenerationState(): GenerationState[1]
 {
   ^GenerationState(generationSide=GenerationSide.Select, withinWhenClause=false);
 }
 
-function meta::relational::functions::sqlQueryToString::notSelectOutsideWhenGenerationStates(): GenerationState[*]
+function meta::external::store::relational::functions::sqlQueryToString::notSelectOutsideWhenGenerationStates(): GenerationState[*]
 {
   let selectInsideWhen  = ^GenerationState(generationSide=GenerationSide.Select, withinWhenClause=true);
   let whereInsideWhen   = ^GenerationState(generationSide=GenerationSide.Where,  withinWhenClause=true);
@@ -571,12 +571,12 @@ function meta::relational::functions::sqlQueryToString::notSelectOutsideWhenGene
   [$selectInsideWhen, $whereInsideWhen, $whereOutsideWhen];
 }
 
-function meta::relational::functions::sqlQueryToString::dynaFnToSql(dynafunctionName: String[1], generationStates:GenerationState[*], toSql:ToSql[1]): DynaFunctionToSql[1]
+function meta::external::store::relational::functions::sqlQueryToString::dynaFnToSql(dynafunctionName: String[1], generationStates:GenerationState[*], toSql:ToSql[1]): DynaFunctionToSql[1]
 {
    ^DynaFunctionToSql(funcName=$dynafunctionName, stateMatch=$generationStates, toSql=$toSql);
 }
 
-function meta::relational::functions::sqlQueryToString::getDynaFunctionDispatcher(dispatch: Map<String, List<DynaFunctionToSql>>[1]): meta::pure::metamodel::function::Function<{DynaFunction[1], SqlGenerationContext[1]->DynaFunctionToSql[1]}>[1]
+function meta::external::store::relational::functions::sqlQueryToString::getDynaFunctionDispatcher(dispatch: Map<String, List<DynaFunctionToSql>>[1]): meta::pure::metamodel::function::Function<{DynaFunction[1], SqlGenerationContext[1]->DynaFunctionToSql[1]}>[1]
 {
    { func:DynaFunction[1], sgc:SqlGenerationContext[1] |
         let result = $dispatch->get($func.name)->cast(@List<DynaFunctionToSql>).values->filter(d | $d.stateMatch->isEmpty() || $sgc.generationState->in($d.stateMatch));
@@ -586,7 +586,7 @@ function meta::relational::functions::sqlQueryToString::getDynaFunctionDispatche
    };
 }
 
-Class meta::relational::functions::sqlQueryToString::DynaFunctionToSql
+Class meta::external::store::relational::functions::sqlQueryToString::DynaFunctionToSql
 {
    funcName:String[1];
    stateMatch:GenerationState[*];
@@ -601,7 +601,7 @@ Class meta::relational::functions::sqlQueryToString::DynaFunctionToSql
    }:String[1];
 }
 
-Class meta::relational::functions::sqlQueryToString::ToSql
+Class meta::external::store::relational::functions::sqlQueryToString::ToSql
 [
     !$this.format->contains(' when ') || !$this.parametersWithinWhenClause->isEmpty()
 ]

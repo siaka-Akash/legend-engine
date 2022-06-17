@@ -173,7 +173,7 @@ function <<access.protected>> meta::protocols::pure::v1_19_0::transformation::fr
     ->removeDuplicatesBy(a|$a->elementToPath());
 }
 
-function <<access.private>> meta::protocols::pure::v1_19_0::transformation::fromPureGraph::extractStoresFromTableReference<T|m>(query: FunctionDefinition<{->T[m]}>[1]): meta::relational::metamodel::Database[*]
+function <<access.private>> meta::protocols::pure::v1_19_0::transformation::fromPureGraph::extractStoresFromTableReference<T|m>(query: FunctionDefinition<{->T[m]}>[1]): meta::external::store::relational::metamodel::Database[*]
 {
   let search = 'tableReference_Database_1__String_1__String_1__Table_1_';
   let expressions = $query.expressionSequence->evaluateAndDeactivate();
@@ -182,7 +182,7 @@ function <<access.private>> meta::protocols::pure::v1_19_0::transformation::from
         ->meta::protocols::pure::v1_19_0::transformation::fromPureGraph::searchQueryGraph($search),
   | []));
 
-  $tableReference->map(ref| $ref->cast(@SimpleFunctionExpression).parametersValues->at(0)->cast(@InstanceValue).values->toOne()->cast(@meta::relational::metamodel::Database));
+  $tableReference->map(ref| $ref->cast(@SimpleFunctionExpression).parametersValues->at(0)->cast(@InstanceValue).values->toOne()->cast(@meta::external::store::relational::metamodel::Database));
 }
 
 function <<access.private>> meta::protocols::pure::v1_19_0::transformation::fromPureGraph::searchQueryGraph(func: SimpleFunctionExpression[1], text: String[1]): SimpleFunctionExpression[*]

@@ -50,7 +50,7 @@ public class TestPlanExecutionWithGraphFetchEqualityCache extends AlloyTestServe
 
         GraphFetchCacheByEqualityKeys personCache = ExecutionCacheBuilder.buildGraphFetchCacheByEqualityKeysFromGuavaCache(
                 CacheBuilder.newBuilder().recordStats().expireAfterWrite(10, TimeUnit.MINUTES).build(),
-                "meta::relational::tests::simpleRelationalMappingInc",
+                "meta::external::store::relational::tests::simpleRelationalMappingInc",
                 "meta_pure_tests_model_simple_Person"
         );
 
@@ -69,7 +69,7 @@ public class TestPlanExecutionWithGraphFetchEqualityCache extends AlloyTestServe
 
         GraphFetchCacheByEqualityKeys personCache = ExecutionCacheBuilder.buildGraphFetchCacheByEqualityKeysFromGuavaCache(
                 CacheBuilder.newBuilder().recordStats().expireAfterWrite(10, TimeUnit.SECONDS).build(),
-                "meta::relational::tests::simpleRelationalMappingInc",
+                "meta::external::store::relational::tests::simpleRelationalMappingInc",
                 "meta_pure_tests_model_simple_Person"
         );
 
@@ -115,7 +115,7 @@ public class TestPlanExecutionWithGraphFetchEqualityCache extends AlloyTestServe
 
         GraphFetchCacheByEqualityKeys personCache = ExecutionCacheBuilder.buildGraphFetchCacheByEqualityKeysFromGuavaCache(
                 CacheBuilder.newBuilder().recordStats().expireAfterWrite(10, TimeUnit.MINUTES).build(),
-                "meta::relational::tests::simpleRelationalMappingInc",
+                "meta::external::store::relational::tests::simpleRelationalMappingInc",
                 "meta_pure_tests_model_simple_Person"
         );
 
@@ -133,7 +133,7 @@ public class TestPlanExecutionWithGraphFetchEqualityCache extends AlloyTestServe
 
         GraphFetchCacheByEqualityKeys personCache = ExecutionCacheBuilder.buildGraphFetchCacheByEqualityKeysFromGuavaCache(
                 CacheBuilder.newBuilder().recordStats().expireAfterWrite(10, TimeUnit.MINUTES).build(),
-                "meta::relational::tests::simpleRelationalMappingInc",
+                "meta::external::store::relational::tests::simpleRelationalMappingInc",
                 "meta_pure_tests_model_simple_Person"
         );
 
@@ -151,7 +151,7 @@ public class TestPlanExecutionWithGraphFetchEqualityCache extends AlloyTestServe
 
         GraphFetchCacheByEqualityKeys firmCache = ExecutionCacheBuilder.buildGraphFetchCacheByEqualityKeysFromGuavaCache(
                 CacheBuilder.newBuilder().recordStats().expireAfterWrite(10, TimeUnit.MINUTES).build(),
-                "meta::relational::tests::simpleRelationalMappingInc",
+                "meta::external::store::relational::tests::simpleRelationalMappingInc",
                 "meta_pure_tests_model_simple_Firm"
         );
 
@@ -170,7 +170,7 @@ public class TestPlanExecutionWithGraphFetchEqualityCache extends AlloyTestServe
 
         GraphFetchCacheByEqualityKeys personCache = ExecutionCacheBuilder.buildGraphFetchCacheByEqualityKeysFromGuavaCache(
                 CacheBuilder.newBuilder().recordStats().expireAfterWrite(10, TimeUnit.MINUTES).build(),
-                "meta::relational::tests::simpleRelationalMappingInc",
+                "meta::external::store::relational::tests::simpleRelationalMappingInc",
                 "meta_pure_tests_model_simple_Person"
         );
 
@@ -195,7 +195,7 @@ public class TestPlanExecutionWithGraphFetchEqualityCache extends AlloyTestServe
 
         GraphFetchCacheByEqualityKeys firmCache = ExecutionCacheBuilder.buildGraphFetchCacheByEqualityKeysFromGuavaCache(
                 CacheBuilder.newBuilder().recordStats().expireAfterWrite(10, TimeUnit.MINUTES).build(),
-                "meta::relational::tests::simpleRelationalMappingInc",
+                "meta::external::store::relational::tests::simpleRelationalMappingInc",
                 "meta_pure_tests_model_simple_Firm"
         );
 
@@ -213,7 +213,7 @@ public class TestPlanExecutionWithGraphFetchEqualityCache extends AlloyTestServe
 
         GraphFetchCacheByEqualityKeys firmCache = ExecutionCacheBuilder.buildGraphFetchCacheByEqualityKeysFromGuavaCache(
                 CacheBuilder.newBuilder().recordStats().expireAfterWrite(10, TimeUnit.MINUTES).build(),
-                "meta::relational::tests::simpleRelationalMappingInc",
+                "meta::external::store::relational::tests::simpleRelationalMappingInc",
                 "meta_pure_tests_model_simple_Firm"
         );
 

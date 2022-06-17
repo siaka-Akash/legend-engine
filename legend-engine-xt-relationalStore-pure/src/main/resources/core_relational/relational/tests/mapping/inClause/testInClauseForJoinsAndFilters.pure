@@ -13,17 +13,17 @@
 // limitations under the License.
 
 ###Pure
-import meta::relational::tests::model::simple::*;
-import meta::csv::*;
-import meta::relational::functions::asserts::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::mapping::*;
 import meta::pure::runtime::*;
-import meta::relational::tests::mapping::in::*;
+import meta::external::store::relational::tests::mapping::in::*;
 
 
 function <<test.Test, meta::pure::profiles::test.AlloyOnly>>
 { meta::pure::executionPlan::profiles::serverVersion.start='v1_13_0' }
-meta::relational::tests::mapping::in::testJoinWithInClause0():Boolean[1]
+meta::external::store::relational::tests::mapping::in::testJoinWithInClause0():Boolean[1]
 {
    let result = execute(|Person.all()->project([p|$p.lastName, p|$p.firm.legalName], ['person', 'firm']), inClauseMapping0, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSameSQL('select "root".LASTNAME as "person", "firmtable_0".LEGALNAME as "firm" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID and ("firmtable_0".ID = 2 or "firmtable_0".ID = 3 or "firmtable_0".ID = 4))', $result->sqlRemoveFormatting());
@@ -31,7 +31,7 @@ meta::relational::tests::mapping::in::testJoinWithInClause0():Boolean[1]
 
 function <<test.Test, meta::pure::profiles::test.AlloyOnly>>
 { meta::pure::executionPlan::profiles::serverVersion.start='v1_13_0' }
-meta::relational::tests::mapping::in::testJoinWithPrefixInClauseContainingNumberLiterals():Boolean[1]
+meta::external::store::relational::tests::mapping::in::testJoinWithPrefixInClauseContainingNumberLiterals():Boolean[1]
 {
    let result = execute(|Person.all()->project([p|$p.lastName, p|$p.firm.legalName], ['person', 'firm']), inClausePrefixMapping1, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSameSQL('select "root".LASTNAME as "person", "firmtable_0".LEGALNAME as "firm" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID and "firmtable_0".ID in (2, 3, 4))', $result->sqlRemoveFormatting());
@@ -39,7 +39,7 @@ meta::relational::tests::mapping::in::testJoinWithPrefixInClauseContainingNumber
 
 function <<test.Test, meta::pure::profiles::test.AlloyOnly>>
 { meta::pure::executionPlan::profiles::serverVersion.start='v1_13_0' }
-meta::relational::tests::mapping::in::testJoinWithPrefixInClauseContainingStringLiterals():Boolean[1]
+meta::external::store::relational::tests::mapping::in::testJoinWithPrefixInClauseContainingStringLiterals():Boolean[1]
 {
    let result = execute(|Person.all()->project([p|$p.lastName, p|$p.firm.legalName], ['person', 'firm']), inClausePrefixMapping2, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSameSQL('select "root".LASTNAME as "person", "firmtable_0".LEGALNAME as "firm" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID and "firmtable_0".LEGALNAME in (\'Firm C\', \'Firm A\'))', $result->sqlRemoveFormatting());
@@ -47,7 +47,7 @@ meta::relational::tests::mapping::in::testJoinWithPrefixInClauseContainingString
 
 function <<test.Test, meta::pure::profiles::test.AlloyOnly>>
 { meta::pure::executionPlan::profiles::serverVersion.start='v1_13_0' }
-meta::relational::tests::mapping::in::testFilterMappingWithPrefixInClause():Boolean[1]
+meta::external::store::relational::tests::mapping::in::testFilterMappingWithPrefixInClause():Boolean[1]
 {
    let result = execute(|Firm.all(), filterMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    // assertSameElements(['ROOT', 'Firm X', 'Firm A', 'Securities', 'Banking', 'Federation'], $result.values.name);
@@ -55,18 +55,18 @@ meta::relational::tests::mapping::in::testFilterMappingWithPrefixInClause():Bool
 }
 
 function <<test.BeforePackage>>
-meta::relational::tests::mapping::in::setUp():Boolean[1]
+meta::external::store::relational::tests::mapping::in::setUp():Boolean[1]
 {
-    meta::relational::tests::mapping::join::setUp();
+    meta::external::store::relational::tests::mapping::join::setUp();
 }
 
-function meta::relational::tests::mapping::in::testRuntime():Runtime[1]
+function meta::external::store::relational::tests::mapping::in::testRuntime():Runtime[1]
 {
-   meta::relational::tests::testRuntime(db);
+   meta::external::store::relational::tests::testRuntime(db);
 }
 
 ###Relational
-Database meta::relational::tests::mapping::in::db
+Database meta::external::store::relational::tests::mapping::in::db
 (
     Table personTable (ID INT PRIMARY KEY, FIRSTNAME VARCHAR(200), LASTNAME VARCHAR(200), ADDRESSID INT, FIRMID INT, FLAG INT,AGE INT)
     Table firmTable(ID INT PRIMARY KEY, LEGALNAME VARCHAR(200), ADDRESSID INT, FLAG INT)
@@ -79,10 +79,10 @@ Database meta::relational::tests::mapping::in::db
 )
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::in::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::in::*;
 
-Mapping meta::relational::tests::mapping::in::inClauseMapping0
+Mapping meta::external::store::relational::tests::mapping::in::inClauseMapping0
 (
    Person : Relational
             {
@@ -101,7 +101,7 @@ Mapping meta::relational::tests::mapping::in::inClauseMapping0
           }
 )
 
-Mapping meta::relational::tests::mapping::in::inClausePrefixMapping1
+Mapping meta::external::store::relational::tests::mapping::in::inClausePrefixMapping1
 (
    Person : Relational
             {
@@ -120,7 +120,7 @@ Mapping meta::relational::tests::mapping::in::inClausePrefixMapping1
           }
 )
 
-Mapping meta::relational::tests::mapping::in::inClausePrefixMapping2
+Mapping meta::external::store::relational::tests::mapping::in::inClausePrefixMapping2
 (
    Person : Relational
             {
@@ -139,7 +139,7 @@ Mapping meta::relational::tests::mapping::in::inClausePrefixMapping2
           }
 )
 
-Mapping meta::relational::tests::mapping::in::filterMapping
+Mapping meta::external::store::relational::tests::mapping::in::filterMapping
 (
    Firm : Relational
           {

@@ -16,15 +16,15 @@ import meta::pure::executionPlan::engine::java::roadmap::*;
 import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::parameters::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::parameters::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::parameters::bridge::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::parameters::dest::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::alloy::chain::parameters::*;
+import meta::external::store::model::test::alloy::chain::parameters::src::*;
+import meta::external::store::model::test::alloy::chain::parameters::bridge::*;
+import meta::external::store::model::test::alloy::chain::parameters::dest::*;
 import meta::pure::runtime::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'}
-meta::pure::mapping::modelToModel::test::alloy::chain::parameters::qualifiedPropertyAccessWithConstantParameter(): Boolean[1]
+meta::external::store::model::test::alloy::chain::parameters::qualifiedPropertyAccessWithConstantParameter(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -149,7 +149,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::parameters::qualifiedProp
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'}
-meta::pure::mapping::modelToModel::test::alloy::chain::parameters::qualifiedPropertyAccessWithVariableParameter(): Boolean[1]
+meta::external::store::model::test::alloy::chain::parameters::qualifiedPropertyAccessWithVariableParameter(): Boolean[1]
 {
    let sourceFirms = '[{"name":"Firm1", "employees":[{"fullName":"Person1"}, {"fullName":"Person2"}]},{"name":"Firm2", "employees":[{"fullName":"Person3"}]}]';
    
@@ -285,48 +285,48 @@ meta::pure::mapping::modelToModel::test::alloy::chain::parameters::qualifiedProp
 }
 
 ###Pure
-import meta::pure::mapping::modelToModel::test::alloy::chain::parameters::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::parameters::bridge::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::parameters::dest::*;
+import meta::external::store::model::test::alloy::chain::parameters::src::*;
+import meta::external::store::model::test::alloy::chain::parameters::bridge::*;
+import meta::external::store::model::test::alloy::chain::parameters::dest::*;
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::parameters::src::__Firm
+Class meta::external::store::model::test::alloy::chain::parameters::src::__Firm
 {
    name      : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::parameters::src::__Person
+Class meta::external::store::model::test::alloy::chain::parameters::src::__Person
 {
    fullName  : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::chain::parameters::src::__Firm___Person
+Association meta::external::store::model::test::alloy::chain::parameters::src::__Firm___Person
 {
    firm      : __Firm[1];        
    employees : __Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::parameters::bridge::_Firm
+Class meta::external::store::model::test::alloy::chain::parameters::bridge::_Firm
 {
    name      : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::parameters::bridge::_Person
+Class meta::external::store::model::test::alloy::chain::parameters::bridge::_Person
 {
    fullName  : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::chain::parameters::bridge::_Firm__Person
+Association meta::external::store::model::test::alloy::chain::parameters::bridge::_Firm__Person
 {
    firm      : _Firm[1];        
    employees : _Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::parameters::dest::Firm
+Class meta::external::store::model::test::alloy::chain::parameters::dest::Firm
 {
    name      : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::parameters::dest::Person
+Class meta::external::store::model::test::alloy::chain::parameters::dest::Person
 {
    fullName  : String[1];
    nameWithTitle(title: String[1]) {
@@ -334,18 +334,18 @@ Class meta::pure::mapping::modelToModel::test::alloy::chain::parameters::dest::P
    }: String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::chain::parameters::dest::Firm_Person
+Association meta::external::store::model::test::alloy::chain::parameters::dest::Firm_Person
 {
    firm      : Firm[1];        
    employees : Person[*];
 }
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::chain::parameters::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::parameters::bridge::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::parameters::dest::*;
+import meta::external::store::model::test::alloy::chain::parameters::src::*;
+import meta::external::store::model::test::alloy::chain::parameters::bridge::*;
+import meta::external::store::model::test::alloy::chain::parameters::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::chain::parameters::BridgeToDestMapping
+Mapping meta::external::store::model::test::alloy::chain::parameters::BridgeToDestMapping
 (
    Firm: Pure {
       ~src _Firm
@@ -359,7 +359,7 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::chain::parameters::Bridg
    }
 )
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::chain::parameters::SrcToBridgeMapping
+Mapping meta::external::store::model::test::alloy::chain::parameters::SrcToBridgeMapping
 (
    _Firm: Pure {
       ~src __Firm

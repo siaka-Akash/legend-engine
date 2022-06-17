@@ -1,16 +1,16 @@
-import meta::relational::functions::sqlQueryToString::h2::*;
-import meta::relational::functions::sqlQueryToString::default::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::functions::sqlQueryToString::h2::*;
+import meta::external::store::relational::functions::sqlQueryToString::default::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
 
-function <<db.ExtensionLoader>> meta::relational::functions::sqlQueryToString::h2::dbExtensionLoaderForH2():DbExtensionLoader[1]
+function <<db.ExtensionLoader>> meta::external::store::relational::functions::sqlQueryToString::h2::dbExtensionLoaderForH2():DbExtensionLoader[1]
 {
   ^DbExtensionLoader(dbType = DatabaseType.H2, loader = createDbExtensionForH2__DbExtension_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::h2::createDbExtensionForH2():DbExtension[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::h2::createDbExtensionForH2():DbExtension[1]
 {
    let reservedWords = h2ReservedWords();
    let literalProcessors = getDefaultLiteralProcessors();
@@ -33,7 +33,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::h2::c
    );
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::h2::h2ReservedWords():String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::h2::h2ReservedWords():String[*]
 {
    [
       'all','array','case','check','constraint','cross','current_date','current_time','current_timestamp','current_user','distinct','except','exists','false','fetch','for','foreign','from',
@@ -42,7 +42,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::h2::h
    ];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::h2::getDynaFunctionToSqlForH2(): DynaFunctionToSql[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::h2::getDynaFunctionToSqlForH2(): DynaFunctionToSql[*]
 {
   let allStates = allGenerationStates();
 
@@ -102,14 +102,14 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::h2::g
   ];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::h2::processSemiStructuredElementForH2(s:RelationalOperationElement[1], sgc:SqlGenerationContext[1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::h2::processSemiStructuredElementForH2(s:RelationalOperationElement[1], sgc:SqlGenerationContext[1]): String[1]
 {
    $s->match([
       o:SemiStructuredObjectNavigation[1] | $o->processSemiStructuredObjectNavigationForH2($sgc)
    ])  
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::h2::processSemiStructuredObjectNavigationForH2(s:SemiStructuredObjectNavigation[1], sgc:SqlGenerationContext[1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::h2::processSemiStructuredObjectNavigationForH2(s:SemiStructuredObjectNavigation[1], sgc:SqlGenerationContext[1]): String[1]
 {
    // Use a user defined function for H2 (testing purpose)
 
@@ -138,13 +138,13 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::h2::p
    $elementAccess)))))));
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::h2::processJoinStringsOperationForH2(js:JoinStrings[1], sgc:SqlGenerationContext[1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::h2::processJoinStringsOperationForH2(js:JoinStrings[1], sgc:SqlGenerationContext[1]): String[1]
 {
    processJoinStringsOperation($js, $sgc, {col, sep| 'group_concat(' + $col + if($sep == '\'\'', |'', |' separator ' + $sep) + ' )'},
     {strs, sep| $strs->joinStrings('concat(', if('\'\'' == $sep, |', ', |',' + $sep + ',') , ')')});
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::h2::convertToDateH2(params:String[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::h2::convertToDateH2(params:String[*]):String[1]
 {
 
       assert( 2 - $params->size()  >= 0,'Incorrect number of parameters for convertDate: convertDate(column,[dateformat])');
@@ -155,31 +155,31 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::h2::c
       'cast( parseDateTime('+$params->at(0)+','+$dateFormat +') as date)';
 }
 
-function meta::relational::functions::sqlQueryToString::h2::normalizeH2DateFormat(params:String[1]):String[1]
+function meta::external::store::relational::functions::sqlQueryToString::h2::normalizeH2DateFormat(params:String[1]):String[1]
 {
    [pair('YYYY', 'yyyy'), pair('DD', 'dd')]->fold({e, a| $a->replace($e.first,$e.second)}, $params);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::h2::dateFormatsH2():String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::h2::dateFormatsH2():String[*]
 {
    ['yyyy-MM-dd', 'MMMyyyy', 'yyyyMMdd'];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::h2::convertToDateTimeH2(params:String[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::h2::convertToDateTimeH2(params:String[*]):String[1]
 {
    $params->convertDateTimeFunctionHasCorrectParams();
    let dateTimeFormat = if( $params->size() == 1,|'\'yyyy-MM-dd hh:mm:ss[.nnnnnnnnn]\'',| $params->at(1););
    'parseDateTime('+$params->at(0)+','+$dateTimeFormat +')';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::h2::processDateDiffDurationUnitForH2(durationUnit:String[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::h2::processDateDiffDurationUnitForH2(durationUnit:String[1]):String[1]
 {
    let durationEnumNames = [DurationUnit.YEARS,DurationUnit.MONTHS,DurationUnit.WEEKS,DurationUnit.DAYS,DurationUnit.HOURS,DurationUnit.MINUTES,DurationUnit.SECONDS,DurationUnit.MILLISECONDS]->map(e|$e->toString());
    let durationDbNames = ['year', 'month', 'week', 'day', 'hour', 'minute', 'second', 'millisecond'];
    $durationEnumNames->zip($durationDbNames)->filter(h | $h.first == $durationUnit).second->toOne();
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::h2::formatMostRecentH2(p:String[1..2], defaultDay:String[1]):String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::h2::formatMostRecentH2(p:String[1..2], defaultDay:String[1]):String[*]
 {
    let day = $p->last()->toOne()->mapToDBDayOfWeekNumber()->toString();
    let current = if ($p->size() == 2, | $p->first()->toOne(), | $defaultDay);

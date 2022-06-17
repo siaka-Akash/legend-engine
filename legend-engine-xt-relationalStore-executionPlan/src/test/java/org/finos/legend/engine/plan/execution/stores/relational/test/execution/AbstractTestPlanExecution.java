@@ -89,7 +89,7 @@ public class AbstractTestPlanExecution
 
     private String getTemplatedPlanJSON()
     {
-        // executionPlan(|meta::relational::tests::mapping::enumeration::model::domain::Employee.all(), meta::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping, meta::relational::tests::mapping::enumeration::enumTestRuntime())->meta::alloy::protocol::vX_X_X::transformation::fromPureGraph::executionPlan::transformPlan()->toJSON([], 1000, config(false, false, true, true));
+        // executionPlan(|meta::external::store::relational::tests::mapping::enumeration::model::domain::Employee.all(), meta::external::store::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping, meta::external::store::relational::tests::mapping::enumeration::enumTestRuntime())->meta::alloy::protocol::vX_X_X::transformation::fromPureGraph::executionPlan::transformPlan()->toJSON([], 1000, config(false, false, true, true));
         return "{\n" +
                 "  \"rootExecutionNode\": {\n" +
                 "    \"sqlQuery\": \"select \\\"root\\\".id as \\\"pk_0\\\", \\\"root\\\".id as \\\"id\\\", \\\"root\\\".name as \\\"name\\\", \\\"root\\\".doh as \\\"dateOfHire\\\", \\\"root\\\".type as \\\"type\\\", \\\"root\\\".active as \\\"active\\\" from employeeTable as \\\"root\\\"\",\n" +
@@ -123,12 +123,12 @@ public class AbstractTestPlanExecution
                 "," +
                 "    \"_type\": \"relational\",\n" +
                 "    \"resultType\": {\n" +
-                "      \"class\": \"meta::relational::tests::mapping::enumeration::model::domain::Employee\",\n" +
+                "      \"class\": \"meta::external::store::relational::tests::mapping::enumeration::model::domain::Employee\",\n" +
                 "      \"setImplementations\": [\n" +
                 "        {\n" +
-                "          \"class\": \"meta::relational::tests::mapping::enumeration::model::domain::Employee\",\n" +
-                "          \"mapping\": \"meta::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping\",\n" +
-                "          \"id\": \"meta_relational_tests_mapping_enumeration_model_domain_Employee\",\n" +
+                "          \"class\": \"meta::external::store::relational::tests::mapping::enumeration::model::domain::Employee\",\n" +
+                "          \"mapping\": \"meta::external::store::relational::tests::mapping::enumeration::model::mapping::employeeTestMapping\",\n" +
+                "          \"id\": \"meta_external_store_relational_tests_mapping_enumeration_model_domain_Employee\",\n" +
                 "          \"propertyMappings\": [\n" +
                 "            {\n" +
                 "              \"property\": \"id\",\n" +
@@ -144,7 +144,7 @@ public class AbstractTestPlanExecution
                 "            },\n" +
                 "            {\n" +
                 "              \"property\": \"type\",\n" +
-                "              \"type\": \"meta::relational::tests::mapping::enumeration::model::domain::EmployeeType\",\n" +
+                "              \"type\": \"meta::external::store::relational::tests::mapping::enumeration::model::domain::EmployeeType\",\n" +
                 "              \"enumMapping\": {\n" +
                 "                \"CONTRACT\": [\n" +
                 "                  \"FTC\",\n" +
@@ -157,7 +157,7 @@ public class AbstractTestPlanExecution
                 "            },\n" +
                 "            {\n" +
                 "              \"property\": \"active\",\n" +
-                "              \"type\": \"meta::relational::tests::mapping::enumeration::model::domain::YesNo\",\n" +
+                "              \"type\": \"meta::external::store::relational::tests::mapping::enumeration::model::domain::YesNo\",\n" +
                 "              \"enumMapping\": {\n" +
                 "                \"YES\": [\n" +
                 "                  \"1\"\n" +

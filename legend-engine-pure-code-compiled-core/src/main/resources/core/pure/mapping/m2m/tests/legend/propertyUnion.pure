@@ -15,16 +15,16 @@
 import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::test::alloy::propertyUnion::*;
-import meta::pure::mapping::modelToModel::test::alloy::propertyUnion::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::propertyUnion::dest::*;
-import meta::pure::mapping::modelToModel::test::alloy::utils::*;
+import meta::external::store::model::test::alloy::propertyUnion::*;
+import meta::external::store::model::test::alloy::propertyUnion::src::*;
+import meta::external::store::model::test::alloy::propertyUnion::dest::*;
+import meta::external::store::model::test::alloy::utils::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> 
 {
    serverVersion.start='v1_19_0'
 }
-meta::pure::mapping::modelToModel::test::alloy::simple::testSimpleUnionAtProperty():Any[*]
+meta::external::store::model::test::alloy::simple::testSimpleUnionAtProperty():Any[*]
 {
    let tree = #{TargetRoot {prop, nested {childProp}}}#;
 
@@ -44,7 +44,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
 {
    serverVersion.start='v1_19_0'
 }
-meta::pure::mapping::modelToModel::test::alloy::simple::testMultiLevelUnion():Any[*]
+meta::external::store::model::test::alloy::simple::testMultiLevelUnion():Any[*]
 {
    let tree = #{TargetRoot {prop, nested {childProp, nested {deepChildProp}}}}#;
 
@@ -64,7 +64,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
 {
    serverVersion.start='v1_19_0'
 }
-meta::pure::mapping::modelToModel::test::alloy::simple::testLargeUnionAtProperty():Any[*]
+meta::external::store::model::test::alloy::simple::testLargeUnionAtProperty():Any[*]
 {
    let tree = #{TargetRoot {prop, nested {childProp}}}#;
 
@@ -84,7 +84,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
 {
    serverVersion.start='v1_19_0'
 }
-meta::pure::mapping::modelToModel::test::alloy::simple::testDisjointUnionWithOptionalProperties():Any[*]
+meta::external::store::model::test::alloy::simple::testDisjointUnionWithOptionalProperties():Any[*]
 {
    let tree = #{MainClass {firstName, unionOfInputClass {field1, field2}}}#;
 
@@ -101,55 +101,55 @@ meta::pure::mapping::modelToModel::test::alloy::simple::testDisjointUnionWithOpt
 }
 
 ###Pure
-import meta::pure::mapping::modelToModel::test::alloy::propertyUnion::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::propertyUnion::dest::*;
+import meta::external::store::model::test::alloy::propertyUnion::src::*;
+import meta::external::store::model::test::alloy::propertyUnion::dest::*;
 
-Class meta::pure::mapping::modelToModel::test::alloy::propertyUnion::src::Source
+Class meta::external::store::model::test::alloy::propertyUnion::src::Source
 {
    prop : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::propertyUnion::dest::TargetRoot
+Class meta::external::store::model::test::alloy::propertyUnion::dest::TargetRoot
 {
    prop   : String[1];
    nested : TargetChild[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::propertyUnion::dest::TargetChild
+Class meta::external::store::model::test::alloy::propertyUnion::dest::TargetChild
 {
    childProp : String[1];
    nested    : TargetDeepChild[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::propertyUnion::dest::TargetDeepChild
+Class meta::external::store::model::test::alloy::propertyUnion::dest::TargetDeepChild
 {
    deepChildProp : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::propertyUnion::src::InputClass
+Class meta::external::store::model::test::alloy::propertyUnion::src::InputClass
 {
   firstName : String[0..1];
   union1_field : String[0..1];
   union2_field : String[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::propertyUnion::dest::MainClass
+Class meta::external::store::model::test::alloy::propertyUnion::dest::MainClass
 {
   firstName : String[0..1];
   unionOfInputClass : S[*]; 
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::propertyUnion::dest::S
+Class meta::external::store::model::test::alloy::propertyUnion::dest::S
 {
   field1 : String[0..1];
   field2 : String[0..1];
 }
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::propertyUnion::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::propertyUnion::dest::*;
+import meta::external::store::model::test::alloy::propertyUnion::src::*;
+import meta::external::store::model::test::alloy::propertyUnion::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::propertyUnion::simplePropertyUnionMap
+Mapping meta::external::store::model::test::alloy::propertyUnion::simplePropertyUnionMap
 (
    TargetRoot : Pure {
       ~src Source
@@ -174,10 +174,10 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::propertyUnion::simplePro
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::propertyUnion::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::propertyUnion::dest::*;
+import meta::external::store::model::test::alloy::propertyUnion::src::*;
+import meta::external::store::model::test::alloy::propertyUnion::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::propertyUnion::simpleDisjointUnionMap
+Mapping meta::external::store::model::test::alloy::propertyUnion::simpleDisjointUnionMap
 (
   MainClass: Pure
   {
@@ -206,10 +206,10 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::propertyUnion::simpleDis
 ) 
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::propertyUnion::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::propertyUnion::dest::*;
+import meta::external::store::model::test::alloy::propertyUnion::src::*;
+import meta::external::store::model::test::alloy::propertyUnion::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::propertyUnion::multiLevelUnionMapping
+Mapping meta::external::store::model::test::alloy::propertyUnion::multiLevelUnionMapping
 (
    TargetRoot[root] : Pure {
       ~src Source
@@ -257,10 +257,10 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::propertyUnion::multiLeve
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::propertyUnion::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::propertyUnion::dest::*;
+import meta::external::store::model::test::alloy::propertyUnion::src::*;
+import meta::external::store::model::test::alloy::propertyUnion::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::propertyUnion::largePropertyUnionMap
+Mapping meta::external::store::model::test::alloy::propertyUnion::largePropertyUnionMap
 (
    TargetRoot : Pure {
       ~src Source

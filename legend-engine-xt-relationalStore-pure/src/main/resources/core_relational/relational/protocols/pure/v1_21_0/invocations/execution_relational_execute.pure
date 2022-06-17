@@ -13,11 +13,11 @@
 // limitations under the License.
 
 ###Pure
-import meta::pure::mapping::aggregationAware::*;
+import meta::external::store::aggregationAware::*;
 import meta::json::*;
 import meta::pure::router::extension::*;
 import meta::protocols::*;
-import meta::pure::mapping::modelToModel::*;
+import meta::external::store::model::*;
 import meta::protocols::pure::v1_21_0::transformation::fromPureGraph::context::*;
 import meta::pure::router::routing::*;
 import meta::protocols::pure::v1_21_0::invocation::execution::execute::*;
@@ -28,8 +28,8 @@ import meta::pure::runtime::*;
 import meta::pure::mapping::*;
 import meta::pure::milestoning::*;
 import meta::alloy::metadataServer::*;
-import meta::relational::milestoning::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::milestoning::*;
+import meta::external::store::relational::mapping::*;
 
 function meta::protocols::pure::v1_21_0::invocation::execution::execute::processTDSResult(r:meta::protocols::pure::v1_21_0::metamodel::invocation::execution::execute::RelationalTDSResult[1], extensions:meta::pure::router::extension::RouterExtension[*]) : Pair<List<Any>,List<Activity>>[1]
 {
@@ -88,7 +88,7 @@ function meta::protocols::pure::v1_21_0::invocation::execution::execute::process
                                              s:String[1]|$m.classMappingById($s)
                                           )->cast(@RootRelationalInstanceSetImplementation);
 
-   let setImplMap = $setImplementations->map(set | pair($set.id, pair($set, meta::pure::milestoning::getTemporalMilestoningStrategy($set.class)->isNotEmpty() && meta::pure::milestoning::getTemporalMilestoningStrategy($set.class)->toOne()->meta::pure::milestoning::expandToSingleTemporalStrategies()->forAll(s| $s->meta::relational::milestoning::relationalElementCanSupportStrategy($set.mainTable())))))->newMap();
+   let setImplMap = $setImplementations->map(set | pair($set.id, pair($set, meta::pure::milestoning::getTemporalMilestoningStrategy($set.class)->isNotEmpty() && meta::pure::milestoning::getTemporalMilestoningStrategy($set.class)->toOne()->meta::pure::milestoning::expandToSingleTemporalStrategies()->forAll(s| $s->meta::external::store::relational::milestoning::relationalElementCanSupportStrategy($set.mainTable())))))->newMap();
 
    let exeCtx = if($context->isEmpty(), | ^ExecutionContext(), | $context->toOne());
    let precas =  $setImplementations->map(set | pair($set.id, precaForRelationalSetImpl($set, $m, $pureRuntime, $exeCtx, $extensions)))->newMap();
@@ -101,7 +101,7 @@ function meta::protocols::pure::v1_21_0::invocation::execution::execute::process
    let pks = $preca.pks->size()->range()->map({pkId |
       let key = $preca.pks->at($pkId);
       let jsonKey = 'pk$_' + $pkId->toString() + if($reference.operationResolvedSetsId->size() == 1, | '', | '_' + $reference.operationResolvedSetsId->indexOf($setId)->toString());
-      if($key.type->isNotEmpty() && ($key.type->toOne()->instanceOf(meta::relational::metamodel::datatype::Timestamp) || $key.type->toOne()->instanceOf(meta::relational::metamodel::datatype::Date)),
+      if($key.type->isNotEmpty() && ($key.type->toOne()->instanceOf(meta::external::store::relational::metamodel::datatype::Timestamp) || $key.type->toOne()->instanceOf(meta::external::store::relational::metamodel::datatype::Date)),
          | parseDate($pkMap->get($jsonKey)->toOne()->cast(@String)),
          | $pkMap->get($jsonKey)->toOne()
       );
@@ -174,7 +174,7 @@ function meta::protocols::pure::v1_21_0::invocation::execution::execute::generat
    let databaseConnection   = $runtime->connectionByElement($store->toOne())->meta::protocols::pure::v1_21_0::transformation::fromPureGraph::runtime::transformConnection($extensions)->cast(@meta::protocols::pure::v1_21_0::metamodel::store::relational::connection::DatabaseConnection);
 
    let setIdx               = if($sets->size() == 1, | '', | '_' + $sets->indexOf($set)->toString());
-   let transformedPkMap     = meta::relational::mapping::resolvePrimaryKeysNames($set->cast(@RelationalInstanceSetImplementation), $pkMap, $setIdx, true, $extensions);
+   let transformedPkMap     = meta::external::store::relational::mapping::resolvePrimaryKeysNames($set->cast(@RelationalInstanceSetImplementation), $pkMap, $setIdx, true, $extensions);
 
    ^meta::protocols::pure::v1_21_0::metamodel::objectReference::AlloyRelationalStoreObjectReference(
       type = meta::protocols::pure::v1_21_0::metamodel::objectReference::AlloyObjectReferenceType.Relational,
@@ -277,18 +277,18 @@ function <<access.private>> meta::protocols::pure::v1_21_0::invocation::executio
                                    (
                                       runtime = $runtime,
                                       mapping = $mapping,
-                                      systemMapping = meta::pure::router::systemMapping::relationalSystemMapping(),
+                                      systemMapping = meta::external::store::relational::contract::relationalStoreContract(),
                                       setImplementation = $setImplementation,
                                       exeCtx = $exeCtx,
                                       debug = noDebug(),
                                       extensions = $extensions
                                    ),
-      pks = if($setImplementation->meta::relational::functions::pureToSqlQuery::getGroupBy()->isEmpty() && ($setImplementation->meta::relational::functions::pureToSqlQuery::getDistinct()->isEmpty() || $setImplementation->meta::relational::functions::pureToSqlQuery::getDistinct()->toOne() == false),
-               | $setImplementation.resolvePrimaryKey()->map(pk | ^RelationalSetPrimaryKey(element = $pk, type = $pk->meta::relational::functions::typeInference::inferRelationalType())),
+      pks = if($setImplementation->meta::external::store::relational::functions::pureToSqlQuery::getGroupBy()->isEmpty() && ($setImplementation->meta::external::store::relational::functions::pureToSqlQuery::getDistinct()->isEmpty() || $setImplementation->meta::external::store::relational::functions::pureToSqlQuery::getDistinct()->toOne() == false),
+               | $setImplementation.resolvePrimaryKey()->map(pk | ^RelationalSetPrimaryKey(element = $pk, type = $pk->meta::external::store::relational::functions::typeInference::inferRelationalType())),
                | []),
       sourceConnection = $runtime->connectionByElement($setImplementation->meta::pure::router::clustering::getResolvedStore($mapping)->toOne())->toOne(),
       propMap = $ps,
-      addMilestoningProperties = meta::pure::milestoning::getTemporalMilestoningStrategy($setImplementation.class)->isNotEmpty() && meta::pure::milestoning::getTemporalMilestoningStrategy($setImplementation.class)->toOne()->meta::pure::milestoning::expandToSingleTemporalStrategies()->forAll(s| $s->meta::relational::milestoning::relationalElementCanSupportStrategy($setImplementation.mainTable()))
+      addMilestoningProperties = meta::pure::milestoning::getTemporalMilestoningStrategy($setImplementation.class)->isNotEmpty() && meta::pure::milestoning::getTemporalMilestoningStrategy($setImplementation.class)->toOne()->meta::pure::milestoning::expandToSingleTemporalStrategies()->forAll(s| $s->meta::external::store::relational::milestoning::relationalElementCanSupportStrategy($setImplementation.mainTable()))
    );
 }
 
@@ -328,8 +328,8 @@ Class <<access.private>> meta::protocols::pure::v1_21_0::invocation::execution::
 
 Class meta::protocols::pure::v1_21_0::invocation::execution::execute::RelationalSetPrimaryKey
 {
-   element : meta::relational::metamodel::RelationalOperationElement[1];
-   type : meta::relational::metamodel::datatype::DataType[0..1];
+   element : meta::external::store::relational::metamodel::RelationalOperationElement[1];
+   type : meta::external::store::relational::metamodel::datatype::DataType[0..1];
 }
 
 Class <<access.private>> meta::protocols::pure::v1_21_0::invocation::execution::execute::PropMapPrecalc

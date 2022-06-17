@@ -13,7 +13,7 @@
 // limitations under the License.
 
 ###Relational
-Database meta::relational::tests::functions::fetchDbMetaData::testFetchDbMetaDataDb
+Database meta::external::store::relational::tests::functions::fetchDbMetaData::testFetchDbMetaDataDb
 (
     Table fetchDbMetaDataPersonTable1 (ID INT PRIMARY KEY, FIRSTNAME VARCHAR(200), LASTNAME VARCHAR(200), AGE INT, ADDRESSID INT, FIRMID INT, MANAGERID INT)
     Table fetchDbMetaDataPersonTable2 (ID INT PRIMARY KEY, FIRSTNAME VARCHAR(200), LASTNAME VARCHAR(200), AGE INT, ADDRESSID INT, FIRMID INT, MANAGERID INT)
@@ -30,7 +30,7 @@ Database meta::relational::tests::functions::fetchDbMetaData::testFetchDbMetaDat
 )
 
 ###Relational
-Database meta::relational::tests::functions::fetchDbMetaData::actualDB
+Database meta::external::store::relational::tests::functions::fetchDbMetaData::actualDB
 (
     Schema testSchema1
     (
@@ -48,7 +48,7 @@ Database meta::relational::tests::functions::fetchDbMetaData::actualDB
 )
 
 ###Relational
-Database meta::relational::tests::functions::fetchDbMetaData::expectedDB
+Database meta::external::store::relational::tests::functions::fetchDbMetaData::expectedDB
 (
     Schema testSchema1
     (
@@ -71,24 +71,24 @@ Database meta::relational::tests::functions::fetchDbMetaData::expectedDB
 )
 
 ###Pure
-import meta::relational::functions::database::*;
-import meta::relational::tests::functions::fetchDbMetaData::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::functions::toDDL::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::functions::database::*;
+import meta::external::store::relational::tests::functions::fetchDbMetaData::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::functions::toDDL::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::runtime::*;
 
-function <<test.BeforePackage>> meta::relational::tests::functions::fetchDbMetaData::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::functions::fetchDbMetaData::setUp():Boolean[1]
 {
     createAndFillTestDb();
 }
 
-function meta::relational::tests::functions::fetchDbMetaData::testFetchDbMetaDataRuntime():Runtime[1]
+function meta::external::store::relational::tests::functions::fetchDbMetaData::testFetchDbMetaDataRuntime():Runtime[1]
 {
-   meta::relational::tests::testRuntime(testFetchDbMetaDataDb);
+   meta::external::store::relational::tests::testRuntime(testFetchDbMetaDataDb);
 }
 
-function  meta::relational::tests::functions::fetchDbMetaData::createAndFillTestDb():Boolean[1]
+function  meta::external::store::relational::tests::functions::fetchDbMetaData::createAndFillTestDb():Boolean[1]
 {
    let connection = testFetchDbMetaDataRuntime().connectionByElement(testFetchDbMetaDataDb)->cast(@TestDatabaseConnection);
    
@@ -108,7 +108,7 @@ function  meta::relational::tests::functions::fetchDbMetaData::createAndFillTest
    true;
 }
 
-function <<test.Test>> meta::relational::tests::functions::fetchDbMetaData::testFetchDbTablesMetaData():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::functions::fetchDbMetaData::testFetchDbTablesMetaData():Boolean[1]
 {
    createAndFillTestDb();
    let connection = testFetchDbMetaDataRuntime().connectionByElement(testFetchDbMetaDataDb)->cast(@TestDatabaseConnection);
@@ -125,7 +125,7 @@ function <<test.Test>> meta::relational::tests::functions::fetchDbMetaData::test
    assertEmpty(fetchDbTablesMetaData($connection, [], 'Random_Table_Name').rows);
 }
 
-function <<test.Test>> meta::relational::tests::functions::fetchDbMetaData::testFetchDbColumnsMetaData():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::functions::fetchDbMetaData::testFetchDbColumnsMetaData():Boolean[1]
 {
    createAndFillTestDb();
    let connection = testFetchDbMetaDataRuntime().connectionByElement(testFetchDbMetaDataDb)->cast(@TestDatabaseConnection);
@@ -152,7 +152,7 @@ function <<test.Test>> meta::relational::tests::functions::fetchDbMetaData::test
    assertEmpty(fetchDbColumnsMetaData($connection, [], [], 'Random_Column_Name').rows);
 }
 
-function <<test.Test>> meta::relational::tests::functions::fetchDbMetaData::testFetchDbSchemasMetaData():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::functions::fetchDbMetaData::testFetchDbSchemasMetaData():Boolean[1]
 {
    createAndFillTestDb();
    let connection = testFetchDbMetaDataRuntime().connectionByElement(testFetchDbMetaDataDb)->cast(@TestDatabaseConnection);
@@ -168,7 +168,7 @@ function <<test.Test>> meta::relational::tests::functions::fetchDbMetaData::test
    assertEmpty(fetchDbSchemasMetaData($connection, 'Random_Schema_Name').rows);
 }
 
-function <<test.Test>> meta::relational::tests::functions::fetchDbMetaData::testFetchDbPrimaryKeysMetaData():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::functions::fetchDbMetaData::testFetchDbPrimaryKeysMetaData():Boolean[1]
 {
    createAndFillTestDb();
    let connection = testFetchDbMetaDataRuntime().connectionByElement(testFetchDbMetaDataDb)->cast(@TestDatabaseConnection);

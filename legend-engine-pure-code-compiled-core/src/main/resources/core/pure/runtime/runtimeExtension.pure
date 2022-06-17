@@ -13,9 +13,9 @@
 // limitations under the License.
 
 import meta::pure::runtime::*;
-import meta::pure::store::*;
+import meta::pure::store::metamodel::*;
 import meta::pure::mapping::*;
-import meta::pure::mapping::modelToModel::*;
+import meta::external::store::model::*;
 
 Class meta::pure::runtime::PackageableRuntime extends PackageableElement
 {

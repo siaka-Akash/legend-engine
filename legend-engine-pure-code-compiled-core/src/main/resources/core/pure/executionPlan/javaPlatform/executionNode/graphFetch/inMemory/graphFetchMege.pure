@@ -1,7 +1,7 @@
 
 import meta::pure::mapping::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::inMemory::*;
+import meta::external::store::model::*;
+import meta::external::store::model::inMemory::*;
 import meta::pure::executionPlan::engine::java::graphFetch::inMemory::*;
 import meta::pure::graphFetch::routing::*;
 import meta::external::language::java::factory::*;
@@ -9,7 +9,7 @@ import meta::external::language::java::transform::*;
 import meta::pure::executionPlan::engine::java::graphFetch::common::*;
 import meta::pure::router::extension::*;
 import meta::pure::executionPlan::engine::java::*;
-import meta::pure::mapping::modelToModel::graphFetch::executionPlan::*;
+import meta::external::store::model::graphFetch::executionPlan::*;
 import meta::external::language::java::metamodel::*;
 function <<access.private>> meta::pure::executionPlan::engine::java::graphFetch::inMemory::MergeOperationForProperty(property:PropertyMapping[0..1]):MergeOperationSetImplementation[0..1]
 {
@@ -20,7 +20,7 @@ function <<access.private>> meta::pure::executionPlan::engine::java::graphFetch:
    }
 
 
-function <<access.private>> meta::pure::executionPlan::engine::java::graphFetch::inMemory::MergeOperationForInstance(instance:meta::pure::mapping::modelToModel::PureInstanceSetImplementation[1]):MergeOperationSetImplementation[1]
+function <<access.private>> meta::pure::executionPlan::engine::java::graphFetch::inMemory::MergeOperationForInstance(instance:meta::external::store::model::PureInstanceSetImplementation[1]):MergeOperationSetImplementation[1]
 {
     $instance.parent.classMappings->filter(m|$m->instanceOf(MergeOperationSetImplementation))->cast(@MergeOperationSetImplementation)->filter(o| $instance.id->in($o.parameters.id))->at(0);
 }
@@ -111,7 +111,7 @@ function <<access.private>> meta::pure::executionPlan::engine::java::graphFetch:
                                   );
 
 
-      let mergeOp = $graphFetchTree.sets->cast(@meta::pure::mapping::modelToModel::PureInstanceSetImplementation)->at(0)->MergeOperationForInstance();
+      let mergeOp = $graphFetchTree.sets->cast(@meta::external::store::model::PureInstanceSetImplementation)->at(0)->MergeOperationForInstance();
       let validationFunction = $mergeOp.validationFunction->evaluateAndDeactivate().expressionSequence->cast(@InstanceValue).values->toOne()->cast(@LambdaFunction<Any>);
 
       assert($validationFunction->functionType().returnType.rawType==Boolean,'Found a non- boolean return type for the merge function of Merge Mapping Operation for class: ' +  $mergeOp.class->elementToPath());

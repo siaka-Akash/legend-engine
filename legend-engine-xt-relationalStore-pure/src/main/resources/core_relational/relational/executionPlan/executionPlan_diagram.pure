@@ -13,7 +13,7 @@
 // limitations under the License.
 
 ###Diagram
-Diagram meta::relational::executionPlan::diagram::RelationalExecutionNodeDiagram(width=0.0, height=0.0)
+Diagram meta::external::store::relational::executionPlan::diagram::RelationalExecutionNodeDiagram(width=0.0, height=0.0)
 {
     TypeView cview_1(
         type=meta::pure::executionPlan::ExecutionNode,
@@ -28,7 +28,7 @@ Diagram meta::relational::executionPlan::diagram::RelationalExecutionNodeDiagram
         lineWidth=1.0)
 
     TypeView cview_8(
-        type=meta::relational::mapping::SQLExecutionNode,
+        type=meta::external::store::relational::mapping::SQLExecutionNode,
         position=(41.00000, 315.00000),
         width=267.53732,
         height=100.00000,
@@ -40,7 +40,7 @@ Diagram meta::relational::executionPlan::diagram::RelationalExecutionNodeDiagram
         lineWidth=1.0)
 
     TypeView cview_2(
-        type=meta::relational::mapping::RelationalInstantiationExecutionNode,
+        type=meta::external::store::relational::mapping::RelationalInstantiationExecutionNode,
         position=(155.00000, 471.00000),
         width=235.97015,
         height=30.00000,
@@ -52,7 +52,7 @@ Diagram meta::relational::executionPlan::diagram::RelationalExecutionNodeDiagram
         lineWidth=1.0)
 
     TypeView cview_3(
-        type=meta::relational::mapping::RelationalRelationDataInstantiationExecutionNode,
+        type=meta::external::store::relational::mapping::RelationalRelationDataInstantiationExecutionNode,
         position=(53.00000, 633.00000),
         width=253.31343,
         height=30.00000,
@@ -64,7 +64,7 @@ Diagram meta::relational::executionPlan::diagram::RelationalExecutionNodeDiagram
         lineWidth=1.0)
 
     TypeView cview_4(
-        type=meta::relational::mapping::RelationalTdsInstantiationExecutionNode,
+        type=meta::external::store::relational::mapping::RelationalTdsInstantiationExecutionNode,
         position=(98.00000, 690.00000),
         width=257.29851,
         height=30.00000,
@@ -76,7 +76,7 @@ Diagram meta::relational::executionPlan::diagram::RelationalExecutionNodeDiagram
         lineWidth=1.0)
 
     TypeView cview_5(
-        type=meta::relational::mapping::RelationalDataTypeInstantiationExecutionNode,
+        type=meta::external::store::relational::mapping::RelationalDataTypeInstantiationExecutionNode,
         position=(220.00000, 790.00000),
         width=254.41791,
         height=30.00000,
@@ -88,7 +88,7 @@ Diagram meta::relational::executionPlan::diagram::RelationalExecutionNodeDiagram
         lineWidth=1.0)
 
     TypeView cview_6(
-        type=meta::relational::mapping::RelationalClassInstantiationExecutionNode,
+        type=meta::external::store::relational::mapping::RelationalClassInstantiationExecutionNode,
         position=(162.00000, 742.00000),
         width=256.64178,
         height=30.00000,
@@ -124,7 +124,7 @@ Diagram meta::relational::executionPlan::diagram::RelationalExecutionNodeDiagram
         lineWidth=1.0)
 
     TypeView cview_9(
-        type=meta::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode,
+        type=meta::external::store::relational::graphFetch::executionPlan::RelationalGraphFetchExecutionNode,
         position=(1179.00000, 547.00000),
         width=277.31343,
         height=58.00000,
@@ -136,7 +136,7 @@ Diagram meta::relational::executionPlan::diagram::RelationalExecutionNodeDiagram
         lineWidth=1.0)
 
     TypeView cview_10(
-        type=meta::relational::graphFetch::executionPlan::RelationalPrimitiveQueryGraphFetchExecutionNode,
+        type=meta::external::store::relational::graphFetch::executionPlan::RelationalPrimitiveQueryGraphFetchExecutionNode,
         position=(1342.00000, 711.00000),
         width=270.00000,
         height=72.00000,
@@ -148,7 +148,7 @@ Diagram meta::relational::executionPlan::diagram::RelationalExecutionNodeDiagram
         lineWidth=1.0)
 
     TypeView cview_11(
-        type=meta::relational::graphFetch::executionPlan::RelationalTempTableGraphFetchExecutionNode,
+        type=meta::external::store::relational::graphFetch::executionPlan::RelationalTempTableGraphFetchExecutionNode,
         position=(1039.00000, 713.00000),
         width=273.50746,
         height=72.00000,
@@ -160,7 +160,7 @@ Diagram meta::relational::executionPlan::diagram::RelationalExecutionNodeDiagram
         lineWidth=1.0)
 
     TypeView cview_13(
-        type=meta::relational::graphFetch::executionPlan::RelationalClassQueryTempTableGraphFetchExecutionNode,
+        type=meta::external::store::relational::graphFetch::executionPlan::RelationalClassQueryTempTableGraphFetchExecutionNode,
         position=(1035.00000, 823.00000),
         width=275.53731,
         height=30.00000,
@@ -172,7 +172,7 @@ Diagram meta::relational::executionPlan::diagram::RelationalExecutionNodeDiagram
         lineWidth=1.0)
 
     TypeView cview_12(
-        type=meta::relational::graphFetch::executionPlan::RelationalRootQueryTempTableGraphFetchExecutionNode,
+        type=meta::external::store::relational::graphFetch::executionPlan::RelationalRootQueryTempTableGraphFetchExecutionNode,
         position=(1034.00000, 892.00000),
         width=278.17911,
         height=72.00000,
@@ -184,7 +184,7 @@ Diagram meta::relational::executionPlan::diagram::RelationalExecutionNodeDiagram
         lineWidth=1.0)
 
     TypeView cview_7(
-        type=meta::relational::mapping::CreateAndPopulateTempTableExecutionNode,
+        type=meta::external::store::relational::mapping::CreateAndPopulateTempTableExecutionNode,
         position=(501.00000, 589.00000),
         width=330.41791,
         height=86.00000,

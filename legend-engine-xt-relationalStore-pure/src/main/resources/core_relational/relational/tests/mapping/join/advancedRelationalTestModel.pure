@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::join::model::domain::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::join::model::domain::*;
 
-Class meta::relational::tests::mapping::join::model::domain::TypeBuiltOutOfMultipleJoins
+Class meta::external::store::relational::tests::mapping::join::model::domain::TypeBuiltOutOfMultipleJoins
 {
     tableProperty:String[1];
     propertyTableA:String[1];
     propertyTableB:String[1];
 }
 
-Class meta::relational::tests::mapping::join::model::domain::TypeBuiltOutOfMultipleJoinsWithDates extends TypeBuiltOutOfMultipleJoins
+Class meta::external::store::relational::tests::mapping::join::model::domain::TypeBuiltOutOfMultipleJoinsWithDates extends TypeBuiltOutOfMultipleJoins
 {
     inDate : Date[1];
     outDate : Date[1];

@@ -12,37 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::functions::sqlstring::*;
+import meta::external::store::relational::functions::sqlstring::*;
 
-Class meta::relational::memsql::tests::db::A
+Class meta::external::store::relational::memsql::tests::db::A
 {
   id: Integer[1];
   window : Integer[1];
 }
 
-function meta::relational::memsql::tests::db::testReservedKeywords() : Boolean[1]
+function meta::external::store::relational::memsql::tests::db::testReservedKeywords() : Boolean[1]
 {
   let result = toSQLString(
-    | meta::relational::memsql::tests::db::A.all()->project([s | $s.window], ['WINDOW']), 
-      meta::relational::memsql::tests::db::simpleRelationalMappingForMemSQLWindowKeyword,
-      meta::relational::runtime::DatabaseType.MemSQL, 
+    | meta::external::store::relational::memsql::tests::db::A.all()->project([s | $s.window], ['WINDOW']),
+      meta::external::store::relational::memsql::tests::db::simpleRelationalMappingForMemSQLWindowKeyword,
+      meta::external::store::relational::runtime::DatabaseType.MemSQL,
       meta::pure::router::extension::defaultRelationalExtensions());
 
   assertEquals('select `root`.`window` as `WINDOW` from `test table` as `root`', $result);
 }
 
 ###Relational
-Database meta::relational::memsql::tests::db::schema1
+Database meta::external::store::relational::memsql::tests::db::schema1
 (
    Table "test table" (ID INT PRIMARY KEY, window INT)
 )
 
 ###Mapping
-Mapping meta::relational::memsql::tests::db::simpleRelationalMappingForMemSQLWindowKeyword
+Mapping meta::external::store::relational::memsql::tests::db::simpleRelationalMappingForMemSQLWindowKeyword
 (
-   meta::relational::memsql::tests::db::A : Relational
+   meta::external::store::relational::memsql::tests::db::A : Relational
    {
-      scope([meta::relational::memsql::tests::db::schema1])
+      scope([meta::external::store::relational::memsql::tests::db::schema1])
       (
          id : "test table".ID,
          window : "test table".window

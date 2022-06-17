@@ -12,29 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::mapping::dataType::model::domain::*;
-import meta::relational::tests::mapping::dataType::model::store::*;
-import meta::relational::tests::mapping::dataType::model::mapping::*;
+import meta::external::store::relational::tests::mapping::dataType::model::domain::*;
+import meta::external::store::relational::tests::mapping::dataType::model::store::*;
+import meta::external::store::relational::tests::mapping::dataType::model::mapping::*;
 
 import meta::pure::profiles::*;
 
-import meta::relational::metamodel::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::join::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::functions::toDDL::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::functions::toDDL::*;
+import meta::external::store::relational::mapping::*;
 
-import meta::relational::tests::*;
+import meta::external::store::relational::tests::*;
 
 import meta::pure::runtime::*;
-import meta::relational::runtime::*;
-import meta::relational::runtime::authentication::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::runtime::authentication::*;
 
 import meta::json::*;
 
 
-function <<test.BeforePackage>> meta::relational::tests::mapping::dataType::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::mapping::dataType::setUp():Boolean[1]
 {
     let connection = testDataTypeMappingRuntime().connectionByElement(myDB)->cast(@TestDatabaseConnection);
 
@@ -47,7 +47,7 @@ function <<test.BeforePackage>> meta::relational::tests::mapping::dataType::setU
 }
 
 
-function <<test.Test>> meta::relational::tests::mapping::dataType::testSimpleTypeMapping():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::dataType::testSimpleTypeMapping():Boolean[1]
 {
     let result = execute(|DataDBTypes.all(), testMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
     assertSize($result.values, 3);
@@ -70,7 +70,7 @@ function <<test.Test>> meta::relational::tests::mapping::dataType::testSimpleTyp
     assertEquals(1.1d, $populatedRow.floatAsDecimal);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::dataType::testSimpleTypeMappingProject():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::dataType::testSimpleTypeMappingProject():Boolean[1]
 {
     let result = execute(|DataDBTypes.all()->filter(e | $e.tinyInt == 1)
                                            ->project([ col( p | $p.tinyInt, 'tinyInt'),
@@ -112,7 +112,7 @@ function <<test.Test>> meta::relational::tests::mapping::dataType::testSimpleTyp
 }
 
 
-function <<test.Test>> meta::relational::tests::mapping::dataType::testSimpleTypeMappingNulls():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::dataType::testSimpleTypeMappingNulls():Boolean[1]
 {
     let result = execute(|DataDBTypes.all(), testMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
     assertSize($result.values, 3);
@@ -136,7 +136,7 @@ function <<test.Test>> meta::relational::tests::mapping::dataType::testSimpleTyp
     assertEquals([], $nullRow.floatAsDecimal);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::dataType::testSimpleTypeMappingBooleanFalse():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::dataType::testSimpleTypeMappingBooleanFalse():Boolean[1]
 {
     let result = execute(|DataDBTypes.all(), testMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
     assertSize($result.values, 3);
@@ -144,7 +144,7 @@ function <<test.Test>> meta::relational::tests::mapping::dataType::testSimpleTyp
     assertEquals(false, $populatedRow.bit);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::dataType::testSimpleTypeMappingProjectNulls():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::dataType::testSimpleTypeMappingProjectNulls():Boolean[1]
 {
    let result = execute(|DataDBTypes.all()->project([d|$d.tinyInt, d|$d.smallInt], ['ti', 'si'])
                               , testMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -157,7 +157,7 @@ function <<test.Test>> meta::relational::tests::mapping::dataType::testSimpleTyp
 }
 
 
-Class meta::relational::tests::mapping::dataType::model::domain::DataDBTypes
+Class meta::external::store::relational::tests::mapping::dataType::model::domain::DataDBTypes
 {
     tinyInt: Integer[0..1];
     smallInt: Integer[0..1];
@@ -179,14 +179,14 @@ Class meta::relational::tests::mapping::dataType::model::domain::DataDBTypes
 
 }
 
-function meta::relational::tests::mapping::dataType::model::store::testDataTypeMappingRuntime():Runtime[1]
+function meta::external::store::relational::tests::mapping::dataType::model::store::testDataTypeMappingRuntime():Runtime[1]
 {
-   meta::relational::tests::testRuntime(myDB);
+   meta::external::store::relational::tests::testRuntime(myDB);
 }
 
 ###Relational
 
-Database meta::relational::tests::mapping::dataType::model::store::myDB
+Database meta::external::store::relational::tests::mapping::dataType::model::store::myDB
 (
     Table dataTable
     (
@@ -210,10 +210,10 @@ Database meta::relational::tests::mapping::dataType::model::store::myDB
 
 
 ###Mapping
-import meta::relational::tests::mapping::dataType::model::domain::*;
-import meta::relational::tests::mapping::dataType::model::store::*;
+import meta::external::store::relational::tests::mapping::dataType::model::domain::*;
+import meta::external::store::relational::tests::mapping::dataType::model::store::*;
 
-Mapping meta::relational::tests::mapping::dataType::model::mapping::testMapping
+Mapping meta::external::store::relational::tests::mapping::dataType::model::mapping::testMapping
 (
     DataDBTypes: Relational
     {

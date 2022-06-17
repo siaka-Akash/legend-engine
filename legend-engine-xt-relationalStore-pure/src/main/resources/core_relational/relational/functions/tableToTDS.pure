@@ -14,44 +14,44 @@
 
 import meta::pure::mapping::*;
 
-Class meta::relational::mapping::TableTDS extends TabularDataSetImplementation
+Class meta::external::store::relational::mapping::TableTDS extends TabularDataSetImplementation
 {
-  table:meta::relational::metamodel::relation::NamedRelation[1];
+  table:meta::external::store::relational::metamodel::relation::NamedRelation[1];
 }
 
-function meta::pure::tds::tableToTDS(table:meta::relational::metamodel::relation::Table[1]):meta::relational::mapping::TableTDS[1]
+function meta::pure::tds::tableToTDS(table:meta::external::store::relational::metamodel::relation::Table[1]):meta::external::store::relational::mapping::TableTDS[1]
 {
-   ^meta::relational::mapping::TableTDS(
+   ^meta::external::store::relational::mapping::TableTDS(
       store = $table.schema.database,
       table = $table,
-      columns = $table.columns->cast(@meta::relational::metamodel::Column)->map(column|let columnIndex = $table.columns->indexOf($column);
+      columns = $table.columns->cast(@meta::external::store::relational::metamodel::Column)->map(column|let columnIndex = $table.columns->indexOf($column);
                                                                                             $column->tableColumnToTdsColumn($columnIndex);)
             );
 }
 
-function meta::pure::tds::viewToTDS(view:meta::relational::metamodel::relation::View[1]):meta::relational::mapping::TableTDS[1]
+function meta::pure::tds::viewToTDS(view:meta::external::store::relational::metamodel::relation::View[1]):meta::external::store::relational::mapping::TableTDS[1]
 {
-   ^meta::relational::mapping::TableTDS(
+   ^meta::external::store::relational::mapping::TableTDS(
       store = $view.schema.database,
       table = $view,
-      columns = $view.columns->cast(@meta::relational::metamodel::Column)->map(column|let columnIndex = $view.columns->indexOf($column);
+      columns = $view.columns->cast(@meta::external::store::relational::metamodel::Column)->map(column|let columnIndex = $view.columns->indexOf($column);
                                                                                            $column->tableColumnToTdsColumn($columnIndex);)
             );
 }
 
-function <<access.private>> meta::pure::tds::tableColumnToTdsColumn(column:meta::relational::metamodel::Column[1], index:Integer[1]):TDSColumn[1]
+function <<access.private>> meta::pure::tds::tableColumnToTdsColumn(column:meta::external::store::relational::metamodel::Column[1], index:Integer[1]):TDSColumn[1]
 {
 
    ^TDSColumn(
       name=$column.name,
       offset=$index,
-      type = $column.type->toOne()->meta::relational::metamodel::datatype::dataTypeToCompatiblePureType()->cast(@meta::pure::metamodel::type::DataType)
+      type = $column.type->toOne()->meta::external::store::relational::metamodel::datatype::dataTypeToCompatiblePureType()->cast(@meta::pure::metamodel::type::DataType)
    );
 }
 
 function
    {doc.doc = 'Project the specified calculated columns from the provided TDS.  This is similar to extend, but rather than adding the columns it replaces all of the existing ones '}
-   meta::pure::tds::project(tds:meta::relational::mapping::TableTDS[1], columnFunctions:ColumnSpecification<TDSRow>[*]):TabularDataSet[1]
+   meta::pure::tds::project(tds:meta::external::store::relational::mapping::TableTDS[1], columnFunctions:ColumnSpecification<TDSRow>[*]):TabularDataSet[1]
 {
    $tds->project($columnFunctions);
 }

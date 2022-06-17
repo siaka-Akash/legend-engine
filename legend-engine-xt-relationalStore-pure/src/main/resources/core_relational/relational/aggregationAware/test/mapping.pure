@@ -1,8 +1,8 @@
 ###Mapping
-import meta::relational::tests::aggregationAware::store::*;
-import meta::relational::tests::aggregationAware::domain::*;
+import meta::external::store::relational::tests::aggregationAware::store::*;
+import meta::external::store::relational::tests::aggregationAware::domain::*;
 
-Mapping meta::relational::tests::aggregationAware::mapping::baseMapping
+Mapping meta::external::store::relational::tests::aggregationAware::mapping::baseMapping
 (
    
    FiscalCalendar : Relational {
@@ -42,9 +42,9 @@ Mapping meta::relational::tests::aggregationAware::mapping::baseMapping
    }
 )
 
-Mapping meta::relational::tests::aggregationAware::mapping::simpleMapping
+Mapping meta::external::store::relational::tests::aggregationAware::mapping::simpleMapping
 (
-   include meta::relational::tests::aggregationAware::mapping::baseMapping
+   include meta::external::store::relational::tests::aggregationAware::mapping::baseMapping
    
    Employee : Relational {
       scope([aggregationAwareStore]base_view.Employee)
@@ -151,9 +151,9 @@ Mapping meta::relational::tests::aggregationAware::mapping::simpleMapping
    }
 )
 
-Mapping meta::relational::tests::aggregationAware::mapping::mappingWithMonthCannotBeAggregated
+Mapping meta::external::store::relational::tests::aggregationAware::mapping::mappingWithMonthCannotBeAggregated
 (
-   include meta::relational::tests::aggregationAware::mapping::baseMapping
+   include meta::external::store::relational::tests::aggregationAware::mapping::baseMapping
    
    Wholesales [SCT] : AggregationAware {
       Views : [
@@ -225,9 +225,9 @@ Mapping meta::relational::tests::aggregationAware::mapping::mappingWithMonthCann
    }
 )
 
-Mapping meta::relational::tests::aggregationAware::mapping::relationalMapping
+Mapping meta::external::store::relational::tests::aggregationAware::mapping::relationalMapping
 (
-   include meta::relational::tests::aggregationAware::mapping::baseMapping
+   include meta::external::store::relational::tests::aggregationAware::mapping::baseMapping
    
    Wholesales [SCT] : Relational {
       scope([aggregationAwareStore]base_view.SalesTable)
@@ -245,9 +245,9 @@ Mapping meta::relational::tests::aggregationAware::mapping::relationalMapping
    }
 )
 
-Mapping meta::relational::tests::aggregationAware::mapping::mappingWithMultiDimensionAggregates
+Mapping meta::external::store::relational::tests::aggregationAware::mapping::mappingWithMultiDimensionAggregates
 (
-   include meta::relational::tests::aggregationAware::mapping::baseMapping
+   include meta::external::store::relational::tests::aggregationAware::mapping::baseMapping
    
    Employee : Relational {
       scope([aggregationAwareStore]base_view.Employee)

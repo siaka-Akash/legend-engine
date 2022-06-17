@@ -21,7 +21,7 @@ import meta::pure::graphFetch::routing::*;
 import meta::pure::mapping::*;
 import meta::pure::router::clustering::*;
 import meta::pure::router::extension::*;
-import meta::pure::router::systemMapping::*;
+import meta::pure::store::contract::*;
 import meta::pure::runtime::*;
 
 import meta::java::generation::code::*;
@@ -52,6 +52,13 @@ function <<access.private>> meta::external::store::service::router::extension::s
    ^RouterExtension
    (
       type = $type,
+
+      storeContracts = [
+                        meta::external::store::model::contract::pureMappingStoreContract(),
+                        meta::external::store::platform::contract::purePlatformStoreContract(),
+                        meta::external::store::service::contract::serviceStoreStoreContract()
+                       ],
+
       serializerExtension =  meta::external::store::service::router::extension::serviceStoreSerializerExtension_String_1__String_1_,
       cluster_cluster_ExtendedRoutedValueSpecification = {r:ExtendedRoutedValueSpecification[1], openVariables:Map<String, List<Any>>[1], mapping:Mapping[1] |
                                                                                 [
@@ -59,7 +66,7 @@ function <<access.private>> meta::external::store::service::router::extension::s
                                                                                      ^ClusteredValueSpecification(
                                                                                         genericType  = $r.genericType,
                                                                                         multiplicity = $r.multiplicity,
-                                                                                        s = meta::external::store::service::router::systemMapping::serviceStoreSystemMapping(),
+                                                                                        s = meta::external::store::service::contract::serviceStoreStoreContract(),
                                                                                         store = $r.mapping.resolveStore($rsi.serviceStore()),
                                                                                         mapping = $r.mapping,
                                                                                         runtime = $r.runtime,
@@ -72,7 +79,7 @@ function <<access.private>> meta::external::store::service::router::extension::s
                                                                                      ^ClusteredValueSpecification(
                                                                                         genericType  = $r.genericType,
                                                                                         multiplicity = $r.multiplicity,
-                                                                                        s = meta::external::store::service::router::systemMapping::serviceStoreSystemMapping(),
+                                                                                        s = meta::external::store::service::contract::serviceStoreStoreContract(),
                                                                                         store = $r.mapping.resolveStore($esi.owner->cast(@RootServiceInstanceSetImplementation)->toOne().serviceStore()),
                                                                                         mapping = $r.mapping,
                                                                                         runtime = $r.runtime,
@@ -89,7 +96,7 @@ function <<access.private>> meta::external::store::service::router::extension::s
                                                                                        ^ClusteredValueSpecification(
                                                                                           genericType  = $r.genericType,
                                                                                           multiplicity = $r.multiplicity,
-                                                                                          s = meta::external::store::service::router::systemMapping::serviceStoreSystemMapping(),
+                                                                                          s = meta::external::store::service::contract::serviceStoreStoreContract(),
                                                                                           store = $r.mapping.resolveStore($serviceStores->toOne()),
                                                                                           mapping = $r.mapping,
                                                                                           runtime = $r.runtime,
@@ -105,7 +112,7 @@ function <<access.private>> meta::external::store::service::router::extension::s
                                                                                          {rsi:RootServiceInstanceSetImplementation[1] | 
                                                                                               let paramMap = $sets->resolveParamMapForChainProcessing($inScopeVars, noDebug());
                                                                                               let xStorePropInScope = $inScopeVars->keyValues()->filter(kv | $kv.second.values->size() == 1 && $kv.second.values->toOne()->instanceOf(AbstractProperty)).second.values->cast(@AbstractProperty<Any>);   
-                                                                                              $xStorePropInScope->map(targetProp | $targetProp->resolveSourcePropertyFromTargetProperty($sets->cast(@meta::pure::mapping::modelToModel::PureInstanceSetImplementation)))->querySupportsBatching($paramMap, $rsi);}},
+                                                                                              $xStorePropInScope->map(targetProp | $targetProp->resolveSourcePropertyFromTargetProperty($sets->cast(@meta::external::store::model::PureInstanceSetImplementation)))->querySupportsBatching($paramMap, $rsi);}},
       executionPlan_print_connectionToString =
                                 {extensions:meta::pure::router::extension::RouterExtension[*]|
                                        [
@@ -134,7 +141,7 @@ function <<access.private>> meta::external::store::service::router::extension::s
       graphFetch_getStoreFromSet_Operation = mapping:Mapping[1] | {rsi : RootServiceInstanceSetImplementation[*] | let serviceStores = $rsi.serviceStore()->removeDuplicates();
                                                                                                                    assert($serviceStores->size() == 1, | 'Found ' + $serviceStores->size()->toString() + ' stores while trying to resolve Operation Mappings. 1 unique store is required for routing. Stores found were ' + $serviceStores.name->joinStrings('[',',', ']'));
                                                                                                                    $mapping.resolveStore($serviceStores->at(0));},
-      graphFetch_getSystemMappingFromStore = db : ServiceStore[1] | meta::external::store::service::router::systemMapping::serviceStoreSystemMapping(),
+      graphFetch_getStoreContractFromStore = db : ServiceStore[1] | meta::external::store::service::contract::serviceStoreStoreContract(),
       java_graphFetch_inMemory_applyTypeFilter = {
          set:InstanceSetImplementation[1], src:Code[1], withoutFilter:Code[1..*], context:GenerationContext[1], debug:DebugContext[1] | [
             rsi: RootServiceInstanceSetImplementation[1] | $withoutFilter,
@@ -200,6 +207,6 @@ function <<access.private>> meta::external::store::service::router::extension::s
                   s:ServiceParametersResolutionExecutionNode[1]   | $s->generateImplementationForServiceParametersResolutionNode($path, $context, $debug)
                ]
             },
-      systemMapping_systemForSetImplementation = r:RootServiceInstanceSetImplementation[1]|serviceStoreSystemMapping()
+      systemMapping_systemForSetImplementation = r:RootServiceInstanceSetImplementation[1]|meta::external::store::service::contract::serviceStoreStoreContract()
    )
 }

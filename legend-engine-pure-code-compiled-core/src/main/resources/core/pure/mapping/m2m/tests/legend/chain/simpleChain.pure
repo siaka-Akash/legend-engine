@@ -16,15 +16,15 @@ import meta::pure::executionPlan::engine::java::roadmap::*;
 import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::simple::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::simple::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::simple::bridge::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::simple::dest::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::alloy::chain::simple::*;
+import meta::external::store::model::test::alloy::chain::simple::src::*;
+import meta::external::store::model::test::alloy::chain::simple::bridge::*;
+import meta::external::store::model::test::alloy::chain::simple::dest::*;
 import meta::pure::runtime::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'}
-meta::pure::mapping::modelToModel::test::alloy::chain::simple::simpleChainSerializeFlat(): Boolean[1]
+meta::external::store::model::test::alloy::chain::simple::simpleChainSerializeFlat(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -51,7 +51,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::simple::simpleChainSerial
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'}
-meta::pure::mapping::modelToModel::test::alloy::chain::simple::simpleChainSerializeFlatChecked(): Boolean[1]
+meta::external::store::model::test::alloy::chain::simple::simpleChainSerializeFlatChecked(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -103,7 +103,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::simple::simpleChainSerial
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'}
-meta::pure::mapping::modelToModel::test::alloy::chain::simple::simpleChainSerializeNested(): Boolean[1]
+meta::external::store::model::test::alloy::chain::simple::simpleChainSerializeNested(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -133,7 +133,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::simple::simpleChainSerial
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'}
-meta::pure::mapping::modelToModel::test::alloy::chain::simple::simpleChainSerializeNestedChecked(): Boolean[1]
+meta::external::store::model::test::alloy::chain::simple::simpleChainSerializeNestedChecked(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -212,7 +212,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::simple::simpleChainSerial
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'}
-meta::pure::mapping::modelToModel::test::alloy::chain::simple::simpleChainSerializeNestedMultiObject(): Boolean[1]
+meta::external::store::model::test::alloy::chain::simple::simpleChainSerializeNestedMultiObject(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -263,7 +263,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::simple::simpleChainSerial
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'}
-meta::pure::mapping::modelToModel::test::alloy::chain::simple::simpleChainSerializeNestedCheckedMultiObject(): Boolean[1]
+meta::external::store::model::test::alloy::chain::simple::simpleChainSerializeNestedCheckedMultiObject(): Boolean[1]
 {
    let tree = #{
       Firm {
@@ -384,7 +384,7 @@ meta::pure::mapping::modelToModel::test::alloy::chain::simple::simpleChainSerial
 }
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> {serverVersion.start='v1_19_0'}
-meta::pure::mapping::modelToModel::test::alloy::chain::simple::testJsonModelConnectionPriorityOverModelChainConnection(): Boolean[1]
+meta::external::store::model::test::alloy::chain::simple::testJsonModelConnectionPriorityOverModelChainConnection(): Boolean[1]
 {
    let tree1 = #{
       Firm {
@@ -423,64 +423,64 @@ meta::pure::mapping::modelToModel::test::alloy::chain::simple::testJsonModelConn
 }
 
 ###Pure
-import meta::pure::mapping::modelToModel::test::alloy::chain::simple::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::simple::bridge::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::simple::dest::*;
+import meta::external::store::model::test::alloy::chain::simple::src::*;
+import meta::external::store::model::test::alloy::chain::simple::bridge::*;
+import meta::external::store::model::test::alloy::chain::simple::dest::*;
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::simple::src::__Firm
+Class meta::external::store::model::test::alloy::chain::simple::src::__Firm
 {
    name      : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::simple::src::__Person
+Class meta::external::store::model::test::alloy::chain::simple::src::__Person
 {
    fullName  : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::chain::simple::src::__Firm___Person
+Association meta::external::store::model::test::alloy::chain::simple::src::__Firm___Person
 {
    firm      : __Firm[1];        
    employees : __Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::simple::bridge::_Firm
+Class meta::external::store::model::test::alloy::chain::simple::bridge::_Firm
 {
    name      : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::simple::bridge::_Person
+Class meta::external::store::model::test::alloy::chain::simple::bridge::_Person
 {
    fullName  : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::chain::simple::bridge::_Firm__Person
+Association meta::external::store::model::test::alloy::chain::simple::bridge::_Firm__Person
 {
    firm      : _Firm[1];        
    employees : _Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::simple::dest::Firm
+Class meta::external::store::model::test::alloy::chain::simple::dest::Firm
 {
    name      : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::chain::simple::dest::Person
+Class meta::external::store::model::test::alloy::chain::simple::dest::Person
 {
    fullName  : String[1];
 }
 
-Association meta::pure::mapping::modelToModel::test::alloy::chain::simple::dest::Firm_Person
+Association meta::external::store::model::test::alloy::chain::simple::dest::Firm_Person
 {
    firm      : Firm[1];        
    employees : Person[*];
 }
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::chain::simple::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::simple::bridge::*;
-import meta::pure::mapping::modelToModel::test::alloy::chain::simple::dest::*;
+import meta::external::store::model::test::alloy::chain::simple::src::*;
+import meta::external::store::model::test::alloy::chain::simple::bridge::*;
+import meta::external::store::model::test::alloy::chain::simple::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::chain::simple::BridgeToDestMapping
+Mapping meta::external::store::model::test::alloy::chain::simple::BridgeToDestMapping
 (
    Firm: Pure {
       ~src _Firm
@@ -494,7 +494,7 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::chain::simple::BridgeToD
    }
 )
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::chain::simple::SrcToBridgeMapping
+Mapping meta::external::store::model::test::alloy::chain::simple::SrcToBridgeMapping
 (
    _Firm: Pure {
       ~src __Firm

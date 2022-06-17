@@ -1,17 +1,17 @@
-import meta::relational::functions::sqlQueryToString::db2::*;
-import meta::relational::functions::sqlQueryToString::default::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::functions::sqlQueryToString::db2::*;
+import meta::external::store::relational::functions::sqlQueryToString::default::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::router::extension::*;
 
-function <<db.ExtensionLoader>> meta::relational::functions::sqlQueryToString::db2::dbExtensionLoaderForDB2():DbExtensionLoader[1]
+function <<db.ExtensionLoader>> meta::external::store::relational::functions::sqlQueryToString::db2::dbExtensionLoaderForDB2():DbExtensionLoader[1]
 {
   ^DbExtensionLoader(dbType = DatabaseType.DB2, loader = createDbExtensionForDB2__DbExtension_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::db2::createDbExtensionForDB2():DbExtension[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::db2::createDbExtensionForDB2():DbExtension[1]
 {
    let reservedWords = defaultReservedWords();
    let literalProcessors = getDefaultLiteralProcessors();
@@ -34,7 +34,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::db2::
    );
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::db2::getDynaFunctionToSqlForDB2(): DynaFunctionToSql[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::db2::getDynaFunctionToSqlForDB2(): DynaFunctionToSql[*]
 {
   let allStates = allGenerationStates();
 
@@ -82,7 +82,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::db2::
   ];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::db2::transformAdjustDB2SQL(p:String[3]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::db2::transformAdjustDB2SQL(p:String[3]):String[1]
 {
    let startDate = $p->at(0);
    let number = $p->at(1)->parseInteger();
@@ -96,7 +96,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::db2::
    ]);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::db2::convertToDateDB2(params:String[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::db2::convertToDateDB2(params:String[*]):String[1]
 {
    $params->convertDateFunctionHasCorrectParams();
    let dateFormat = if( $params->size() == 1 ,|'\'YYYY-MM-DD\'',| $params->at(1));
@@ -104,7 +104,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::db2::
    'to_date('+$params->at(0)+','+$dateFormat +')';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::db2::convertToDateTimeDB2(params:String[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::db2::convertToDateTimeDB2(params:String[*]):String[1]
 {
    $params->convertDateTimeFunctionHasCorrectParams();
    let dateTimeFormat = if( $params->size() == 1,|'\'YYYY-MM-DD HH24:MI:SS\'',| $params->at(1));
@@ -112,24 +112,24 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::db2::
    'timestamp_format('+$params->at(0)+','+$dateTimeFormat +')';
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::db2::formatMostRecentDb2(p:String[1..2], defaultDay:String[1]):String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::db2::formatMostRecentDb2(p:String[1..2], defaultDay:String[1]):String[*]
 {
    let day = $p->last()->toOne()->mapToDBDayOfWeekNumber()->toString();
    let current = if ($p->size() == 2, | $p->first()->toOne(), | $defaultDay);
    [$current, $day, $current, $day, $current, $day, $current];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::db2::processJoinStringsOperationForDB2(js:JoinStrings[1], sgc:SqlGenerationContext[1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::db2::processJoinStringsOperationForDB2(js:JoinStrings[1], sgc:SqlGenerationContext[1]): String[1]
 {
    processJoinStringsOperation($js, $sgc, [], {strs, sep| $strs->joinStrings('(', if('\'\'' == $sep, |' concat ', |' concat ' + $sep + ' concat '), ')')});
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::db2::processSelectSQLQueryForDB2(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::db2::processSelectSQLQueryForDB2(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
 {
    $s->processSelectSQLQueryForDB2($sgc.dbConfig, $sgc.format, $sgc.config, $isSubSelect, $sgc.extensions);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::db2::processSelectSQLQueryForDB2(s:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::db2::processSelectSQLQueryForDB2(s:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
 {
   let opStr = if($s.filteringOperation->isEmpty(), |'', |$s.filteringOperation->map(s|$s->wrapAsBooleanOperation($extensions)->processOperation($dbConfig, $format->indent(), ^$config(callingFromFilter = true), $extensions))->filter(s|$s != '')->joinStrings(' <||> '));
   let havingStr = if($s.havingOperation->isEmpty(), |'', |$s.havingOperation->map(s|$s->processOperation($dbConfig, $format->indent(), $config, $extensions))->filter(s|$s != '')->joinStrings(' <||> '));
@@ -144,7 +144,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::db2::
   + processLimit($s, $format, processTakeForDB2_SelectSQLQuery_1__Format_1__String_1_, processSliceOrDropDefault_SelectSQLQuery_1__Format_1__Any_1__String_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::db2::processTakeForDB2(s:SelectSQLQuery[1], format:Format[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::db2::processTakeForDB2(s:SelectSQLQuery[1], format:Format[1]):String[1]
 {
    ' ' + $format.separator +'fetch first ' + $s.toRow->toOne()->getValueForTake()->toString() +' rows only';
 }

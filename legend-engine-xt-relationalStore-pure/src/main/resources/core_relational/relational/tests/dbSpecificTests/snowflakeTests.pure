@@ -12,26 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::runtime::*;
-import meta::relational::dbTestRunner::*;
-import meta::relational::tests::dbSpecificTests::H2::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::dbTestRunner::*;
+import meta::external::store::relational::tests::dbSpecificTests::H2::*;
 import meta::pure::alloy::connections::*;
 import meta::pure::test::*;
 
 
-function <<test.TestCollection>> meta::relational::tests::dbSpecificTests::snowflake::runSQLQueryTestsParam(): PureTestCollection[1]
+function <<test.TestCollection>> meta::external::store::relational::tests::dbSpecificTests::snowflake::runSQLQueryTestsParam(): PureTestCollection[1]
 {
-  let connection = meta::relational::dbTestRunner::getTestConnection(DatabaseType.Snowflake, meta::pure::router::extension::defaultRelationalExtensions());
+  let connection = meta::external::store::relational::dbTestRunner::getTestConnection(DatabaseType.Snowflake, meta::pure::router::extension::defaultRelationalExtensions());
   
-  meta::relational::tests::dbSpecificTests::sqlQueryTests::dynaFunctions
+  meta::external::store::relational::tests::dbSpecificTests::sqlQueryTests::dynaFunctions
           ->collectParameterizedTests('Snowflake',
                 ^DbTestConfig(dbType=DatabaseType.Snowflake, connection=$connection), [],
-                meta::relational::tests::dbSpecificTests::snowflake::runSQLQueryTestsParamFilter_FunctionDefinition_1__Boolean_1_
+                meta::external::store::relational::tests::dbSpecificTests::snowflake::runSQLQueryTestsParamFilter_FunctionDefinition_1__Boolean_1_
                 );
 }
 
 
-function meta::relational::tests::dbSpecificTests::snowflake::runSQLQueryTestsParamFilter(f:FunctionDefinition<Any>[1]):Boolean[1]
+function meta::external::store::relational::tests::dbSpecificTests::snowflake::runSQLQueryTestsParamFilter(f:FunctionDefinition<Any>[1]):Boolean[1]
 {
   // currently hardcoding unsupported funcs, In future fetch this from db extensions and skip
   let unsupportedDynaFunctions = ['dayOfMonth'];
@@ -44,7 +44,7 @@ function meta::relational::tests::dbSpecificTests::snowflake::runSQLQueryTestsPa
                                       ];
 
   let ignoredTests= $unsupportedDynaFunctions->concatenate($failingSupportedDynaFunctions)->map(dynaFuncName |
-              let dynaFuncPackageName = 'meta::relational::tests::dbSpecificTests::sqlQueryTests::dynaFunctions::' + $dynaFuncName;
+              let dynaFuncPackageName = 'meta::external::store::relational::tests::dbSpecificTests::sqlQueryTests::dynaFunctions::' + $dynaFuncName;
               $dynaFuncPackageName->pathToElement()->cast(@Package)->collectTests(););
 
   !$ignoredTests->contains($f);

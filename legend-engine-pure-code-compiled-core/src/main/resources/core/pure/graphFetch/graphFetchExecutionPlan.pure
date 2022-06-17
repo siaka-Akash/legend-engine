@@ -14,7 +14,7 @@
 
 import meta::pure::dataQuality::*;
 import meta::pure::graphFetch::*;
-import meta::pure::store::*;
+import meta::pure::store::metamodel::*;
 import meta::pure::router::extension::*;
 import meta::pure::graphFetch::routing::*;
 import meta::pure::graphFetch::execution::*;
@@ -22,8 +22,8 @@ import meta::pure::graphFetch::executionPlan::*;
 import meta::pure::executionPlan::*;
 import meta::pure::executionPlan::toString::*;
 import meta::pure::mapping::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::graphFetch::executionPlan::*;
+import meta::external::store::model::*;
+import meta::external::store::model::graphFetch::executionPlan::*;
 import meta::pure::runtime::*;
 
 Class <<doc.deprecated>> meta::pure::graphFetch::executionPlan::GraphFetchExecutionNode extends ExecutionNode
@@ -37,7 +37,7 @@ Class <<doc.deprecated>> meta::pure::graphFetch::executionPlan::GraphFetchExecut
 Class meta::pure::graphFetch::executionPlan::GlobalGraphFetchExecutionNode extends ExecutionNode
 {
    graphFetchTree               : ClusteredGraphFetchTree[1];
-   store                        : meta::pure::store::Store[1];
+   store                        : meta::pure::store::metamodel::Store[1];
    children                     : GlobalGraphFetchExecutionNode[*];
    localGraphFetchExecutionNode : LocalGraphFetchExecutionNode[1];
    parentIndex                  : Integer[0..1];

@@ -13,11 +13,11 @@
 // limitations under the License.
 
 ###Mapping
-import meta::relational::tests::mapping::extend::primaryKey::*;
-import meta::relational::tests::mapping::extend::store::*;
-import meta::relational::tests::mapping::extend::model::*;
+import meta::external::store::relational::tests::mapping::extend::primaryKey::*;
+import meta::external::store::relational::tests::mapping::extend::store::*;
+import meta::external::store::relational::tests::mapping::extend::model::*;
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::AMappingWithGroupBy
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::AMappingWithGroupBy
 (
    A[a] : Relational
    {
@@ -27,7 +27,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::AMappingWithGroupB
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::AMappingWithDistinct
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::AMappingWithDistinct
 (
    A[a] : Relational
    {
@@ -37,7 +37,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::AMappingWithDistin
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::AMappingWithUserDefinedPrimaryKey
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::AMappingWithUserDefinedPrimaryKey
 (
    A[a] : Relational
    {
@@ -47,7 +47,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::AMappingWithUserDe
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::AMappingWithNothing
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::AMappingWithNothing
 (
    A[a] : Relational
    {
@@ -56,7 +56,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::AMappingWithNothin
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithGroupByAMappingWithGroupBy
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithGroupByAMappingWithGroupBy
 (
    include AMappingWithGroupBy
 
@@ -67,7 +67,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithGroupB
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithDistinctAMappingWithGroupBy
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithDistinctAMappingWithGroupBy
 (
    include AMappingWithGroupBy
 
@@ -78,7 +78,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithDistin
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithUserDefinedPrimaryKeyAMappingWithGroupBy
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithUserDefinedPrimaryKeyAMappingWithGroupBy
 (
    include AMappingWithGroupBy
 
@@ -89,7 +89,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithUserDe
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithNothingAMappingWithGroupBy
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithNothingAMappingWithGroupBy
 (
    include AMappingWithGroupBy
 
@@ -99,7 +99,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithNothin
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithGroupByAMappingWithDistinct
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithGroupByAMappingWithDistinct
 (
    include AMappingWithDistinct
 
@@ -110,7 +110,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithGroupB
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithDistinctAMappingWithDistinct
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithDistinctAMappingWithDistinct
 (
    include AMappingWithDistinct
 
@@ -121,7 +121,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithDistin
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithUserDefinedPrimaryKeyAMappingWithDistinct
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithUserDefinedPrimaryKeyAMappingWithDistinct
 (
    include AMappingWithDistinct
 
@@ -132,7 +132,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithUserDe
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithNothingAMappingWithDistinct
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithNothingAMappingWithDistinct
 (
    include AMappingWithDistinct
 
@@ -142,7 +142,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithNothin
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithGroupByAMappingWithUserDefinedPrimaryKey
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithGroupByAMappingWithUserDefinedPrimaryKey
 (
    include AMappingWithUserDefinedPrimaryKey
 
@@ -153,7 +153,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithGroupB
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithDistinctAMappingWithUserDefinedPrimaryKey
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithDistinctAMappingWithUserDefinedPrimaryKey
 (
    include AMappingWithUserDefinedPrimaryKey
 
@@ -164,7 +164,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithDistin
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithUserDefinedPrimaryKeyAMappingWithUserDefinedPrimaryKey
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithUserDefinedPrimaryKeyAMappingWithUserDefinedPrimaryKey
 (
    include AMappingWithUserDefinedPrimaryKey
 
@@ -175,7 +175,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithUserDe
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithNothingAMappingWithUserDefinedPrimaryKey
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithNothingAMappingWithUserDefinedPrimaryKey
 (
    include AMappingWithUserDefinedPrimaryKey
 
@@ -185,7 +185,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithNothin
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithGroupByAMappingWithNothing
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithGroupByAMappingWithNothing
 (
    include AMappingWithNothing
 
@@ -196,7 +196,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithGroupB
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithDistinctAMappingWithNothing
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithDistinctAMappingWithNothing
 (
    include AMappingWithNothing
 
@@ -207,7 +207,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithDistin
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithUserDefinedPrimaryKeyAMappingWithNothing
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithUserDefinedPrimaryKeyAMappingWithNothing
 (
    include AMappingWithNothing
 
@@ -218,7 +218,7 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithUserDe
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithNothingAMappingWithNothing
+Mapping meta::external::store::relational::tests::mapping::extend::primaryKey::BMappingWithNothingAMappingWithNothing
 (
    include AMappingWithNothing
 
@@ -229,11 +229,11 @@ Mapping meta::relational::tests::mapping::extend::primaryKey::BMappingWithNothin
 )
 
 ###Pure
-import meta::relational::metamodel::*;
-import meta::relational::mapping::*;
-import meta::relational::tests::mapping::extend::primaryKey::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::mapping::extend::primaryKey::*;
 
-function <<test.Test>> meta::relational::tests::mapping::extend::primaryKey::testPrimaryKeyForB():Any[*]
+function <<test.Test>> meta::external::store::relational::tests::mapping::extend::primaryKey::testPrimaryKeyForB():Any[*]
 {
    assertEquals('bName', BMappingWithGroupByAMappingWithGroupBy.classMappingById('b')->cast(@RootRelationalInstanceSetImplementation)->toOne().resolvePrimaryKey()->cast(@TableAliasColumn).column.name);
    assertEquals('aName', BMappingWithDistinctAMappingWithGroupBy.classMappingById('b')->cast(@RootRelationalInstanceSetImplementation)->toOne().resolvePrimaryKey()->cast(@TableAliasColumn).column.name);

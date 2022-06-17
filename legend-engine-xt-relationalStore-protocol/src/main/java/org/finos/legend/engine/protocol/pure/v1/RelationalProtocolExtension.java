@@ -191,6 +191,6 @@ public class RelationalProtocolExtension implements PureProtocolExtension
     @Override
     public Map<Class<? extends PackageableElement>, String> getExtraProtocolToClassifierPathMap()
     {
-        return Maps.mutable.with(Database.class, "meta::relational::metamodel::Database");
+        return Maps.mutable.with(Database.class, "meta::external::store::relational::metamodel::Database");
     }
 }

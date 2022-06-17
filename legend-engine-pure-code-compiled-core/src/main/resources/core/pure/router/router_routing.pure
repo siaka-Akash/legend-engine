@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import meta::controlevent::autoactionrule::*;
-import meta::pure::router::systemMapping::*;
+import meta::pure::store::contract::*;
 import meta::pure::graphFetch::routing::*;
 import meta::pure::graphFetch::*;
 import meta::pure::dataQuality::*;
@@ -25,7 +25,7 @@ import meta::pure::router::printer::*;
 import meta::pure::router::routing::*;
 import meta::pure::router::operations::*;
 import meta::pure::mapping::*;
-import meta::pure::mapping::aggregationAware::*;
+import meta::external::store::aggregationAware::*;
 
 
 Class meta::pure::graphFetch::routing::RoutedGraphFetchTree extends GraphFetchTree
@@ -46,8 +46,8 @@ Class meta::pure::graphFetch::routing::RoutedPropertyGraphFetchTree extends Rout
 
 Class meta::pure::graphFetch::routing::ClusteredGraphFetchTree extends GraphFetchTree
 {
-   s : SystemMapping[1];
-   store : meta::pure::store::Store[1];
+   s : StoreContract[1];
+   store : meta::pure::store::metamodel::Store[1];
    tree : RoutedGraphFetchTree[1];
    openVars : Map<String, List<Any>>[1];
    runtime : Runtime[0..1];

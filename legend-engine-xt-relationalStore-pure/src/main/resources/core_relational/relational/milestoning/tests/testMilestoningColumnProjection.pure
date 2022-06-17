@@ -13,11 +13,11 @@
 // limitations under the License.
 
 ###Pure
-import meta::relational::functions::asserts::*;
-import meta::relational::tests::milestoning::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::tests::milestoning::*;
+import meta::external::store::relational::tests::*;
 
-function <<test.Test>> meta::relational::tests::milestoning::projection::testMilestoningColumnProjectionForRoot():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::milestoning::projection::testMilestoningColumnProjectionForRoot():Boolean[1]
 {
    let result = execute(|Product.allVersions()->project([p|$p.id, p|$p.milestoning.from, p|$p.milestoning.thru],['id', 'from', 'thru']), milestoningMapWithEmbeddedSimple, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSameSQL('select "root".id as "id", "root".from_z as "from", "root".thru_z as "thru" from ProductTable as "root"', $result);
@@ -27,7 +27,7 @@ function <<test.Test>> meta::relational::tests::milestoning::projection::testMil
    assertSameElements([%2015-08-26T00:00:00.000000000+0000, %2015-10-16T00:00:00.000000000+0000, %9999-12-31T00:00:00.000000000+0000, %9999-12-31T00:00:00.000000000+0000], $data.getDate('thru')); 
 }
 
-function <<test.Test>> meta::relational::tests::milestoning::projection::testMilestoningColumnProjectionForEmbedded():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::milestoning::projection::testMilestoningColumnProjectionForEmbedded():Boolean[1]
 {
    let result = execute(|Product.allVersions()->project([c|$c.classificationAllVersions.type, c|$c.classificationAllVersions.milestoning.from, c|$c.classificationAllVersions.milestoning.thru],['type', 'from', 'thru']), milestoningMapWithEmbeddedSimple, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSameSQL('select "root".type as "type", "root".from_z as "from", "root".thru_z as "thru" from ProductTable as "root"', $result);
@@ -37,7 +37,7 @@ function <<test.Test>> meta::relational::tests::milestoning::projection::testMil
    assertSameElements([%2015-08-26T00:00:00.000000000+0000, %2015-10-16T00:00:00.000000000+0000, %9999-12-31T00:00:00.000000000+0000, %9999-12-31T00:00:00.000000000+0000], $data.getDate('thru')); 
 }
 
-function <<test.Test>> meta::relational::tests::milestoning::projection::testMilestoningColumnProjectionForInlineEmbedded():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::milestoning::projection::testMilestoningColumnProjectionForInlineEmbedded():Boolean[1]
 {
    let result = execute(|Product.allVersions()->project([e|$e.exchangeAllVersions.name, e|$e.exchangeAllVersions.milestoning.from, e|$e.exchangeAllVersions.milestoning.thru],['name', 'from', 'thru']), milestoningMapWithEmbeddedSimple, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSameSQL('select "root".exchange as "name", "root".from_z as "from", "root".thru_z as "thru" from ProductTable as "root"', $result);
@@ -47,7 +47,7 @@ function <<test.Test>> meta::relational::tests::milestoning::projection::testMil
    assertSameElements([%2015-08-26T00:00:00.000000000+0000, %2015-10-16T00:00:00.000000000+0000, %9999-12-31T00:00:00.000000000+0000, %9999-12-31T00:00:00.000000000+0000], $data.getDate('thru')); 
 }
 
-function <<test.Test>> meta::relational::tests::milestoning::projection::testMilestoningColumnProjectionWithNonMilestonedTable():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::milestoning::projection::testMilestoningColumnProjectionWithNonMilestonedTable():Boolean[1]
 {
    let result = execute(|Product.allVersions()->project([p|$p.id, p|$p.milestoning.from, p|$p.milestoning.thru],['id', 'from', 'thru']), noMilestoningMap, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSameSQL('select "root".id as "id", null as "from", null as "thru" from ProductTableNoMilestoning as "root"', $result);
@@ -57,7 +57,7 @@ function <<test.Test>> meta::relational::tests::milestoning::projection::testMil
    assertSameElements([^TDSNull(), ^TDSNull()], $data.get('thru')); 
 }
 
-function <<test.BeforePackage>> meta::relational::tests::milestoning::projection::setUp():Any[0..1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::milestoning::projection::setUp():Any[0..1]
 {
    initDatabase();
 }

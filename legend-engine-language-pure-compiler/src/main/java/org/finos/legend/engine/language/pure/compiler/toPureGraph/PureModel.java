@@ -77,7 +77,7 @@ import org.finos.legend.pure.m3.coreinstance.meta.pure.metamodel.type.generics.G
 import org.finos.legend.pure.m3.coreinstance.meta.pure.metamodel.valuespecification.VariableExpression;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.runtime.Connection;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.runtime.Runtime;
-import org.finos.legend.pure.m3.coreinstance.meta.pure.store.Store;
+import org.finos.legend.pure.m3.coreinstance.meta.pure.store.metamodel.Store;
 import org.finos.legend.pure.m3.navigation.M3Paths;
 import org.finos.legend.pure.m3.navigation.PackageableElement.PackageableElement;
 import org.finos.legend.pure.m3.serialization.filesystem.PureCodeStorage;
@@ -340,22 +340,15 @@ public class PureModel implements IPureModel
      */
     private void registerElementsForPathToElement()
     {
-        registerElementForPathToElement("meta::pure::mapping::modelToModel", Lists.mutable.with(
+        registerElementForPathToElement("meta::external::store::model::contract", Lists.mutable.with(
                 "supports_FunctionExpression_1__Boolean_1_",
                 "planExecution_StoreQuery_1__RoutedValueSpecification_$0_1$__Mapping_$0_1$__Runtime_$0_1$__ExecutionContext_1__RouterExtension_MANY__DebugContext_1__ExecutionNode_1_",
-                "execution_StoreQuery_1__RoutedValueSpecification_$0_1$__Mapping_1__Runtime_1__ExecutionContext_1__RouterExtension_MANY__DebugContext_1__Result_1_"
-        ));
-        registerElementForPathToElement("meta::pure::mapping::modelToModel::inMemory", Lists.mutable.with(
+                "execution_StoreQuery_1__RoutedValueSpecification_$0_1$__Mapping_1__Runtime_1__ExecutionContext_1__RouterExtension_MANY__DebugContext_1__Result_1_",
                 "getterOverrideMapped_Any_1__PropertyMapping_1__Any_MANY_",
-                "getterOverrideNonMapped_Any_1__Property_1__Any_MANY_"
-        ));
-        registerElementForPathToElement("meta::pure::store::platform", Lists.mutable.with(
-                "supports_FunctionExpression_1__Boolean_1_"
-        ));
-        registerElementForPathToElement("meta::pure::store::platform::execution", Lists.mutable.with(
-                "execution_StoreQuery_1__RoutedValueSpecification_$0_1$__Mapping_$0_1$__Runtime_$0_1$__ExecutionContext_1__RouterExtension_MANY__DebugContext_1__Result_1_"
-        ));
-        registerElementForPathToElement("meta::pure::store::platform::executionPlan::generation", Lists.mutable.with(
+                "getterOverrideNonMapped_Any_1__Property_1__Any_MANY_"));
+        registerElementForPathToElement("meta::external::store::platform::contract", Lists.mutable.with(
+                "supports_FunctionExpression_1__Boolean_1_",
+                "execution_StoreQuery_1__RoutedValueSpecification_$0_1$__Mapping_$0_1$__Runtime_$0_1$__ExecutionContext_1__RouterExtension_MANY__DebugContext_1__Result_1_",
                 "planExecution_StoreQuery_1__RoutedValueSpecification_$0_1$__Mapping_$0_1$__Runtime_$0_1$__ExecutionContext_1__RouterExtension_MANY__DebugContext_1__ExecutionNode_1_"
         ));
         registerElementForPathToElement("meta::protocols::pure::vX_X_X::invocation::execution::execute", Lists.mutable.with(

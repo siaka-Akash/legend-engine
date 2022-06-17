@@ -12,36 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::pure::router::systemMapping::*;
+import meta::pure::store::contract::*;
 import meta::pure::router::extension::*;
-import meta::relational::metamodel::*;
+import meta::external::store::relational::metamodel::*;
 import meta::pure::mapping::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::runtime::*;
-import meta::relational::functions::pureToSqlQuery::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::functions::sqlstring::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::functions::pureToSqlQuery::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::functions::sqlstring::*;
 import meta::pure::runtime::*;
 import meta::pure::router::clustering::*;
 import meta::pure::router::execution::*;
 import meta::pure::router::store::platform::*;
+import meta::external::store::platform::contract::*;
 
 
-function meta::relational::functions::sqlstring::toSQLStringPretty(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlstring::toSQLStringPretty(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], extensions:RouterExtension[*]):String[1]
 {
    toSQLString($f, $mapping, $databaseType, [], [], ^Format(newLine='\n', indent='\t'), $extensions, noDebug())
 }
 
-function meta::relational::functions::sqlstring::toSQLStringPretty(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], runtime:Runtime[1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlstring::toSQLStringPretty(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], runtime:Runtime[1], extensions:RouterExtension[*]):String[1]
 {
    let databaseConnection = $runtime.connections->toOne()->cast(@DatabaseConnection);
    toSQL($f, $mapping, $runtime, $extensions).toSQLString($databaseConnection.type, $databaseConnection.timeZone, $databaseConnection.quoteIdentifiers, ^Format(newLine='\n', indent='\t'));
 }
 
-function meta::relational::functions::sqlstring::toSQL(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], runtime:Runtime[1], extensions:RouterExtension[*]):SQLResult[1]
+function meta::external::store::relational::functions::sqlstring::toSQL(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], runtime:Runtime[1], extensions:RouterExtension[*]):SQLResult[1]
 {
    let databaseConnection = $runtime.connections->filter(c|$c->instanceOf(DatabaseConnection))->toOne()->cast(@DatabaseConnection);
-   let postProcessors = meta::relational::mapping::sqlQueryDefaultPostProcessors()->map(pp | {select:SelectSQLQuery[*] | $pp->eval($select, $extensions)})->concatenate($databaseConnection.sqlQueryPostProcessors);
+   let postProcessors = meta::external::store::relational::mapping::sqlQueryDefaultPostProcessors()->map(pp | {select:SelectSQLQuery[*] | $pp->eval($select, $extensions)})->concatenate($databaseConnection.sqlQueryPostProcessors);
    let sql = toSQL($f, $mapping, $databaseConnection.type, $databaseConnection.timeZone, $postProcessors, $extensions, noDebug());
 
    if ($databaseConnection.sqlQueryPostProcessorsConnectionAware->isEmpty(), | $sql, | let newSql = $sql.sqlQueries->map(s | $databaseConnection.sqlQueryPostProcessorsConnectionAware->fold({pp,q|$pp->eval($q, $databaseConnection->cast(@DatabaseConnection)).values->toOne()}, $s->cast(@SelectSQLQuery)));
@@ -50,60 +51,60 @@ function meta::relational::functions::sqlstring::toSQL(f:FunctionDefinition<{->A
 }
 
 
-function meta::relational::functions::sqlstring::toSQLStringPretty(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], dbTimeZone:String[0..1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlstring::toSQLStringPretty(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], dbTimeZone:String[0..1], extensions:RouterExtension[*]):String[1]
 {
    toSQLString($f, $mapping, $databaseType, $dbTimeZone, [], ^Format(newLine='\n', indent='\t'), $extensions, noDebug())
 }
 
-function meta::relational::functions::sqlstring::toSQLString(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlstring::toSQLString(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], extensions:RouterExtension[*]):String[1]
 {
    toSQLString($f, $mapping, $databaseType, [], [], ^Format(newLine='', indent=''), $extensions, noDebug())
 }
 
-function meta::relational::functions::sqlstring::toSQLString(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], extensions:RouterExtension[*], debug:DebugContext[1]):String[1]
+function meta::external::store::relational::functions::sqlstring::toSQLString(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], extensions:RouterExtension[*], debug:DebugContext[1]):String[1]
 {
    toSQLString($f, $mapping, $databaseType, [], [], ^Format(newLine='', indent=''), $extensions, $debug)
 }
 
-function meta::relational::functions::sqlstring::toSQLString(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], dbTimeZone:String[0..1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlstring::toSQLString(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], dbTimeZone:String[0..1], extensions:RouterExtension[*]):String[1]
 {
    toSQLString($f, $mapping, $databaseType, $dbTimeZone, [], ^Format(newLine='', indent=''), $extensions, noDebug())
 }
 
-function meta::relational::functions::sqlstring::toNonExecutableSQLString(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], extensions:RouterExtension[*]):String[1]
+function meta::external::store::relational::functions::sqlstring::toNonExecutableSQLString(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], extensions:RouterExtension[*]):String[1]
 {
-   toSQLString($f, $mapping, $databaseType, [], {select:SelectSQLQuery[1] | meta::relational::postProcessor::nonExecutable_SelectSQLQuery_1__RouterExtension_MANY__Result_1_->eval($select, $extensions)}, ^Format(newLine='', indent=''), $extensions, noDebug())
+   toSQLString($f, $mapping, $databaseType, [], {select:SelectSQLQuery[1] | meta::external::store::relational::postProcessor::nonExecutable_SelectSQLQuery_1__RouterExtension_MANY__Result_1_->eval($select, $extensions)}, ^Format(newLine='', indent=''), $extensions, noDebug())
 }
 
-function meta::relational::functions::sqlstring::toSQLString(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], dbTimeZone:String[0..1], sqlQueryPostProcessors: Function<{SelectSQLQuery[1]->Result<SelectSQLQuery|1>[1]}>[*], format:Format[1], extensions:RouterExtension[*], debug:DebugContext[1]):String[1]
+function meta::external::store::relational::functions::sqlstring::toSQLString(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], dbTimeZone:String[0..1], sqlQueryPostProcessors: Function<{SelectSQLQuery[1]->Result<SelectSQLQuery|1>[1]}>[*], format:Format[1], extensions:RouterExtension[*], debug:DebugContext[1]):String[1]
 {
    toSQLString($f, $mapping, $databaseType, $dbTimeZone, [], $sqlQueryPostProcessors, $format, $extensions, $debug);
 }
 
-function meta::relational::functions::sqlstring::toSQLString(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], dbTimeZone:String[0..1], quoteIdentifier:Boolean[0..1], sqlQueryPostProcessors: Function<{SelectSQLQuery[1]->Result<SelectSQLQuery|1>[1]}>[*], format:Format[1], extensions:RouterExtension[*], debug:DebugContext[1]):String[1]
+function meta::external::store::relational::functions::sqlstring::toSQLString(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], dbTimeZone:String[0..1], quoteIdentifier:Boolean[0..1], sqlQueryPostProcessors: Function<{SelectSQLQuery[1]->Result<SelectSQLQuery|1>[1]}>[*], format:Format[1], extensions:RouterExtension[*], debug:DebugContext[1]):String[1]
 {
    let routed = $f->routeFunction($mapping, ^Runtime(connections=[^Connection(element='Mock')]), $extensions, $debug);
    let sqlResult = toSQL($routed.functions.expressionSequence->evaluateAndDeactivate()->cast(@ClusteredValueSpecification), $f->openVariableValues(), $mapping, $databaseType, $dbTimeZone, $sqlQueryPostProcessors, $extensions, $debug, ^SQLResult(shouldWarn=false, extensions=$extensions));
    $sqlResult.toSQLString($databaseType, $dbTimeZone, $quoteIdentifier, $format);
 }
 
-function <<access.private>> meta::relational::functions::sqlstring::toSQL(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], dbTimeZone:String[0..1], sqlQueryPostProcessors: Function<{SelectSQLQuery[1]->Result<SelectSQLQuery|1>[1]}>[*], extensions:RouterExtension[*], debug:DebugContext[1]):SQLResult[1]
+function <<access.private>> meta::external::store::relational::functions::sqlstring::toSQL(f:FunctionDefinition<{->Any[*]}>[1], mapping:Mapping[1], databaseType:DatabaseType[1], dbTimeZone:String[0..1], sqlQueryPostProcessors: Function<{SelectSQLQuery[1]->Result<SelectSQLQuery|1>[1]}>[*], extensions:RouterExtension[*], debug:DebugContext[1]):SQLResult[1]
 {
    let routed = $f->routeFunction($mapping, ^Runtime(connections=[^Connection(element='Mock')]), $extensions, $debug);
    toSQL($routed.functions.expressionSequence->evaluateAndDeactivate()->cast(@ClusteredValueSpecification), $f->openVariableValues(), $mapping, $databaseType, $dbTimeZone, $sqlQueryPostProcessors, $extensions, $debug, ^SQLResult(shouldWarn=false, extensions=$extensions));
 }
 
 
-function <<access.private>> meta::relational::functions::sqlstring::toSQL(clusters:ClusteredValueSpecification[*], vars:Map<String, List<Any>>[1], mapping:Mapping[1], databaseType:DatabaseType[1], dbTimeZone:String[0..1], sqlQueryPostProcessors: Function<{SelectSQLQuery[1]->Result<SelectSQLQuery|1>[1]}>[*], extensions:RouterExtension[*], debug:DebugContext[1], sqlResult:SQLResult[1]):SQLResult[1]
+function <<access.private>> meta::external::store::relational::functions::sqlstring::toSQL(clusters:ClusteredValueSpecification[*], vars:Map<String, List<Any>>[1], mapping:Mapping[1], databaseType:DatabaseType[1], dbTimeZone:String[0..1], sqlQueryPostProcessors: Function<{SelectSQLQuery[1]->Result<SelectSQLQuery|1>[1]}>[*], extensions:RouterExtension[*], debug:DebugContext[1], sqlResult:SQLResult[1]):SQLResult[1]
 {
    let clusterBeforeAggregateRewrite = $clusters->head();
-   if($clusterBeforeAggregateRewrite.store->toOne()->instanceOf(meta::pure::mapping::aggregationAware::AggregationAwareStore),
-      | let reprocessedFunction = meta::pure::mapping::aggregationAware::reprocessFunction($clusterBeforeAggregateRewrite.val->cast(@FunctionExpression)->toOne(), $vars, []->cast(@RoutedValueSpecification), $mapping, $debug);
+   if($clusterBeforeAggregateRewrite.store->toOne()->instanceOf(meta::external::store::aggregationAware::AggregationAwareStore),
+      | let reprocessedFunction = meta::external::store::aggregationAware::reprocessFunction($clusterBeforeAggregateRewrite.val->cast(@FunctionExpression)->toOne(), $vars, []->cast(@RoutedValueSpecification), $mapping, $debug);
         let routed = $reprocessedFunction->routeFunction($mapping, ^Runtime(connections=[^Connection(element='Mock')]), $extensions, $debug);
         toSQL($routed.functions.expressionSequence->evaluateAndDeactivate()->cast(@ClusteredValueSpecification), $vars, $mapping, $databaseType, $dbTimeZone, $sqlQueryPostProcessors, $extensions, $debug, $sqlResult);,
       | let cluster = $clusterBeforeAggregateRewrite;
         let firstDbCluster = findDBCluster($cluster->at(0), []->cast(@ClusteredValueSpecification));
-        if($cluster.s.executeFunctionAsString == purePlatformSystemMapping().executeFunctionAsString && $firstDbCluster->isEmpty(),
+        if($cluster.s.executeStoreQuery == purePlatformStoreContract().executeStoreQuery && $firstDbCluster->isEmpty(),
            |  let fe = $cluster.val->match([r:ExtendedRoutedValueSpecification[1]|$r.value, v:ValueSpecification[1]|$v])->cast(@FunctionExpression);
               let params = $fe.parametersValues->evaluateAndDeactivate();
               let paramName = $params->at(0)->cast(@InstanceValue).values->at(0)->cast(@String);
@@ -111,7 +112,7 @@ function <<access.private>> meta::relational::functions::sqlstring::toSQL(cluste
               let res = $cluster->executeExpression($vars, [], [], [], $exeCtx, false, $extensions, $debug);
 
               toSQL($clusters->tail(), $vars->put($paramName, ^List<Any>(values=$res.values)), $mapping, $databaseType, $dbTimeZone, $sqlQueryPostProcessors, $extensions, $debug, $sqlResult); ,
-           |  let dbCluster = if ($cluster.store->toOne()->instanceOf(meta::relational::metamodel::Database),| $cluster, | $firstDbCluster->at(0)->cast(@ClusteredValueSpecification));
+           |  let dbCluster = if ($cluster.store->toOne()->instanceOf(meta::external::store::relational::metamodel::Database),| $cluster, | $firstDbCluster->at(0)->cast(@ClusteredValueSpecification));
               let query = $dbCluster.val->match([r:ExtendedRoutedValueSpecification[1]|$r.value, v:ValueSpecification[1]|$v])->cast(@FunctionExpression)->toSQLQuery($mapping, $vars, [], $debug, $extensions);
               let newQuery = if($sqlQueryPostProcessors->isEmpty(), | $query, | $sqlQueryPostProcessors->fold({p,sql | $p->eval($sql->cast(@SelectSQLQuery)).values->toOne()}, $query));
               ^$sqlResult(shouldWarn=($sqlResult.shouldWarn || !$clusters->tail()->isEmpty()),
@@ -121,18 +122,18 @@ function <<access.private>> meta::relational::functions::sqlstring::toSQL(cluste
 }
 
 
-function <<access.private>> meta::relational::functions::sqlstring::findDBCluster(v:ValueSpecification[1], current:ClusteredValueSpecification[*]):ClusteredValueSpecification[*]
+function <<access.private>> meta::external::store::relational::functions::sqlstring::findDBCluster(v:ValueSpecification[1], current:ClusteredValueSpecification[*]):ClusteredValueSpecification[*]
 {
    $v->match([r:ExtendedRoutedValueSpecification[1]|$r.value, a:Any[1]|$a])
      ->match([
-                  c:ClusteredValueSpecification[1]|if ($c.store->instanceOf(meta::relational::metamodel::Database),|$current->add($c),|$c.val->findDBCluster($current)),
+                  c:ClusteredValueSpecification[1]|if ($c.store->instanceOf(meta::external::store::relational::metamodel::Database),|$current->add($c),|$c.val->findDBCluster($current)),
                   fe:FunctionExpression[1]|$current->concatenate($fe.parametersValues->map(p|$p->findDBCluster([]->cast(@ClusteredValueSpecification)))),
                   i:InstanceValue[1]|[],
                   v:VariableExpression[1] | []
              ]);
 }
 
-Class meta::relational::functions::sqlstring::SQLResult
+Class meta::external::store::relational::functions::sqlstring::SQLResult
 {
    shouldWarn: Boolean[1];
    sqlQueries: SQLQuery[*];

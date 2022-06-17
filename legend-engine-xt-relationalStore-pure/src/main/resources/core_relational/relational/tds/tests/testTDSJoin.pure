@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-Class meta::relational::tests::tds::tdsJoin::testJoinTDS_Person
+Class meta::external::store::relational::tests::tds::tdsJoin::testJoinTDS_Person
 {
    personID: Integer[1];
    firstName: String[1];
@@ -26,25 +26,25 @@ Class meta::relational::tests::tds::tdsJoin::testJoinTDS_Person
    }:String[1];
 }
 
-Class meta::relational::tests::tds::tdsJoin::testJoinTDS_Firm
+Class meta::external::store::relational::tests::tds::tdsJoin::testJoinTDS_Firm
 {
    legalName: String[1];
    firmID: Integer[1];
    firmAddrID: Integer[1];
 }
 
-Class meta::relational::tests::tds::tdsJoin::testJoinTDS_Address
+Class meta::external::store::relational::tests::tds::tdsJoin::testJoinTDS_Address
 {
    addrName: String[1];
    addrID: Integer[1];
 }
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
-import meta::relational::tests::tds::tdsJoin::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::tests::tds::tdsJoin::*;
 
-Mapping meta::relational::tests::tds::tdsJoin::testJoinTDSMapping
+Mapping meta::external::store::relational::tests::tds::tdsJoin::testJoinTDSMapping
 (
    testJoinTDS_Person : Relational
             {
@@ -79,7 +79,7 @@ Mapping meta::relational::tests::tds::tdsJoin::testJoinTDSMapping
           }
 )
 
-Mapping meta::relational::tests::tds::tdsJoin::testJoinTDSMappingWithFilter
+Mapping meta::external::store::relational::tests::tds::tdsJoin::testJoinTDSMappingWithFilter
 (
    testJoinTDS_Person : Relational
             {
@@ -106,7 +106,7 @@ Mapping meta::relational::tests::tds::tdsJoin::testJoinTDSMappingWithFilter
           }
 )
 
-Mapping meta::relational::tests::tds::tdsJoin::testJoinTDSMappingTwoDatabase
+Mapping meta::external::store::relational::tests::tds::tdsJoin::testJoinTDSMappingTwoDatabase
 (
   
    testJoinTDS_Person : Relational
@@ -144,7 +144,7 @@ Mapping meta::relational::tests::tds::tdsJoin::testJoinTDSMappingTwoDatabase
 
 )
 
-Mapping meta::relational::tests::tds::tdsJoin::testJoinTDSMappingTwoDatabaseWithColumnsMappedViaJoinsAndDynaFunction
+Mapping meta::external::store::relational::tests::tds::tdsJoin::testJoinTDSMappingTwoDatabaseWithColumnsMappedViaJoinsAndDynaFunction
 (
 
    testJoinTDS_Person : Relational
@@ -173,7 +173,7 @@ Mapping meta::relational::tests::tds::tdsJoin::testJoinTDSMappingTwoDatabaseWith
 )
 
 
-Mapping meta::relational::tests::tds::tdsJoin::testJoinTDSMappingThreeDatabase
+Mapping meta::external::store::relational::tests::tds::tdsJoin::testJoinTDSMappingThreeDatabase
 (
 
    testJoinTDS_Person : Relational
@@ -212,18 +212,18 @@ Mapping meta::relational::tests::tds::tdsJoin::testJoinTDSMappingThreeDatabase
 )
 
 ###Pure
-import meta::relational::metamodel::execute::*;
-import meta::relational::functions::sqlstring::*;
-import meta::relational::mapping::*;
-import meta::relational::runtime::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::functions::sqlstring::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::tests::*;
 import meta::pure::metamodel::tds::*;
 import meta::pure::profiles::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::tds::tdsJoin::*;
-import meta::relational::metamodel::join::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::tds::tdsJoin::*;
+import meta::external::store::relational::metamodel::join::*;
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testInnerJoinSimple():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testInnerJoinSimple():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
                         ->join(testJoinTDS_Firm.all()->project([#/testJoinTDS_Firm/legalName!firmName#, #/testJoinTDS_Firm/firmID!fID#]), JoinType.INNER, {a,b|$a.getInteger('eID') == $b.getInteger('fID');}), testJoinTDSMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -232,7 +232,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testInnerJoinSimpl
                        '5,Roberts,2,Firm A,2', '6,Hill,3,Firm B,3', '7,Harris,4,Firm C,4'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testLeftOuterJoinSimple():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testLeftOuterJoinSimple():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
                         ->join(testJoinTDS_Firm.all()->project([#/testJoinTDS_Firm/legalName!firmName#, #/testJoinTDS_Firm/firmID!fID#]), JoinType.LEFT_OUTER, {a,b|($a.getInteger('eID') + 2) == $b.getInteger('fID')}), testJoinTDSMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -241,7 +241,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testLeftOuterJoinS
                        '5,Roberts,2,Firm C,4', '6,Hill,3,TDSNull,TDSNull', '7,Harris,4,TDSNull,TDSNull'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testRightOuterJoinSimple():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testRightOuterJoinSimple():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
                         ->join(testJoinTDS_Firm.all()->project([#/testJoinTDS_Firm/legalName!firmName#, #/testJoinTDS_Firm/firmID!fID#]), JoinType.RIGHT_OUTER, {a,b|($a.getInteger('eID') + 2) == $b.getInteger('fID');}), testJoinTDSMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -251,7 +251,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testRightOuterJoin
                        '5,Roberts,2,Firm C,4', 'TDSNull,TDSNull,TDSNull,Firm A,2', 'TDSNull,TDSNull,TDSNull,Firm X,1'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testInnerJoinConditionTrueUsingCol():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testInnerJoinConditionTrueUsingCol():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()->project([col(t|$t.personID,'personID'), col(t|$t.lastName,'personName'), col(t|$t.employerID,'eID')])
                         ->join(testJoinTDS_Firm.all()->project([#/testJoinTDS_Firm/legalName!firmName#, #/testJoinTDS_Firm/firmID!fID#]), JoinType.INNER, {a,b|true}), testJoinTDSMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -265,7 +265,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testInnerJoinCondi
                        '7,Harris,4,Firm X,1', '7,Harris,4,Firm A,2', '7,Harris,4,Firm B,3', '7,Harris,4,Firm C,4'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testInnerJoinConditionTrue():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testInnerJoinConditionTrue():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
                         ->join(testJoinTDS_Firm.all()->project([#/testJoinTDS_Firm/legalName!firmName#, #/testJoinTDS_Firm/firmID!fID#]), JoinType.INNER, {a,b|true}), testJoinTDSMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -279,14 +279,14 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testInnerJoinCondi
                        '7,Harris,4,Firm X,1', '7,Harris,4,Firm A,2', '7,Harris,4,Firm B,3', '7,Harris,4,Firm C,4'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testInnerJoinConditionFalse():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testInnerJoinConditionFalse():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
                         ->join(testJoinTDS_Firm.all()->project([#/testJoinTDS_Firm/legalName!firmName#, #/testJoinTDS_Firm/firmID!fID#]), JoinType.INNER, {a,b|false}), testJoinTDSMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 0);
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testLeftOuterJoinConditionFalse():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testLeftOuterJoinConditionFalse():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
                         ->join(testJoinTDS_Firm.all()->project([#/testJoinTDS_Firm/legalName!firmName#, #/testJoinTDS_Firm/firmID!fID#]), JoinType.LEFT_OUTER, {a,b|false}), testJoinTDSMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -295,7 +295,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testLeftOuterJoinC
                        '5,Roberts,2,TDSNull,TDSNull', '6,Hill,3,TDSNull,TDSNull', '7,Harris,4,TDSNull,TDSNull'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testRightOuterJoinConditionFalse():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testRightOuterJoinConditionFalse():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
                         ->join(testJoinTDS_Firm.all()->project([#/testJoinTDS_Firm/legalName!firmName#, #/testJoinTDS_Firm/firmID!fID#]), JoinType.RIGHT_OUTER, {a,b|false}), testJoinTDSMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -303,7 +303,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testRightOuterJoin
    assertSameElements(['TDSNull,TDSNull,TDSNull,Firm X,1', 'TDSNull,TDSNull,TDSNull,Firm A,2', 'TDSNull,TDSNull,TDSNull,Firm B,3', 'TDSNull,TDSNull,TDSNull,Firm C,4'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinVariableInLambda():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinVariableInLambda():Boolean[1]
 {
    let val = 0;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
@@ -313,7 +313,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinVariableIn
                        '5,Roberts,2,Firm A,2', '6,Hill,3,Firm B,3', '7,Harris,4,Firm C,4'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinLambdaAsVariable():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinLambdaAsVariable():Boolean[1]
 {
    let jc =  {a:TDSRow[1], b:TDSRow[1] |$a.getInteger('eID') == $b.getInteger('fID');};
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
@@ -323,7 +323,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinLambdaAsVa
                        '5,Roberts,2,Firm A,2', '6,Hill,3,Firm B,3', '7,Harris,4,Firm C,4'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinWithLiteralColumn():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinWithLiteralColumn():Boolean[1]
 {
    let jc =  {a:TDSRow[1], b:TDSRow[1] |$a.getInteger('eID') == $b.getInteger('fID');};
    let result = execute(|testJoinTDS_Person.all()->project([ col(p|$p.personID, 'personID'), col(p|$p.lastName, 'personName') , col(p|$p.employerID, 'eID'), col(p|true, 'Literal') ])
@@ -333,7 +333,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinWithLitera
                        '5,Roberts,2,true,Firm A,2', '6,Hill,3,true,Firm B,3', '7,Harris,4,true,Firm C,4'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinTypeAsVariable():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinTypeAsVariable():Boolean[1]
 {
    let type = JoinType.INNER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
@@ -343,7 +343,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinTypeAsVari
                        '5,Roberts,2,Firm A,2', '6,Hill,3,Firm B,3', '7,Harris,4,Firm C,4'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testRestrictAfterJoin():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testRestrictAfterJoin():Boolean[1]
 {
    let type = JoinType.INNER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
@@ -355,7 +355,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testRestrictAfterJ
 }
 
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testMultipleJoins():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testMultipleJoins():Boolean[1]
 {
    let type = JoinType.INNER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
@@ -368,7 +368,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testMultipleJoins(
                        'Roberts,Cupertino', 'Hill,Tokyo', 'Harris,Mountain View'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testFilterAfterJoinInner():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testFilterAfterJoinInner():Boolean[1]
 {
    let type = JoinType.INNER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -379,7 +379,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testFilterAfterJoi
    assertSameElements(['Roberts,34,9', 'Hill,32,10', 'Harris,35,11'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testFilterAfterJoinOuter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testFilterAfterJoinOuter():Boolean[1]
 {
    let type = JoinType.LEFT_OUTER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -390,7 +390,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testFilterAfterJoi
    assertSameElements(['Roberts,34,9', 'Hill,32,10', 'Harris,35,11'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testExtendAfterJoinInner():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testExtendAfterJoinInner():Boolean[1]
 {
    let type = JoinType.INNER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -402,7 +402,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testExtendAfterJoi
                        'Roberts,34,9,7', 'Hill,32,10,4', 'Harris,35,11,6'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testExtendAfterJoinOuter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testExtendAfterJoinOuter():Boolean[1]
 {
    let type = JoinType.LEFT_OUTER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -414,7 +414,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testExtendAfterJoi
                        'Roberts,34,9,7', 'Hill,32,10,4', 'Harris,35,11,6'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinAfterExtendInner():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinAfterExtendInner():Boolean[1]
 {
    let type = JoinType.INNER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -425,7 +425,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinAfterExten
    assertSameElements(['Allen,22,8,5', 'Harris,35,9,6', 'Johnson,22,10,7', 'Roberts,34,10,7', 'Smith,23,8,5'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinAfterExtendOuter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinAfterExtendOuter():Boolean[1]
 {
    let type = JoinType.LEFT_OUTER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -437,7 +437,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinAfterExten
                        'Roberts,34,10,7', 'Hill,32,TDSNull,4', 'Harris,35,9,6'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testSelfJoinInner():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testSelfJoinInner():Boolean[1]
 {
    let type = JoinType.INNER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/managerID!mID#])
@@ -447,7 +447,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testSelfJoinInner(
    assertSameElements(['Smith,Johnson', 'Johnson,Allen', 'Hill,Johnson'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testSelfJoinOuter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testSelfJoinOuter():Boolean[1]
 {
    let type = JoinType.LEFT_OUTER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/managerID!mID#])
@@ -458,7 +458,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testSelfJoinOuter(
                        'Roberts,TDSNull', 'Hill,TDSNull', 'Harris,TDSNull'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testGroupByAfterJoinInner():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testGroupByAfterJoinInner():Boolean[1]
 {
    let type = JoinType.INNER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -469,7 +469,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testGroupByAfterJo
    assertSameElements(['8,4', '9,1', '11,1', '10,1'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testGroupByAfterJoinOuter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testGroupByAfterJoinOuter():Boolean[1]
 {
    let type = JoinType.LEFT_OUTER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -480,7 +480,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testGroupByAfterJo
    assertSameElements(['8,4', '9,1', '11,1', '10,1'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinAfterGroupByAfterJoinInner():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinAfterGroupByAfterJoinInner():Boolean[1]
 {
    let type = JoinType.INNER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -493,7 +493,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinAfterGroup
    assertSameElements(['New York,4', 'Cupertino,1', 'Mountain View,1', 'Tokyo,1'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinAfterGroupByAfterJoinOuter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinAfterGroupByAfterJoinOuter():Boolean[1]
 {
    let type = JoinType.LEFT_OUTER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -506,7 +506,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinAfterGroup
    assertSameElements(['New York,4', 'Cupertino,1', 'Mountain View,1', 'Tokyo,1'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testExtendAfterJoinAfterAfterGroupByAfterJoinInner():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testExtendAfterJoinAfterAfterGroupByAfterJoinInner():Boolean[1]
 {
    let type = JoinType.INNER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -521,7 +521,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testExtendAfterJoi
 }
 
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testExtendAfterJoinAfterAfterGroupByAfterJoinOuter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testExtendAfterJoinAfterAfterGroupByAfterJoinOuter():Boolean[1]
 {
    let type = JoinType.LEFT_OUTER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -535,7 +535,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testExtendAfterJoi
    assertSameElements(['New York,8,4', 'Cupertino,9,1', 'Mountain View,13,1', 'Tokyo,5,1'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testFilterAfterExtendJoinAfterAfterGroupByAfterJoinInner():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testFilterAfterExtendJoinAfterAfterGroupByAfterJoinInner():Boolean[1]
 {
    let type = JoinType.INNER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -550,7 +550,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testFilterAfterExt
    assertSameElements(['Cupertino,9,1', 'Mountain View,13,1'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testFilterAfterExtendJoinAfterAfterGroupByAfterJoinOuter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testFilterAfterExtendJoinAfterAfterGroupByAfterJoinOuter():Boolean[1]
 {
    let type = JoinType.LEFT_OUTER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -565,7 +565,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testFilterAfterExt
    assertSameElements(['Cupertino,9,1', 'Mountain View,13,1'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testGroupByAfterFilterAfterExtendJoinAfterAfterGroupByAfterJoinInner():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testGroupByAfterFilterAfterExtendJoinAfterAfterGroupByAfterJoinInner():Boolean[1]
 {
    let type = JoinType.INNER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -581,7 +581,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testGroupByAfterFi
    assertSameElements(['Cupertino,1', 'Mountain View,1'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testGroupByAfterFilterAfterExtendJoinAfterAfterGroupByAfterJoinOuter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testGroupByAfterFilterAfterExtendJoinAfterAfterGroupByAfterJoinOuter():Boolean[1]
 {
    let type = JoinType.LEFT_OUTER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -597,7 +597,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testGroupByAfterFi
    assertSameElements(['Cupertino,1', 'Mountain View,1'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinAfterGroupByBothInner():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinAfterGroupByBothInner():Boolean[1]
 {
    let type = JoinType.INNER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -609,7 +609,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinAfterGroup
    assertSameElements(['1,4', '2,1', '3,1', '4,1'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinAfterGroupByBothOuter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinAfterGroupByBothOuter():Boolean[1]
 {
    let type = JoinType.LEFT_OUTER;
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/age!personAge#, #/testJoinTDS_Person/employerID!eID#])
@@ -622,7 +622,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinAfterGroup
 }
 
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testInnerJoinWithQualifiedPropertiesOnLeft():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testInnerJoinWithQualifiedPropertiesOnLeft():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/fullName!fullName#, #/testJoinTDS_Person/employerID!eID#])
                         ->join(testJoinTDS_Firm.all()->project([#/testJoinTDS_Firm/legalName!firmName#, #/testJoinTDS_Firm/firmID!fID#]), JoinType.INNER, {a,b|$a.getInteger('eID') == $b.getInteger('fID');})
@@ -632,7 +632,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testInnerJoinWithQ
       'Firm C,David Harris', 'Firm B,Oliver Hill'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testInnerJoinWithQualifiedPropertiesOnRight():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testInnerJoinWithQualifiedPropertiesOnRight():Boolean[1]
 {
    let result = execute(|testJoinTDS_Firm.all()->project([#/testJoinTDS_Firm/legalName!firmName#, #/testJoinTDS_Firm/firmID!fID#])
                         ->join(testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/fullName!fullName#, #/testJoinTDS_Person/employerID!eID#]), JoinType.INNER, {a,b|$a.getInteger('eID') == $b.getInteger('fID');})
@@ -642,7 +642,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testInnerJoinWithQ
       'Firm C,David Harris', 'Firm B,Oliver Hill'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinBySingleColumnName():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinBySingleColumnName():Boolean[1]
 {
    let result = execute(
       |testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
@@ -658,7 +658,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinBySingleCo
                        '5,Roberts,2,Firm A,2', '6,Hill,3,Firm B,3', '7,Harris,4,Firm C,4'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinBySingleColumnNameLeftOuter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinBySingleColumnNameLeftOuter():Boolean[1]
 {
    let result = execute(
       |testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
@@ -674,7 +674,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinBySingleCo
          '4,Allen,1,TDSNull,TDSNull', '5,Roberts,2,TDSNull,TDSNull', '6,Hill,3,TDSNull,TDSNull', '7,Harris,4,TDSNull,TDSNull'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinBySingleColumnNameRightOuter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinBySingleColumnNameRightOuter():Boolean[1]
 {
    let result = execute(
       |testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])->filter(r:TDSRow[1]|false)
@@ -692,7 +692,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinBySingleCo
       'TDSNull,TDSNull,TDSNull,Firm C,4', 'TDSNull,TDSNull,TDSNull,Firm B,3'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinByMultiColumnName():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinByMultiColumnName():Boolean[1]
 {
    let result = execute(
       |testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
@@ -708,7 +708,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinByMultiCol
                        '5,Roberts,2,Firm A,2', '6,Hill,3,Firm B,3', '7,Harris,4,Firm C,4'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinByCommonColumnName():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinByCommonColumnName():Boolean[1]
 {
    let result = execute(
       |testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!fID#])
@@ -724,7 +724,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinByCommonCo
       '4,Allen,1,Firm X', '5,Roberts,2,Firm A', '6,Hill,3,Firm B', '7,Harris,4,Firm C'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinByCommonColumnName_RightOuter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinByCommonColumnName_RightOuter():Boolean[1]
 {
    let result = execute(
       |testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!fID#])->filter(r|false)
@@ -740,7 +740,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinByCommonCo
    assertSameElements(['TDSNull,TDSNull,Firm A,2', 'TDSNull,TDSNull,Firm X,1', 'TDSNull,TDSNull,Firm C,4', 'TDSNull,TDSNull,Firm B,3'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinByColumnName_AfterLimit():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinByColumnName_AfterLimit():Boolean[1]
 {
    let result = execute(
       |testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!fID#])->limit(100)
@@ -757,14 +757,14 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinByColumnNa
       '4,Allen,1,Firm X', '5,Roberts,2,Firm A', '6,Hill,3,Firm B', '7,Harris,4,Firm C'], $result.values.rows->map(r|$r.values->makeString(',')));
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testLeftOuterJoinWithFilterOnClassAndFunction():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testLeftOuterJoinWithFilterOnClassAndFunction():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()->project([#/testJoinTDS_Person/personID!personID#, #/testJoinTDS_Person/lastName!personName#, #/testJoinTDS_Person/employerID!eID#])
                         ->join(testJoinTDS_Firm.all()->filter(f|$f.legalName->length()>20)->project([#/testJoinTDS_Firm/legalName!firmName#, #/testJoinTDS_Firm/firmID!fID#]), JoinType.LEFT_OUTER, {a,b|($a.getInteger('eID') + 2) == $b.getInteger('fID');}), testJoinTDSMappingWithFilter, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
-   meta::relational::functions::asserts::assertSameSQL('select "persontable_0"."personID" as "personID", "persontable_0"."personName" as "personName", "persontable_0"."eID" as "eID", "persontable_0"."firmName" as "firmName", "persontable_0"."fID" as "fID" from (select "persontable_1"."personID" as "personID", "persontable_1"."personName" as "personName", "persontable_1"."eID" as "eID", "firmtable_0"."firmName" as "firmName", "firmtable_0"."fID" as "fID" from (select "root".ID as "personID", "root".LASTNAME as "personName", "root".FIRMID as "eID" from personTable as "root") as "persontable_1" left outer join (select "root".LEGALNAME as "firmName", "root".ID as "fID" from firmTable as "root" where "root".LEGALNAME = \'Firm X\' and char_length("root".LEGALNAME) > 20) as "firmtable_0" on (("persontable_1"."eID" + 2) = "firmtable_0"."fID")) as "persontable_0"',$result);
+   meta::external::store::relational::functions::asserts::assertSameSQL('select "persontable_0"."personID" as "personID", "persontable_0"."personName" as "personName", "persontable_0"."eID" as "eID", "persontable_0"."firmName" as "firmName", "persontable_0"."fID" as "fID" from (select "persontable_1"."personID" as "personID", "persontable_1"."personName" as "personName", "persontable_1"."eID" as "eID", "firmtable_0"."firmName" as "firmName", "firmtable_0"."fID" as "fID" from (select "root".ID as "personID", "root".LASTNAME as "personName", "root".FIRMID as "eID" from personTable as "root") as "persontable_1" left outer join (select "root".LEGALNAME as "firmName", "root".ID as "fID" from firmTable as "root" where "root".LEGALNAME = \'Firm X\' and char_length("root".LEGALNAME) > 20) as "firmtable_0" on (("persontable_1"."eID" + 2) = "firmtable_0"."fID")) as "persontable_0"',$result);
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinOnColumnsAfterConcatenate():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinOnColumnsAfterConcatenate():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()
                         ->project([col({p:testJoinTDS_Person[1]|$p.firstName}, 'First Name'),
@@ -785,12 +785,12 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinOnColumnsA
                         testJoinTDSMapping,
                         testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
 
-   meta::relational::functions::asserts::assertSameSQL('select "unionalias_0"."First Name" as "First Name", "unionalias_0"."Age_1" as "Age_1", "unionalias_0"."First Name_2" as "First Name_2", "unionalias_0"."Age" as "Age" from (select "unionalias_1"."First Name" as "First Name", "unionalias_1"."Age_1" as "Age_1", "persontable_1"."First Name_2" as "First Name_2", "persontable_1"."Age" as "Age" from (select "unionalias_2"."First Name" as "First Name", "unionalias_2"."Age_1" as "Age_1" from (select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root") as "unionalias_2") as "unionalias_1" left outer join (select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root") as "persontable_1" on ("unionalias_1"."First Name" = "persontable_1"."First Name_2")) as "unionalias_0"',$result);
+   meta::external::store::relational::functions::asserts::assertSameSQL('select "unionalias_0"."First Name" as "First Name", "unionalias_0"."Age_1" as "Age_1", "unionalias_0"."First Name_2" as "First Name_2", "unionalias_0"."Age" as "Age" from (select "unionalias_1"."First Name" as "First Name", "unionalias_1"."Age_1" as "Age_1", "persontable_1"."First Name_2" as "First Name_2", "persontable_1"."Age" as "Age" from (select "unionalias_2"."First Name" as "First Name", "unionalias_2"."Age_1" as "Age_1" from (select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root") as "unionalias_2") as "unionalias_1" left outer join (select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root") as "persontable_1" on ("unionalias_1"."First Name" = "persontable_1"."First Name_2")) as "unionalias_0"',$result);
 
 
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinFuncByColAfterQueryWithConcatenate():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinFuncByColAfterQueryWithConcatenate():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()
                         ->project([col({p:testJoinTDS_Person[1]|$p.firstName}, 'First Name'),
@@ -811,10 +811,10 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinFuncByColA
                         testJoinTDSMapping,
                         testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
 
-   meta::relational::functions::asserts::assertSameSQL('select "unionalias_0"."First Name" as "First Name", "unionalias_0"."Age_1" as "Age_1", "unionalias_0"."First Name_2" as "First Name_2", "unionalias_0"."Age" as "Age" from (select "unionalias_1"."First Name" as "First Name", "unionalias_1"."Age_1" as "Age_1", "persontable_1"."First Name_2" as "First Name_2", "persontable_1"."Age" as "Age" from (select "unionalias_2"."First Name" as "First Name", "unionalias_2"."Age_1" as "Age_1" from (select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root") as "unionalias_2") as "unionalias_1" left outer join (select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root") as "persontable_1" on ("unionalias_1"."First Name" = "persontable_1"."First Name_2")) as "unionalias_0"',$result);
+   meta::external::store::relational::functions::asserts::assertSameSQL('select "unionalias_0"."First Name" as "First Name", "unionalias_0"."Age_1" as "Age_1", "unionalias_0"."First Name_2" as "First Name_2", "unionalias_0"."Age" as "Age" from (select "unionalias_1"."First Name" as "First Name", "unionalias_1"."Age_1" as "Age_1", "persontable_1"."First Name_2" as "First Name_2", "persontable_1"."Age" as "Age" from (select "unionalias_2"."First Name" as "First Name", "unionalias_2"."Age_1" as "Age_1" from (select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root") as "unionalias_2") as "unionalias_1" left outer join (select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root") as "persontable_1" on ("unionalias_1"."First Name" = "persontable_1"."First Name_2")) as "unionalias_0"',$result);
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinFuncByColToQueryWithConcatenate():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinFuncByColToQueryWithConcatenate():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()
                         ->project([col({p:testJoinTDS_Person[1]|$p.firstName}, 'First Name'),
@@ -837,10 +837,10 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinFuncByColT
                         testJoinTDSMapping,
                         testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
 
-   meta::relational::functions::asserts::assertSameSQL('select "persontable_0"."First Name" as "First Name", "persontable_0"."Age_1" as "Age_1", "persontable_0"."First Name_2" as "First Name_2", "persontable_0"."Age" as "Age" from (select "persontable_1"."First Name" as "First Name", "persontable_1"."Age_1" as "Age_1", "unionalias_0"."First Name_2" as "First Name_2", "unionalias_0"."Age" as "Age" from (select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root") as "persontable_1" left outer join (select "unionalias_1"."First Name_2" as "First Name_2", "unionalias_1"."Age" as "Age" from (select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root") as "unionalias_1") as "unionalias_0" on ("persontable_1"."First Name" = "unionalias_0"."First Name_2")) as "persontable_0"',$result);
+   meta::external::store::relational::functions::asserts::assertSameSQL('select "persontable_0"."First Name" as "First Name", "persontable_0"."Age_1" as "Age_1", "persontable_0"."First Name_2" as "First Name_2", "persontable_0"."Age" as "Age" from (select "persontable_1"."First Name" as "First Name", "persontable_1"."Age_1" as "Age_1", "unionalias_0"."First Name_2" as "First Name_2", "unionalias_0"."Age" as "Age" from (select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root") as "persontable_1" left outer join (select "unionalias_1"."First Name_2" as "First Name_2", "unionalias_1"."Age" as "Age" from (select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root") as "unionalias_1") as "unionalias_0" on ("persontable_1"."First Name" = "unionalias_0"."First Name_2")) as "persontable_0"',$result);
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinFuncByColAfterQueryWithConcatenateToQueryWithConcatenate():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinFuncByColAfterQueryWithConcatenateToQueryWithConcatenate():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()
                         ->project([col({p:testJoinTDS_Person[1]|$p.firstName}, 'First Name'),
@@ -866,10 +866,10 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinFuncByColA
                         testJoinTDSMapping,
                         testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
 
-   meta::relational::functions::asserts::assertSameSQL('select "unionalias_0"."First Name" as "First Name", "unionalias_0"."Age_1" as "Age_1", "unionalias_0"."First Name_2" as "First Name_2", "unionalias_0"."Age" as "Age" from (select "unionalias_1"."First Name" as "First Name", "unionalias_1"."Age_1" as "Age_1", "unionalias_3"."First Name_2" as "First Name_2", "unionalias_3"."Age" as "Age" from (select "unionalias_2"."First Name" as "First Name", "unionalias_2"."Age_1" as "Age_1" from (select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root") as "unionalias_2") as "unionalias_1" left outer join (select "unionalias_2"."First Name_2" as "First Name_2", "unionalias_2"."Age" as "Age" from (select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root") as "unionalias_2") as "unionalias_3" on ("unionalias_1"."First Name" = "unionalias_3"."First Name_2")) as "unionalias_0"',$result);
+   meta::external::store::relational::functions::asserts::assertSameSQL('select "unionalias_0"."First Name" as "First Name", "unionalias_0"."Age_1" as "Age_1", "unionalias_0"."First Name_2" as "First Name_2", "unionalias_0"."Age" as "Age" from (select "unionalias_1"."First Name" as "First Name", "unionalias_1"."Age_1" as "Age_1", "unionalias_3"."First Name_2" as "First Name_2", "unionalias_3"."Age" as "Age" from (select "unionalias_2"."First Name" as "First Name", "unionalias_2"."Age_1" as "Age_1" from (select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root") as "unionalias_2") as "unionalias_1" left outer join (select "unionalias_2"."First Name_2" as "First Name_2", "unionalias_2"."Age" as "Age" from (select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root") as "unionalias_2") as "unionalias_3" on ("unionalias_1"."First Name" = "unionalias_3"."First Name_2")) as "unionalias_0"',$result);
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinByColToQueryWithConcatenate():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinByColToQueryWithConcatenate():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()
                         ->project([col({p:testJoinTDS_Person[1]|$p.firstName}, 'First Name'),
@@ -892,12 +892,12 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinByColToQue
                         testJoinTDSMapping,
                         testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
 
-   meta::relational::functions::asserts::assertSameSQL('select "persontable_0"."First Name" as "First Name", "persontable_0"."Age_1" as "Age_1", "persontable_0"."First Name_2" as "First Name_2", "persontable_0"."Age" as "Age" from (select "persontable_1"."First Name" as "First Name", "persontable_1"."Age_1" as "Age_1", "unionalias_0"."First Name_2" as "First Name_2", "unionalias_0"."Age" as "Age" from (select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root") as "persontable_1" left outer join (select "unionalias_1"."First Name_2" as "First Name_2", "unionalias_1"."Age" as "Age" from (select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root") as "unionalias_1") as "unionalias_0" on ("persontable_1"."First Name" = "unionalias_0"."First Name_2")) as "persontable_0"',$result);
+   meta::external::store::relational::functions::asserts::assertSameSQL('select "persontable_0"."First Name" as "First Name", "persontable_0"."Age_1" as "Age_1", "persontable_0"."First Name_2" as "First Name_2", "persontable_0"."Age" as "Age" from (select "persontable_1"."First Name" as "First Name", "persontable_1"."Age_1" as "Age_1", "unionalias_0"."First Name_2" as "First Name_2", "unionalias_0"."Age" as "Age" from (select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root") as "persontable_1" left outer join (select "unionalias_1"."First Name_2" as "First Name_2", "unionalias_1"."Age" as "Age" from (select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root") as "unionalias_1") as "unionalias_0" on ("persontable_1"."First Name" = "unionalias_0"."First Name_2")) as "persontable_0"',$result);
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testTableToTDSWithQuotesGroupBy():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testTableToTDSWithQuotesGroupBy():Boolean[1]
 {
-   let queryWithoutQuotes = {|tableToTDS(meta::relational::functions::database::tableReference(meta::relational::tests::db, 'default', 'tableWithQuotedColumns'))
+   let queryWithoutQuotes = {|tableToTDS(meta::external::store::relational::functions::database::tableReference(meta::external::store::relational::tests::db, 'default', 'tableWithQuotedColumns'))
 
                              ->project([
                                col({r:TDSRow[1]|$r.getString('FIRST NAME')}, 'FIRST NAME'),
@@ -908,25 +908,25 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testTableToTDSWith
                               ])
                              ->restrict(['FIRST NAME', 'LAST NAME'])
                                  ->join(
-                                    tableToTDS(meta::relational::functions::database::tableReference(meta::relational::tests::db, 'default', 'tableWithQuotedColumns'))
+                                    tableToTDS(meta::external::store::relational::functions::database::tableReference(meta::external::store::relational::tests::db, 'default', 'tableWithQuotedColumns'))
 
                                     ->project([col(r:TDSRow[1]| $r.getString('FIRST NAME'), 'FIRST NAME_2'),
                                                col(r:TDSRow[1]| $r.getString('LAST NAME'), 'LAST NAME_2')
                                               ]),
-                                    meta::relational::metamodel::join::JoinType.LEFT_OUTER,
+                                    meta::external::store::relational::metamodel::join::JoinType.LEFT_OUTER,
                                     'FIRST NAME',
                                     'FIRST NAME_2'
                                  )};
 
-   let mapping = meta::relational::tests::tds::tabletds::EmptyMapping;
-   let runtime = meta::relational::tests::testRuntime();
+   let mapping = meta::external::store::relational::tests::tds::tabletds::EmptyMapping;
+   let runtime = meta::external::store::relational::tests::testRuntime();
    let resWithoutQuotes = execute($queryWithoutQuotes, $mapping, $runtime, meta::pure::router::extension::defaultRelationalExtensions());
 
    let expected = 'select "tablewithquotedcolumns_0"."FIRST NAME" as "FIRST NAME", "tablewithquotedcolumns_0"."LAST NAME" as "LAST NAME", "tablewithquotedcolumns_0"."FIRST NAME_2" as "FIRST NAME_2", "tablewithquotedcolumns_0"."LAST NAME_2" as "LAST NAME_2" from (select "tablewithquotedcolumns_1"."FIRST NAME" as "FIRST NAME", "tablewithquotedcolumns_1"."LAST NAME" as "LAST NAME", "tablewithquotedcolumns_3"."FIRST NAME_2" as "FIRST NAME_2", "tablewithquotedcolumns_3"."LAST NAME_2" as "LAST NAME_2" from (select "root"."FIRST NAME" as "FIRST NAME", "root"."LAST NAME" as "LAST NAME" from tableWithQuotedColumns as "root") as "tablewithquotedcolumns_1" left outer join (select "root"."FIRST NAME" as "FIRST NAME_2", "root"."LAST NAME" as "LAST NAME_2" from tableWithQuotedColumns as "root") as "tablewithquotedcolumns_3" on ("tablewithquotedcolumns_1"."FIRST NAME" = "tablewithquotedcolumns_3"."FIRST NAME_2")) as "tablewithquotedcolumns_0"';
 
    assertEquals($expected, $resWithoutQuotes->sqlRemoveFormatting());
 
-   let queryWithQuotes = {|tableToTDS(meta::relational::functions::database::tableReference(meta::relational::tests::db, 'default', 'tableWithQuotedColumns'))
+   let queryWithQuotes = {|tableToTDS(meta::external::store::relational::functions::database::tableReference(meta::external::store::relational::tests::db, 'default', 'tableWithQuotedColumns'))
                             ->project([
                                col({r:TDSRow[1]|$r.getString('FIRST NAME')}, 'FIRST NAME'),
                                col({r:TDSRow[1]|$r.getString('LAST NAME')}, 'LAST NAME'),
@@ -936,11 +936,11 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testTableToTDSWith
                               ])
                                  ->restrict(['"FIRST NAME"', '"LAST NAME"'])
                                  ->join(
-                                    tableToTDS(meta::relational::functions::database::tableReference(meta::relational::tests::db, 'default', 'tableWithQuotedColumns'))
+                                    tableToTDS(meta::external::store::relational::functions::database::tableReference(meta::external::store::relational::tests::db, 'default', 'tableWithQuotedColumns'))
                                     ->project([col(r:TDSRow[1]| $r.getString('FIRST NAME'), 'FIRST NAME_2'),
                                                col(r:TDSRow[1]| $r.getString('LAST NAME'), 'LAST NAME_2')
                                               ]),
-                                    meta::relational::metamodel::join::JoinType.LEFT_OUTER,
+                                    meta::external::store::relational::metamodel::join::JoinType.LEFT_OUTER,
                                     '"FIRST NAME"',
                                     'FIRST NAME_2'
                                  )};
@@ -949,7 +949,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testTableToTDSWith
    assertEquals($expected, $resWithQuotes->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinByColAfterQueryWithConcatenate():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinByColAfterQueryWithConcatenate():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()
                         ->project([col({p:testJoinTDS_Person[1]|$p.firstName}, 'First Name'),
@@ -970,10 +970,10 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinByColAfter
                         testJoinTDSMapping,
                         testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
 
-   meta::relational::functions::asserts::assertSameSQL('select "unionalias_0"."First Name" as "First Name", "unionalias_0"."Age_1" as "Age_1", "unionalias_0"."First Name_2" as "First Name_2", "unionalias_0"."Age" as "Age" from (select "unionalias_1"."First Name" as "First Name", "unionalias_1"."Age_1" as "Age_1", "persontable_1"."First Name_2" as "First Name_2", "persontable_1"."Age" as "Age" from (select "unionalias_2"."First Name" as "First Name", "unionalias_2"."Age_1" as "Age_1" from (select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root") as "unionalias_2") as "unionalias_1" left outer join (select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root") as "persontable_1" on ("unionalias_1"."First Name" = "persontable_1"."First Name_2")) as "unionalias_0"',$result);
+   meta::external::store::relational::functions::asserts::assertSameSQL('select "unionalias_0"."First Name" as "First Name", "unionalias_0"."Age_1" as "Age_1", "unionalias_0"."First Name_2" as "First Name_2", "unionalias_0"."Age" as "Age" from (select "unionalias_1"."First Name" as "First Name", "unionalias_1"."Age_1" as "Age_1", "persontable_1"."First Name_2" as "First Name_2", "persontable_1"."Age" as "Age" from (select "unionalias_2"."First Name" as "First Name", "unionalias_2"."Age_1" as "Age_1" from (select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root") as "unionalias_2") as "unionalias_1" left outer join (select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root") as "persontable_1" on ("unionalias_1"."First Name" = "persontable_1"."First Name_2")) as "unionalias_0"',$result);
 }
 
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinByColAfterQueryWithConcatenateToQueryWithConcatenate():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::testJoinByColAfterQueryWithConcatenateToQueryWithConcatenate():Boolean[1]
 {
    let result = execute(|testJoinTDS_Person.all()
                         ->project([col({p:testJoinTDS_Person[1]|$p.firstName}, 'First Name'),
@@ -999,11 +999,11 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::testJoinByColAfter
                         testJoinTDSMapping,
                         testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
 
-   meta::relational::functions::asserts::assertSameSQL('select "unionalias_0"."First Name" as "First Name", "unionalias_0"."Age_1" as "Age_1", "unionalias_0"."First Name_2" as "First Name_2", "unionalias_0"."Age" as "Age" from (select "unionalias_1"."First Name" as "First Name", "unionalias_1"."Age_1" as "Age_1", "unionalias_3"."First Name_2" as "First Name_2", "unionalias_3"."Age" as "Age" from (select "unionalias_2"."First Name" as "First Name", "unionalias_2"."Age_1" as "Age_1" from (select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root") as "unionalias_2") as "unionalias_1" left outer join (select "unionalias_2"."First Name_2" as "First Name_2", "unionalias_2"."Age" as "Age" from (select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root") as "unionalias_2") as "unionalias_3" on ("unionalias_1"."First Name" = "unionalias_3"."First Name_2")) as "unionalias_0"',$result);
+   meta::external::store::relational::functions::asserts::assertSameSQL('select "unionalias_0"."First Name" as "First Name", "unionalias_0"."Age_1" as "Age_1", "unionalias_0"."First Name_2" as "First Name_2", "unionalias_0"."Age" as "Age" from (select "unionalias_1"."First Name" as "First Name", "unionalias_1"."Age_1" as "Age_1", "unionalias_3"."First Name_2" as "First Name_2", "unionalias_3"."Age" as "Age" from (select "unionalias_2"."First Name" as "First Name", "unionalias_2"."Age_1" as "Age_1" from (select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name", "root".AGE as "Age_1" from personTable as "root") as "unionalias_2") as "unionalias_1" left outer join (select "unionalias_2"."First Name_2" as "First Name_2", "unionalias_2"."Age" as "Age" from (select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root" UNION ALL select "root".FIRSTNAME as "First Name_2", "root".AGE as "Age" from personTable as "root") as "unionalias_2") as "unionalias_3" on ("unionalias_1"."First Name" = "unionalias_3"."First Name_2")) as "unionalias_0"',$result);
 }
 
 
-function meta::relational::tests::tds::tdsJoin::twoDBRunTime():	meta::pure::runtime::Runtime[1]
+function meta::external::store::relational::tests::tds::tdsJoin::twoDBRunTime():	meta::pure::runtime::Runtime[1]
 {
    ^meta::pure::runtime::Runtime
    (
@@ -1018,12 +1018,12 @@ function meta::relational::tests::tds::tdsJoin::twoDBRunTime():	meta::pure::runt
 }
 
 
-function <<test.BeforePackage>> meta::relational::tests::tds::tdsJoin::alloy::createAndFillDatabaseForMultiDBJoins():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::tds::tdsJoin::alloy::createAndFillDatabaseForMultiDBJoins():Boolean[1]
 {
-   let connection2 = meta::relational::tests::tds::tdsJoin::twoDBRunTime().connectionByElement(database2)->cast(@TestDatabaseConnection);
-   meta::relational::functions::toDDL::dropAndCreateTableInDb(dbInc, 'firmTable', $connection2);
+   let connection2 = meta::external::store::relational::tests::tds::tdsJoin::twoDBRunTime().connectionByElement(database2)->cast(@TestDatabaseConnection);
+   meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(dbInc, 'firmTable', $connection2);
 
-   meta::relational::functions::toDDL::dropAndCreateTableInDb(dbInc, 'addressTable', $connection2);
+   meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(dbInc, 'addressTable', $connection2);
   executeInDb('Drop schema schemaB if exists cascade;', $connection2);
   executeInDb('create schema schemaB;', $connection2);
 
@@ -1049,7 +1049,7 @@ function <<test.BeforePackage>> meta::relational::tests::tds::tdsJoin::alloy::cr
 
 
 //TODO Mark as AlloyOnly
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::alloy::testSimpleJoin():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::alloy::testSimpleJoin():Boolean[1]
 {
 
     meta::alloy::test::mayExecuteAlloyTest(
@@ -1067,7 +1067,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::alloy::testSimpleJ
 
 
 //TODO Mark as AlloyOnly
-function <<test.Test>> meta::relational::tests::tds::tdsJoin::alloy::testSimpleJoinColumns():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::tds::tdsJoin::alloy::testSimpleJoinColumns():Boolean[1]
 {
 
     meta::alloy::test::mayExecuteAlloyTest(
@@ -1086,7 +1086,7 @@ function <<test.Test>> meta::relational::tests::tds::tdsJoin::alloy::testSimpleJ
 
 
 ###Relational
-Database meta::relational::tests::tds::tdsJoin::database2
+Database meta::external::store::relational::tests::tds::tdsJoin::database2
 (
     Join Address_Firm(addressTable.ID = firmTable.ADDRESSID)
     Table firmTable(ID INT PRIMARY KEY, LEGALNAME VARCHAR(200), ADDRESSID INT)
@@ -1095,7 +1095,7 @@ Database meta::relational::tests::tds::tdsJoin::database2
 
 
 ###Relational
-Database meta::relational::tests::tds::tdsJoin::database3
+Database meta::external::store::relational::tests::tds::tdsJoin::database3
 (
 
     Table addressTable(ID INT PRIMARY KEY, TYPE INT, NAME VARCHAR(200), STREET VARCHAR(100), COMMENTS VARCHAR(100))

@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::csv::*;
-import meta::relational::functions::asserts::*;
-import meta::relational::validation::*;
-import meta::relational::functions::toDDL::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::validation::*;
+import meta::external::store::relational::functions::toDDL::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::runtime::*;
-import meta::relational::validation::showcase::model::*;
-import meta::relational::validation::showcase::standalone::*;
+import meta::external::store::relational::validation::showcase::model::*;
+import meta::external::store::relational::validation::showcase::standalone::*;
 
-function <<test.Test>> meta::relational::validation::showcase::standalone::validateAllConstraints():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::showcase::standalone::validateAllConstraints():Boolean[1]
 {
    let validationResult = validate({|Trade.all()}, validationShowcaseMapping, getRuntime(), getConstraintsContextInformation(), meta::pure::router::extension::defaultRelationalExtensions());
    
@@ -41,7 +41,7 @@ function <<test.Test>> meta::relational::validation::showcase::standalone::valid
                 'cusipExists,Error,Product cusip empty,4\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::showcase::standalone::validateSingleConstraint():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::showcase::standalone::validateSingleConstraint():Boolean[1]
 {
    let validationResult = validate({|Trade.all()}, validationShowcaseMapping, getRuntime(), ['etiNotEmpty'], meta::pure::router::extension::defaultRelationalExtensions());
    assertSameSQL('select \'etiNotEmpty\' as "CONSTRAINT_ID", '+
@@ -55,7 +55,7 @@ function <<test.Test>> meta::relational::validation::showcase::standalone::valid
                 'etiNotEmpty,Error,External Trade ID is not valid,2\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::showcase::standalone::validateMultipleConstraints():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::showcase::standalone::validateMultipleConstraints():Boolean[1]
 {
    let validationResult = validate({|Trade.all()}, validationShowcaseMapping, getRuntime(), ['etiNotEmpty', 'validLocation'], meta::pure::router::extension::defaultRelationalExtensions());
    assertSameSQL('select "unionalias_0"."CONSTRAINT_ID" as "CONSTRAINT_ID", '+
@@ -78,7 +78,7 @@ function <<test.Test>> meta::relational::validation::showcase::standalone::valid
                 'validLocation,Error,,4\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::showcase::standalone::validateMultiplesConstraintWithConstraintInformation():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::showcase::standalone::validateMultiplesConstraintWithConstraintInformation():Boolean[1]
 {
    let validationResult = validate({|Trade.all()}, validationShowcaseMapping, getRuntime(), ['etiNotEmpty', 'validLocation'], getConstraintsContextInformation(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSameSQL('select "unionalias_0"."CONSTRAINT_ID" as "CONSTRAINT_ID", '+
@@ -101,7 +101,7 @@ function <<test.Test>> meta::relational::validation::showcase::standalone::valid
                 'validLocation,Warn,Location is not known,4\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::showcase::standalone::validateMultiplesConstraintWithAdditionalProjections():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::showcase::standalone::validateMultiplesConstraintWithAdditionalProjections():Boolean[1]
 {
    let validationResult = validate({|Trade.all()}, [col(x:Trade[1] | $x.tradeId, 'Trade ID'), col(x:Trade[1] | $x.externalTradeId, 'Ext Trade ID'), col(x:Trade[1] | $x.location, 'Location')], [], validationShowcaseMapping, getRuntime(), ^RelationalExecutionContext(), ['etiNotEmpty', 'validLocation'], getConstraintsContextInformation(), meta::pure::router::extension::defaultRelationalExtensions());
    
@@ -111,7 +111,7 @@ function <<test.Test>> meta::relational::validation::showcase::standalone::valid
                 'validLocation,Warn,Location is not known,4,103,Dummy\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::showcase::standalone::validateMultiplesConstraintWithPostTDSOperation1():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::showcase::standalone::validateMultiplesConstraintWithPostTDSOperation1():Boolean[1]
 {
    let validationResult = validate({|Trade.all()}, [col(x:Trade[1] | $x.tradeId, 'Trade ID'), col(x:Trade[1] | $x.externalTradeId, 'Ext Trade ID'), col(x:Trade[1] | $x.location, 'Location')], {t:TabularDataSet[1]|$t->groupBy(['CONSTRAINT_ID'],agg('COUNT', x|$x.getInteger('Trade ID'), y|$y->count()))}, 
                                     validationShowcaseMapping, getRuntime(), ^RelationalExecutionContext(), ['etiNotEmpty', 'validLocation'], getConstraintsContextInformation(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -121,7 +121,7 @@ function <<test.Test>> meta::relational::validation::showcase::standalone::valid
                 'etiNotEmpty,1\n', $validationResult.values->sort([desc('COUNT')])->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::showcase::standalone::validateAllConstraintsWithPostTDSOperation2():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::showcase::standalone::validateAllConstraintsWithPostTDSOperation2():Boolean[1]
 {
    let validationResult = validate({|Trade.all()}, [col(x:Trade[1] | $x.tradeId, 'Trade ID'), col(x:Trade[1] | $x.externalTradeId, 'Ext Trade ID'), col(x:Trade[1] | $x.location, 'Location')], {t:TabularDataSet[1]|$t->restrict(['Trade ID', 'Ext Trade ID', 'CONSTRAINT_ID', 'MESSAGE'])->sort([asc('Trade ID'),asc('CONSTRAINT_ID')])}, 
                                     validationShowcaseMapping, getRuntime(), ^RelationalExecutionContext(), [], getConstraintsContextInformation(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -140,7 +140,7 @@ function <<test.Test>> meta::relational::validation::showcase::standalone::valid
                 '5,104,quantityInValidRange,Quantity not in range: 1000000\n', $validationResult.values->toCSV());
 }
 
-function <<test.Test>> meta::relational::validation::showcase::standalone::validateAllConstraintsWithInnerJoinInFilter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::validation::showcase::standalone::validateAllConstraintsWithInnerJoinInFilter():Boolean[1]
 {
    let validationResult = validate({|Trade.all()}, validationShowcaseMappingWithInnerJoinsInFilter, getRuntime(), getConstraintsContextInformation(), meta::pure::router::extension::defaultRelationalExtensions());
    
@@ -149,12 +149,12 @@ function <<test.Test>> meta::relational::validation::showcase::standalone::valid
                 'isATypeAccount,Warn,Account is not Type A : ,1\n', $validationResult.values->toCSV());
 }
 
-function meta::relational::validation::showcase::standalone::getRuntime():Runtime[1]
+function meta::external::store::relational::validation::showcase::standalone::getRuntime():Runtime[1]
 {
-   meta::relational::tests::testRuntime(^Database());
+   meta::external::store::relational::tests::testRuntime(^Database());
 }
 
-function <<test.BeforePackage>> meta::relational::validation::showcase::standalone::createTablesInDb():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::validation::showcase::standalone::createTablesInDb():Boolean[1]
 {
    let runtime = getRuntime();
    let dbConn = $runtime.connections->at(0)->cast(@DatabaseConnection);
@@ -205,10 +205,10 @@ function <<test.BeforePackage>> meta::relational::validation::showcase::standalo
 }
 
 ###Mapping
-import meta::relational::validation::showcase::standalone::*;
-import meta::relational::validation::showcase::model::*;
+import meta::external::store::relational::validation::showcase::standalone::*;
+import meta::external::store::relational::validation::showcase::model::*;
 
-Mapping meta::relational::validation::showcase::standalone::validationShowcaseMapping
+Mapping meta::external::store::relational::validation::showcase::standalone::validationShowcaseMapping
 (
 
    Product : Relational
@@ -277,9 +277,9 @@ Mapping meta::relational::validation::showcase::standalone::validationShowcaseMa
    
 )
 
-Mapping meta::relational::validation::showcase::standalone::validationShowcaseMappingWithInnerJoinsInFilter
+Mapping meta::external::store::relational::validation::showcase::standalone::validationShowcaseMappingWithInnerJoinsInFilter
 (
-   include meta::relational::validation::showcase::standalone::validationShowcaseMapping
+   include meta::external::store::relational::validation::showcase::standalone::validationShowcaseMapping
    
    *Trade[tradeWithInnerJoinInFilter] : Relational
    {
@@ -300,7 +300,7 @@ Mapping meta::relational::validation::showcase::standalone::validationShowcaseMa
 
 
 ###Relational
-Database meta::relational::validation::showcase::standalone::db
+Database meta::external::store::relational::validation::showcase::standalone::db
 (
    Table tradeTable(ID VARCHAR(100) PRIMARY KEY, ETI VARCHAR(100), LOCATION VARCHAR(100), TRADING_GROUP VARCHAR(100), prodId INT, accountID INT, quantity INT, tradeDate DATE, settlementDateTime TIMESTAMP)
    Table tradingGroupTable(NAME VARCHAR(100) PRIMARY KEY, STATUS VARCHAR(100))

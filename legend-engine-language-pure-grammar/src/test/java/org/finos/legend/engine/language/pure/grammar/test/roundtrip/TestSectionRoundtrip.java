@@ -113,11 +113,11 @@ public class TestSectionRoundtrip extends TestGrammarRoundtrip.TestGrammarRoundt
                 "}\n" +
                 "\n\n" +
                 "###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::union::unionModelMapping\n" +
+                "Mapping meta::external::store::model::test::union::unionModelMapping\n" +
                 "(\n" +
                 ")\n" +
                 "\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::units::unitDecomposeMapping\n" +
+                "Mapping meta::external::store::model::test::units::unitDecomposeMapping\n" +
                 "(\n" +
                 ")\n" +
                 "\n\n" +

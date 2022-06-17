@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::mapping::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
 import meta::pure::profiles::*;
 import meta::pure::metamodel::tds::*;
 
-function <<test.Test>> meta::relational::tests::projection::association::toOne::testAssociationToOne():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::association::toOne::testAssociationToOne():Boolean[1]
 {
    let result = execute(|Person.all()->project([#/Person/firstName#, #/Person/firm/legalName#]), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 7);
@@ -26,7 +26,7 @@ function <<test.Test>> meta::relational::tests::projection::association::toOne::
    assertEquals('select "root".FIRSTNAME as "firstName", "firmtable_0".LEGALNAME as "legalName" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::association::toOne::testAssociationToOneWithQuery():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::association::toOne::testAssociationToOneWithQuery():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|$p.firm.legalName == 'Firm X')->project([#/Person/firstName#, #/Person/firm/legalName#]), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 4);
@@ -34,7 +34,7 @@ function <<test.Test>> meta::relational::tests::projection::association::toOne::
    assertEquals('select "root".FIRSTNAME as "firstName", "firmtable_0".LEGALNAME as "legalName" from personTable as "root" left outer join firmTable as "firmtable_0" on ("firmtable_0".ID = "root".FIRMID) where "firmtable_0".LEGALNAME = \'Firm X\'', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::association::toOne::testTwoAssociationsToOneBranchWithQuery():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::association::toOne::testTwoAssociationsToOneBranchWithQuery():Boolean[1]
 {
    let result = execute(|Person.all()->filter(p|$p.firm->toOne().legalName == 'Firm X' && $p.address->toOne().name == 'Hoboken')->project([#/Person/lastName#, #/Person/firm/legalName#, #/Person/address/name#]), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values->at(0), 1);

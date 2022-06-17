@@ -12,61 +12,61 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::functions::database::*;
-import meta::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::functions::database::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
 import meta::pure::metamodel::function::*;
-import meta::relational::metamodel::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::functions::toDDL::*;
-import meta::relational::runtime::*;
-import meta::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::functions::toDDL::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::metamodel::relation::*;
 import apps::pure::api::relational::toDDL::*;
 
-function meta::relational::functions::toDDL::dropAndCreateTableSql(database:Database[1], schemaName:String[1], tableName:String[1], applyContraints:Boolean[1]):String[1]
+function meta::external::store::relational::functions::toDDL::dropAndCreateTableSql(database:Database[1], schemaName:String[1], tableName:String[1], applyContraints:Boolean[1]):String[1]
 {
    dropTableStatement($database, $schemaName, $tableName) + '\n'
    + createTableStatement($database, $schemaName, $tableName, getTableToTableIdentityFunction(), $applyContraints);
 
 }
 
-function meta::relational::functions::toDDL::dropAndCreateTableInDb(database:Database[1], tableName: String[1], c:DatabaseConnection[1]) : Boolean[1]
+function meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(database:Database[1], tableName: String[1], c:DatabaseConnection[1]) : Boolean[1]
 {
     dropAndCreateTableInDb($database, 'default', $tableName, $c);
 }
 
-function meta::relational::functions::toDDL::dropAndCreateTableInDb(database:Database[1], schema: String[1], tableName: String[1], c:DatabaseConnection[1]) : Boolean[1]
+function meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(database:Database[1], schema: String[1], tableName: String[1], c:DatabaseConnection[1]) : Boolean[1]
 {
    dropAndCreateTableInDb($database, $schema, $tableName, getTableToTableIdentityFunction(), $c, true, false);
 }
 
-function <<doc.deprecated>> meta::relational::functions::toDDL::dropAndCreateTableInDb(database:Database[1], schema: String[1], tableName: String[1], c:DatabaseConnection[1], applyConstraints:Boolean[1]) : Boolean[1]
+function <<doc.deprecated>> meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(database:Database[1], schema: String[1], tableName: String[1], c:DatabaseConnection[1], applyConstraints:Boolean[1]) : Boolean[1]
 {
    dropAndCreateTableInDb($database, $schema, $tableName, getTableToTableIdentityFunction(), $c, $applyConstraints, false);
 }
 
-function meta::relational::functions::toDDL::dropAndCreateTableInDb(database:Database[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1], c:DatabaseConnection[1]) : Boolean[1]
+function meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(database:Database[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1], c:DatabaseConnection[1]) : Boolean[1]
 {
    dropAndCreateTableInDb($database, $schema, $tableName, $tablePostProcess, $c, true, false);
 }
 
-function meta::relational::functions::toDDL::dropAndCreateTableInDb(database:Database[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1], c:DatabaseConnection[1], applyConstraints:Boolean[1]) : Boolean[1]
+function meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(database:Database[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1], c:DatabaseConnection[1], applyConstraints:Boolean[1]) : Boolean[1]
 {
    dropAndCreateTableInDb($database, $schema, $tableName, $tablePostProcess, $c, $applyConstraints, false);
 }
 
-function meta::relational::functions::toDDL::dropAndCreateTableInDb(database:Database[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1], c:DatabaseConnection[1], applyConstraints:Boolean[1], debug:Boolean[1]) : Boolean[1]
+function meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(database:Database[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1], c:DatabaseConnection[1], applyConstraints:Boolean[1], debug:Boolean[1]) : Boolean[1]
 {
    executeInDb(dropTableStatement($database, $schema, $tableName, $tablePostProcess), $c, $debug);
    executeInDb(createTableStatement($database, $c.type, $schema, $tableName, $tablePostProcess, $applyConstraints), $c, $debug);
    true;
 }
 
-function meta::relational::functions::toDDL::dropAndCreateSchemaInDb(schema: String[1], c:DatabaseConnection[1]) : Boolean[1]
+function meta::external::store::relational::functions::toDDL::dropAndCreateSchemaInDb(schema: String[1], c:DatabaseConnection[1]) : Boolean[1]
 {
    dropAndCreateSchemaInDb($schema, $c, false);
 }
 
-function meta::relational::functions::toDDL::dropAndCreateSchemaInDb(schema: String[1], c:DatabaseConnection[1], debug:Boolean[1]) : Boolean[1]
+function meta::external::store::relational::functions::toDDL::dropAndCreateSchemaInDb(schema: String[1], c:DatabaseConnection[1], debug:Boolean[1]) : Boolean[1]
 {
    executeInDb(dropSchemaStatement($schema), $c, $debug);
    executeInDb(createSchemaStatement($schema), $c, $debug);
@@ -74,116 +74,116 @@ function meta::relational::functions::toDDL::dropAndCreateSchemaInDb(schema: Str
 }
 
 //use corresponding functions parameterized with dbType instead
-function <<doc.deprecated>> meta::relational::functions::toDDL::createSchemaStatement(schema:String[1]) : String[1]
+function <<doc.deprecated>> meta::external::store::relational::functions::toDDL::createSchemaStatement(schema:String[1]) : String[1]
 {
-   meta::relational::functions::toDDL::createSchemaStatement($schema, createDbConfig(DatabaseType.H2));
+   meta::external::store::relational::functions::toDDL::createSchemaStatement($schema, createDbConfig(DatabaseType.H2));
 }
 
-function meta::relational::functions::toDDL::createSchemaStatement(schemaName:String[1], dbConfig:DbConfig[1]) : String[1]
+function meta::external::store::relational::functions::toDDL::createSchemaStatement(schemaName:String[1], dbConfig:DbConfig[1]) : String[1]
 {
   $dbConfig.translateCreateSchema(^CreateSchemaSQL(schema= ^Schema(name= $schemaName, database=^Database(name='dummy'))))->toOne();
 }
 
-function <<doc.deprecated>> meta::relational::functions::toDDL::dropSchemaStatement(schema:String[1]) : String[1]
+function <<doc.deprecated>> meta::external::store::relational::functions::toDDL::dropSchemaStatement(schema:String[1]) : String[1]
 {
    dropSchemaStatement($schema, createDbConfig(DatabaseType.H2));
 }
 
-function meta::relational::functions::toDDL::dropSchemaStatement(schemaName:String[1], dbConfig:DbConfig[1]) : String[1]
+function meta::external::store::relational::functions::toDDL::dropSchemaStatement(schemaName:String[1], dbConfig:DbConfig[1]) : String[1]
 {
    $dbConfig.translateDropSchema(^DropSchemaSQL(schema= ^Schema(name= $schemaName, database=^Database(name='dummy'))))->toOne();
 }
 
-function <<doc.deprecated>> meta::relational::functions::toDDL::dropTableStatement(database:Database[1], tableName: String[1]) : String[1]
+function <<doc.deprecated>> meta::external::store::relational::functions::toDDL::dropTableStatement(database:Database[1], tableName: String[1]) : String[1]
 {
     dropTableStatement($database, $tableName, createDbConfig(DatabaseType.H2));
 }
 
-function meta::relational::functions::toDDL::dropTableStatement(database:Database[1], tableName: String[1], dbConfig:DbConfig[1]) : String[1]
+function meta::external::store::relational::functions::toDDL::dropTableStatement(database:Database[1], tableName: String[1], dbConfig:DbConfig[1]) : String[1]
 {
     dropTableStatement($database, 'default', $tableName, $dbConfig);
 }
 
-function <<doc.deprecated>> meta::relational::functions::toDDL::createTableStatement(database:Database[1], tableName: String[1]) : String[1]
+function <<doc.deprecated>> meta::external::store::relational::functions::toDDL::createTableStatement(database:Database[1], tableName: String[1]) : String[1]
 {
     createTableStatement($database, $tableName, createDbConfig(DatabaseType.H2));
 }
 
-function meta::relational::functions::toDDL::createTableStatement(database:Database[1], tableName: String[1], dbConfig:DbConfig[1]) : String[1]
+function meta::external::store::relational::functions::toDDL::createTableStatement(database:Database[1], tableName: String[1], dbConfig:DbConfig[1]) : String[1]
 {
     createTableStatement($database, 'default', $tableName, $dbConfig);
 }
 
-function <<doc.deprecated>> meta::relational::functions::toDDL::dropTableStatement(database:Database[1], schema: String[1], tableName: String[1]) : String[1]
+function <<doc.deprecated>> meta::external::store::relational::functions::toDDL::dropTableStatement(database:Database[1], schema: String[1], tableName: String[1]) : String[1]
 {
    dropTableStatement($database, $schema, $tableName , createDbConfig(DatabaseType.H2));
 }
 
-function meta::relational::functions::toDDL::dropTableStatement(database:Database[1], schema: String[1], tableName: String[1], dbConfig:DbConfig[1]) : String[1]
+function meta::external::store::relational::functions::toDDL::dropTableStatement(database:Database[1], schema: String[1], tableName: String[1], dbConfig:DbConfig[1]) : String[1]
 {
    dropTableStatement($database, $schema, $tableName, getTableToTableIdentityFunction(), $dbConfig);
 }
 
-function <<doc.deprecated>> meta::relational::functions::toDDL::dropTableStatement(database:Database[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1]) : String[1]
+function <<doc.deprecated>> meta::external::store::relational::functions::toDDL::dropTableStatement(database:Database[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1]) : String[1]
 {
     dropTableStatement($database, $schema, $tableName, $tablePostProcess, createDbConfig(DatabaseType.H2));
 }
 
-function meta::relational::functions::toDDL::dropTableStatement(database:Database[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1], dbConfig:DbConfig[1]) : String[1]
+function meta::external::store::relational::functions::toDDL::dropTableStatement(database:Database[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1], dbConfig:DbConfig[1]) : String[1]
 {
    let t = $tablePostProcess->eval(getTable($database, $schema, $tableName));
    dropTableStatement($t, $dbConfig);
 }
 
-function meta::relational::functions::toDDL::dropTableStatement(t:Table[1], dbConfig:DbConfig[1]) : String[1]
+function meta::external::store::relational::functions::toDDL::dropTableStatement(t:Table[1], dbConfig:DbConfig[1]) : String[1]
 {
    $dbConfig.translateDropTable(^DropTableSQL(table=$t))->toOne();
 }
 
-function <<doc.deprecated>>  meta::relational::functions::toDDL::createTableStatement(database:Database[1], schema: String[1], tableName: String[1]) : String[1]
+function <<doc.deprecated>>  meta::external::store::relational::functions::toDDL::createTableStatement(database:Database[1], schema: String[1], tableName: String[1]) : String[1]
 {
    createTableStatement($database, $schema, $tableName, createDbConfig(DatabaseType.H2));
 }
 
-function meta::relational::functions::toDDL::createTableStatement(database:Database[1], schema: String[1], tableName: String[1], dbConfig:DbConfig[1]) : String[1]
+function meta::external::store::relational::functions::toDDL::createTableStatement(database:Database[1], schema: String[1], tableName: String[1], dbConfig:DbConfig[1]) : String[1]
 {
    createTableStatement($database, $schema, $tableName, getTableToTableIdentityFunction(), true, $dbConfig);
 }
 
 //deprecated
-function <<access.private>> meta::relational::functions::toDDL::createTableStatement(database:Database[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1], applyConstraints:Boolean[1]) : String[1]
+function <<access.private>> meta::external::store::relational::functions::toDDL::createTableStatement(database:Database[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1], applyConstraints:Boolean[1]) : String[1]
 {
    createTableStatement($database, $schema, $tableName, $tablePostProcess, $applyConstraints, createDbConfig(DatabaseType.H2));
 }
 
 //deprecated
-function <<access.private>> meta::relational::functions::toDDL::createTableStatement(database:Database[1], dbType:DatabaseType[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1], applyConstraints:Boolean[1]) : String[1]
+function <<access.private>> meta::external::store::relational::functions::toDDL::createTableStatement(database:Database[1], dbType:DatabaseType[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1], applyConstraints:Boolean[1]) : String[1]
 {
    createTableStatement($database, $schema, $tableName, $tablePostProcess, $applyConstraints, createDbConfig($dbType));
 }
 
-function <<access.private>> meta::relational::functions::toDDL::createTableStatement(database:Database[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1], applyConstraints:Boolean[1], dbConfig:DbConfig[1]) : String[1]
+function <<access.private>> meta::external::store::relational::functions::toDDL::createTableStatement(database:Database[1], schema: String[1], tableName: String[1], tablePostProcess: Function<{Table[1]->Table[1]}>[1], applyConstraints:Boolean[1], dbConfig:DbConfig[1]) : String[1]
 {
    let t = $tablePostProcess->eval(getTable($database, $schema, $tableName));
    $t->createTableStatement($applyConstraints, $dbConfig);
 }
 
-function meta::relational::functions::toDDL::createTableStatement(t:Table[1], applyConstraints:Boolean[1], dbConfig:DbConfig[1]) : String[1]
+function meta::external::store::relational::functions::toDDL::createTableStatement(t:Table[1], applyConstraints:Boolean[1], dbConfig:DbConfig[1]) : String[1]
 {
    $dbConfig.translateCreateTable(^CreateTableSQL(table= $t, applyConstraints= $applyConstraints))->toOne();
 }
 
 //deprecated
-function <<access.private>> meta::relational::functions::toDDL::getColumnTypeSqlText(columnType:meta::relational::metamodel::datatype::DataType[1], dbType:DatabaseType[1]):String[1] 
+function <<access.private>> meta::external::store::relational::functions::toDDL::getColumnTypeSqlText(columnType:meta::external::store::relational::metamodel::datatype::DataType[1], dbType:DatabaseType[1]):String[1]
 {
    $columnType->match([
-      s : meta::relational::metamodel::datatype::SemiStructured[1] | $s->getSemiStructuredColumnTypeSqlText($dbType),
-      a : Any[*] | meta::relational::metamodel::datatype::dataTypeToSqlText($columnType)
+      s : meta::external::store::relational::metamodel::datatype::SemiStructured[1] | $s->getSemiStructuredColumnTypeSqlText($dbType),
+      a : Any[*] | meta::external::store::relational::metamodel::datatype::dataTypeToSqlText($columnType)
    ])
 }
 
 //deprecated
-function <<access.private>> meta::relational::functions::toDDL::getSemiStructuredColumnTypeSqlText(columnType:meta::relational::metamodel::datatype::SemiStructured[1], dbType:DatabaseType[1]):String[1] 
+function <<access.private>> meta::external::store::relational::functions::toDDL::getSemiStructuredColumnTypeSqlText(columnType:meta::external::store::relational::metamodel::datatype::SemiStructured[1], dbType:DatabaseType[1]):String[1]
 {
    if ($dbType == DatabaseType.H2,
        | 'VARCHAR(4000)',
@@ -191,12 +191,12 @@ function <<access.private>> meta::relational::functions::toDDL::getSemiStructure
    )
 }
 
-function meta::relational::functions::toDDL::buildInsertSQLQueryResultIntoTable(tableName: String[1], s:SelectSQLQuery[1], connection: DatabaseConnection[1], extensions:meta::pure::router::extension::RouterExtension[*], context:DebugContext[1]) : String[1]
+function meta::external::store::relational::functions::toDDL::buildInsertSQLQueryResultIntoTable(tableName: String[1], s:SelectSQLQuery[1], connection: DatabaseConnection[1], extensions:meta::pure::router::extension::RouterExtension[*], context:DebugContext[1]) : String[1]
 {
    'insert into '+ $tableName+' ( '+sqlQueryToString($s, $connection.type, $connection.timeZone, $connection.quoteIdentifiers, $extensions)+' )';
 }
 
-function meta::relational::functions::toDDL::insertSQLQueryResultIntoTable(tableName: String[1], s:SelectSQLQuery[1], connection: DatabaseConnection[1], extensions:meta::pure::router::extension::RouterExtension[*], context:DebugContext[1]) : Any[0..1]
+function meta::external::store::relational::functions::toDDL::insertSQLQueryResultIntoTable(tableName: String[1], s:SelectSQLQuery[1], connection: DatabaseConnection[1], extensions:meta::pure::router::extension::RouterExtension[*], context:DebugContext[1]) : Any[0..1]
 {
    let stmt = buildInsertSQLQueryResultIntoTable($tableName, $s, $connection, $extensions, $context);
 
@@ -206,12 +206,12 @@ function meta::relational::functions::toDDL::insertSQLQueryResultIntoTable(table
 }
 
 
-function meta::relational::functions::toDDL::getTableToTableIdentityFunction():Function<{Table[1]->Table[1]}>[1]
+function meta::external::store::relational::functions::toDDL::getTableToTableIdentityFunction():Function<{Table[1]->Table[1]}>[1]
 {
    {t:Table[1] |$t}
 }
 
-function <<access.private>> meta::relational::functions::toDDL::getTable(database:Database[1], schemaName: String[1], tableName: String[1]):Table[1]
+function <<access.private>> meta::external::store::relational::functions::toDDL::getTable(database:Database[1], schemaName: String[1], tableName: String[1]):Table[1]
 {
    let schema = $database.schema($schemaName);
 
@@ -222,10 +222,10 @@ function <<access.private>> meta::relational::functions::toDDL::getTable(databas
    if ($t->isEmpty(), | fail('No table found with name ' + $tableName + ' in schema ' + $schemaName + ' in ' + $database.name->toOne()); $t->toOne();, | $t->toOne());
 }
 
-function meta::relational::functions::toDDL::createTempTableStatement() : meta::pure::metamodel::function::Function<{String[1], Column[*], DatabaseType[1]->String[1]}>[1]
+function meta::external::store::relational::functions::toDDL::createTempTableStatement() : meta::pure::metamodel::function::Function<{String[1], Column[*], DatabaseType[1]->String[1]}>[1]
 {
   {ttName:String[1], cols: Column[*], dbType: DatabaseType[1]|
-        let colsAsString = '('+$cols->map(c|$c.name + ' ' + meta::relational::metamodel::datatype::dataTypeToSqlText($c.type))->joinStrings(',')+')';
+        let colsAsString = '('+$cols->map(c|$c.name + ' ' + meta::external::store::relational::metamodel::datatype::dataTypeToSqlText($c.type))->joinStrings(',')+')';
 
         if($dbType == DatabaseType.H2,| 'Create LOCAL TEMPORARY TABLE '+$ttName+$colsAsString+';';
                                      ,| if([DatabaseType.Sybase, DatabaseType.SybaseIQ]->contains($dbType),| 'Declare LOCAL TEMPORARY TABLE '+$ttName+$colsAsString+' on commit preserve rows;'

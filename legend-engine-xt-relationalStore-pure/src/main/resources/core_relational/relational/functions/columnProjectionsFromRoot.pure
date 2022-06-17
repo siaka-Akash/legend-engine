@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::metamodel::*;
-import meta::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::metamodel::relation::*;
 
-function meta::relational::functions::columnProjectionsFromRoot(a: Any[*], relation: NamedRelation[1], columnNames: String[*], distinct: Boolean[0..1], limit: Integer[0..1]):RelationData[1]
+function meta::external::store::relational::functions::columnProjectionsFromRoot(a: Any[*], relation: NamedRelation[1], columnNames: String[*], distinct: Boolean[0..1], limit: Integer[0..1]):RelationData[1]
 {
    fail('Not supported!');
    ^RelationData

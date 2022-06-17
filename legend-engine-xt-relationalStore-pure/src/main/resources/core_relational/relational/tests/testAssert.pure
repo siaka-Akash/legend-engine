@@ -13,26 +13,26 @@
 // limitations under the License.
 
 import meta::pure::mapping::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::mapping::*;
 
-function meta::relational::functions::asserts::assertSameSQL(sqlString:String[1],result:Result<Any|*>[1]):Boolean[1]
+function meta::external::store::relational::functions::asserts::assertSameSQL(sqlString:String[1],result:Result<Any|*>[1]):Boolean[1]
 {
   assertEquals($sqlString, $result->sqlRemoveFormatting());
 }
 
-function meta::relational::functions::asserts::assertSameSQL(sqlString:String[1],result:String[1]):Boolean[1]
+function meta::external::store::relational::functions::asserts::assertSameSQL(sqlString:String[1],result:String[1]):Boolean[1]
 {
   assertEquals($sqlString, $result);
 }
 
 
-function meta::relational::functions::asserts::sqlContains(subString:String[1],result:Result<Any|*>[1]):Boolean[1]
+function meta::external::store::relational::functions::asserts::sqlContains(subString:String[1],result:Result<Any|*>[1]):Boolean[1]
 {
   let sql = $result->sqlRemoveFormatting() ;
    assert($sql->contains($subString), | $sql + ' does not contain ' + $subString);
 }
 
-function meta::relational::functions::asserts::sqlContains(subString:String[1],result:String[1]):Boolean[1]
+function meta::external::store::relational::functions::asserts::sqlContains(subString:String[1],result:String[1]):Boolean[1]
 {
   assert($result->contains($subString), | $result + ' does not contain ' + $subString);
 }

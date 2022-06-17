@@ -178,17 +178,17 @@ public class TestJsonToGrammarApi
     public void testSimpleModelMapping()
     {
         String expected = "###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                 "(\n" +
-                "  *meta::pure::mapping::modelToModel::test::shared::dest::Person[meta_pure_mapping_modelToModel_test_shared_dest_Person]: Pure\n" +
+                "  *meta::external::store::model::test::shared::dest::Person[meta_pure_mapping_modelToModel_test_shared_dest_Person]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_S_Person\n" +
+                "    ~src meta::external::store::model::test::shared::src::_S_Person\n" +
                 "    firstName: $src.fullName->substring(0, $src.fullName->indexOf(' ')),\n" +
                 "    lastName: $src.fullName->substring($src.fullName->indexOf(' ') + 1, $src.fullName->length())\n" +
                 "  }\n" +
-                "  *meta::pure::mapping::modelToModel::test::shared::dest::Product2Simple[meta_pure_mapping_modelToModel_test_shared_dest_Product2Simple]: Pure\n" +
+                "  *meta::external::store::model::test::shared::dest::Product2Simple[meta_pure_mapping_modelToModel_test_shared_dest_Product2Simple]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_Product2\n" +
+                "    ~src meta::external::store::model::test::shared::src::_Product2\n" +
                 "    name: $src.name,\n" +
                 "    region: $src.region\n" +
                 "  }\n" +
@@ -294,42 +294,42 @@ public class TestJsonToGrammarApi
     public void testUnionModelMapping()
     {
         String expected = "###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::union::unionModelMapping\n" +
+                "Mapping meta::external::store::model::test::union::unionModelMapping\n" +
                 "(\n" +
-                "  *meta::pure::mapping::modelToModel::test::shared::dest::Person[meta_pure_mapping_modelToModel_test_shared_dest_Person]: Operation\n" +
+                "  *meta::external::store::model::test::shared::dest::Person[meta_pure_mapping_modelToModel_test_shared_dest_Person]: Operation\n" +
                 "  {\n" +
                 "    meta::pure::router::operations::union_OperationSetImplementation_1__SetImplementation_MANY_(p1,p2)\n" +
                 "  }\n" +
-                "  *meta::pure::mapping::modelToModel::test::shared::dest::Firm[meta_pure_mapping_modelToModel_test_shared_dest_Firm]: Operation\n" +
+                "  *meta::external::store::model::test::shared::dest::Firm[meta_pure_mapping_modelToModel_test_shared_dest_Firm]: Operation\n" +
                 "  {\n" +
                 "    meta::pure::router::operations::union_OperationSetImplementation_1__SetImplementation_MANY_(f1,f2)\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::shared::dest::Firm[f1]: Pure\n" +
+                "  meta::external::store::model::test::shared::dest::Firm[f1]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_Firm\n" +
+                "    ~src meta::external::store::model::test::shared::src::_Firm\n" +
                 "    legalName: 'f1 / ' + $src.name\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::shared::dest::Firm[f2]: Pure\n" +
+                "  meta::external::store::model::test::shared::dest::Firm[f2]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_Firm\n" +
+                "    ~src meta::external::store::model::test::shared::src::_Firm\n" +
                 "    legalName: 'f2 / ' + $src.name\n" +
                 "  }\n" +
-                "  *meta::pure::mapping::modelToModel::test::shared::dest::Address[meta_pure_mapping_modelToModel_test_shared_dest_Address]: Pure\n" +
+                "  *meta::external::store::model::test::shared::dest::Address[meta_pure_mapping_modelToModel_test_shared_dest_Address]: Pure\n" +
                 "  {\n" +
                 "    street: 'streetConstant'\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::shared::dest::Person[p1]: Pure\n" +
+                "  meta::external::store::model::test::shared::dest::Person[p1]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_Person\n" +
+                "    ~src meta::external::store::model::test::shared::src::_Person\n" +
                 "    ~filter $src.fullName->startsWith('Johny')\n" +
                 "    firstName: $src.fullName->substring(0, $src.fullName->indexOf(' ')),\n" +
                 "    lastName: $src.fullName->substring($src.fullName->indexOf(' ') + 1, $src.fullName->length()),\n" +
                 "    addresses[meta_pure_mapping_modelToModel_test_shared_dest_Address]: $src.addresses,\n" +
                 "    firm[f1]: $src.firm\n" +
                 "  }\n" +
-                "  meta::pure::mapping::modelToModel::test::shared::dest::Person[p2]: Pure\n" +
+                "  meta::external::store::model::test::shared::dest::Person[p2]: Pure\n" +
                 "  {\n" +
-                "    ~src meta::pure::mapping::modelToModel::test::shared::src::_Person\n" +
+                "    ~src meta::external::store::model::test::shared::src::_Person\n" +
                 "    ~filter $src.fullName->startsWith('_')\n" +
                 "    firstName: 'N/A',\n" +
                 "    lastName: 'N/A',\n" +

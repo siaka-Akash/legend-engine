@@ -15,8 +15,8 @@
 import meta::pure::alloy::connections::*;
 import meta::pure::runtime::*;
 import meta::pure::mapping::*;
-import meta::relational::metamodel::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::mapping::*;
 import meta::pure::alloy::connections::alloy::*;
 import meta::pure::alloy::connections::alloy::specification::*;
 import meta::pure::alloy::connections::alloy::authentication::*;
@@ -24,7 +24,7 @@ import meta::pure::alloy::connections::alloy::authentication::*;
 Class <<typemodifiers.abstract>> meta::pure::alloy::connections::PostProcessor {}
 
 
-Class meta::pure::alloy::connections::Mapper extends meta::relational::runtime::PostProcessorParameter {
+Class meta::pure::alloy::connections::Mapper extends meta::external::store::relational::runtime::PostProcessorParameter {
    from: String[1];
    to: String[1];
 }
@@ -41,19 +41,19 @@ Class <<typemodifiers.abstract>> meta::pure::alloy::connections::TableNameMapper
 }
 
 
-function meta::pure::alloy::connections::tableMapperPostProcessor(mapper:MapperPostProcessor[1]):meta::relational::runtime::PostProcessorWithParameter[1]
+function meta::pure::alloy::connections::tableMapperPostProcessor(mapper:MapperPostProcessor[1]):meta::external::store::relational::runtime::PostProcessorWithParameter[1]
 {
-   ^meta::relational::runtime::PostProcessorWithParameter(parameters = $mapper.mappers,
+   ^meta::external::store::relational::runtime::PostProcessorWithParameter(parameters = $mapper.mappers,
                                                           postProcessor = meta::pure::alloy::connections::postProcessor::tableMapperPostProcessor__PostProcessor_1_);
 
 }
 
-function meta::pure::alloy::connections::postProcessor::tableMapperPostProcessor():meta::relational::runtime::PostProcessor[1]
+function meta::pure::alloy::connections::postProcessor::tableMapperPostProcessor():meta::external::store::relational::runtime::PostProcessor[1]
 {
-   ^meta::relational::runtime::PostProcessor(sqlQueryPostProcessorForExecution ={|''} , sqlQueryPostProcessorForPlan = meta::pure::alloy::connections::tableMapperPostProcessor_SQLQuery_1__Mapping_$0_1$__Runtime_1__Database_$0_1$__ExecutionContext_1__PostProcessorParameter_MANY__PostProcessorResult_1_ )
+   ^meta::external::store::relational::runtime::PostProcessor(sqlQueryPostProcessorForExecution ={|''} , sqlQueryPostProcessorForPlan = meta::pure::alloy::connections::tableMapperPostProcessor_SQLQuery_1__Mapping_$0_1$__Runtime_1__Database_$0_1$__ExecutionContext_1__PostProcessorParameter_MANY__PostProcessorResult_1_ )
 }
 
-function meta::pure::alloy::connections::tableMapperPostProcessor(sql:SQLQuery[1],m:Mapping[0..1], runtime:Runtime[1],store:Database[0..1],exeCtx:ExecutionContext[1],params:	meta::relational::runtime::PostProcessorParameter[*]):PostProcessorResult[1]
+function meta::pure::alloy::connections::tableMapperPostProcessor(sql:SQLQuery[1],m:Mapping[0..1], runtime:Runtime[1],store:Database[0..1],exeCtx:ExecutionContext[1],params:	meta::external::store::relational::runtime::PostProcessorParameter[*]):PostProcessorResult[1]
 {
    let pairs = $params->map(p |
       $p->match([
@@ -80,20 +80,20 @@ function meta::pure::alloy::connections::tableMapperPostProcessor(sql:SQLQuery[1
       ])
    );
 
-   let result = meta::relational::postProcessor::replaceTables($sql->cast(@meta::relational::metamodel::relation::SelectSQLQuery), $pairs);
+   let result = meta::external::store::relational::postProcessor::replaceTables($sql->cast(@meta::external::store::relational::metamodel::relation::SelectSQLQuery), $pairs);
 
-   ^meta::relational::mapping::PostProcessorResult(query = $result.values);
+   ^meta::external::store::relational::mapping::PostProcessorResult(query = $result.values);
 }
 
-Class meta::relational::postProcessor::SchemaNameMapper extends meta::relational::runtime::PostProcessorParameter {
+Class meta::external::store::relational::postProcessor::SchemaNameMapper extends meta::external::store::relational::runtime::PostProcessorParameter {
    in:String[1];
    out:String[1];
 
    toString() {'{in: '+$this.in+', out:'+$this.out+'}'}:String[1];
 }
 
-Class meta::relational::postProcessor::TableNameMapper extends meta::relational::runtime::PostProcessorParameter {
-   schemaNameMapper : meta::relational::postProcessor::SchemaNameMapper[1];
+Class meta::external::store::relational::postProcessor::TableNameMapper extends meta::external::store::relational::runtime::PostProcessorParameter {
+   schemaNameMapper : meta::external::store::relational::postProcessor::SchemaNameMapper[1];
    in : String[1];
    out : String[1];
 

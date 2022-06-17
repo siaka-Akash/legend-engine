@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::pure::mapping::modelToModel::test::createInstances::*;
-import meta::pure::mapping::modelToModel::test::filter::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::createInstances::*;
+import meta::external::store::model::test::filter::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::*;
 import meta::pure::runtime::*;
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
 
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::createInstances::testCreateInstances():Any[*]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::createInstances::testCreateInstances():Any[*]
 {
     let res = execute(
             |Firm.all()->filter(f|$f.employees->exists(e|$e.lastName == 'efgh')),
@@ -40,7 +40,7 @@ function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::
 
 
 
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::simple::testCartesianOnAssociation():Any[*]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::simple::testCartesianOnAssociation():Any[*]
 {
     let res = execute(
             |FirmEmployee.all() ,
@@ -59,7 +59,7 @@ function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::
    assertSameElements($res.values.fullName, ['Person 1','Person 2'] );
 }
 
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::simple::testCartesianOnAssociationMultiProperty():Any[*]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::simple::testCartesianOnAssociationMultiProperty():Any[*]
 {
     let res = execute(
             |FirmEmployee.all() ,
@@ -80,7 +80,7 @@ function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::
 
 }
 
-function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::test::simple::testCartesianOnAssociationMultiPropertyOptional():Any[*]
+function <<meta::pure::profiles::test.Test>> meta::external::store::model::test::simple::testCartesianOnAssociationMultiPropertyOptional():Any[*]
 {
     let res = execute(
             |FirmEmployee.all() ,
@@ -100,12 +100,12 @@ function <<meta::pure::profiles::test.Test>> meta::pure::mapping::modelToModel::
    assertSameElements(['first'] ,$res.values.streetAddress );
 }
 
-function meta::pure::mapping::modelToModel::test::createInstances::getName(src : _Firm[1]) : String[1]
+function meta::external::store::model::test::createInstances::getName(src : _Firm[1]) : String[1]
 {
    $src.name;
 }
 
-function meta::pure::mapping::modelToModel::test::createInstances::getFullName(src : _Firm[1]) : String[*]
+function meta::external::store::model::test::createInstances::getFullName(src : _Firm[1]) : String[*]
 {
    let employees = $src.employees;
    if($employees->isNotEmpty(),
@@ -114,12 +114,12 @@ function meta::pure::mapping::modelToModel::test::createInstances::getFullName(s
 }
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::union::*;
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::union::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::createInstances::createInstancesModelMapping
+Mapping meta::external::store::model::test::createInstances::createInstancesModelMapping
 (
    *Person : Operation
            {
@@ -150,14 +150,14 @@ Mapping meta::pure::mapping::modelToModel::test::createInstances::createInstance
 
 
 ###Mapping
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::createInstances::*;
-import meta::pure::mapping::modelToModel::test::union::*;
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::createInstances::*;
+import meta::external::store::model::test::union::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::createInstances::createInstancesModelMappingOneMany
+Mapping meta::external::store::model::test::createInstances::createInstancesModelMappingOneMany
 (
    
    FirmEmployee : Pure
@@ -172,13 +172,13 @@ Mapping meta::pure::mapping::modelToModel::test::createInstances::createInstance
 
 
 ###Mapping
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::union::*;
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::union::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
+import meta::external::store::model::test::*;
 
-Mapping meta::pure::mapping::modelToModel::test::createInstances::createInstancesModelMappingOneManyMultiProperty
+Mapping meta::external::store::model::test::createInstances::createInstancesModelMappingOneManyMultiProperty
 (
    
    FirmEmployee : Pure

@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::metamodel::*;
-import meta::relational::dbTestRunner::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::dbTestRunner::*;
 import meta::pure::test::*;
 
-function <<paramTest.Test>> meta::relational::tests::dbSpecificTests::sqlQueryTests::dynaFunctions::in::testIn(config:DbTestConfig[1]):Boolean[1]
+function <<paramTest.Test>> meta::external::store::relational::tests::dbSpecificTests::sqlQueryTests::dynaFunctions::in::testIn(config:DbTestConfig[1]):Boolean[1]
 {
   let dynaFunc = ^DynaFunction(name='in', parameters=[^Literal(value='a'), ^LiteralList(values=[^Literal(value='a')])]);
   let expected = ^Literal(value=true);
   runDynaFunctionDatabaseTest($dynaFunc, $expected, $config);
 }
 
-function <<paramTest.Test>> meta::relational::tests::dbSpecificTests::sqlQueryTests::dynaFunctions::coalesce::testCoalesce(config:DbTestConfig[1]):Boolean[1]
+function <<paramTest.Test>> meta::external::store::relational::tests::dbSpecificTests::sqlQueryTests::dynaFunctions::coalesce::testCoalesce(config:DbTestConfig[1]):Boolean[1]
 {
   let dynaFunc = ^DynaFunction(name='coalesce', parameters=[^Literal(value=^SQLNull()), ^Literal(value='a')]);
   let expected = ^Literal(value='a');

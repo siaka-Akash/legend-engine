@@ -588,7 +588,7 @@ function meta::pure::lineage::scanProperties::propertyTree::buildMultiLevelPrope
 {
    let res = ^Pair<ValueSpecification, List<PropertyPathTree>>(first=$vs, second=^List<PropertyPathTree>(values=[$vs->scanProperties($debug).result->buildPropertyTree()]));
 
-   $mappings->fold({a, b| let reprocessedQuery = $b.first->cast(@FunctionExpression)->meta::pure::mapping::modelToModel::chain::allReprocess([], $a, $extensions, $debug).res;
+   $mappings->fold({a, b| let reprocessedQuery = $b.first->cast(@FunctionExpression)->meta::external::store::model::chain::allReprocess([], $a, $extensions, $debug).res;
                           let newPropertyTree = $reprocessedQuery->scanProperties($debug).result->buildPropertyTree();
                           ^$b(first = $reprocessedQuery,
                               second = ^List<PropertyPathTree>(values=$b.second.values->concatenate($newPropertyTree)));

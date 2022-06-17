@@ -16,20 +16,20 @@ import meta::pure::executionPlan::*;
 import meta::pure::router::extension::*;
 import meta::pure::mapping::*;
 import meta::pure::runtime::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::functions::typeInference::*;
-import meta::relational::mapping::*;
-import meta::relational::dbTestRunner::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::functions::typeInference::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::dbTestRunner::*;
 
-function meta::relational::dbTestRunner::runDynaFunctionDatabaseTest(dynaFunc:DynaFunction[1], expectedResult:Literal[1..*], testConfig:DbTestConfig[1]): Boolean[1]
+function meta::external::store::relational::dbTestRunner::runDynaFunctionDatabaseTest(dynaFunc:DynaFunction[1], expectedResult:Literal[1..*], testConfig:DbTestConfig[1]): Boolean[1]
 {
   runDynaFunctionDatabaseTest($dynaFunc, $expectedResult, [] , $testConfig);
 } 
 
-function meta::relational::dbTestRunner::runDynaFunctionDatabaseTest(dynaFunc:DynaFunction[1], expectedResult:Literal[1..*], equalityComparator: Function<{Any[1..*],Any[1..*]->Boolean[1]}>[0..1] , testConfig:DbTestConfig[1]): Boolean[1]
+function meta::external::store::relational::dbTestRunner::runDynaFunctionDatabaseTest(dynaFunc:DynaFunction[1], expectedResult:Literal[1..*], equalityComparator: Function<{Any[1..*],Any[1..*]->Boolean[1]}>[0..1] , testConfig:DbTestConfig[1]): Boolean[1]
 { 
   //sqlQueryGenerator
   let sqlQuery = defaultDynaFunctionSqlQueryGenerator($dynaFunc,$expectedResult, $testConfig);
@@ -67,7 +67,7 @@ if($testConfig.connection->isEmpty(),
      );
 }
 
-function meta::relational::dbTestRunner::defaultDynaFunctionSqlQueryGenerator(dynaFunc:DynaFunction[1] , expectedResult:Literal[1..*], testConfig:DbTestConfig[1]): SQLQuery[1]
+function meta::external::store::relational::dbTestRunner::defaultDynaFunctionSqlQueryGenerator(dynaFunc:DynaFunction[1] , expectedResult:Literal[1..*], testConfig:DbTestConfig[1]): SQLQuery[1]
 { 
   $expectedResult->match([
     l:Literal[1] | $l.value->match([
@@ -79,7 +79,7 @@ function meta::relational::dbTestRunner::defaultDynaFunctionSqlQueryGenerator(dy
   ]);
 }
 
-function meta::relational::dbTestRunner::overwriteDynaFunctionExpectedResult(expectedResult:Literal[1..*], testConfig:DbTestConfig[1]): Literal[1..*]
+function meta::external::store::relational::dbTestRunner::overwriteDynaFunctionExpectedResult(expectedResult:Literal[1..*], testConfig:DbTestConfig[1]): Literal[1..*]
 { 
   $expectedResult.value->match([
           b: Boolean[1] | if($b==true, |^Literal(value=1), |^Literal(value=0)),  // if dynaFunc returns true , returns 1 , else 0
@@ -89,7 +89,7 @@ function meta::relational::dbTestRunner::overwriteDynaFunctionExpectedResult(exp
 
 
 
-function meta::relational::dbTestRunner::defaultEqualityComparator(actual:Any[1..*], expected:Any[1..*] ): Boolean[1]
+function meta::external::store::relational::dbTestRunner::defaultEqualityComparator(actual:Any[1..*], expected:Any[1..*] ): Boolean[1]
 {
   zip($actual ,$expected)->map(x|
             $x.first->match([
@@ -108,7 +108,7 @@ function meta::relational::dbTestRunner::defaultEqualityComparator(actual:Any[1.
 }
 
 
-function meta::relational::dbTestRunner::floatEqualityComparatorGenerator(tolerance:Any[1..*]) :  Function<{Any[1..*], Any[1..*] -> Boolean[1]}>[1]
+function meta::external::store::relational::dbTestRunner::floatEqualityComparatorGenerator(tolerance:Any[1..*]) :  Function<{Any[1..*], Any[1..*] -> Boolean[1]}>[1]
 {
   {actual:Any[1..*], expected:Any[1..*] |      
         assert($expected->size() == $actual->size());
@@ -123,7 +123,7 @@ function meta::relational::dbTestRunner::floatEqualityComparatorGenerator(tolera
   }
 }
 
-function meta::relational::dbTestRunner::timestampEqualityComparatorGenerator(tolerance:Any[1..*], du:DurationUnit[1]) :  Function<{Any[1..*], Any[1..*] -> Boolean[1]}>[1]
+function meta::external::store::relational::dbTestRunner::timestampEqualityComparatorGenerator(tolerance:Any[1..*], du:DurationUnit[1]) :  Function<{Any[1..*], Any[1..*] -> Boolean[1]}>[1]
 {
   {actual:Any[1..*], expected:Any[1..*] |      
         assert($expected->size() == $actual->size());
@@ -138,11 +138,11 @@ function meta::relational::dbTestRunner::timestampEqualityComparatorGenerator(to
   }
 }
 
-function meta::relational::dbTestRunner::wrapSQLStringInExecutionPlan(sqlString:String[1], resultTypes:meta::relational::metamodel::datatype::DataType[1..*], dbType:DatabaseType[1], connection:DatabaseConnection[1]):ExecutionPlan[1]
+function meta::external::store::relational::dbTestRunner::wrapSQLStringInExecutionPlan(sqlString:String[1], resultTypes:meta::external::store::relational::metamodel::datatype::DataType[1..*], dbType:DatabaseType[1], connection:DatabaseConnection[1]):ExecutionPlan[1]
 {
   let runtime = ^Runtime(connections=$connection);
   
-  let resultType = ^DataTypeResultType(type= $resultTypes->at(0)->meta::relational::metamodel::datatype::dataTypeToCompatiblePureType());
+  let resultType = ^DataTypeResultType(type= $resultTypes->at(0)->meta::external::store::relational::metamodel::datatype::dataTypeToCompatiblePureType());
 
   let resultColumns = $resultTypes->toIndexed()->map(e| 
             ^SQLResultColumn(label='result' + $e.first->toString(), dataType=$e.second));

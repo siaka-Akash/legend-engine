@@ -13,45 +13,45 @@
 // limitations under the License.
 
 import meta::pure::mapping::*;
-import meta::csv::*;
-import meta::relational::functions::database::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::functions::database::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::runtime::*;
-import meta::relational::functions::pureToSqlQuery::*;
+import meta::external::store::relational::functions::pureToSqlQuery::*;
 import meta::pure::router::routing::*;
 import meta::pure::router::extension::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::*;
-import meta::relational::mapping::*;
-import meta::relational::functions::toDDL::*;
-import meta::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::functions::toDDL::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
 
-function meta::relational::mapping::sql(result:Result<Any|*>[1]):String[1]
+function meta::external::store::relational::mapping::sql(result:Result<Any|*>[1]):String[1]
 {
    $result->sql(0)
 }
 
-function meta::relational::mapping::sql(result:Result<Any|*>[1], activityNumber:Integer[1]):String[1]
+function meta::external::store::relational::mapping::sql(result:Result<Any|*>[1], activityNumber:Integer[1]):String[1]
 {
    $result.activities->filter(a | $a->instanceOf(RelationalActivity))->at($activityNumber)->cast(@RelationalActivity).sql
 }
 
-function meta::relational::mapping::sqlRemoveFormatting(result:Result<Any|*>[1]):String[1]
+function meta::external::store::relational::mapping::sqlRemoveFormatting(result:Result<Any|*>[1]):String[1]
 {
    $result->sqlRemoveFormatting(0);
 }
 
-function meta::relational::mapping::sqlRemoveFormatting(result:Result<Any|*>[1], activityNumber:Integer[1]):String[1]
+function meta::external::store::relational::mapping::sqlRemoveFormatting(result:Result<Any|*>[1], activityNumber:Integer[1]):String[1]
 {
     $result->sql($activityNumber)->sqlRemoveFormatting()
 }
 
-function meta::relational::mapping::sqlRemoveFormatting(sql : String[1]):String[1]
+function meta::external::store::relational::mapping::sqlRemoveFormatting(sql : String[1]):String[1]
 {
    $sql->replace('\n', '')->replace('\t', '')
 }
 
-function meta::relational::runtime::extractDBs(m:meta::pure::mapping::Mapping[*], r:Runtime[1]):Database[*]
+function meta::external::store::relational::runtime::extractDBs(m:meta::pure::mapping::Mapping[*], r:Runtime[1]):Database[*]
 {
    let allMappings = $m->concatenate(getMappingsFromRuntime($r));
 
@@ -63,20 +63,20 @@ function meta::relational::runtime::extractDBs(m:meta::pure::mapping::Mapping[*]
    $dbFromMappings->concatenate($dbFromRuntime)->removeDuplicates();
 }
 
-function meta::relational::runtime::extractDBs(m:meta::pure::mapping::Mapping[1]):Database[*]
+function meta::external::store::relational::runtime::extractDBs(m:meta::pure::mapping::Mapping[1]):Database[*]
 {
    $m->extractDBs($m);
 }
 
-function <<access.private>> meta::relational::runtime::extractDBs(m:meta::pure::mapping::Mapping[1], topMapping: meta::pure::mapping::Mapping[1]):Database[*]
+function <<access.private>> meta::external::store::relational::runtime::extractDBs(m:meta::pure::mapping::Mapping[1], topMapping: meta::pure::mapping::Mapping[1]):Database[*]
 {
    $m.includes.included->map(i|$i->extractDBs($topMapping))
    ->concatenate(
-      $m.classMappings->filter(r|$r->instanceOf(meta::relational::mapping::RootRelationalInstanceSetImplementation))->cast(@meta::relational::mapping::RootRelationalInstanceSetImplementation).mainTableAlias.database->map(n|$topMapping.resolveStore($n)->cast(@Database))
+      $m.classMappings->filter(r|$r->instanceOf(meta::external::store::relational::mapping::RootRelationalInstanceSetImplementation))->cast(@meta::external::store::relational::mapping::RootRelationalInstanceSetImplementation).mainTableAlias.database->map(n|$topMapping.resolveStore($n)->cast(@Database))
    )->removeDuplicates();
 }
 
-function meta::relational::functions::database::setUpData(t:String[1], mapping:Mapping[1]):String[*]
+function meta::external::store::relational::functions::database::setUpData(t:String[1], mapping:Mapping[1]):String[*]
 {
    let databases = $mapping->extractDBs()->removeDuplicates();
 
@@ -88,7 +88,7 @@ function meta::relational::functions::database::setUpData(t:String[1], mapping:M
 }
 
 
-function meta::relational::functions::database::setUpData(t:String[1], mapping:Mapping[*], runtime:Runtime[1]):String[*]
+function meta::external::store::relational::functions::database::setUpData(t:String[1], mapping:Mapping[*], runtime:Runtime[1]):String[*]
 {
    let databases = $mapping->extractDBs($runtime);
 
@@ -97,7 +97,7 @@ function meta::relational::functions::database::setUpData(t:String[1], mapping:M
    meta::alloy::service::execution::setUpDataSQLs($t, $database);
 }
 
-function meta::relational::functions::database::setUpData(records:List<String>[*], mapping:Mapping[*], runtime:Runtime[1]):String[*]
+function meta::external::store::relational::functions::database::setUpData(records:List<String>[*], mapping:Mapping[*], runtime:Runtime[1]):String[*]
 {
    let databases = $mapping->extractDBs($runtime);
 
@@ -132,8 +132,8 @@ function <<access.private>> meta::alloy::service::execution::schemaAndTableSetup
 
    let schemaSetup = $allSchemas->map({schema |
       [
-         meta::relational::functions::toDDL::dropSchemaStatement($schema.name),
-         meta::relational::functions::toDDL::createSchemaStatement($schema.name)
+         meta::external::store::relational::functions::toDDL::dropSchemaStatement($schema.name),
+         meta::external::store::relational::functions::toDDL::createSchemaStatement($schema.name)
       ]
    });
 
@@ -177,38 +177,38 @@ function meta::alloy::service::execution::setUpDataSQLs(records:List<String>[*],
    $schemaAndTableSetup->concatenate(loadCsvDataToDbTable($records, $db, t:Table[1]|$t));
 }
 
-function {service.contentType='text/csv', service.contentDisposition='attachment;filename=result.csv'} meta::csv::toCSV(t:TabularDataSet[1]):String[1]
+function {service.contentType='text/csv', service.contentDisposition='attachment;filename=result.csv'} meta::external::store::relational::tests::csv::toCSV(t:TabularDataSet[1]):String[1]
 {
-   $t->meta::csv::toCSV(false);
+   $t->meta::external::store::relational::tests::csv::toCSV(false);
 }
 
-function {service.contentType='text/csv', service.contentDisposition='attachment;filename=result.csv'} meta::csv::toCSV(t:TabularDataSet[1], renderTdsNull:Boolean[1]):String[1]
+function {service.contentType='text/csv', service.contentDisposition='attachment;filename=result.csv'} meta::external::store::relational::tests::csv::toCSV(t:TabularDataSet[1], renderTdsNull:Boolean[1]):String[1]
 {
    $t->toCSV(SimpleDateTimeFormat(), ISO8601DateFormat(), $renderTdsNull);
 }
 
-function meta::csv::toCSV(t:TabularDataSet[1], dateTimeFormat:String[1], dateFormat:String[1], renderTdsNull:Boolean[1]):String[1]
+function meta::external::store::relational::tests::csv::toCSV(t:TabularDataSet[1], dateTimeFormat:String[1], dateFormat:String[1], renderTdsNull:Boolean[1]):String[1]
 {
    $t.columns->map(c | $c.name->toCSVString($dateTimeFormat, $dateFormat, $renderTdsNull))->joinStrings(',') + '\n' +
    $t.rows->map(r | $r.values->map(v | $v->toCSVString($dateTimeFormat, $dateFormat, $renderTdsNull))->joinStrings(','))->joinStrings('', '\n', '\n');
 }
 
-function meta::csv::toCSVString(anything:Any[1]):String[1]
+function meta::external::store::relational::tests::csv::toCSVString(anything:Any[1]):String[1]
 {
    $anything->toCSVString(SimpleDateTimeFormat(), ISO8601DateFormat());
 }
 
-function meta::csv::dataValueToCSV(value:Any[0..1], dateTimeFormat:String[1], dateFormat:String[1]):String[1]
+function meta::external::store::relational::tests::csv::dataValueToCSV(value:Any[0..1], dateTimeFormat:String[1], dateFormat:String[1]):String[1]
 {
     if($value->isEmpty(), |'', |$value->toOne()->toCSVString($dateTimeFormat, $dateFormat))
 }
 
-function <<access.protected>> meta::csv::toCSVString(anything:Any[1], dateTimeFormat:String[1], dateFormat:String[1]):String[1]
+function <<access.protected>> meta::external::store::relational::tests::csv::toCSVString(anything:Any[1], dateTimeFormat:String[1], dateFormat:String[1]):String[1]
 {
-   meta::csv::toCSVString($anything, $dateTimeFormat, $dateFormat, false)
+   meta::external::store::relational::tests::csv::toCSVString($anything, $dateTimeFormat, $dateFormat, false)
 }
 
-function <<access.protected>> meta::csv::toCSVString(anything:Any[1], dateTimeFormat:String[1], dateFormat:String[1], renderTdsNull:Boolean[1]):String[1]
+function <<access.protected>> meta::external::store::relational::tests::csv::toCSVString(anything:Any[1], dateTimeFormat:String[1], dateFormat:String[1], renderTdsNull:Boolean[1]):String[1]
 {
    $anything->match([
                         n:TDSNull[1]|if($renderTdsNull,|'TDSNull',|''),
@@ -217,21 +217,21 @@ function <<access.protected>> meta::csv::toCSVString(anything:Any[1], dateTimeFo
                     ]);
 }
 
-function <<access.private>> meta::csv::formatDateTime(date: Date[1], dateTimeFormat:String[1], dateFormat:String[1]):String[1]
+function <<access.private>> meta::external::store::relational::tests::csv::formatDateTime(date: Date[1], dateTimeFormat:String[1], dateFormat:String[1]):String[1]
 {
    if($date->hasHour(),
          |format($dateTimeFormat, $date)->escapeCSVString(),
          |format($dateFormat, $date));
 }
 
-function <<access.private>> meta::csv::escapeCSVString(string:String[1]):String[1]
+function <<access.private>> meta::external::store::relational::tests::csv::escapeCSVString(string:String[1]):String[1]
 {
    if($string->contains(',') || $string->contains('"') || $string->contains('\n') || $string->contains('\r'),
       | '"' + $string->replace('"', '""') + '"',
       | $string);
 }
 
-function meta::relational::mapping::findPropertySequence(v:ValueSpecification[1]):Pair<Class<Any>,AbstractProperty<Any>>[*]
+function meta::external::store::relational::mapping::findPropertySequence(v:ValueSpecification[1]):Pair<Class<Any>,AbstractProperty<Any>>[*]
 {
    $v->match([
                fe:FunctionExpression[1]|
@@ -251,7 +251,7 @@ function meta::relational::mapping::findPropertySequence(v:ValueSpecification[1]
             ])
 }
 
-function meta::relational::mapping::findPropertyMapping(property:AbstractProperty<Any>[1], propertyOwnerClass:Class<Any>[1], currentPropertyMapping:PropertyMapping[*], propertyMappingFromRouter:PropertyMapping[*], mapping:Mapping[1],debug:DebugContext[1]):PropertyMapping[*]
+function meta::external::store::relational::mapping::findPropertyMapping(property:AbstractProperty<Any>[1], propertyOwnerClass:Class<Any>[1], currentPropertyMapping:PropertyMapping[*], propertyMappingFromRouter:PropertyMapping[*], mapping:Mapping[1],debug:DebugContext[1]):PropertyMapping[*]
 {
    let propertyName = $property.name->toOne();
    if($currentPropertyMapping->size() >= 1  && $currentPropertyMapping->at(0)->instanceOf(EmbeddedRelationalInstanceSetImplementation),
@@ -299,7 +299,7 @@ function meta::relational::mapping::findPropertyMapping(property:AbstractPropert
    );
 }
 
-function meta::relational::mapping::dataTypePropertyMappings(impl:RelationalInstanceSetImplementation[1]):PropertyMapping[*]
+function meta::external::store::relational::mapping::dataTypePropertyMappings(impl:RelationalInstanceSetImplementation[1]):PropertyMapping[*]
 {
    $impl.allPropertyMappings()->map(pm | $pm.property->genericType().typeArguments->at(1).rawType->toOne()->match([
                                               d : meta::pure::metamodel::type::DataType[1] | $pm,
@@ -308,7 +308,7 @@ function meta::relational::mapping::dataTypePropertyMappings(impl:RelationalInst
 }
 
 
-function meta::relational::mapping::resolvePrimaryKey(rsi: RelationalInstanceSetImplementation[1]):RelationalOperationElement[*]
+function meta::external::store::relational::mapping::resolvePrimaryKey(rsi: RelationalInstanceSetImplementation[1]):RelationalOperationElement[*]
 {
    $rsi->match([
       ersi: EmbeddedRelationalInstanceSetImplementation[1] | $ersi.setMappingOwner.resolvePrimaryKey(),
@@ -316,7 +316,7 @@ function meta::relational::mapping::resolvePrimaryKey(rsi: RelationalInstanceSet
    ])
 }
 
-function meta::relational::mapping::resolveMainTable(rsi: RelationalInstanceSetImplementation[1]):Table[1]
+function meta::external::store::relational::mapping::resolveMainTable(rsi: RelationalInstanceSetImplementation[1]):Table[1]
 {
    $rsi->match([
       ersi: EmbeddedRelationalInstanceSetImplementation[1] | $ersi.setMappingOwner.mainTable(),
@@ -324,7 +324,7 @@ function meta::relational::mapping::resolveMainTable(rsi: RelationalInstanceSetI
    ])
 }
 
-function meta::relational::mapping::resolveMainRelation(rsi: RelationalInstanceSetImplementation[1]):Relation[1]
+function meta::external::store::relational::mapping::resolveMainRelation(rsi: RelationalInstanceSetImplementation[1]):Relation[1]
 {
    $rsi->match([
       ersi: EmbeddedRelationalInstanceSetImplementation[1] | $ersi.setMappingOwner.mainRelation(),
@@ -332,7 +332,7 @@ function meta::relational::mapping::resolveMainRelation(rsi: RelationalInstanceS
    ])
 }
 
-function meta::relational::mapping::resolvePrimaryKeysNames(rsi: RelationalInstanceSetImplementation[1], pkMap:Map<String, Any>[1], setIdx:String[1], transformToPlatformNames:Boolean[1], extensions:RouterExtension[*]):Map<String, Any>[1]
+function meta::external::store::relational::mapping::resolvePrimaryKeysNames(rsi: RelationalInstanceSetImplementation[1], pkMap:Map<String, Any>[1], setIdx:String[1], transformToPlatformNames:Boolean[1], extensions:RouterExtension[*]):Map<String, Any>[1]
 {
    let pks = $rsi->resolvePrimaryKey();
 
@@ -348,7 +348,7 @@ function meta::relational::mapping::resolvePrimaryKeysNames(rsi: RelationalInsta
             })->newMap();
 }
 
-function meta::relational::mapping::findMainClassInGetAllExpression(vs:ValueSpecification[1]):Class<Any>[1]
+function meta::external::store::relational::mapping::findMainClassInGetAllExpression(vs:ValueSpecification[1]):Class<Any>[1]
 {
    let getAllFe = $vs->findExpressionsForFunctionInValueSpecification([getAll_Class_1__T_MANY_, getAll_Class_1__Date_1__T_MANY_, getAll_Class_1__Date_1__Date_1__T_MANY_]);
    if($getAllFe->isEmpty(), | Any, | $getAllFe.parametersValues->at(0)->cast(@ExtendedRoutedValueSpecification)->byPassRouterInfo()->cast(@InstanceValue).values->toOne()->cast(@Class<Any>));

@@ -38,6 +38,7 @@ import org.finos.legend.engine.query.pure.api.Execute;
 import org.finos.legend.engine.shared.core.api.model.ExecuteInput;
 import org.finos.legend.engine.shared.core.deployment.DeploymentMode;
 import org.finos.legend.engine.shared.core.url.EngineUrlStreamHandlerFactory;
+import org.finos.legend.pure.generated.core_pure_extensions_extension;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -247,8 +248,7 @@ public class TestM2MGrammarCompileAndExecute
         ModelManager modelManager = new ModelManager(DeploymentMode.TEST);
         PlanExecutor executor = PlanExecutor.newPlanExecutor(InMemory.build());
         HttpServletRequest request = (HttpServletRequest) Proxy.newProxyInstance(getClass().getClassLoader(), new java.lang.Class<?>[] {HttpServletRequest.class}, new ReflectiveInvocationHandler(new Request()));
-        //Should use: core_pure_extensions_extension.Root_meta_pure_router_extension_defaultExtensions__RouterExtension_MANY_(modelManager.)
-        Response result = new Execute(modelManager, executor, (PureModel pureModel) -> Lists.mutable.empty(), LegendPlanTransformers.transformers).execute(request, input, SerializationFormat.defaultFormat, null, null);
+        Response result = new Execute(modelManager, executor, (PureModel pureModel) -> core_pure_extensions_extension.Root_meta_pure_router_extension_defaultExtensions__RouterExtension_MANY_(pureModel.getExecutionSupport()), LegendPlanTransformers.transformers).execute(request, input, SerializationFormat.defaultFormat, null, null);
         Assert.assertEquals(200, result.getStatus());
         return result;
     }

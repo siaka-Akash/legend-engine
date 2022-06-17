@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::pure::mapping::modelToModel::test::shared::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::*;
+import meta::external::store::model::test::shared::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::*;
 import meta::pure::runtime::*;
-import meta::pure::mapping::modelToModel::test::shared::src::*;
-import meta::pure::mapping::modelToModel::test::shared::dest::*;
+import meta::external::store::model::test::shared::src::*;
+import meta::external::store::model::test::shared::dest::*;
 
 
 
-Class meta::pure::mapping::modelToModel::test::shared::dest::Firm
+Class meta::external::store::model::test::shared::dest::Firm
 {
    legalName : String[1];
    employees : Person[*];
@@ -29,7 +29,7 @@ Class meta::pure::mapping::modelToModel::test::shared::dest::Firm
    count : Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::dest::Person
+Class meta::external::store::model::test::shared::dest::Person
 {
    firstName : String[1];
    lastName : String[1];
@@ -40,14 +40,14 @@ Class meta::pure::mapping::modelToModel::test::shared::dest::Person
    type : String[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::dest::NameWithLang
+Class meta::external::store::model::test::shared::dest::NameWithLang
 {
   lang: String[1];
   value: String[1];
 }
 
 
-Class meta::pure::mapping::modelToModel::test::shared::dest::PersonWithConstraint
+Class meta::external::store::model::test::shared::dest::PersonWithConstraint
 [
    firstNameLength : $this.firstName->length() > 5
 ]
@@ -58,7 +58,7 @@ Class meta::pure::mapping::modelToModel::test::shared::dest::PersonWithConstrain
    firm : Firm[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::dest::FirmEmployee
+Class meta::external::store::model::test::shared::dest::FirmEmployee
 {
    firmName : String[1];
    fullName : String[1];
@@ -66,151 +66,151 @@ Class meta::pure::mapping::modelToModel::test::shared::dest::FirmEmployee
    streetAddress: String[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::dest::Address
+Class meta::external::store::model::test::shared::dest::Address
 {
    street : String[0..1];
    extension : AddressExtension[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::dest::AddressExtension
+Class meta::external::store::model::test::shared::dest::AddressExtension
 {
     stuff : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::dest::Vehicle
+Class meta::external::store::model::test::shared::dest::Vehicle
 {
    wheelCount : Integer[1];
    engine : Boolean[1];
    roadster : Boolean[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_RoadVehicle
+Class meta::external::store::model::test::shared::src::_RoadVehicle
 {
    wheelCount : Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_Car extends _RoadVehicle
+Class meta::external::store::model::test::shared::src::_Car extends _RoadVehicle
 {
    engine : Boolean[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_Bicycle extends _RoadVehicle
+Class meta::external::store::model::test::shared::src::_Bicycle extends _RoadVehicle
 {
    roadster : Boolean[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_Firm
+Class meta::external::store::model::test::shared::src::_Firm
 {
   name : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_SimpleFirm
+Class meta::external::store::model::test::shared::src::_SimpleFirm
 {
   name : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_Person
+Class meta::external::store::model::test::shared::src::_Person
 {
    fullName : String[1];
    addresses : Address[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_SimplePerson
+Class meta::external::store::model::test::shared::src::_SimplePerson
 {
    fullName : String[1];
    dateOfBirth : StrictDate[0..1];
    address : Address[0..1];
 }
 
-Association  meta::pure::mapping::modelToModel::test::shared::src::_Firm_Person
+Association  meta::external::store::model::test::shared::src::_Firm_Person
 {
    employees : _Person[*];
    firm : _Firm[1];
 }
 
-Association  meta::pure::mapping::modelToModel::test::shared::src::_SimpleFirm_SimplePerson
+Association  meta::external::store::model::test::shared::src::_SimpleFirm_SimplePerson
 {
    simpleEmployees : _SimplePerson[*];
    firm : _SimpleFirm[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_S_Person
+Class meta::external::store::model::test::shared::src::_S_Person
 {
    fullName      : String[1];
    alternateName : _NameWithLang[0..1];
    _type         : String[0..1];
 }
 
-Profile meta::pure::mapping::modelToModel::test::shared::src::xmlValueType
+Profile meta::external::store::model::test::shared::src::xmlValueType
 {
   stereotypes: [attribute, defaultValue];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_NameWithLang
+Class meta::external::store::model::test::shared::src::_NameWithLang
 {
   <<xmlValueType.attribute>> _lang: String[1];
   <<xmlValueType.defaultValue>> value__: String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_S_PersonA extends _S_Person
+Class meta::external::store::model::test::shared::src::_S_PersonA extends _S_Person
 {
    aName    : String[1];
    vehicle  : _RoadVehicle[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_S_PersonB extends _S_Person
+Class meta::external::store::model::test::shared::src::_S_PersonB extends _S_Person
 {
    bName    : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_S_Firm
+Class meta::external::store::model::test::shared::src::_S_Firm
 {
   name : String[1];
 }
 
-Association  meta::pure::mapping::modelToModel::test::shared::src::_S_Firm__S_Person
+Association  meta::external::store::model::test::shared::src::_S_Firm__S_Person
 {
    employees : _S_Person[*];
    firm : _S_Firm[0..1];
 }
 
-Association  meta::pure::mapping::modelToModel::test::shared::src::_S_Person_S_Person_Address_
+Association  meta::external::store::model::test::shared::src::_S_Person_S_Person_Address_
 {
    address : S_Person_Address[0..1];
    person  : _S_Person[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_Person_Address
+Class meta::external::store::model::test::shared::src::_Person_Address
 {
    name : String[1];
    street : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::S_Person_Address
+Class meta::external::store::model::test::shared::src::S_Person_Address
 {
    name : String[1];
    street : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_Trade
+Class meta::external::store::model::test::shared::src::_Trade
 {
    side : Integer[1];
    product: _Product[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::dest::Trade
+Class meta::external::store::model::test::shared::dest::Trade
 {
    side : Side[1];
    productName: String[1];
    productRegion: String[0..1];
 }
 
-Enum meta::pure::mapping::modelToModel::test::shared::dest::Side
+Enum meta::external::store::model::test::shared::dest::Side
 {
    Buy, Sell   
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_FirmX
+Class meta::external::store::model::test::shared::src::_FirmX
 {
    name : String[1];
    ceo:_PersonSrc1[0..1];
@@ -218,17 +218,17 @@ Class meta::pure::mapping::modelToModel::test::shared::src::_FirmX
    pathToEmployeesSet2:_PersonSrc2[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_PersonSrc1
+Class meta::external::store::model::test::shared::src::_PersonSrc1
 {
    nameFrom1 : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_PersonSrc2
+Class meta::external::store::model::test::shared::src::_PersonSrc2
 {
    nameFrom2 : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::dest::Product
+Class meta::external::store::model::test::shared::dest::Product
 {
    name : String[1];
    subProductName:String[1];
@@ -236,27 +236,27 @@ Class meta::pure::mapping::modelToModel::test::shared::dest::Product
    region: String[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::dest::Product2Simple
+Class meta::external::store::model::test::shared::dest::Product2Simple
 {
    name : String[1];
    region: Region[0..1];
 }
 
-Enum meta::pure::mapping::modelToModel::test::shared::dest::Region
+Enum meta::external::store::model::test::shared::dest::Region
 {
    NewYork,
    London
 }
 
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_Product extends ProductWithRegion
+Class meta::external::store::model::test::shared::src::_Product extends ProductWithRegion
 {
    name : String[1];
    subProductName:String[1];
    bondDetailStatus: String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::_Product2
+Class meta::external::store::model::test::shared::src::_Product2
 {
    name : String[1];
    subProductName:String[1];
@@ -264,7 +264,7 @@ Class meta::pure::mapping::modelToModel::test::shared::src::_Product2
    region: Region[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::shared::src::ProductWithRegion
+Class meta::external::store::model::test::shared::src::ProductWithRegion
 {
    region : String[1];
 }

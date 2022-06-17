@@ -13,10 +13,10 @@
 // limitations under the License.
 
 ###Mapping
-import meta::relational::tests::mapping::extend::store::*;
-import meta::relational::tests::mapping::extend::model::*;
+import meta::external::store::relational::tests::mapping::extend::store::*;
+import meta::external::store::relational::tests::mapping::extend::model::*;
 
-Mapping meta::relational::tests::mapping::extend::mainTable::AMapping
+Mapping meta::external::store::relational::tests::mapping::extend::mainTable::AMapping
 (
    A[a] : Relational
    {
@@ -25,9 +25,9 @@ Mapping meta::relational::tests::mapping::extend::mainTable::AMapping
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::mainTable::B1Mapping
+Mapping meta::external::store::relational::tests::mapping::extend::mainTable::B1Mapping
 (
-   include meta::relational::tests::mapping::extend::mainTable::AMapping
+   include meta::external::store::relational::tests::mapping::extend::mainTable::AMapping
 
    B[b1] extends [a] : Relational
    {
@@ -35,9 +35,9 @@ Mapping meta::relational::tests::mapping::extend::mainTable::B1Mapping
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::mainTable::B2Mapping
+Mapping meta::external::store::relational::tests::mapping::extend::mainTable::B2Mapping
 (
-   include meta::relational::tests::mapping::extend::mainTable::AMapping
+   include meta::external::store::relational::tests::mapping::extend::mainTable::AMapping
 
    B[b2] extends [a] : Relational
    {
@@ -46,9 +46,9 @@ Mapping meta::relational::tests::mapping::extend::mainTable::B2Mapping
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::mainTable::C1Mapping
+Mapping meta::external::store::relational::tests::mapping::extend::mainTable::C1Mapping
 (
-   include meta::relational::tests::mapping::extend::mainTable::B1Mapping
+   include meta::external::store::relational::tests::mapping::extend::mainTable::B1Mapping
 
    C[c1] extends [b1] : Relational
    {
@@ -56,9 +56,9 @@ Mapping meta::relational::tests::mapping::extend::mainTable::C1Mapping
    }
 )
 
-Mapping meta::relational::tests::mapping::extend::mainTable::C2Mapping
+Mapping meta::external::store::relational::tests::mapping::extend::mainTable::C2Mapping
 (
-   include meta::relational::tests::mapping::extend::mainTable::B2Mapping
+   include meta::external::store::relational::tests::mapping::extend::mainTable::B2Mapping
 
    C[c2] extends [b2] : Relational
    {
@@ -69,31 +69,31 @@ Mapping meta::relational::tests::mapping::extend::mainTable::C2Mapping
 )
 
 ###Pure
-import meta::relational::mapping::*;
-import meta::relational::tests::mapping::extend::mainTable::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::mapping::extend::mainTable::*;
 
-function <<test.Test>> meta::relational::tests::mapping::extend::mainTable::testMainTableForB1():Any[*]
+function <<test.Test>> meta::external::store::relational::tests::mapping::extend::mainTable::testMainTableForB1():Any[*]
 {
    let mainTable = B1Mapping.classMappingById('b1')->cast(@RootRelationalInstanceSetImplementation).mainTable;
    let superMappingMainTable = AMapping.classMappingById('a')->cast(@RootRelationalInstanceSetImplementation).mainTable;
    assertEquals($superMappingMainTable, $mainTable);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::extend::mainTable::testMainTableForB2():Any[*]
+function <<test.Test>> meta::external::store::relational::tests::mapping::extend::mainTable::testMainTableForB2():Any[*]
 {
    let mainTable = B2Mapping.classMappingById('b2')->cast(@RootRelationalInstanceSetImplementation).mainTable;
    let superMappingMainTable = AMapping.classMappingById('a')->cast(@RootRelationalInstanceSetImplementation).mainTable;
    assertEquals($superMappingMainTable, $mainTable);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::extend::mainTable::testMainTableForC1():Any[*]
+function <<test.Test>> meta::external::store::relational::tests::mapping::extend::mainTable::testMainTableForC1():Any[*]
 {
    let mainTable = C1Mapping.classMappingById('c1')->cast(@RootRelationalInstanceSetImplementation).mainTable;
    let superMappingMainTable = B1Mapping.classMappingById('b1')->cast(@RootRelationalInstanceSetImplementation).mainTable;
    assertEquals($superMappingMainTable, $mainTable);
 }
 
-function <<test.Test>> meta::relational::tests::mapping::extend::mainTable::testMainTableForC2():Any[*]
+function <<test.Test>> meta::external::store::relational::tests::mapping::extend::mainTable::testMainTableForC2():Any[*]
 {
    let mainTable = C2Mapping.classMappingById('c2')->cast(@RootRelationalInstanceSetImplementation).mainTable;
    let superMappingMainTable = B2Mapping.classMappingById('b2')->cast(@RootRelationalInstanceSetImplementation).mainTable;

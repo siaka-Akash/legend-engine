@@ -27,13 +27,13 @@ import org.finos.legend.pure.generated.Root_meta_pure_alloy_connections_SchemaNa
 import org.finos.legend.pure.generated.Root_meta_pure_alloy_connections_SchemaNameMapper_Impl;
 import org.finos.legend.pure.generated.Root_meta_pure_alloy_connections_TableNameMapper;
 import org.finos.legend.pure.generated.Root_meta_pure_alloy_connections_TableNameMapper_Impl;
-import org.finos.legend.pure.generated.Root_meta_relational_metamodel_Database_Impl;
+import org.finos.legend.pure.generated.Root_meta_external_store_relational_metamodel_Database_Impl;
 
 import java.util.List;
 
 public class HelperRelationalDatabaseConnectionBuilder
 {
-    public static void addTestDataSetUp(org.finos.legend.pure.m3.coreinstance.meta.relational.runtime.TestDatabaseConnection test, String testDataSetupCsv, java.util.List<String> testDataSetupSqls)
+    public static void addTestDataSetUp(org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.runtime.TestDatabaseConnection test, String testDataSetupCsv, java.util.List<String> testDataSetupSqls)
     {
         if (testDataSetupCsv != null)
         {
@@ -46,14 +46,14 @@ public class HelperRelationalDatabaseConnectionBuilder
         }
     }
 
-    public static void addDatabaseConnectionProperties(org.finos.legend.pure.m3.coreinstance.meta.relational.runtime.DatabaseConnection pureConnection, String element, String connectionType, String timeZone, Boolean quoteIdentifiers, CompileContext context)
+    public static void addDatabaseConnectionProperties(org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.runtime.DatabaseConnection pureConnection, String element, String connectionType, String timeZone, Boolean quoteIdentifiers, CompileContext context)
     {
         addDatabaseConnectionProperties(pureConnection, element, null, connectionType, timeZone, quoteIdentifiers, context);
     }
 
-    public static void addDatabaseConnectionProperties(org.finos.legend.pure.m3.coreinstance.meta.relational.runtime.DatabaseConnection pureConnection, String element, SourceInformation elementSourceInformation, String connectionType, String timeZone, Boolean quoteIdentifiers, CompileContext context)
+    public static void addDatabaseConnectionProperties(org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.runtime.DatabaseConnection pureConnection, String element, SourceInformation elementSourceInformation, String connectionType, String timeZone, Boolean quoteIdentifiers, CompileContext context)
     {
-        org.finos.legend.pure.m3.coreinstance.meta.relational.runtime.DatabaseConnection connection = pureConnection._type(context.pureModel.getEnumValue("meta::relational::runtime::DatabaseType", connectionType));
+        org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.runtime.DatabaseConnection connection = pureConnection._type(context.pureModel.getEnumValue("meta::external::store::relational::runtime::DatabaseType", connectionType));
         connection._timeZone(timeZone);
         connection._quoteIdentifiers(quoteIdentifiers);
 
@@ -63,7 +63,7 @@ public class HelperRelationalDatabaseConnectionBuilder
         }
         catch (RuntimeException e)
         {
-            connection._element(new Root_meta_relational_metamodel_Database_Impl(element)._name(element));
+            connection._element(new Root_meta_external_store_relational_metamodel_Database_Impl(element)._name(element));
         }
     }
 

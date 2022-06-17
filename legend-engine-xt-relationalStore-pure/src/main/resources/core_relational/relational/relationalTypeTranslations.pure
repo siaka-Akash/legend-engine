@@ -12,24 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::runtime::*;
-import meta::relational::translation::*;
-import meta::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::translation::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
 
-Class meta::relational::translation::TranslationContext
+Class meta::external::store::relational::translation::TranslationContext
 {
    dbType: DatabaseType[0..1];
-   coreTypeToDbSpecificSqlTranslator: Function<{meta::relational::metamodel::datatype::CoreDataType[1] -> String[0..1]}>[0..1];
+   coreTypeToDbSpecificSqlTranslator: Function<{meta::external::store::relational::metamodel::datatype::CoreDataType[1] -> String[0..1]}>[0..1];
 }
 
-function meta::relational::translation::translateCoreTypeToDbSpecificType(type: meta::relational::metamodel::datatype::DataType[0..1], translationContext : TranslationContext[1]): meta::relational::metamodel::datatype::DataType[0..1]
+function meta::external::store::relational::translation::translateCoreTypeToDbSpecificType(type: meta::external::store::relational::metamodel::datatype::DataType[0..1], translationContext : TranslationContext[1]): meta::external::store::relational::metamodel::datatype::DataType[0..1]
 {
    if($type->isEmpty() || ($translationContext.dbType->isEmpty() && $translationContext.coreTypeToDbSpecificSqlTranslator->isEmpty()), |$type,
       |let translator = if($translationContext.coreTypeToDbSpecificSqlTranslator->isEmpty(), |$translationContext.dbType->toOne()->createDbConfig([]).dbExtension.coreTypeToDbSpecificSqlTranslator, |$translationContext.coreTypeToDbSpecificSqlTranslator);
        if($translator->isEmpty(), |$type,
-          |let dbSpecificSql = $translator->toOne()->eval($type->toOne()->cast(@meta::relational::metamodel::datatype::CoreDataType));
-           if($dbSpecificSql->isEmpty(), |$type, |^meta::relational::metamodel::datatype::DbSpecificDataType(
-                                                    coreDataType=$type->toOne()->cast(@meta::relational::metamodel::datatype::CoreDataType),
+          |let dbSpecificSql = $translator->toOne()->eval($type->toOne()->cast(@meta::external::store::relational::metamodel::datatype::CoreDataType));
+           if($dbSpecificSql->isEmpty(), |$type, |^meta::external::store::relational::metamodel::datatype::DbSpecificDataType(
+                                                    coreDataType=$type->toOne()->cast(@meta::external::store::relational::metamodel::datatype::CoreDataType),
                                                     dbSpecificSql=$dbSpecificSql->toOne())
            );
        );

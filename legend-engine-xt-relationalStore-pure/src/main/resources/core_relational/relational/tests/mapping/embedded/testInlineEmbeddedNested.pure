@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::functions::asserts::*;
-import meta::relational::mapping::*;
-import meta::csv::*;
-import meta::relational::tests::mapping::embedded::advanced::mapping::*;
-import meta::relational::tests::mapping::embedded::advanced::model::*;
-import meta::relational::tests::mapping::embedded::advanced::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::mapping::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::model::*;
+import meta::external::store::relational::tests::mapping::embedded::advanced::*;
 
-function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inline::nested::testProjection():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::nested::testProjection():Boolean[1]
 {
 
 
@@ -32,7 +32,7 @@ function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inl
   true;
 }
 
-function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inline::nested::testFilter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::nested::testFilter():Boolean[1]
 {
    
     let result1 = execute(|BondDetail.all()->filter(b | $b.issuer.address.name == 'addressi1' )
@@ -51,7 +51,7 @@ function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inl
 
 }
 
-function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inline::nested::testDenormWithComplexFilter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::nested::testDenormWithComplexFilter():Boolean[1]
 {
   //filter with two embedded properties in the filter
   let result = execute(|BondDetail.all()->filter(p | $p.issuer.address.name->endsWith('i1') && $p.description->startsWith('Bond'))
@@ -64,7 +64,7 @@ function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inl
  }
 
 
-function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inline::nested::testGroupBy():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::nested::testGroupBy():Boolean[1]
 {
   let result = execute(|BondDetail.all()->groupBy( [p | $p.holder.address.name] ,
                                  [agg(x|if ( $x.type == '5 years' ,|5.0,|1.0),
@@ -78,7 +78,7 @@ function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inl
 
 }
 
-function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inline::nested::testGroupByComplexAgg():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::nested::testGroupByComplexAgg():Boolean[1]
 {
   let result = execute(|BondDetail.all()->groupBy( [p | $p.holder.address.name] ,
                                  [agg(x|if($x.holder.address.name->startsWith('addressh1'),|5.0,|1.0),
@@ -92,7 +92,7 @@ function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inl
 
 }
 
-function <<test.Test>> meta::relational::tests::mapping::embedded::advanced::inline::nested::testQualifierProperty():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::embedded::advanced::inline::nested::testQualifierProperty():Boolean[1]
 {
 
   let result = execute(|BondDetail.all()->filter(p | $p.issuer.address.description->startsWith('D:addressi1') )

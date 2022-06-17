@@ -13,14 +13,14 @@
 // limitations under the License.
 
 import meta::pure::profiles::*;
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::model::simple::*;
 
-Class meta::relational::tests::model::simple::EntityWithAddress
+Class meta::external::store::relational::tests::model::simple::EntityWithAddress
 {
     address : Address[0..1];
 }
 
-Class meta::relational::tests::model::simple::EntityWithLocations
+Class meta::external::store::relational::tests::model::simple::EntityWithLocations
 {
     locations : Location[*];
     locationsByType(types:GeographicEntityType[*])
@@ -29,7 +29,7 @@ Class meta::relational::tests::model::simple::EntityWithLocations
     }:Location[*];
 }
 
-Class meta::relational::tests::model::simple::Firm extends EntityWithAddress
+Class meta::external::store::relational::tests::model::simple::Firm extends EntityWithAddress
 {
     <<equality.Key>> legalName : String[1];
 
@@ -86,18 +86,18 @@ Class meta::relational::tests::model::simple::Firm extends EntityWithAddress
    }:Boolean[1];
 }
 
-Class meta::relational::tests::model::simple::PersonNameParameter
+Class meta::external::store::relational::tests::model::simple::PersonNameParameter
 {
    lastNameFirst:Boolean[1];
    nested:PersonNameParameterNested[1];
 }
 
-Class meta::relational::tests::model::simple::PersonNameParameterNested
+Class meta::external::store::relational::tests::model::simple::PersonNameParameterNested
 {
    prefix:String[1];
 }
 
-Class meta::relational::tests::model::simple::Person extends EntityWithAddress, EntityWithLocations
+Class meta::external::store::relational::tests::model::simple::Person extends EntityWithAddress, EntityWithLocations
 {
     firstName : String[1];
     lastName : String[1];
@@ -144,13 +144,13 @@ Class meta::relational::tests::model::simple::Person extends EntityWithAddress, 
     activeEmployment: Boolean[0..1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::model::simple::TemporalEntityWithAddress
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::model::simple::TemporalEntityWithAddress
 {
     name : String[1];
     address : Address[*];
 }
 
-Class meta::relational::tests::model::simple::PersonExtension extends meta::relational::tests::model::simple::Person
+Class meta::external::store::relational::tests::model::simple::PersonExtension extends meta::external::store::relational::tests::model::simple::Person
 {
    birthdate: Date[0..1];
 
@@ -159,10 +159,10 @@ Class meta::relational::tests::model::simple::PersonExtension extends meta::rela
       }:Integer[0..1];
 }
 
-Class meta::relational::tests::model::simple::FirmExtension extends Firm
+Class meta::external::store::relational::tests::model::simple::FirmExtension extends Firm
 {
    establishedDate: Date[1];
-   employeesExt: meta::relational::tests::model::simple::PersonExtension[*];
+   employeesExt: meta::external::store::relational::tests::model::simple::PersonExtension[*];
 
    establishedYear(){
       $this.establishedDate->year()
@@ -174,7 +174,7 @@ Class meta::relational::tests::model::simple::FirmExtension extends Firm
    }:String[0..1];
 }
 
-Class meta::relational::tests::model::simple::Interaction
+Class meta::external::store::relational::tests::model::simple::Interaction
 {
    id : String[1];
    source : Person[0..1];
@@ -184,18 +184,18 @@ Class meta::relational::tests::model::simple::Interaction
    longestInteractionBetweenSourceAndTarget : Integer[1];
 }
 
-Class meta::relational::tests::model::simple::GeographicEntity
+Class meta::external::store::relational::tests::model::simple::GeographicEntity
 {
     type : GeographicEntityType[1];
 }
 
-Class meta::relational::tests::model::simple::Location extends GeographicEntity
+Class meta::external::store::relational::tests::model::simple::Location extends GeographicEntity
 {
     place : String[1];
     censusdate: Date[0..1];
 }
 
-Class meta::relational::tests::model::simple::Address extends GeographicEntity
+Class meta::external::store::relational::tests::model::simple::Address extends GeographicEntity
 {
     name : String[1];
     street : String[0..1];
@@ -205,19 +205,19 @@ Class meta::relational::tests::model::simple::Address extends GeographicEntity
     }:String[1];
 }
 
-Enum meta::relational::tests::model::simple::GeographicEntityType
+Enum meta::external::store::relational::tests::model::simple::GeographicEntityType
 {
     {doc.doc = 'A city, town, village, or other urban area.'} CITY,
     <<doc.deprecated>> COUNTRY,
     {doc.doc = 'Any geographic entity other than a city or country.'} REGION
 }
 
-Class meta::relational::tests::model::simple::PlaceOfInterest
+Class meta::external::store::relational::tests::model::simple::PlaceOfInterest
 {
     name : String[1];
 }
 
-Class meta::relational::tests::model::simple::Organization
+Class meta::external::store::relational::tests::model::simple::Organization
 {
     name : String[1];
     superOrganizations()
@@ -239,19 +239,19 @@ Class meta::relational::tests::model::simple::Organization
     }:Person[*];
 }
 
-Class meta::relational::tests::model::simple::Division extends Organization
+Class meta::external::store::relational::tests::model::simple::Division extends Organization
 {
 }
 
-Class meta::relational::tests::model::simple::Department extends Organization
+Class meta::external::store::relational::tests::model::simple::Department extends Organization
 {
 }
 
-Class meta::relational::tests::model::simple::Team extends Organization
+Class meta::external::store::relational::tests::model::simple::Team extends Organization
 {
 }
 
-Class meta::relational::tests::model::simple::Application
+Class meta::external::store::relational::tests::model::simple::Application
 {
    source : String[1];
    date : Date[1];
@@ -260,56 +260,56 @@ Class meta::relational::tests::model::simple::Application
 
 }
 
-Association meta::relational::tests::model::simple::Employment
+Association meta::external::store::relational::tests::model::simple::Employment
 {
     firm : Firm[0..1];
     employees : Person[*];
 }
 
-Association meta::relational::tests::model::simple::Firm_TemporalEntityWithAddress
+Association meta::external::store::relational::tests::model::simple::Firm_TemporalEntityWithAddress
 {
     firm : Firm[0..1];
     temporalEntityWithAddress : TemporalEntityWithAddress[*];
 }
 
-Association meta::relational::tests::model::simple::FirmCEO
+Association meta::external::store::relational::tests::model::simple::FirmCEO
 {
     ceoFirm : Firm[0..1];
     ceo : Person[0..1];
 }
 
-Association meta::relational::tests::model::simple::FirmOrganizations
+Association meta::external::store::relational::tests::model::simple::FirmOrganizations
 {
     firm : Firm[1];
     organizations : Organization[*];
 }
 
-Association meta::relational::tests::model::simple::SubOrganization
+Association meta::external::store::relational::tests::model::simple::SubOrganization
 {
     parent : Organization[0..1];
     children : Organization[*];
 }
 
-Association meta::relational::tests::model::simple::Membership
+Association meta::external::store::relational::tests::model::simple::Membership
 {
     organizations : Organization[*];
     members : Person[*];
 }
 
-Association meta::relational::tests::model::simple::PlacesOfInterest
+Association meta::external::store::relational::tests::model::simple::PlacesOfInterest
 {
     location : Location[1];
     placeOfInterest : PlaceOfInterest[*];
 }
 
-Association meta::relational::tests::model::simple::AddressLocation
+Association meta::external::store::relational::tests::model::simple::AddressLocation
 {
     location : Location[0..1];
     addresses: Address[*];
 }
 
 
-Class meta::relational::tests::model::simple::Product
+Class meta::external::store::relational::tests::model::simple::Product
 {
    name : String[1];
    cusip(){$this.synonymByType(ProductSynonymType.CUSIP).name}:String[1];
@@ -319,26 +319,26 @@ Class meta::relational::tests::model::simple::Product
    classification : ProductClassification[0..1];
 }
 
-Class <<temporal.businesstemporal>> meta::relational::tests::model::simple::ProductClassification{
+Class <<temporal.businesstemporal>> meta::external::store::relational::tests::model::simple::ProductClassification{
    type : String[1];
    description : String[1];
 }
 
-Enum meta::relational::tests::model::simple::ProductSynonymType
+Enum meta::external::store::relational::tests::model::simple::ProductSynonymType
 {
    CUSIP,
    ISIN,
    GSN
 }
 
-Class meta::relational::tests::model::simple::Synonym
+Class meta::external::store::relational::tests::model::simple::Synonym
 {
    typeAsString : String[1];
    type : ProductSynonymType[1];
    name : String[1];
 }
 
-Association meta::relational::tests::model::simple::ProdSynonym
+Association meta::external::store::relational::tests::model::simple::ProdSynonym
 {
    synonyms : Synonym[*];
    product : Product[1];
@@ -347,7 +347,7 @@ Association meta::relational::tests::model::simple::ProdSynonym
    synonymsByTypes(types:ProductSynonymType[*]){$this.synonyms->filter(s|$s.type->in($types))}:Synonym[*];
 }
 
-Class meta::relational::tests::model::simple::Account
+Class meta::external::store::relational::tests::model::simple::Account
 {
    name : String[1];
    createDate : StrictDate[1];
@@ -363,7 +363,7 @@ Class meta::relational::tests::model::simple::Account
    }:Boolean[1];
 }
 
-Class meta::relational::tests::model::simple::AccountWithConstraints
+Class meta::external::store::relational::tests::model::simple::AccountWithConstraints
 [
    tradesNotDoubleBooked( ~function: $this->project([a|$a.trades.id],['tradeId'])->groupBy('tradeId', agg('count', x|$x, y| $y->count()))->filter(t|$t.getInteger('count') > 1)->tdsRows()->isEmpty()
                           ~enforcementLevel: Error
@@ -374,19 +374,19 @@ Class meta::relational::tests::model::simple::AccountWithConstraints
    trades : Trade[*];
 }
 
-Class meta::relational::tests::model::simple::OrderPnl
+Class meta::external::store::relational::tests::model::simple::OrderPnl
 {
    pnl:Float[1];
    supportContactName:String[1];
    order:Order[1];
 }
 
-Class meta::relational::tests::model::simple::AccountPnl
+Class meta::external::store::relational::tests::model::simple::AccountPnl
 {
    pnl:Float[1];
 }
 
-Class meta::relational::tests::model::simple::Order
+Class meta::external::store::relational::tests::model::simple::Order
 {
    id : Integer[1];
    date : StrictDate[1];
@@ -397,7 +397,7 @@ Class meta::relational::tests::model::simple::Order
    zeroPnl : Boolean[1];
 }
 
-Class meta::relational::tests::model::simple::Trade
+Class meta::external::store::relational::tests::model::simple::Trade
 {
    id : Integer[1];
    date : StrictDate[1];
@@ -495,7 +495,7 @@ Class meta::relational::tests::model::simple::Trade
    }:Person[1..*];
 }
 
-Class meta::relational::tests::model::simple::TradeEvent
+Class meta::external::store::relational::tests::model::simple::TradeEvent
 {
    eventType : String[0..1];
    date: StrictDate[1];
@@ -503,36 +503,36 @@ Class meta::relational::tests::model::simple::TradeEvent
    traderAddress : String[0..1];
 }
 
-Association meta::relational::tests::model::simple::Account_AccountPnl
+Association meta::external::store::relational::tests::model::simple::Account_AccountPnl
 {
    account : Account[0..1];
    accountPnl : AccountPnl[0..1];
 }
 
-Association meta::relational::tests::model::simple::Trade_Accounts
+Association meta::external::store::relational::tests::model::simple::Trade_Accounts
 {
    account : Account[0..1];
    trades : Trade[*];
 }
 
-Association meta::relational::tests::model::simple::Trade_Orders
+Association meta::external::store::relational::tests::model::simple::Trade_Orders
 {
    account : Account[0..1];
    orders : Order[*];
 }
 
-Class meta::relational::tests::model::simple::Contract
+Class meta::external::store::relational::tests::model::simple::Contract
 {
    id : String[1];
    money : Money[1];
 }
 
-Class meta::relational::tests::model::simple::Currency
+Class meta::external::store::relational::tests::model::simple::Currency
 {
    currency : String[1];
 }
 
-Class meta::relational::tests::model::simple::Money
+Class meta::external::store::relational::tests::model::simple::Money
 {
    amount: Float[1];
    usdRates:  FxReferenceRate[*];
@@ -551,49 +551,49 @@ Class meta::relational::tests::model::simple::Money
    }:Float[1] ;
 }
 
-Class meta::relational::tests::model::simple::FxReferenceRate
+Class meta::external::store::relational::tests::model::simple::FxReferenceRate
 {
    observationDate: DateTime[1];
    nonStandardTenorQualifier: NonStandardTenorQualifier[0..1];
    rate: Float[1];
 }
 
-Enum meta::relational::tests::model::simple::NonStandardTenorQualifier
+Enum meta::external::store::relational::tests::model::simple::NonStandardTenorQualifier
 {
    S,   // Spot
    F,   // Forward
    None // None
 }
 
-Association meta::relational::tests::model::simple::BridgeAsso1
+Association meta::external::store::relational::tests::model::simple::BridgeAsso1
 {
     bridge : Bridge[0..1];
     employees : Person[*];
 }
 
-Association meta::relational::tests::model::simple::BridgeAsso2
+Association meta::external::store::relational::tests::model::simple::BridgeAsso2
 {
     bridge : Bridge[0..1];
     firm : Firm[0..1];
 }
 
-Class meta::relational::tests::model::simple::Bridge
+Class meta::external::store::relational::tests::model::simple::Bridge
 {
 }
 
-Class meta::relational::tests::model::simple::Event
+Class meta::external::store::relational::tests::model::simple::Event
 {
    eventName:String[1];
    eventDate: DateTime[1];
 }
 
-Class meta::relational::tests::model::simple::ReservedWords
+Class meta::external::store::relational::tests::model::simple::ReservedWords
 {
    window : String[1];
    current_date : StrictDate[1];
 }
 
-Class meta::relational::tests::model::simple::PersonWithConstraints extends Person
+Class meta::external::store::relational::tests::model::simple::PersonWithConstraints extends Person
 [
    firstNameTest( ~function: $this.firstName == 'test'
                           ~enforcementLevel: Error

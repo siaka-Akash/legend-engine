@@ -1,6 +1,6 @@
 ###Relational
 
-Database meta::relational::tests::aggregationAware::store::aggregationAwareStore
+Database meta::external::store::relational::tests::aggregationAware::store::aggregationAwareStore
 (
    Schema base_view 
    (
@@ -148,18 +148,18 @@ Database meta::relational::tests::aggregationAware::store::aggregationAwareStore
 
 ###Pure
 import meta::pure::runtime::*;
-import meta::relational::tests::aggregationAware::store::*;
-import meta::relational::tests::aggregationAware::*;
-import meta::relational::runtime::*;
-import meta::relational::functions::toDDL::*;
-import meta::relational::metamodel::execute::*;
+import meta::external::store::relational::tests::aggregationAware::store::*;
+import meta::external::store::relational::tests::aggregationAware::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::functions::toDDL::*;
+import meta::external::store::relational::metamodel::execute::*;
 
-function meta::relational::tests::aggregationAware::runtime(): Runtime[1]
+function meta::external::store::relational::tests::aggregationAware::runtime(): Runtime[1]
 {
-   meta::relational::tests::testRuntime(aggregationAwareStore);
+   meta::external::store::relational::tests::testRuntime(aggregationAwareStore);
 }
 
-function <<test.BeforePackage>> meta::relational::tests::aggregationAware::setUp():Any[*]
+function <<test.BeforePackage>> meta::external::store::relational::tests::aggregationAware::setUp():Any[*]
 {
    let connection = runtime().connectionByElement(aggregationAwareStore)->cast(@TestDatabaseConnection);
    [

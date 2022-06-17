@@ -16,8 +16,8 @@ import meta::pure::executionPlan::engine::java::roadmap::*;
 import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::test::alloy::simple::nilHandling::*;
-import meta::pure::mapping::modelToModel::test::alloy::utils::*;
+import meta::external::store::model::test::alloy::simple::nilHandling::*;
+import meta::external::store::model::test::alloy::utils::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly, feature.M2MBasics>> 
 {  serverVersion.start='v1_19_0',
@@ -26,7 +26,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  a mapping is executed using graphFetch and serialize.',
    doc.doc='Then:  the mapping conversion should succeed.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::simple::canHandleNilWhileMapping() : Boolean[1]
+meta::external::store::model::test::alloy::simple::canHandleNilWhileMapping() : Boolean[1]
 {
    let tree = #{Target {s}}#;
 
@@ -49,7 +49,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  a mapping is executed using graphFetch and serialize.',
    doc.doc='Then:  the mapping conversion should succeed.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::simple::canHandleNonNilWhileMapping() : Boolean[1]
+meta::external::store::model::test::alloy::simple::canHandleNonNilWhileMapping() : Boolean[1]
 {
    let tree = #{Target {s}}#;
 
@@ -71,7 +71,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  a mapping is executed using graphFetch and serialize.',
    doc.doc='Then:  the mapping conversion should succeed.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::simple::canHandleSimplePropertyMappedToNil() : Boolean[1]
+meta::external::store::model::test::alloy::simple::canHandleSimplePropertyMappedToNil() : Boolean[1]
 {
    let tree = #{Target {s}}#;
 
@@ -93,7 +93,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  a mapping is executed using graphFetch and serialize.',
    doc.doc='Then:  the mapping conversion should succeed.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::simple::canHandleComplexPropertyMappedToNil() : Boolean[1]
+meta::external::store::model::test::alloy::simple::canHandleComplexPropertyMappedToNil() : Boolean[1]
 {
    let tree = #{Target {nested {a, b}}}#;
 
@@ -109,27 +109,27 @@ meta::pure::mapping::modelToModel::test::alloy::simple::canHandleComplexProperty
    assert(jsonEquivalent($expected->parseJSON(), $json->parseJSON()));
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::simple::nilHandling::Source
+Class meta::external::store::model::test::alloy::simple::nilHandling::Source
 {
    i: Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::simple::nilHandling::Target
+Class meta::external::store::model::test::alloy::simple::nilHandling::Target
 {
    s: String[0..1];
    nested: TargetNested[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::simple::nilHandling::TargetNested
+Class meta::external::store::model::test::alloy::simple::nilHandling::TargetNested
 {
    a: String[0..1];
    b: String[0..1];
 }
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::simple::nilHandling::*;
+import meta::external::store::model::test::alloy::simple::nilHandling::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::simple::nilHandling::mapWithNil
+Mapping meta::external::store::model::test::alloy::simple::nilHandling::mapWithNil
 (
    Target: Pure
       {
@@ -139,9 +139,9 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::simple::nilHandling::map
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::simple::nilHandling::*;
+import meta::external::store::model::test::alloy::simple::nilHandling::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::simple::nilHandling::mapToNil
+Mapping meta::external::store::model::test::alloy::simple::nilHandling::mapToNil
 (
    Target: Pure
       {
@@ -151,9 +151,9 @@ Mapping meta::pure::mapping::modelToModel::test::alloy::simple::nilHandling::map
 )
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::simple::nilHandling::*;
+import meta::external::store::model::test::alloy::simple::nilHandling::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::simple::nilHandling::mapToNilComplexProperty
+Mapping meta::external::store::model::test::alloy::simple::nilHandling::mapToNilComplexProperty
 (
    Target: Pure
       {

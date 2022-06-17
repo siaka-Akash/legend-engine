@@ -178,7 +178,7 @@ function <<access.protected>> meta::protocols::pure::vX_X_X::transformation::fro
   $allElements;  
 }
 
-function <<access.private>> meta::protocols::pure::vX_X_X::transformation::fromPureGraph::extractStoresFromTableReference<T|m>(query: FunctionDefinition<{->T[m]}>[1]): meta::relational::metamodel::Database[*]
+function <<access.private>> meta::protocols::pure::vX_X_X::transformation::fromPureGraph::extractStoresFromTableReference<T|m>(query: FunctionDefinition<{->T[m]}>[1]): meta::external::store::relational::metamodel::Database[*]
 {
   let search = 'tableReference_Database_1__String_1__String_1__Table_1_';
   let expressions = $query.expressionSequence->evaluateAndDeactivate();
@@ -187,7 +187,7 @@ function <<access.private>> meta::protocols::pure::vX_X_X::transformation::fromP
         ->meta::protocols::pure::vX_X_X::transformation::fromPureGraph::searchQueryGraph($search),
   | []));
 
-  $tableReference->map(ref| $ref->cast(@SimpleFunctionExpression).parametersValues->at(0)->cast(@InstanceValue).values->toOne()->cast(@meta::relational::metamodel::Database));
+  $tableReference->map(ref| $ref->cast(@SimpleFunctionExpression).parametersValues->at(0)->cast(@InstanceValue).values->toOne()->cast(@meta::external::store::relational::metamodel::Database));
 }
 
 function <<access.private>> meta::protocols::pure::vX_X_X::transformation::fromPureGraph::searchQueryGraph(func: SimpleFunctionExpression[1], text: String[1]): SimpleFunctionExpression[*]

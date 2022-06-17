@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::metamodel::execute::*;
-import meta::relational::tests::loadCsv::*;
-import meta::relational::runtime::*;
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::tests::loadCsv::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::tests::model::simple::*;
 
-function <<test.Test>> meta::relational::tests::loadCsv::testLoadCsv():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::loadCsv::testLoadCsv():Boolean[1]
 {
-   let connection = meta::relational::tests::testRuntime(db).connections->toOne()->cast(@TestDatabaseConnection);
-   meta::relational::functions::toDDL::dropAndCreateTableInDb(db, 'personCsvTable', $connection);
+   let connection = meta::external::store::relational::tests::testRuntime(db).connections->toOne()->cast(@TestDatabaseConnection);
+   meta::external::store::relational::functions::toDDL::dropAndCreateTableInDb(db, 'personCsvTable', $connection);
    loadCsvToDbTable('/core_relational/relational/functions/tests/loadCsvToDbTable/employees.csv', db.schema('default')->toOne().table('personCsvTable')->toOne(),
                      $connection);
                      
-   let res = execute(|Person.all(), csvMapping, meta::relational::tests::testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
+   let res = execute(|Person.all(), csvMapping, meta::external::store::relational::tests::testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
                      
    assertEquals('Joe', $res.values->at(0).firstName);
    assertEquals('Bloggs', $res.values->at(0).lastName);
@@ -36,10 +36,10 @@ function <<test.Test>> meta::relational::tests::loadCsv::testLoadCsv():Boolean[1
 }
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::loadCsv::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::loadCsv::*;
 
-Mapping meta::relational::tests::loadCsv::csvMapping
+Mapping meta::external::store::relational::tests::loadCsv::csvMapping
 (
     Person : Relational
             {
@@ -54,7 +54,7 @@ Mapping meta::relational::tests::loadCsv::csvMapping
 
 ###Relational
 
-Database meta::relational::tests::loadCsv::db
+Database meta::external::store::relational::tests::loadCsv::db
 (
    Table personCsvTable(FIRSTNAME VARCHAR(30) PRIMARY KEY, LASTNAME VARCHAR(40), AGE INTEGER)
    

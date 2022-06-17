@@ -259,7 +259,7 @@ public class TestMappingGrammarParser extends TestGrammarParser.TestGrammarParse
         // check data format type
         test("Class model::domain::Source {}\n" +
                 "###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                 "(\n" +
                 "   MappingTests\n" +
                 "   [\n" +
@@ -276,7 +276,7 @@ public class TestMappingGrammarParser extends TestGrammarParser.TestGrammarParse
         // object input data with no format type
         test("Class model::domain::Source {}\n" +
                 "###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                 "(\n" +
                 "   MappingTests\n" +
                 "   [\n" +
@@ -293,7 +293,7 @@ public class TestMappingGrammarParser extends TestGrammarParser.TestGrammarParse
         // check data input type
         test("Class model::domain::Source {}\n" +
                 "###Mapping\n" +
-                "Mapping meta::pure::mapping::modelToModel::test::simple::simpleModelMapping\n" +
+                "Mapping meta::external::store::model::test::simple::simpleModelMapping\n" +
                 "(\n" +
                 "   MappingTests\n" +
                 "   [\n" +

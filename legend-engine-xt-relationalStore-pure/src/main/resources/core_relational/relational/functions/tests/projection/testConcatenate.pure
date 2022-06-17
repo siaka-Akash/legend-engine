@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::model::simple::*;
-import meta::relational::mapping::*;
-import meta::relational::tests::*;
-import meta::relational::functions::sqlstring::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::*;
+import meta::external::store::relational::functions::sqlstring::*;
 
 
-function <<test.Test, test.ToFix>> meta::relational::tests::projection::concatenate::testSimpleConcatenate():Boolean[1]
+function <<test.Test, test.ToFix>> meta::external::store::relational::tests::projection::concatenate::testSimpleConcatenate():Boolean[1]
 {
    let result = execute(|Person.all()->concatenate(Person.all())->project([#/Person/firstName#]), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 14 );
@@ -29,7 +29,7 @@ function <<test.Test, test.ToFix>> meta::relational::tests::projection::concaten
 
 ###Pure
 
-Class meta::relational::tests::projection::concatenate::tdsQueries::Product
+Class meta::external::store::relational::tests::projection::concatenate::tdsQueries::Product
 {
    id : Integer[1];
    name : String[1];
@@ -38,15 +38,15 @@ Class meta::relational::tests::projection::concatenate::tdsQueries::Product
 
 ###Relational
 
-Database meta::relational::tests::projection::concatenate::tdsQueries::ProductDatabase
+Database meta::external::store::relational::tests::projection::concatenate::tdsQueries::ProductDatabase
 (
    Table ProductTable(id INT PRIMARY KEY, name VARCHAR(20), type VARCHAR(20))
 )
 
 ###Mapping
-import meta::relational::tests::projection::concatenate::tdsQueries::*;
+import meta::external::store::relational::tests::projection::concatenate::tdsQueries::*;
 
-Mapping meta::relational::tests::projection::concatenate::tdsQueries::ProductMapping
+Mapping meta::external::store::relational::tests::projection::concatenate::tdsQueries::ProductMapping
 (
    Product : Relational
    {
@@ -57,11 +57,11 @@ Mapping meta::relational::tests::projection::concatenate::tdsQueries::ProductMap
 )
 
 ###Pure
-import meta::relational::functions::asserts::*;
-import meta::relational::milestoning::*;
-import meta::relational::tests::projection::concatenate::tdsQueries::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::milestoning::*;
+import meta::external::store::relational::tests::projection::concatenate::tdsQueries::*;
 
-function <<test.Test>> meta::relational::tests::projection::concatenate::tdsQueries::testConcatenationOfTdsQueries():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::concatenate::tdsQueries::testConcatenationOfTdsQueries():Boolean[1]
 {
    let lfs = [{|Product.all()->project([p|$p.id, p|$p.name, p|$p.type],['id', 'name', 'type'])},
               {|Product.all()->project([p|$p.id, p|$p.name, p|$p.type],['id', 'name', 'type'])},
@@ -79,7 +79,7 @@ function <<test.Test>> meta::relational::tests::projection::concatenate::tdsQuer
    assertEquals($expectedResult, $actualResult);
 }
 
-function <<test.Test>> meta::relational::tests::projection::concatenate::tdsQueries::testConcatenationOfTdsQueriesWithFilter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::concatenate::tdsQueries::testConcatenationOfTdsQueriesWithFilter():Boolean[1]
 {
    let lfs = [{|Product.all()->filter(p|$p.name=='name1')->project([p|$p.id, p|$p.name, p|$p.type],['id', 'name', 'type'])},
               {|Product.all()->filter(p|$p.name=='name2')->project([p|$p.id, p|$p.name, p|$p.type],['id', 'name', 'type'])},
@@ -98,7 +98,7 @@ function <<test.Test>> meta::relational::tests::projection::concatenate::tdsQuer
 }
 
 
-function <<test.Test>> meta::relational::tests::projection::concatenate::tdsQueries::testConcatenationOfTdsQueriesWithGroupBy():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::concatenate::tdsQueries::testConcatenationOfTdsQueriesWithGroupBy():Boolean[1]
 {
    let lfs = [{|Product.all()->project([p|$p.id, p|$p.name, p|$p.type],['id', 'name', 'type'])->groupBy(['type'], [agg('count', x| $x.getInteger('id'), a | $a -> count())])},
               {|Product.all()->project([p|$p.id, p|$p.name, p|$p.type],['id', 'name', 'type'])->groupBy(['type'], [agg('count', x| $x.getInteger('id'), a | $a -> count())])},
@@ -116,7 +116,7 @@ function <<test.Test>> meta::relational::tests::projection::concatenate::tdsQuer
    assertEquals($expectedResult, $actualResult);
 }
 
-function <<test.Test>> meta::relational::tests::projection::concatenate::tdsQueries::testConcatenationOfTdsQueriesWithFilterAndGroupBy():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::concatenate::tdsQueries::testConcatenationOfTdsQueriesWithFilterAndGroupBy():Boolean[1]
 {
    let lfs = [{|Product.all()->filter(p|$p.name=='name1')->project([p|$p.id, p|$p.name, p|$p.type],['id', 'name', 'type'])->groupBy(['type'], [agg('count', x| $x.getInteger('id'), a | $a -> count())])},
               {|Product.all()->filter(p|$p.name=='name2')->project([p|$p.id, p|$p.name, p|$p.type],['id', 'name', 'type'])->groupBy(['type'], [agg('count', x| $x.getInteger('id'), a | $a -> count())])},
@@ -135,19 +135,19 @@ function <<test.Test>> meta::relational::tests::projection::concatenate::tdsQuer
 }
 
 ###Pure
-import meta::relational::runtime::*;
-import meta::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::metamodel::*;
 import meta::pure::runtime::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::functions::toDDL::*;
-import meta::relational::tests::projection::concatenate::tdsQueries::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::functions::toDDL::*;
+import meta::external::store::relational::tests::projection::concatenate::tdsQueries::*;
 
-function meta::relational::tests::projection::concatenate::tdsQueries::testRuntime():Runtime[1]
+function meta::external::store::relational::tests::projection::concatenate::tdsQueries::testRuntime():Runtime[1]
 {
-   meta::relational::tests::testRuntime(ProductDatabase);
+   meta::external::store::relational::tests::testRuntime(ProductDatabase);
 }
 
-function <<test.BeforePackage>> meta::relational::tests::projection::concatenate::tdsQueries::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::projection::concatenate::tdsQueries::setUp():Boolean[1]
 {
    let connection = testRuntime().connectionByElement(ProductDatabase)->cast(@TestDatabaseConnection);
    

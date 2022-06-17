@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import meta::pure::mapping::*;
-import meta::pure::store::*;
+import meta::pure::store::metamodel::*;
 import meta::pure::runtime::*;
 import meta::json::*;
 
@@ -56,8 +56,8 @@ Class meta::protocols::pure::vX_X_X::extension::SerializerExtension_vX_X_X exten
    scan_buildPureModelAsText_getCorrectedElementSourceInformation : Function<{meta::pure::metamodel::PackageableElement[1] -> SourceInformation[1]}>[0..1];
 
    scan_buildBasePureModel_findAllTypesFromMapping : Function<{Nil[1]->Type[*]}>[*];
-   scan_buildBasePureModel_extractStores : Function<{Mapping[1], meta::pure::router::extension::RouterExtension[*] -> Function<{Nil[1]->meta::pure::store::Store[*]}>[*]}>[0..1];
-   scan_buildBasePureModel_processProperties : Function<{Mapping[1], meta::pure::router::extension::RouterExtension[*] -> Function<{Nil[1]->meta::pure::store::Store[*]}>[*]}>[0..1];
+   scan_buildBasePureModel_extractStores : Function<{Mapping[1], meta::pure::router::extension::RouterExtension[*] -> Function<{Nil[1]->meta::pure::store::metamodel::Store[*]}>[*]}>[0..1];
+   scan_buildBasePureModel_processProperties : Function<{Mapping[1], meta::pure::router::extension::RouterExtension[*] -> Function<{Nil[1]->meta::pure::store::metamodel::Store[*]}>[*]}>[0..1];
    
    invocation_execution_execute1 : Function<{ExecutionContext[1]->Boolean[1]}>[*];
    invocation_execution_execute2_pre : Pair<Function<{String[1]->Boolean[1]}>, Function<{String[1], JSONObject[1], Mapping[1], Runtime[1],ExtendedJSONDeserializationConfig[1],ExecutionContext[0..1]->Pair<List<Any>,List<Activity>>[1]}>>[*];

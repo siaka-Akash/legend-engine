@@ -16,9 +16,9 @@ import meta::pure::executionPlan::engine::java::roadmap::*;
 import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::test::alloy::utils::*;
-import meta::pure::mapping::modelToModel::test::filter::mapping::*;
-import meta::pure::mapping::modelToModel::test::filter::model::*;
+import meta::external::store::model::test::alloy::utils::*;
+import meta::external::store::model::test::filter::mapping::*;
+import meta::external::store::model::test::filter::model::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly, feature.Filter>>
 {  serverVersion.start='v1_19_0',
@@ -27,7 +27,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch.',
    doc.doc='Then:  only the filtered objectsare returned'
 }
-meta::pure::mapping::modelToModel::test::alloy::filter::canFilterInAMapping() : Boolean[1]
+meta::external::store::model::test::alloy::filter::canFilterInAMapping() : Boolean[1]
 {
    let tree = #{Person {lastName}}#;
    let func = {|Person.all()->graphFetch($tree)->serialize($tree)};
@@ -48,7 +48,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetchChecked.',
    doc.doc='Then:  only the filtered objectsare returned'
 }
-meta::pure::mapping::modelToModel::test::alloy::filter::canFilterInAMappingChecked() : Boolean[1]
+meta::external::store::model::test::alloy::filter::canFilterInAMappingChecked() : Boolean[1]
 {
    let tree = #{Person {lastName}}#;
    let func = {|Person.all()->graphFetchChecked($tree)->serialize($tree)};
@@ -78,7 +78,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch.',
    doc.doc='Then:  only the filtered child objects are returned'
 }
-meta::pure::mapping::modelToModel::test::alloy::filter::canFilterInAMappingOnChildObjects() : Boolean[1]
+meta::external::store::model::test::alloy::filter::canFilterInAMappingOnChildObjects() : Boolean[1]
 {
    let tree = #{Firm { employees {lastName}}}#;
    let func = {|Firm.all()->graphFetch($tree)->serialize($tree)};
@@ -99,7 +99,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the mapping is executed using graphFetch.',
    doc.doc='Then:  only the filtered child objects are returned'
 }
-meta::pure::mapping::modelToModel::test::alloy::filter::canExecuteFilterAtSetLevel() : Boolean[1]
+meta::external::store::model::test::alloy::filter::canExecuteFilterAtSetLevel() : Boolean[1]
 {
    let tree = #{D {id, e {id} }}#;
    let func = {|D.all()->graphFetch($tree)->serialize($tree)};
@@ -114,64 +114,64 @@ meta::pure::mapping::modelToModel::test::alloy::filter::canExecuteFilterAtSetLev
 }
 
 ###Pure
-import meta::pure::mapping::modelToModel::test::filter::model::*;
+import meta::external::store::model::test::filter::model::*;
 
-Class meta::pure::mapping::modelToModel::test::filter::model::Firm
+Class meta::external::store::model::test::filter::model::Firm
 {
    legalName : String[1];
    employees : Person[*];
    count     : Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::filter::model::Person
+Class meta::external::store::model::test::filter::model::Person
 {
    firstName : String[1];
    lastName  : String[1];
    firm      : Firm[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::filter::model::_Firm
+Class meta::external::store::model::test::filter::model::_Firm
 {
   name : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::filter::model::_Person
+Class meta::external::store::model::test::filter::model::_Person
 {
    fullName : String[1];
 }
 
-Association  meta::pure::mapping::modelToModel::filter::model::src::_Firm_Person
+Association  meta::external::store::model::filter::model::src::_Firm_Person
 {
    employees : _Person[*];
    firm : _Firm[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::filter::model::D
+Class meta::external::store::model::test::filter::model::D
 {
    id : Integer[1];
    e  : E[0..1];
 }
 
-Class meta::pure::mapping::modelToModel::test::filter::model::E
+Class meta::external::store::model::test::filter::model::E
 {
    id : Integer[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::filter::model::_D
+Class meta::external::store::model::test::filter::model::_D
 {
    id : Integer[1];
    e  : _E[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::filter::model::_E
+Class meta::external::store::model::test::filter::model::_E
 {
    id : Integer[1];
 }
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::filter::model::*;
+import meta::external::store::model::test::filter::model::*;
 
-Mapping meta::pure::mapping::modelToModel::test::filter::mapping::filterMapping
+Mapping meta::external::store::model::test::filter::mapping::filterMapping
 (
    Person : Pure
    {
@@ -188,7 +188,7 @@ Mapping meta::pure::mapping::modelToModel::test::filter::mapping::filterMapping
    }
 )
 
-Mapping meta::pure::mapping::modelToModel::test::filter::mapping::setFilterMapping
+Mapping meta::external::store::model::test::filter::mapping::setFilterMapping
 (
   D : Pure
   {

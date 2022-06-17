@@ -27,7 +27,7 @@ import meta::pure::executionPlan::engine::java::graphFetch::storeStreamReading::
 import meta::pure::executionPlan::engine::java::naming::*;
 import meta::pure::executionPlan::engine::java::typeInfo::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::*;
+import meta::external::store::model::*;
 import meta::pure::metamodel::serialization::grammar::*;
 
 function meta::pure::executionPlan::engine::java::graphFetch::json::jsonReaderClass(conventions:Conventions[1], path:String[1], srcTreeClass:meta::pure::metamodel::type::Class<Any>[1]): meta::external::language::java::metamodel::Class[1]

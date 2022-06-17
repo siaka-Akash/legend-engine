@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-Class meta::relational::tests::mapping::embedded::model::ClassWithTimeStampKey
+Class meta::external::store::relational::tests::mapping::embedded::model::ClassWithTimeStampKey
 {
    <<equality.Key>>     
    id1         : Integer[1];  
    <<equality.Key>>
    id2        : Date[1];
    id3        : String[1];  
-   embeddedElement: meta::relational::tests::mapping::embedded::model::EmbeddedElement[0..1];
+   embeddedElement: meta::external::store::relational::tests::mapping::embedded::model::EmbeddedElement[0..1];
 }
 
-Class meta::relational::tests::mapping::embedded::model::EmbeddedElement
+Class meta::external::store::relational::tests::mapping::embedded::model::EmbeddedElement
 {
     propFloat: Float[0..1];
     propString : String[0..1];
@@ -32,10 +32,10 @@ Class meta::relational::tests::mapping::embedded::model::EmbeddedElement
 
 
 ###Mapping
-import meta::relational::tests::mapping::embedded::model::*;
-import meta::relational::tests::mapping::embedded::model::store::*;
+import meta::external::store::relational::tests::mapping::embedded::model::*;
+import meta::external::store::relational::tests::mapping::embedded::model::store::*;
 
-Mapping meta::relational::tests::mapping::embedded::model::mapping::EmbeddedWithTimstampKeys
+Mapping meta::external::store::relational::tests::mapping::embedded::model::mapping::EmbeddedWithTimstampKeys
 (
    ClassWithTimeStampKey: Relational
    {
@@ -55,25 +55,25 @@ Mapping meta::relational::tests::mapping::embedded::model::mapping::EmbeddedWith
 
 
 ###Pure
-import meta::relational::runtime::*;
-import meta::relational::runtime::authentication::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::runtime::authentication::*;
 import meta::pure::profiles::*;
 import meta::pure::runtime::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::tests::mapping::embedded::model::*;
-import meta::relational::tests::mapping::embedded::model::store::*;
-import meta::relational::tests::mapping::embedded::model::mapping::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::tests::mapping::embedded::model::*;
+import meta::external::store::relational::tests::mapping::embedded::model::store::*;
+import meta::external::store::relational::tests::mapping::embedded::model::mapping::*;
 import meta::pure::functions::date::*;
 import meta::pure::functions::string::*;
 
 
-function meta::relational::tests::mapping::embedded::model::store::testDataTypeMappingRuntimeWithTz():Runtime[1]
+function meta::external::store::relational::tests::mapping::embedded::model::store::testDataTypeMappingRuntimeWithTz():Runtime[1]
 {
-   meta::relational::tests::testRuntime(myDB);
+   meta::external::store::relational::tests::testRuntime(myDB);
 }
 
 
-function <<test.ToFix>> meta::relational::tests::mapping::embedded::testTimeStampPrimaryKeyStringAsDate():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::mapping::embedded::testTimeStampPrimaryKeyStringAsDate():Boolean[1]
 {       
      
   let stringDate = '2016-01-25 10:00:00.000000000'; //EST 2016-01-25 10:00:00......GMT : 2016-01-25 15:00:00
@@ -96,7 +96,7 @@ function <<test.ToFix>> meta::relational::tests::mapping::embedded::testTimeStam
 }
 
 
-function <<test.ToFix>> meta::relational::tests::mapping::embedded::testTimeStampPrimaryKeyDateInFilter():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::mapping::embedded::testTimeStampPrimaryKeyDateInFilter():Boolean[1]
 {       
      
    //date in UTC

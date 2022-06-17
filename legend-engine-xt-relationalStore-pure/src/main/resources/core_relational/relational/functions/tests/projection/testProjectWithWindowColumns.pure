@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::mapping::distinct::model::mapping::*;
-import meta::relational::tests::mapping::distinct::model::domain::*;
+import meta::external::store::relational::tests::mapping::distinct::model::mapping::*;
+import meta::external::store::relational::tests::mapping::distinct::model::domain::*;
 import meta::pure::functions::math::olap::*;
-import meta::relational::runtime::*;
-import meta::relational::functions::sqlstring::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::functions::sqlstring::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
 
-function <<test.Test>>meta::relational::tests::projection::window::testWindowWithSortSingle():Boolean[1]
+function <<test.Test>>meta::external::store::relational::tests::projection::window::testWindowWithSortSingle():Boolean[1]
 {
-   let func = {|meta::relational::tests::model::simple::Person.all()
+   let func = {|meta::external::store::relational::tests::model::simple::Person.all()
       ->project([
          col(p |$p.lastName,'lastName') 
          ,col(window(p |$p.firstName ),sortAsc(p |$p.lastName), func(p |$p.age->toOne(), y| $y->average()),'ageAverageWindow')
@@ -32,9 +32,9 @@ function <<test.Test>>meta::relational::tests::projection::window::testWindowWit
 }
 
 
-function <<test.Test>>meta::relational::tests::projection::window::testWindowWithMultiplePartitions():Boolean[1]
+function <<test.Test>>meta::external::store::relational::tests::projection::window::testWindowWithMultiplePartitions():Boolean[1]
 {
-   let func ={|meta::relational::tests::model::simple::Person.all()
+   let func ={|meta::external::store::relational::tests::model::simple::Person.all()
       ->project([
          col(p |$p.lastName,'lastName') 
          ,col(window([p |$p.lastName,p |$p.firstName] ),sortAsc(p |$p.lastName), func(p |$p.age->toOne(), y| $y->average()),'ageAverageMultiplePartitions')
@@ -45,9 +45,9 @@ function <<test.Test>>meta::relational::tests::projection::window::testWindowWit
 }
 
 
-function <<test.Test>>meta::relational::tests::projection::window::testwindowWithSortMultiple():Boolean[1]
+function <<test.Test>>meta::external::store::relational::tests::projection::window::testwindowWithSortMultiple():Boolean[1]
 {
-   let func ={|meta::relational::tests::model::simple::Person.all()
+   let func ={|meta::external::store::relational::tests::model::simple::Person.all()
       ->project([
          col(p |$p.lastName,'lastName') 
          ,col(window(p |$p.firstName ),sortAsc(p |$p.lastName), func(p |$p.age->toOne(), y| $y->average()),'ageAverageWindow')
@@ -59,9 +59,9 @@ function <<test.Test>>meta::relational::tests::projection::window::testwindowWit
    assertEquals('select "root".LASTNAME as "lastName", avg(1.0 * "root".AGE) OVER (Partition By "root".FIRSTNAME Order By "root".LASTNAME ASC) as "ageAverageWindow", sum("root".AGE) OVER (Partition By "personTable_d#5_d_m1_d_m2_d_m2".LASTNAME Order By "personTable_d#5_d_m1_d_m2_d_m2".FIRSTNAME DESC) as "ageSumWindow" from personTable as "root" left outer join personTable as "personTable_d#5_d_m1_d_m2_d_m2" on ("root".MANAGERID = "personTable_d#5_d_m1_d_m2_d_m2".ID)',$res);
 }
 
-function <<test.Test>>meta::relational::tests::projection::window::testWindowWithoutSortSingle():Boolean[1]
+function <<test.Test>>meta::external::store::relational::tests::projection::window::testWindowWithoutSortSingle():Boolean[1]
 {
-   let func ={|meta::relational::tests::model::simple::Person.all()
+   let func ={|meta::external::store::relational::tests::model::simple::Person.all()
       ->project([
          col(p |$p.lastName,'lastName') 
          ,col(window(p |$p.firstName ), func(p |$p.age->toOne(), y| $y->average()),'ageWindow')
@@ -70,9 +70,9 @@ function <<test.Test>>meta::relational::tests::projection::window::testWindowWit
    assertEquals('select "root".LASTNAME as "lastName", avg(1.0 * "root".AGE) OVER (Partition By "root".FIRSTNAME ) as "ageWindow" from personTable as "root"',$res);
 }
 
-function <<test.Test>>meta::relational::tests::projection::window::testWindowWithoutSortMultiple():Boolean[1]
+function <<test.Test>>meta::external::store::relational::tests::projection::window::testWindowWithoutSortMultiple():Boolean[1]
 {
-   let func ={|meta::relational::tests::model::simple::Person.all()
+   let func ={|meta::external::store::relational::tests::model::simple::Person.all()
       ->project([
          col(p |$p.lastName,'lastName') 
          ,col(window(p |$p.firstName ), func(p |$p.age->toOne(), y| $y->max()),'ageMaxWindow')
@@ -82,9 +82,9 @@ function <<test.Test>>meta::relational::tests::projection::window::testWindowWit
    assertEquals('select "root".LASTNAME as "lastName", max("root".AGE) OVER (Partition By "root".FIRSTNAME ) as "ageMaxWindow", sum("root".AGE) OVER (Partition By "personTable_d#5_d_m1_d_m2_d_m2".LASTNAME ) as "ageSumWindow" from personTable as "root" left outer join personTable as "personTable_d#5_d_m1_d_m2_d_m2" on ("root".MANAGERID = "personTable_d#5_d_m1_d_m2_d_m2".ID)',$res);
 }
 
-function <<test.Test>>meta::relational::tests::projection::window::testRankSingle():Boolean[1]
+function <<test.Test>>meta::external::store::relational::tests::projection::window::testRankSingle():Boolean[1]
 {
-   let func ={|meta::relational::tests::model::simple::Person.all()
+   let func ={|meta::external::store::relational::tests::model::simple::Person.all()
       ->project([
          col(p |$p.lastName,'lastName') 
          ,col(window(p |$p.firstName ),sortAsc(p|$p.lastName),y | $y->rank(),'ageRankWindow')])
@@ -94,9 +94,9 @@ function <<test.Test>>meta::relational::tests::projection::window::testRankSingl
          assertEquals('select "root".LASTNAME as "lastName", rank() OVER (Partition By "root".FIRSTNAME Order By "root".LASTNAME ASC) as "ageRankWindow" from personTable as "root"',$res);
 }
 
-function <<test.Test>>meta::relational::tests::projection::window::testRankMultiple():Boolean[1]
+function <<test.Test>>meta::external::store::relational::tests::projection::window::testRankMultiple():Boolean[1]
 {
-   let func ={|meta::relational::tests::model::simple::Person.all()
+   let func ={|meta::external::store::relational::tests::model::simple::Person.all()
       ->project([
          col(p |$p.lastName,'lastName') 
          ,col(window(p |$p.firstName ),sortAsc(p |$p.lastName), y | $y->rank(),'ageRankWindow1')
@@ -108,9 +108,9 @@ function <<test.Test>>meta::relational::tests::projection::window::testRankMulti
 }
 
 
-function <<test.Test>>meta::relational::tests::projection::window::testDifferentWindowFunctionFamilies():Boolean[1]
+function <<test.Test>>meta::external::store::relational::tests::projection::window::testDifferentWindowFunctionFamilies():Boolean[1]
 {
-   let func ={|meta::relational::tests::model::simple::Person.all()
+   let func ={|meta::external::store::relational::tests::model::simple::Person.all()
       ->project([
          col(p |$p.lastName,'lastName') 
          ,col(window(p |$p.firstName ),sortAsc(p |$p.lastName), func(p |$p.age->toOne(), y| $y->average()),'ageAverage')
@@ -123,7 +123,7 @@ function <<test.Test>>meta::relational::tests::projection::window::testDifferent
 }
 
 
-function <<test.Test>>meta::relational::tests::projection::window::testWindowwithGroupBy():Boolean[1]
+function <<test.Test>>meta::external::store::relational::tests::projection::window::testWindowwithGroupBy():Boolean[1]
 {
    let func ={|Trade.all()
       ->project([
@@ -138,9 +138,9 @@ function <<test.Test>>meta::relational::tests::projection::window::testWindowwit
 }
 
 
-function <<test.Test>>meta::relational::tests::projection::window::testWindowWithSortAndGroupBy():Boolean[1]
+function <<test.Test>>meta::external::store::relational::tests::projection::window::testWindowWithSortAndGroupBy():Boolean[1]
 {
-   let func ={|meta::relational::tests::model::simple::Trade.all()
+   let func ={|meta::external::store::relational::tests::model::simple::Trade.all()
       ->project([
          col(t |$t.quantity, 'cnt'),
          col(t |$t.product.name, 'prodName')
@@ -153,9 +153,9 @@ function <<test.Test>>meta::relational::tests::projection::window::testWindowWit
    assertEquals('select "productTable_d#6_d#3_m2".NAME as "prodName", avg(1.0 * "root".quantity) as "avg" from tradeTable as "root" left outer join productSchema.productTable as "productTable_d#6_d#3_m2" on ("root".prodId = "productTable_d#6_d#3_m2".ID) group by "prodName" order by "prodName" desc',$res);
 }
 
-function <<test.Test>>meta::relational::tests::projection::window::testNoPartition():Boolean[1]
+function <<test.Test>>meta::external::store::relational::tests::projection::window::testNoPartition():Boolean[1]
 {
-   let func ={|meta::relational::tests::model::simple::Trade.all()
+   let func ={|meta::external::store::relational::tests::model::simple::Trade.all()
                ->project([
                     col(t|$t.product.name, 'prodName'),
                     col(sortAsc(t|$t.id),func(t|$t.quantity, y|$y->sum()), 'testWindow')
@@ -165,9 +165,9 @@ function <<test.Test>>meta::relational::tests::projection::window::testNoPartiti
    assertEquals('select "productTable_d#4_d_m1".NAME as "prodName", sum("root".quantity) OVER (Order By "root".ID ASC) as "testWindow" from tradeTable as "root" left outer join productSchema.productTable as "productTable_d#4_d_m1" on ("root".prodId = "productTable_d#4_d_m1".ID)',$res);   
 }
 
-function <<test.Test>>meta::relational::tests::projection::window::testWindowColumnWithTdsDistinct():Boolean[1]
+function <<test.Test>>meta::external::store::relational::tests::projection::window::testWindowColumnWithTdsDistinct():Boolean[1]
 {
-   let func ={|meta::relational::tests::model::simple::Trade.all()
+   let func ={|meta::external::store::relational::tests::model::simple::Trade.all()
                ->project([
                     col(t|$t.product.name, 'prodName'),
                     col(sortAsc(t|$t.id),func(t|$t.quantity, y|$y->sum()), 'testWindow')
@@ -177,7 +177,7 @@ function <<test.Test>>meta::relational::tests::projection::window::testWindowCol
    assertEquals('select distinct "productTable_d#5_d#2_m1".NAME as "prodName", sum("root".quantity) OVER (Order By "root".ID ASC) as "testWindow" from tradeTable as "root" left outer join productSchema.productTable as "productTable_d#5_d#2_m1" on ("root".prodId = "productTable_d#5_d#2_m1".ID)',$res);   
 }
 
-function <<test.Test>>meta::relational::tests::projection::window::testProjectWithColumnSubSetAndWindowColumn():Boolean[1]
+function <<test.Test>>meta::external::store::relational::tests::projection::window::testProjectWithColumnSubSetAndWindowColumn():Boolean[1]
 {
    let func = {| Person.all()->projectWithColumnSubset( [ 
                    col(p| $p.firstName , 'first_name'  ),
@@ -194,7 +194,7 @@ function <<test.Test>>meta::relational::tests::projection::window::testProjectWi
 
 }
 
-function <<test.Test>> meta::relational::tests::projection::window::testDistinctWithWindowColumn():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::window::testDistinctWithWindowColumn():Boolean[1]
 {
    let func = {|IncomeFunction.all()->project([col(c|$c.name,'name'),col(sortAsc(c|$c.IfName->toOne()),y|$y->rank(),'name2')])->distinct()}; //, testDataTypeMappingRuntime(),debug())};
    let res = toSQLString($func, testMappingWithJoin, DatabaseType.SybaseIQ, meta::pure::router::extension::defaultRelationalExtensions());
@@ -202,10 +202,10 @@ function <<test.Test>> meta::relational::tests::projection::window::testDistinct
 }
 
 
-function <<test.Test>> meta::relational::tests::projection::window::testUsingWindowAttributeInFilter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::window::testUsingWindowAttributeInFilter():Boolean[1]
 {     
     let func ={|
-      meta::relational::tests::model::simple::Person.all()
+      meta::external::store::relational::tests::model::simple::Person.all()
       ->project([
          col(x |$x.lastName,'firstName') 
          ,col(window([p |$p.lastName]),sortAsc(p |$p.age->toOne()), y| $y->rank(),'rank_test') 
@@ -219,10 +219,10 @@ function <<test.Test>> meta::relational::tests::projection::window::testUsingWin
    assertEquals('select "root".LASTNAME as "firstName", "root"."rank_test" as "rank_test" from (select "_subroot".LASTNAME as LASTNAME, rank() OVER (Partition By "_subroot".LASTNAME Order By "_subroot".AGE ASC) as "rank_test" from personTable as "_subroot") as "root" where "root"."rank_test" = 1',$res);
 }
 
-function <<test.Test>> meta::relational::tests::projection::window::testQueryWithJoinUsingWindowAttributeInFilter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::window::testQueryWithJoinUsingWindowAttributeInFilter():Boolean[1]
 {     
     let func ={|
-      meta::relational::tests::model::simple::Person.all()
+      meta::external::store::relational::tests::model::simple::Person.all()
       ->project([
          col(x |$x.lastName,'firstName') 
          ,col(window([p |$p.lastName ,p|$p.manager.lastName->toOne()]),sortAsc(p |$p.age->toOne()), y| $y->rank(),'rank_test') 
@@ -236,10 +236,10 @@ function <<test.Test>> meta::relational::tests::projection::window::testQueryWit
    assertEquals('select "root".LASTNAME as "firstName", "root"."rank_test" as "rank_test" from (select "_subroot".LASTNAME as LASTNAME, rank() OVER (Partition By "_subroot".LASTNAME,"personTable_d#7_d#3_m2_d#3_m1_d#3_m2".LASTNAME Order By "_subroot".AGE ASC) as "rank_test" from personTable as "_subroot" left outer join personTable as "personTable_d#7_d#3_m2_d#3_m1_d#3_m2" on ("_subroot".MANAGERID = "personTable_d#7_d#3_m2_d#3_m1_d#3_m2".ID)) as "root" where "root"."rank_test" = 2 and "root"."rank_test" = 1',$res);
 }
 
-function <<test.Test>> meta::relational::tests::projection::window::testQueryWithFilterBeforeWindowColInFilter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::window::testQueryWithFilterBeforeWindowColInFilter():Boolean[1]
 {
    let func ={|
-      meta::relational::tests::model::simple::Person.all()
+      meta::external::store::relational::tests::model::simple::Person.all()
       ->project([
          col(x |$x.lastName,'firstName') 
          ,col(x|$x.manager.firstName ,'managerFirstName')
@@ -254,17 +254,17 @@ function <<test.Test>> meta::relational::tests::projection::window::testQueryWit
    assertEquals('select "root".LASTNAME as "firstName", "root".FIRSTNAME as "managerFirstName", "root"."rank_test" as "rank_test" from (select "_subroot".LASTNAME as LASTNAME, "personTable_d#7_d#4_m2".FIRSTNAME as FIRSTNAME, rank() OVER (Partition By "_subroot".LASTNAME,"personTable_d#7_d#4_m2".LASTNAME Order By "_subroot".AGE ASC) as "rank_test" from personTable as "_subroot" left outer join personTable as "personTable_d#7_d#4_m2" on ("_subroot".MANAGERID = "personTable_d#7_d#4_m2".ID) where "personTable_d#7_d#4_m2".FIRSTNAME = \'Scott\' and "_subroot".LASTNAME = \'Mohammed\') as "root" where "root"."rank_test" = 2',$res);
 }
 
-function <<test.Test>> meta::relational::tests::projection::window::testDynaFunctionInWindow():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::window::testDynaFunctionInWindow():Boolean[1]
 {
    let func = {|Order.all()->project([col(o|$o.id, 'id'), col(window(o|$o.zeroPnl), sortAsc(o|$o.quantity), y|$y->rank(), 'testCol')]) };
    let result =  toSQLString($func, simpleRelationalMapping, DatabaseType.SybaseIQ, meta::pure::router::extension::defaultRelationalExtensions());
    assertEquals('select "root".ID as "id", rank() OVER (Partition By case when "orderPnlView_d#2_dy0#2_d_m1_d_m1_d_m2".pnl = 0 then \'true\' else \'false\' end Order By "root".quantity ASC) as "testCol" from orderTable as "root" left outer join (select distinct "root".ORDER_ID as ORDER_ID, "root".pnl as pnl, "accountTable_d#2_dy0#2_l_d#2_dy0#2_m3_r".ID as accountId, "salesPersonTable_d#2_dy0#2_l_d#2_dy0#2_m4_md".NAME as supportContact, "salesPersonTable_d#2_dy0#2_l_d#2_dy0#2_m4_md".PERSON_ID as supportContactId from orderPnlTable as "root" left outer join orderTable as "orderTable_d#2_dy0#2_d#2_dy0#2_m3" on ("root".ORDER_ID = "orderTable_d#2_dy0#2_d#2_dy0#2_m3".ID) left outer join accountTable as "accountTable_d#2_dy0#2_l_d#2_dy0#2_m3_r" on ("orderTable_d#2_dy0#2_d#2_dy0#2_m3".accountID = "accountTable_d#2_dy0#2_l_d#2_dy0#2_m3_r".ID) left outer join salesPersonTable as "salesPersonTable_d#2_dy0#2_l_d#2_dy0#2_m4_md" on ("orderTable_d#2_dy0#2_d#2_dy0#2_m3".accountID = "salesPersonTable_d#2_dy0#2_l_d#2_dy0#2_m4_md".ACCOUNT_ID) where "root".pnl > 0) as "orderPnlView_d#2_dy0#2_d_m1_d_m1_d_m2" on ("orderPnlView_d#2_dy0#2_d_m1_d_m1_d_m2".ORDER_ID = "root".ID)', $result);
 }
 
-function <<test.Test>> meta::relational::tests::projection::window::testProjectWindowColumnSnowflake():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::window::testProjectWindowColumnSnowflake():Boolean[1]
 {
    let func = {|
-      meta::relational::tests::model::simple::Person.all()
+      meta::external::store::relational::tests::model::simple::Person.all()
          ->project([
             col(p|$p.lastName, 'lastName'),
             col(window(p|$p.firstName), sortAsc(p|$p.lastName), func(p|$p.age->toOne(), y|$y->average()), 'ageAverageWindow')

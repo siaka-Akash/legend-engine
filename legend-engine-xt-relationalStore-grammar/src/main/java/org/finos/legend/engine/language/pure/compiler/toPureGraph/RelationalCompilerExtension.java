@@ -70,31 +70,31 @@ import org.finos.legend.pure.generated.Root_meta_pure_alloy_connections_alloy_sp
 import org.finos.legend.pure.generated.Root_meta_pure_functions_collection_List_Impl;
 import org.finos.legend.pure.generated.Root_meta_pure_metamodel_type_generics_GenericType_Impl;
 import org.finos.legend.pure.generated.Root_meta_pure_metamodel_valuespecification_InstanceValue_Impl;
-import org.finos.legend.pure.generated.Root_meta_relational_mapping_GroupByMapping_Impl;
-import org.finos.legend.pure.generated.Root_meta_relational_mapping_RelationalAssociationImplementation_Impl;
-import org.finos.legend.pure.generated.Root_meta_relational_mapping_RootRelationalInstanceSetImplementation_Impl;
-import org.finos.legend.pure.generated.Root_meta_relational_metamodel_Database_Impl;
-import org.finos.legend.pure.generated.Root_meta_relational_metamodel_TableAlias_Impl;
-import org.finos.legend.pure.generated.Root_meta_relational_runtime_RelationalExecutionContext_Impl;
+import org.finos.legend.pure.generated.Root_meta_external_store_relational_mapping_GroupByMapping_Impl;
+import org.finos.legend.pure.generated.Root_meta_external_store_relational_mapping_RelationalAssociationImplementation_Impl;
+import org.finos.legend.pure.generated.Root_meta_external_store_relational_mapping_RootRelationalInstanceSetImplementation_Impl;
+import org.finos.legend.pure.generated.Root_meta_external_store_relational_metamodel_Database_Impl;
+import org.finos.legend.pure.generated.Root_meta_external_store_relational_metamodel_TableAlias_Impl;
+import org.finos.legend.pure.generated.Root_meta_external_store_relational_runtime_RelationalExecutionContext_Impl;
 import org.finos.legend.pure.generated.core_relational_relational_runtime_connection_postprocessor;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.AssociationImplementation;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.EmbeddedSetImplementation;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.Mapping;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.SetImplementation;
-import org.finos.legend.pure.m3.coreinstance.meta.pure.mapping.aggregationAware.AggregationAwareSetImplementation;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.aggregationAware.AggregationAwareSetImplementation;
 import org.finos.legend.pure.m3.coreinstance.meta.pure.metamodel.valuespecification.ValueSpecification;
-import org.finos.legend.pure.m3.coreinstance.meta.pure.store.Store;
-import org.finos.legend.pure.m3.coreinstance.meta.relational.mapping.EmbeddedRelationalInstanceSetImplementation;
-import org.finos.legend.pure.m3.coreinstance.meta.relational.mapping.RelationalAssociationImplementation;
-import org.finos.legend.pure.m3.coreinstance.meta.relational.mapping.RootRelationalInstanceSetImplementation;
-import org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.AliasAccessor;
-import org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.Column;
-import org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.RelationalOperationElement;
-import org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.TableAlias;
-import org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.TableAliasAccessor;
-import org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.relation.NamedRelation;
-import org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.relation.Relation;
-import org.finos.legend.pure.m3.coreinstance.meta.relational.runtime.PostProcessorWithParameter;
+import org.finos.legend.pure.m3.coreinstance.meta.pure.store.metamodel.Store;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.mapping.EmbeddedRelationalInstanceSetImplementation;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.mapping.RelationalAssociationImplementation;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.mapping.RootRelationalInstanceSetImplementation;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.AliasAccessor;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.Column;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.RelationalOperationElement;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.TableAlias;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.TableAliasAccessor;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.relation.NamedRelation;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.relation.Relation;
+import org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.runtime.PostProcessorWithParameter;
 import org.finos.legend.pure.runtime.java.compiled.generation.processors.support.map.PureMap;
 
 import java.util.Collections;
@@ -112,17 +112,17 @@ public class RelationalCompilerExtension implements IRelationalCompilerExtension
                 Database.class,
                 (Database srcDatabase, CompileContext context) ->
                 {
-                    org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.Database database = new Root_meta_relational_metamodel_Database_Impl(srcDatabase.name);
+                    org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.Database database = new Root_meta_external_store_relational_metamodel_Database_Impl(srcDatabase.name);
 
                     database._classifierGenericType(new Root_meta_pure_metamodel_type_generics_GenericType_Impl("")
-                            ._rawType(context.pureModel.getType("meta::relational::metamodel::Database")));
+                            ._rawType(context.pureModel.getType("meta::external::store::relational::metamodel::Database")));
 
                     context.pureModel.storesIndex.put(context.pureModel.buildPackageString(srcDatabase._package, srcDatabase.name), database);
                     return database;
                 },
                 (Database srcDatabase, CompileContext context) ->
                 {
-                    org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.Database database = HelperRelationalBuilder.getDatabase(context.pureModel.buildPackageString(srcDatabase._package, srcDatabase.name), srcDatabase.sourceInformation, context);
+                    org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.Database database = HelperRelationalBuilder.getDatabase(context.pureModel.buildPackageString(srcDatabase._package, srcDatabase.name), srcDatabase.sourceInformation, context);
                     if (!srcDatabase.includedStores.isEmpty())
                     {
                         database._includes(ListIterate.collect(srcDatabase.includedStores, include -> HelperRelationalBuilder.resolveDatabase(context.pureModel.addPrefixToTypeReference(include), srcDatabase.sourceInformation, context)));
@@ -131,19 +131,19 @@ public class RelationalCompilerExtension implements IRelationalCompilerExtension
                 },
                 (Database srcDatabase, CompileContext context) ->
                 {
-                    org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.Database database = HelperRelationalBuilder.getDatabase(context.pureModel.buildPackageString(srcDatabase._package, srcDatabase.name), srcDatabase.sourceInformation, context);
+                    org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.Database database = HelperRelationalBuilder.getDatabase(context.pureModel.buildPackageString(srcDatabase._package, srcDatabase.name), srcDatabase.sourceInformation, context);
                     ListIterate.forEach(srcDatabase.schemas, _schema -> HelperRelationalBuilder.processDatabaseSchemaViewsFirstPass(_schema, context, database));
                 },
                 (Database srcDatabase, CompileContext context) ->
                 {
-                    org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.Database database = HelperRelationalBuilder.getDatabase(context.pureModel.buildPackageString(srcDatabase._package, srcDatabase.name), srcDatabase.sourceInformation, context);
+                    org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.Database database = HelperRelationalBuilder.getDatabase(context.pureModel.buildPackageString(srcDatabase._package, srcDatabase.name), srcDatabase.sourceInformation, context);
                     // TODO checkForDuplicatesByName for filters/joins
                     database._joins(srcDatabase.joins == null ? Lists.fixedSize.empty() : ListIterate.collect(srcDatabase.joins, join -> HelperRelationalBuilder.processDatabaseJoin(join, context, database)))
                             ._filters(srcDatabase.filters == null ? Lists.fixedSize.empty() : ListIterate.collect(srcDatabase.filters, filter -> HelperRelationalBuilder.processDatabaseFilter(filter, context, database)));
                 },
                 (Database srcDatabase, CompileContext context) ->
                 {
-                    org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.Database database = HelperRelationalBuilder.getDatabase(context.pureModel.buildPackageString(srcDatabase._package, srcDatabase.name), srcDatabase.sourceInformation, context);
+                    org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.Database database = HelperRelationalBuilder.getDatabase(context.pureModel.buildPackageString(srcDatabase._package, srcDatabase.name), srcDatabase.sourceInformation, context);
                     ListIterate.forEach(srcDatabase.schemas, _schema -> HelperRelationalBuilder.processDatabaseSchemaViewsSecondPass(_schema, context, database));
                 }
         ));
@@ -159,14 +159,14 @@ public class RelationalCompilerExtension implements IRelationalCompilerExtension
                     {
                         RootRelationalClassMapping classMapping = (RootRelationalClassMapping) cm;
                         String id = classMapping.id != null ? classMapping.id : getElementFullPath(context.resolveClass(classMapping._class, classMapping.classSourceInformation), context.pureModel.getExecutionSupport()).replaceAll("::", "_");
-                        final RootRelationalInstanceSetImplementation res = new Root_meta_relational_mapping_RootRelationalInstanceSetImplementation_Impl(id)._id(id);
+                        final RootRelationalInstanceSetImplementation res = new Root_meta_external_store_relational_mapping_RootRelationalInstanceSetImplementation_Impl(id)._id(id);
                         MutableList<RelationalOperationElement> groupByColumns = ListIterate.collect(classMapping.groupBy, relationalOperationElement -> HelperRelationalBuilder.processRelationalOperationElement(relationalOperationElement, context, Maps.mutable.empty(), Lists.mutable.empty()));
-                        org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.TableAlias mainTableAlias = null;
+                        org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.TableAlias mainTableAlias = null;
                         // user has defined main table
                         if (classMapping.mainTable != null)
                         {
                             Relation pureTable = HelperRelationalBuilder.getRelation(classMapping.mainTable, context);
-                            mainTableAlias = new Root_meta_relational_metamodel_TableAlias_Impl("")
+                            mainTableAlias = new Root_meta_external_store_relational_metamodel_TableAlias_Impl("")
                                     ._relationalElement(pureTable)
                                     ._database(HelperRelationalBuilder.resolveDatabase(classMapping.mainTable.getDb(), classMapping.mainTable.sourceInformation, context));
                         }
@@ -181,9 +181,9 @@ public class RelationalCompilerExtension implements IRelationalCompilerExtension
                         }
                         if (!classMapping.groupBy.isEmpty())
                         {
-                            res._groupBy(new Root_meta_relational_mapping_GroupByMapping_Impl("")._columns(groupByColumns));
+                            res._groupBy(new Root_meta_external_store_relational_mapping_GroupByMapping_Impl("")._columns(groupByColumns));
                         }
-                        MutableList<org.finos.legend.pure.m3.coreinstance.meta.relational.mapping.EmbeddedRelationalInstanceSetImplementation> embeddedRelationalPropertyMappings = Lists.mutable.empty();
+                        MutableList<org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.mapping.EmbeddedRelationalInstanceSetImplementation> embeddedRelationalPropertyMappings = Lists.mutable.empty();
                         MutableMap<String, TableAlias> tableAliasesMap = Maps.mutable.empty();
                         HelperRelationalBuilder.processRelationalClassMapping(classMapping, context, res, res, parentMapping, embeddedRelationalPropertyMappings, HelperMappingBuilder.getAllEnumerationMappings(parentMapping), tableAliasesMap);
                         // user has not defined mainTable and the processing of mainTableAlias is complete (done with processing of class mapping)
@@ -191,7 +191,7 @@ public class RelationalCompilerExtension implements IRelationalCompilerExtension
                         {
                             MutableSet<TableAlias> tableAliases = tableAliasesMap.valuesView().toSet();
                             MutableSet<RelationalOperationElement> tables = tableAliases.collect(AliasAccessor::_relationalElement);
-                            MutableSet<org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.Database> databases = tableAliases.collect(TableAliasAccessor::_database);
+                            MutableSet<org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.Database> databases = tableAliases.collect(TableAliasAccessor::_database);
 
                             // if classMapping is extending another class the main table can be resolved in ExtraClassMappingSecondPassProcessors
                             if ((tables.size() == 0 && classMapping.extendsClassMappingId == null) || tables.size() > 1)
@@ -205,7 +205,7 @@ public class RelationalCompilerExtension implements IRelationalCompilerExtension
 
                             if (tables.size() == 1 && databases.size() == 1)
                             {
-                                mainTableAlias = new Root_meta_relational_metamodel_TableAlias_Impl("");
+                                mainTableAlias = new Root_meta_external_store_relational_metamodel_TableAlias_Impl("");
                                 mainTableAlias._relationalElement(tables.toList().getFirst());
                                 mainTableAlias._database(databases.toList().getFirst());
                                 res._mainTableAlias(mainTableAlias);
@@ -302,7 +302,7 @@ public class RelationalCompilerExtension implements IRelationalCompilerExtension
                     if (associationMapping instanceof RelationalAssociationMapping)
                     {
                         RelationalAssociationMapping relationalAssociationImplementation = (RelationalAssociationMapping) associationMapping;
-                        RelationalAssociationImplementation base = new Root_meta_relational_mapping_RelationalAssociationImplementation_Impl("");
+                        RelationalAssociationImplementation base = new Root_meta_external_store_relational_mapping_RelationalAssociationImplementation_Impl("");
                         final org.finos.legend.pure.m3.coreinstance.meta.pure.metamodel.relationship.Association pureAssociation = context.resolveAssociation(relationalAssociationImplementation.association, associationMapping.sourceInformation);
                         MutableList<EmbeddedRelationalInstanceSetImplementation> embeddedRelationalPropertyMappings = Lists.mutable.empty();
                         MutableList<Store> stores = ListIterate.collect(relationalAssociationImplementation.stores, context::resolveStore);
@@ -398,7 +398,7 @@ public class RelationalCompilerExtension implements IRelationalCompilerExtension
                 MutableMap<Relation, org.finos.legend.pure.m3.coreinstance.meta.pure.functions.collection.List<Column>> fksByTable = Maps.mutable.empty();
                 ListIterate.forEach(relationalContext.importDataFlowFkCols, fks ->
                 {
-                    org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.Schema schema = ((org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.Database) context.pureModel.getStore(fks.table.getDb()))
+                    org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.Schema schema = ((org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.Database) context.pureModel.getStore(fks.table.getDb()))
                             ._schemas().detect(s -> s._name().equals(fks.table.schema));
                     RichIterable<? extends NamedRelation> relations = fks.table._type.equals("Table")
                             ? schema._tables()
@@ -410,7 +410,7 @@ public class RelationalCompilerExtension implements IRelationalCompilerExtension
                     ).select(Objects::nonNull);
                     fksByTable.put(table, new Root_meta_pure_functions_collection_List_Impl("")._values(columns));
                 });
-                return new Root_meta_relational_runtime_RelationalExecutionContext_Impl("")
+                return new Root_meta_external_store_relational_runtime_RelationalExecutionContext_Impl("")
                         ._queryTimeOutInSeconds(relationalContext.queryTimeOutInSeconds)
                         ._enableConstraints(relationalContext.enableConstraints)
                         ._addDriverTablePkForProject(relationalContext.addDriverTablePkForProject)
@@ -431,9 +431,9 @@ public class RelationalCompilerExtension implements IRelationalCompilerExtension
     {
         return Collections.singletonList((handlers) ->
                 Lists.mutable.with(
-                        new FunctionHandlerDispatchBuilderInfo("meta::relational::functions::database::tableReference_Database_1__String_1__String_1__Table_1_", (List<ValueSpecification> ps) -> ps.size() == 3 && handlers.isOne(ps.get(0)._multiplicity()) && ("Nil".equals(ps.get(0)._genericType()._rawType()._name()) || "Database".equals(ps.get(0)._genericType()._rawType()._name())) && handlers.isOne(ps.get(1)._multiplicity()) && ("Nil".equals(ps.get(1)._genericType()._rawType()._name()) || "String".equals(ps.get(1)._genericType()._rawType()._name())) && handlers.isOne(ps.get(2)._multiplicity()) && ("Nil".equals(ps.get(2)._genericType()._rawType()._name()) || "String".equals(ps.get(2)._genericType()._rawType()._name()))),
-                        new FunctionHandlerDispatchBuilderInfo("meta::relational::functions::database::viewReference_Database_1__String_1__String_1__View_1_", (List<ValueSpecification> ps) -> ps.size() == 3 && handlers.isOne(ps.get(0)._multiplicity()) && ("Nil".equals(ps.get(0)._genericType()._rawType()._name()) || "Database".equals(ps.get(0)._genericType()._rawType()._name())) && handlers.isOne(ps.get(1)._multiplicity()) && ("Nil".equals(ps.get(1)._genericType()._rawType()._name()) || "String".equals(ps.get(1)._genericType()._rawType()._name())) && handlers.isOne(ps.get(2)._multiplicity()) && ("Nil".equals(ps.get(2)._genericType()._rawType()._name()) || "String".equals(ps.get(2)._genericType()._rawType()._name()))),
-                        new FunctionHandlerDispatchBuilderInfo("meta::relational::milestoning::unknownDefaultBusinessDate__Date_1_", (List<ValueSpecification> ps) -> ps.size() == 0)
+                        new FunctionHandlerDispatchBuilderInfo("meta::external::store::relational::functions::database::tableReference_Database_1__String_1__String_1__Table_1_", (List<ValueSpecification> ps) -> ps.size() == 3 && handlers.isOne(ps.get(0)._multiplicity()) && ("Nil".equals(ps.get(0)._genericType()._rawType()._name()) || "Database".equals(ps.get(0)._genericType()._rawType()._name())) && handlers.isOne(ps.get(1)._multiplicity()) && ("Nil".equals(ps.get(1)._genericType()._rawType()._name()) || "String".equals(ps.get(1)._genericType()._rawType()._name())) && handlers.isOne(ps.get(2)._multiplicity()) && ("Nil".equals(ps.get(2)._genericType()._rawType()._name()) || "String".equals(ps.get(2)._genericType()._rawType()._name()))),
+                        new FunctionHandlerDispatchBuilderInfo("meta::external::store::relational::functions::database::viewReference_Database_1__String_1__String_1__View_1_", (List<ValueSpecification> ps) -> ps.size() == 3 && handlers.isOne(ps.get(0)._multiplicity()) && ("Nil".equals(ps.get(0)._genericType()._rawType()._name()) || "Database".equals(ps.get(0)._genericType()._rawType()._name())) && handlers.isOne(ps.get(1)._multiplicity()) && ("Nil".equals(ps.get(1)._genericType()._rawType()._name()) || "String".equals(ps.get(1)._genericType()._rawType()._name())) && handlers.isOne(ps.get(2)._multiplicity()) && ("Nil".equals(ps.get(2)._genericType()._rawType()._name()) || "String".equals(ps.get(2)._genericType()._rawType()._name()))),
+                        new FunctionHandlerDispatchBuilderInfo("meta::external::store::relational::milestoning::unknownDefaultBusinessDate__Date_1_", (List<ValueSpecification> ps) -> ps.size() == 0)
                 ));
     }
 
@@ -443,26 +443,26 @@ public class RelationalCompilerExtension implements IRelationalCompilerExtension
         return Collections.singletonList((handlers) ->
                 Lists.mutable.with(
                         new FunctionHandlerRegistrationInfo(null,
-                                handlers.h("meta::relational::milestoning::unknownDefaultBusinessDate__Date_1_", false, ps -> handlers.res("Date", "one"))
+                                handlers.h("meta::external::store::relational::milestoning::unknownDefaultBusinessDate__Date_1_", false, ps -> handlers.res("Date", "one"))
                         ),
                         new FunctionHandlerRegistrationInfo(null,
-                                handlers.h("meta::pure::tds::tableToTDS_Table_1__TableTDS_1_", false, ps -> handlers.res("meta::relational::mapping::TableTDS", "one"))
+                                handlers.h("meta::pure::tds::tableToTDS_Table_1__TableTDS_1_", false, ps -> handlers.res("meta::external::store::relational::mapping::TableTDS", "one"))
                         ),
                         new FunctionHandlerRegistrationInfo(null,
-                                handlers.h("meta::pure::tds::viewToTDS_View_1__TableTDS_1_", false, ps -> handlers.res("meta::relational::mapping::TableTDS", "one"))
+                                handlers.h("meta::pure::tds::viewToTDS_View_1__TableTDS_1_", false, ps -> handlers.res("meta::external::store::relational::mapping::TableTDS", "one"))
                         ),
                         new FunctionHandlerRegistrationInfo(Lists.mutable.with(2, 0),
-                                // meta::pure::tds::project(tds:meta::relational::mapping::TableTDS[1], columnFunctions:ColumnSpecification<TDSRow>[*]):TabularDataSet[1]
+                                // meta::pure::tds::project(tds:meta::external::store::relational::mapping::TableTDS[1], columnFunctions:ColumnSpecification<TDSRow>[*]):TabularDataSet[1]
                                 handlers.h("meta::pure::tds::project_TableTDS_1__ColumnSpecification_MANY__TabularDataSet_1_", false, ps -> handlers.res("meta::pure::tds::TabularDataSet", "one"), ps -> handlers.typeOne(ps.get(0), "TableTDS"))
                         ),
                         new FunctionHandlerRegistrationInfo(null,
                                 handlers.h("meta::pure::functions::asserts::assertJsonStringsEqual_String_1__String_1__Boolean_1_", false, ps -> handlers.res("Boolean", "one"), ps -> true)
                         ),
                         new FunctionHandlerRegistrationInfo(null,
-                                handlers.h("meta::relational::functions::database::tableReference_Database_1__String_1__String_1__Table_1_", false, ps -> handlers.res("meta::relational::metamodel::relation::Table", "one"))
+                                handlers.h("meta::external::store::relational::functions::database::tableReference_Database_1__String_1__String_1__Table_1_", false, ps -> handlers.res("meta::external::store::relational::metamodel::relation::Table", "one"))
                         ),
                         new FunctionHandlerRegistrationInfo(null,
-                                handlers.h("meta::relational::functions::database::viewReference_Database_1__String_1__String_1__View_1_", false, ps -> handlers.res("meta::relational::metamodel::relation::View", "one"))
+                                handlers.h("meta::external::store::relational::functions::database::viewReference_Database_1__String_1__String_1__View_1_", false, ps -> handlers.res("meta::external::store::relational::metamodel::relation::View", "one"))
                         )
                 ));
     }
@@ -498,12 +498,12 @@ public class RelationalCompilerExtension implements IRelationalCompilerExtension
     {
         return Collections.singletonList(registerElementForPathToElement ->
         {
-            registerElementForPathToElement.value("meta::relational::mapping", Lists.mutable.with(
+            registerElementForPathToElement.value("meta::external::store::relational::contract", Lists.mutable.with(
                     "supports_FunctionExpression_1__Boolean_1_",
                     "supportsStream_FunctionExpression_1__Boolean_1_",
                     "planExecution_StoreQuery_1__RoutedValueSpecification_$0_1$__Mapping_$0_1$__Runtime_$0_1$__ExecutionContext_1__RouterExtension_MANY__DebugContext_1__ExecutionNode_1_"
             ));
-            registerElementForPathToElement.value("meta::pure::mapping::aggregationAware", Lists.mutable.with(
+            registerElementForPathToElement.value("meta::external::store::aggregationAware::contract", Lists.mutable.with(
                     "supports_FunctionExpression_1__Boolean_1_",
                     "planExecution_StoreQuery_1__RoutedValueSpecification_$0_1$__Mapping_$0_1$__Runtime_$0_1$__ExecutionContext_1__RouterExtension_MANY__DebugContext_1__ExecutionNode_1_",
                     "execution_StoreQuery_1__RoutedValueSpecification_$0_1$__Mapping_1__Runtime_1__ExecutionContext_1__RouterExtension_MANY__DebugContext_1__Result_1_"
@@ -523,7 +523,7 @@ public class RelationalCompilerExtension implements IRelationalCompilerExtension
             {
                 DatabaseInstance databaseInstance = (DatabaseInstance) valueSpecification;
                 return new Root_meta_pure_metamodel_valuespecification_InstanceValue_Impl("")
-                        ._genericType(new Root_meta_pure_metamodel_type_generics_GenericType_Impl("")._rawType(context.pureModel.getType("meta::relational::metamodel::Database")))
+                        ._genericType(new Root_meta_pure_metamodel_type_generics_GenericType_Impl("")._rawType(context.pureModel.getType("meta::external::store::relational::metamodel::Database")))
                         ._multiplicity(context.pureModel.getMultiplicity("one"))
                         ._values(Lists.mutable.with(context.resolveStore(databaseInstance.fullPath, databaseInstance.sourceInformation)));
             }
@@ -573,7 +573,7 @@ public class RelationalCompilerExtension implements IRelationalCompilerExtension
     }
 
     @Override
-    public List<Function3<org.finos.legend.engine.protocol.pure.v1.model.packageableElement.store.relational.model.milestoning.Milestoning, CompileContext, Multimap<String, Column>, org.finos.legend.pure.m3.coreinstance.meta.relational.metamodel.relation.Milestoning>> getExtraMilestoningProcessors()
+    public List<Function3<org.finos.legend.engine.protocol.pure.v1.model.packageableElement.store.relational.model.milestoning.Milestoning, CompileContext, Multimap<String, Column>, org.finos.legend.pure.m3.coreinstance.meta.external.store.relational.metamodel.relation.Milestoning>> getExtraMilestoningProcessors()
     {
         return Lists.mutable.with((spec, context, columnMap) -> HelperRelationalBuilder.visitMilestoning(spec, context, columnMap));
     }

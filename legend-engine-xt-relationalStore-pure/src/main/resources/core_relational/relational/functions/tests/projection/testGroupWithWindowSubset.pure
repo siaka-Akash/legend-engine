@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::csv::*;
-import meta::relational::mapping::*;
-import meta::relational::tests::advanced::contractmoneyscenario::*;
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::advanced::contractmoneyscenario::*;
+import meta::external::store::relational::tests::model::simple::*;
 
-function <<test.Test>> meta::relational::tests::projection::testGroupByWithWindowSubset():Any[*]
+function <<test.Test>> meta::external::store::relational::tests::projection::testGroupByWithWindowSubset():Any[*]
 {
-   meta::relational::tests::advanced::contractmoneyscenario::setUp();
-   let ContractMoney = meta::relational::tests::advanced::contractmoneyscenario::ContractMoney;   
+   meta::external::store::relational::tests::advanced::contractmoneyscenario::setUp();
+   let ContractMoney = meta::external::store::relational::tests::advanced::contractmoneyscenario::ContractMoney;
    let results = execute(|Contract.all()->groupByWithWindowSubset([
                                                     c |$c.id, 
                                                     c|$c.money.amount ,

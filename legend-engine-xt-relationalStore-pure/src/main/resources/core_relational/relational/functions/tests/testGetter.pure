@@ -12,24 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::mapping::*;
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::*;
 import meta::pure::profiles::*;
 
-function <<test.BeforePackage>> meta::relational::tests::getter::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::getter::setUp():Boolean[1]
 {
     createTablesAndFillDb();
 }
 
-function <<test.Test>> meta::relational::tests::getter::testSimpleGetter():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::getter::testSimpleGetter():Boolean[1]
 {
    let result = execute(|Person.all(), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSameElements(['Firm X', 'Firm X', 'Firm X', 'Firm X', 'Firm A', 'Firm B', 'Firm C'], $result.values->map(p|$p.firm.legalName));
 }
 
 
-function <<test.Test>>   meta::relational::tests::getter::testGetterTwice():Boolean[1]
+function <<test.Test>>   meta::external::store::relational::tests::getter::testGetterTwice():Boolean[1]
 {
    let result = execute(|Firm.all()->filter(f | $f.legalName == 'Firm A'), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values, 1);

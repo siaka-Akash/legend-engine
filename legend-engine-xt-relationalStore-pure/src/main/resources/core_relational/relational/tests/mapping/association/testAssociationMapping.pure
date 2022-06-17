@@ -12,44 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::*;
+import meta::external::store::relational::tests::*;
 import meta::pure::profiles::*;
 import meta::pure::mapping::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::runtime::*;
-import meta::relational::tests::model::simple::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::tests::model::simple::*;
 
-import meta::relational::tests::mapping::association::*;
+import meta::external::store::relational::tests::mapping::association::*;
 
 
-function <<test.BeforePackage>> meta::relational::tests::mapping::association::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::mapping::association::setUp():Boolean[1]
 {
     createTablesAndFillDb();
 }
 
 
-function <<test.Test>> meta::relational::tests::mapping::association::testPersonToFirm():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::association::testPersonToFirm():Boolean[1]
 {
    let result1 = execute(|Person.all()->project([p|$p.firstName, p|$p.firm.legalName], ['name', 'firm']), associationMappingWithIds, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values->at(0);
    assertEquals(7, $result1.rows->size());
    assertSameElements(['Anthony Firm X', 'David Firm C', 'Fabrice Firm A', 'John Firm X', 'John Firm X', 'Oliver Firm B', 'Peter Firm X'], $result1.rows->map(r|$r.getString('name')+' '+$r.getString('firm')->toString()));
 }
 
-function <<test.Test>> meta::relational::tests::mapping::association::testFirmToEmployees():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::association::testFirmToEmployees():Boolean[1]
 {
    let result1 = execute(|Firm.all()->project([f|$f.legalName, f|$f.employees.firstName], ['legalName', 'employee']), associationMappingWithIds, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values->at(0);
    assertEquals(7, $result1.rows->size());
    assertSameElements(['Firm A Fabrice', 'Firm X Anthony', 'Firm X John', 'Firm X John', 'Firm X Peter', 'Firm C David', 'Firm B Oliver'], $result1.rows->map(r|$r.getString('legalName')+' '+$r.getString('employee')->toString()));
 }
 
-function <<test.Test>> meta::relational::tests::mapping::association::testPersonToFirmWithDefaults():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::association::testPersonToFirmWithDefaults():Boolean[1]
 {
    let result1 = execute(|Person.all()->project([p|$p.firstName, p|$p.firm.legalName], ['name', 'firm']), associationMappingWithDefaultIds, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values->at(0);
    assertEquals(7, $result1.rows->size());
    assertSameElements(['Anthony Firm X', 'David Firm C', 'Fabrice Firm A', 'John Firm X', 'John Firm X', 'Oliver Firm B', 'Peter Firm X'], $result1.rows->map(r|$r.getString('name')+' '+$r.getString('firm')->toString()));
 }
 
-function <<test.Test>> meta::relational::tests::mapping::association::testFirmToEmployeesWithDefaults():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::association::testFirmToEmployeesWithDefaults():Boolean[1]
 {
    let result1 = execute(|Firm.all()->project([f|$f.legalName, f|$f.employees.firstName], ['legalName', 'employee']), associationMappingWithDefaultIds, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values->at(0);
    assertEquals(7, $result1.rows->size());
@@ -57,33 +57,33 @@ function <<test.Test>> meta::relational::tests::mapping::association::testFirmTo
 }
 
 
-function <<test.Test>> meta::relational::tests::mapping::association::testFirmToEmployeesIncludes():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::association::testFirmToEmployeesIncludes():Boolean[1]
 {
    let result1 = execute(|Firm.all()->project([f|$f.legalName, f|$f.employees.firstName], ['legalName', 'employee']), associationMappingWithIncludes, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values->at(0);
    assertEquals(7, $result1.rows->size());
    assertSameElements(['Firm A Fabrice', 'Firm X Anthony', 'Firm X John', 'Firm X John', 'Firm X Peter', 'Firm C David', 'Firm B Oliver'], $result1.rows->map(r|$r.getString('legalName')+' '+$r.getString('employee')->toString()));
 }
 
-function <<test.Test>> meta::relational::tests::mapping::association::testPersonToFirmIncludes():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::association::testPersonToFirmIncludes():Boolean[1]
 {
    let result1 = execute(|Person.all()->project([p|$p.firstName, p|$p.firm.legalName], ['name', 'firm']), associationMappingWithIncludes, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values->at(0);
    assertEquals(7, $result1.rows->size());
    assertSameElements(['Anthony Firm X', 'David Firm C', 'Fabrice Firm A', 'John Firm X', 'John Firm X', 'Oliver Firm B', 'Peter Firm X'], $result1.rows->map(r|$r.getString('name')+' '+$r.getString('firm')->toString()));
 }
 
-function <<test.Test>> meta::relational::tests::mapping::association::testPersonToFirmWithDifferentRootMapping():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::association::testPersonToFirmWithDifferentRootMapping():Boolean[1]
 {
    let result1 = execute(|Person.all()->project([p|$p.firstName, p|$p.firm.legalName, p|$p.firm.ceo.firstName], ['name', 'firm', 'ceo']), associationMappingWithDifferentRoot, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions()).values->at(0);
    assertEquals(7, $result1.rows->size());
 }
 
 ###Mapping
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::mapping::association::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::mapping::association::*;
+import meta::external::store::relational::tests::*;
 
 
-Mapping meta::relational::tests::mapping::association::associationMappingWithIds
+Mapping meta::external::store::relational::tests::mapping::association::associationMappingWithIds
 (
 
    Person[per1] : Relational
@@ -114,7 +114,7 @@ Mapping meta::relational::tests::mapping::association::associationMappingWithIds
    }
 )
 
-Mapping meta::relational::tests::mapping::association::associationMapping1
+Mapping meta::external::store::relational::tests::mapping::association::associationMapping1
 (
       Person[per1] : Relational
             {
@@ -130,7 +130,7 @@ Mapping meta::relational::tests::mapping::association::associationMapping1
             }
 )
 
-Mapping meta::relational::tests::mapping::association::associationMapping2
+Mapping meta::external::store::relational::tests::mapping::association::associationMapping2
 (
       Firm[fir1] : Relational
           {
@@ -138,10 +138,10 @@ Mapping meta::relational::tests::mapping::association::associationMapping2
           }
 )
 
-Mapping meta::relational::tests::mapping::association::associationMapping3
+Mapping meta::external::store::relational::tests::mapping::association::associationMapping3
 (
-   include meta::relational::tests::mapping::association::associationMapping1
-   include meta::relational::tests::mapping::association::associationMapping2
+   include meta::external::store::relational::tests::mapping::association::associationMapping1
+   include meta::external::store::relational::tests::mapping::association::associationMapping2
    
 
    Employment : Relational
@@ -154,14 +154,14 @@ Mapping meta::relational::tests::mapping::association::associationMapping3
    }
 )
 
-Mapping meta::relational::tests::mapping::association::associationMappingWithIncludes
+Mapping meta::external::store::relational::tests::mapping::association::associationMappingWithIncludes
 (
-   include meta::relational::tests::mapping::association::associationMapping3
+   include meta::external::store::relational::tests::mapping::association::associationMapping3
 )
 
 
 
-Mapping meta::relational::tests::mapping::association::associationMappingWithDefaultIds
+Mapping meta::external::store::relational::tests::mapping::association::associationMappingWithDefaultIds
 (
 
    Person : Relational
@@ -193,7 +193,7 @@ Mapping meta::relational::tests::mapping::association::associationMappingWithDef
 )
 
 
-Mapping meta::relational::tests::mapping::association::associationMappingWithDifferentRoot
+Mapping meta::external::store::relational::tests::mapping::association::associationMappingWithDifferentRoot
 (
    
    *Person[rp] : Relational

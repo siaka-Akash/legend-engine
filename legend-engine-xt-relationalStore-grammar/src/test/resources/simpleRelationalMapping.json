@@ -14,7 +14,7 @@
             "schema": "productSchema",
             "_type": "table",
             "table": "productTable",
-            "database": "meta::relational::tests::dbInc"
+            "database": "meta::external::store::relational::tests::dbInc"
           },
           "_type": "relational",
           "root": true,
@@ -29,7 +29,7 @@
                   "schema": "productSchema",
                   "_type": "table",
                   "table": "productTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               "target": "",
@@ -45,7 +45,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "Product_Synonym"
                   }
                 ]
@@ -66,7 +66,7 @@
                 "schema": "productSchema",
                 "_type": "table",
                 "table": "productTable",
-                "database": "meta::relational::tests::dbInc"
+                "database": "meta::external::store::relational::tests::dbInc"
               }
             }
           ],
@@ -79,7 +79,7 @@
             "schema": "productSchema",
             "_type": "table",
             "table": "synonymTable",
-            "database": "meta::relational::tests::db"
+            "database": "meta::external::store::relational::tests::db"
           },
           "_type": "relational",
           "root": true,
@@ -94,7 +94,7 @@
                   "schema": "productSchema",
                   "_type": "table",
                   "table": "synonymTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -113,7 +113,7 @@
                   "schema": "productSchema",
                   "_type": "table",
                   "table": "synonymTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -133,7 +133,7 @@
                   "schema": "productSchema",
                   "_type": "table",
                   "table": "synonymTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -149,7 +149,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "Product_Synonym"
                   }
                 ]
@@ -170,7 +170,7 @@
                 "schema": "productSchema",
                 "_type": "table",
                 "table": "synonymTable",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               }
             }
           ],
@@ -183,7 +183,7 @@
             "schema": "default",
             "_type": "table",
             "table": "tradeTable",
-            "database": "meta::relational::tests::db"
+            "database": "meta::external::store::relational::tests::db"
           },
           "_type": "relational",
           "root": true,
@@ -198,7 +198,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "tradeTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -217,7 +217,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "tradeTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -233,7 +233,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "Trade_Account"
                   }
                 ]
@@ -250,7 +250,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "Trade_Product"
                   }
                 ]
@@ -271,7 +271,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "tradeTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -290,7 +290,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "tradeTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -311,12 +311,12 @@
                     "schema": "default",
                     "_type": "table",
                     "table": "tradeEventViewMaxTradeEventDate",
-                    "database": "meta::relational::tests::db"
+                    "database": "meta::external::store::relational::tests::db"
                   }
                 },
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "Trade_TradeEventViewMaxTradeEventDate"
                   }
                 ]
@@ -333,7 +333,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "Trade_TradeEvent"
                   }
                 ]
@@ -354,7 +354,7 @@
                 "schema": "default",
                 "_type": "table",
                 "table": "tradeTable",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               }
             }
           ],
@@ -367,7 +367,7 @@
             "schema": "default",
             "_type": "table",
             "table": "orderTable",
-            "database": "meta::relational::tests::db"
+            "database": "meta::external::store::relational::tests::db"
           },
           "_type": "relational",
           "root": true,
@@ -382,7 +382,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -401,7 +401,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -420,7 +420,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -439,7 +439,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -460,12 +460,12 @@
                     "schema": "default",
                     "_type": "table",
                     "table": "orderPnlView",
-                    "database": "meta::relational::tests::db"
+                    "database": "meta::external::store::relational::tests::db"
                   }
                 },
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "OrderPnlView_Order"
                   }
                 ]
@@ -482,11 +482,11 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "OrderPnlView_Order"
                   },
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "OrderPnlView_Person"
                   }
                 ]
@@ -517,12 +517,12 @@
                             "schema": "default",
                             "_type": "table",
                             "table": "orderPnlView",
-                            "database": "meta::relational::tests::db"
+                            "database": "meta::external::store::relational::tests::db"
                           }
                         },
                         "joins": [
                           {
-                            "db": "meta::relational::tests::db",
+                            "db": "meta::external::store::relational::tests::db",
                             "name": "OrderPnlView_Order"
                           }
                         ]
@@ -559,7 +559,7 @@
                 "schema": "default",
                 "_type": "table",
                 "table": "orderTable",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               }
             }
           ],
@@ -572,7 +572,7 @@
             "schema": "default",
             "_type": "table",
             "table": "orderPnlView",
-            "database": "meta::relational::tests::db"
+            "database": "meta::external::store::relational::tests::db"
           },
           "_type": "relational",
           "root": true,
@@ -587,7 +587,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderPnlView",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -606,7 +606,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderPnlView",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -621,7 +621,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "OrderPnlView_Order"
                   }
                 ]
@@ -642,7 +642,7 @@
                 "schema": "default",
                 "_type": "table",
                 "table": "orderPnlView",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               }
             }
           ],
@@ -655,7 +655,7 @@
             "schema": "default",
             "_type": "table",
             "table": "accountOrderPnlView",
-            "database": "meta::relational::tests::db"
+            "database": "meta::external::store::relational::tests::db"
           },
           "_type": "relational",
           "root": true,
@@ -670,7 +670,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "accountOrderPnlView",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -686,7 +686,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "AccountPnlView_Account"
                   }
                 ]
@@ -707,7 +707,7 @@
                 "schema": "default",
                 "_type": "table",
                 "table": "accountOrderPnlView",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               }
             }
           ],
@@ -720,7 +720,7 @@
             "schema": "default",
             "_type": "table",
             "table": "tradeEventTable",
-            "database": "meta::relational::tests::db"
+            "database": "meta::external::store::relational::tests::db"
           },
           "_type": "relational",
           "root": true,
@@ -735,7 +735,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "tradeEventTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -754,7 +754,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "tradeEventTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -769,7 +769,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "TradeEvent_Person"
                   }
                 ]
@@ -796,7 +796,7 @@
                         "schema": "default",
                         "_type": "table",
                         "table": "addressTable",
-                        "database": "meta::relational::tests::dbInc"
+                        "database": "meta::external::store::relational::tests::dbInc"
                       }
                     },
                     {
@@ -807,18 +807,18 @@
                         "schema": "default",
                         "_type": "table",
                         "table": "addressTable",
-                        "database": "meta::relational::tests::dbInc"
+                        "database": "meta::external::store::relational::tests::dbInc"
                       }
                     }
                   ]
                 },
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "TradeEvent_Person"
                   },
                   {
-                    "db": "meta::relational::tests::dbInc",
+                    "db": "meta::external::store::relational::tests::dbInc",
                     "name": "Address_Person"
                   }
                 ]
@@ -839,7 +839,7 @@
                 "schema": "default",
                 "_type": "table",
                 "table": "tradeEventTable",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               }
             }
           ],
@@ -852,7 +852,7 @@
             "schema": "default",
             "_type": "table",
             "table": "accountTable",
-            "database": "meta::relational::tests::db"
+            "database": "meta::external::store::relational::tests::db"
           },
           "_type": "relational",
           "root": true,
@@ -867,7 +867,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "accountTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -886,7 +886,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "accountTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -902,7 +902,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "Trade_Account"
                   }
                 ]
@@ -920,7 +920,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "Order_Account"
                   }
                 ]
@@ -938,7 +938,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "AccountPnlView_Account"
                   }
                 ]
@@ -959,7 +959,7 @@
                 "schema": "default",
                 "_type": "table",
                 "table": "accountTable",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               }
             }
           ],
@@ -972,7 +972,7 @@
             "schema": "default",
             "_type": "table",
             "table": "interactionTable",
-            "database": "meta::relational::tests::db"
+            "database": "meta::external::store::relational::tests::db"
           },
           "_type": "relational",
           "root": true,
@@ -987,7 +987,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "interactionTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -1006,7 +1006,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "interactionTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               "target": "",
@@ -1021,7 +1021,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "Interaction_Source"
                   }
                 ]
@@ -1038,7 +1038,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "Interaction_Target"
                   }
                 ]
@@ -1067,7 +1067,7 @@
                           "schema": "default",
                           "_type": "table",
                           "table": "interactionTable",
-                          "database": "meta::relational::tests::db"
+                          "database": "meta::external::store::relational::tests::db"
                         }
                       },
                       {
@@ -1104,12 +1104,12 @@
                     "schema": "default",
                     "_type": "table",
                     "table": "interactionViewMaxTime",
-                    "database": "meta::relational::tests::db"
+                    "database": "meta::external::store::relational::tests::db"
                   }
                 },
                 "joins": [
                   {
-                    "db": "meta::relational::tests::db",
+                    "db": "meta::external::store::relational::tests::db",
                     "name": "InteractionTable_InteractionViewMaxTime"
                   }
                 ]
@@ -1130,7 +1130,7 @@
                 "schema": "default",
                 "_type": "table",
                 "table": "interactionTable",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               }
             }
           ],
@@ -1140,13 +1140,13 @@
       ],
       "includedMappings": [
         {
-          "includedMapping": "meta::relational::tests::simpleRelationalMappingInc",
-          "sourceDatabasePath": "meta::relational::tests::dbInc",
-          "targetDatabasePath": "meta::relational::tests::db"
+          "includedMapping": "meta::external::store::relational::tests::simpleRelationalMappingInc",
+          "sourceDatabasePath": "meta::external::store::relational::tests::dbInc",
+          "targetDatabasePath": "meta::external::store::relational::tests::db"
         }
       ],
       "name": "simpleRelationalMapping",
-      "package": "meta::relational::tests",
+      "package": "meta::external::store::relational::tests",
       "enumerationMappings": [
         {
           "id": "SynonymEnum",
@@ -1177,7 +1177,7 @@
             "schema": "default",
             "_type": "table",
             "table": "personTable",
-            "database": "meta::relational::tests::dbInc"
+            "database": "meta::external::store::relational::tests::dbInc"
           },
           "_type": "relational",
           "root": true,
@@ -1192,7 +1192,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               "target": "",
@@ -1211,7 +1211,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               "target": "",
@@ -1230,7 +1230,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               "target": "",
@@ -1246,7 +1246,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::dbInc",
+                    "db": "meta::external::store::relational::tests::dbInc",
                     "name": "Firm_Person"
                   }
                 ]
@@ -1263,7 +1263,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::dbInc",
+                    "db": "meta::external::store::relational::tests::dbInc",
                     "name": "Address_Person"
                   }
                 ]
@@ -1280,7 +1280,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::dbInc",
+                    "db": "meta::external::store::relational::tests::dbInc",
                     "name": "Person_Location"
                   }
                 ]
@@ -1297,7 +1297,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::dbInc",
+                    "db": "meta::external::store::relational::tests::dbInc",
                     "name": "Person_Manager"
                   }
                 ]
@@ -1318,7 +1318,7 @@
                 "schema": "default",
                 "_type": "table",
                 "table": "personTable",
-                "database": "meta::relational::tests::dbInc"
+                "database": "meta::external::store::relational::tests::dbInc"
               }
             }
           ],
@@ -1331,7 +1331,7 @@
             "schema": "default",
             "_type": "table",
             "table": "firmTable",
-            "database": "meta::relational::tests::dbInc"
+            "database": "meta::external::store::relational::tests::dbInc"
           },
           "_type": "relational",
           "root": true,
@@ -1346,7 +1346,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "firmTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               "target": "",
@@ -1362,7 +1362,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::dbInc",
+                    "db": "meta::external::store::relational::tests::dbInc",
                     "name": "Firm_Person"
                   }
                 ]
@@ -1379,7 +1379,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::dbInc",
+                    "db": "meta::external::store::relational::tests::dbInc",
                     "name": "Address_Firm"
                   }
                 ]
@@ -1400,7 +1400,7 @@
                 "schema": "default",
                 "_type": "table",
                 "table": "firmTable",
-                "database": "meta::relational::tests::dbInc"
+                "database": "meta::external::store::relational::tests::dbInc"
               }
             }
           ],
@@ -1413,7 +1413,7 @@
             "schema": "default",
             "_type": "table",
             "table": "addressTable",
-            "database": "meta::relational::tests::dbInc"
+            "database": "meta::external::store::relational::tests::dbInc"
           },
           "_type": "relational",
           "root": true,
@@ -1428,7 +1428,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "addressTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               "target": "",
@@ -1447,7 +1447,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "addressTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               "target": "",
@@ -1467,7 +1467,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "addressTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               "target": "",
@@ -1486,7 +1486,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "addressTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               "target": "",
@@ -1505,7 +1505,7 @@
                 "schema": "default",
                 "_type": "table",
                 "table": "addressTable",
-                "database": "meta::relational::tests::dbInc"
+                "database": "meta::external::store::relational::tests::dbInc"
               }
             }
           ],
@@ -1518,7 +1518,7 @@
             "schema": "default",
             "_type": "table",
             "table": "locationTable",
-            "database": "meta::relational::tests::dbInc"
+            "database": "meta::external::store::relational::tests::dbInc"
           },
           "_type": "relational",
           "root": true,
@@ -1533,7 +1533,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "locationTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               "target": "",
@@ -1552,7 +1552,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "locationTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               "target": "",
@@ -1571,7 +1571,7 @@
                 "schema": "default",
                 "_type": "table",
                 "table": "locationTable",
-                "database": "meta::relational::tests::dbInc"
+                "database": "meta::external::store::relational::tests::dbInc"
               }
             }
           ],
@@ -1584,7 +1584,7 @@
             "schema": "default",
             "_type": "table",
             "table": "placeOfInterestTable",
-            "database": "meta::relational::tests::dbInc"
+            "database": "meta::external::store::relational::tests::dbInc"
           },
           "_type": "relational",
           "root": true,
@@ -1599,7 +1599,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "placeOfInterestTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               "target": "",
@@ -1618,7 +1618,7 @@
                 "schema": "default",
                 "_type": "table",
                 "table": "placeOfInterestTable",
-                "database": "meta::relational::tests::dbInc"
+                "database": "meta::external::store::relational::tests::dbInc"
               }
             },
             {
@@ -1629,7 +1629,7 @@
                 "schema": "default",
                 "_type": "table",
                 "table": "placeOfInterestTable",
-                "database": "meta::relational::tests::dbInc"
+                "database": "meta::external::store::relational::tests::dbInc"
               }
             }
           ],
@@ -1638,7 +1638,7 @@
         }
       ],
       "name": "simpleRelationalMappingInc",
-      "package": "meta::relational::tests",
+      "package": "meta::external::store::relational::tests",
       "enumerationMappings": [
         {
           "id": "GE",
@@ -1666,7 +1666,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::dbInc",
+                    "db": "meta::external::store::relational::tests::dbInc",
                     "name": "location_PlaceOfInterest"
                   }
                 ]
@@ -1684,7 +1684,7 @@
                 "_type": "elemtWithJoins",
                 "joins": [
                   {
-                    "db": "meta::relational::tests::dbInc",
+                    "db": "meta::external::store::relational::tests::dbInc",
                     "name": "location_PlaceOfInterest"
                   }
                 ]
@@ -1697,7 +1697,7 @@
             }
           ],
           "stores": [
-            "meta::relational::tests::dbInc"
+            "meta::external::store::relational::tests::dbInc"
           ]
         }
       ]
@@ -7629,7 +7629,7 @@
       {
         "_type": "class",
         "name": "Person",
-        "package": "meta::relational::tests::mapping::union::extend",
+        "package": "meta::external::store::relational::tests::mapping::union::extend",
         "superTypes": [
           "meta::pure::tests::model::simple::Person"
         ]
@@ -7691,7 +7691,7 @@
       {
         "_type": "class",
         "name": "Firm",
-        "package": "meta::relational::tests::mapping::union::extend",
+        "package": "meta::external::store::relational::tests::mapping::union::extend",
         "superTypes": [
           "meta::pure::tests::model::simple::Firm"
         ]
@@ -7843,7 +7843,7 @@
       {
         "_type": "class",
         "name": "Address",
-        "package": "meta::relational::tests::mapping::union::extend",
+        "package": "meta::external::store::relational::tests::mapping::union::extend",
         "superTypes": [
           "meta::pure::tests::model::simple::Address"
         ]
@@ -7851,7 +7851,7 @@
       {
         "_type": "class",
         "name": "MyProduct",
-        "package": "meta::relational::tests::mapping::subType",
+        "package": "meta::external::store::relational::tests::mapping::subType",
         "superTypes": [
           "meta::pure::tests::model::simple::Product"
         ]
@@ -8443,7 +8443,7 @@
       {
         "_type": "class",
         "name": "CreditRating",
-        "package": "meta::relational::tests::mapping::subType",
+        "package": "meta::external::store::relational::tests::mapping::subType",
         "properties": [
           {
             "name": "description",
@@ -8932,7 +8932,7 @@
       {
         "_type": "association",
         "name": "ProductRating",
-        "package": "meta::relational::tests::mapping::subType",
+        "package": "meta::external::store::relational::tests::mapping::subType",
         "properties": [
           {
             "name": "product",
@@ -8940,7 +8940,7 @@
               "lowerBound": 1,
               "upperBound": 1
             },
-            "type": "meta::relational::tests::mapping::subType::MyProduct"
+            "type": "meta::external::store::relational::tests::mapping::subType::MyProduct"
           },
           {
             "name": "rating",
@@ -8948,7 +8948,7 @@
               "lowerBound": 0,
               "upperBound": 1
             },
-            "type": "meta::relational::tests::mapping::subType::CreditRating"
+            "type": "meta::external::store::relational::tests::mapping::subType::CreditRating"
           }
         ]
       },
@@ -9139,7 +9139,7 @@
       "_type": "pure",
       "packageableElementPointers": [
         {
-          "path": "meta::relational::tests::simpleRelationalMapping",
+          "path": "meta::external::store::relational::tests::simpleRelationalMapping",
           "type": "MAPPING"
         }
       ],
@@ -9164,7 +9164,7 @@
                   "schema": "productSchema",
                   "_type": "table",
                   "table": "synonymTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9175,7 +9175,7 @@
                   "schema": "productSchema",
                   "_type": "table",
                   "table": "productTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -9195,7 +9195,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "tradeTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9206,7 +9206,7 @@
                   "schema": "productSchema",
                   "_type": "table",
                   "table": "productTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -9226,7 +9226,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "tradeTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9237,7 +9237,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "accountTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               }
             ]
@@ -9257,7 +9257,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "interactionTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9268,7 +9268,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -9288,7 +9288,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "interactionTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9299,7 +9299,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -9323,7 +9323,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "interactionTable",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   {
@@ -9334,7 +9334,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "interactionViewMaxTime",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   }
                 ]
@@ -9351,7 +9351,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "interactionTable",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   {
@@ -9362,7 +9362,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "interactionViewMaxTime",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   }
                 ]
@@ -9384,7 +9384,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "tradeTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9395,7 +9395,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "tradeEventTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               }
             ]
@@ -9415,7 +9415,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "tradeTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9426,7 +9426,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "tradeEventViewMaxTradeEventDate",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               }
             ]
@@ -9446,7 +9446,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "tradeEventTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9457,7 +9457,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -9481,7 +9481,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "interactionTable",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   {
@@ -9492,7 +9492,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "interactionTable",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   }
                 ]
@@ -9509,7 +9509,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "interactionTable",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   {
@@ -9520,7 +9520,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "interactionTable",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   }
                 ]
@@ -9543,7 +9543,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9554,7 +9554,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "salesPersonTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               }
             ]
@@ -9574,7 +9574,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9585,7 +9585,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "accountTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               }
             ]
@@ -9605,7 +9605,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderPnlView",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9616,7 +9616,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               }
             ]
@@ -9636,7 +9636,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderPnlViewOnView",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9647,7 +9647,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               }
             ]
@@ -9667,7 +9667,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderNegativePnlView",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9678,7 +9678,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               }
             ]
@@ -9698,7 +9698,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderNegativePnlViewOnView",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9709,7 +9709,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               }
             ]
@@ -9729,7 +9729,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderPnlView",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9740,7 +9740,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -9760,7 +9760,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "salesPersonTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9771,7 +9771,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "PersonFirmView",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -9791,7 +9791,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderPnlTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9802,7 +9802,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               }
             ]
@@ -9822,7 +9822,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "accountOrderPnlView",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -9833,7 +9833,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "accountTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               }
             ]
@@ -9853,7 +9853,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               {
@@ -9864,7 +9864,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "otherNamesTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               }
             ]
@@ -10249,7 +10249,7 @@
                     "schema": "default",
                     "_type": "table",
                     "table": "interactionTable",
-                    "database": "meta::relational::tests::db"
+                    "database": "meta::external::store::relational::tests::db"
                   }
                 },
                 {
@@ -10260,7 +10260,7 @@
                     "schema": "default",
                     "_type": "table",
                     "table": "interactionTable",
-                    "database": "meta::relational::tests::db"
+                    "database": "meta::external::store::relational::tests::db"
                   }
                 }
               ],
@@ -10268,7 +10268,7 @@
                 "schema": "default",
                 "_type": "Table",
                 "table": "interactionTable",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               },
               "name": "interactionViewMaxTime",
               "columnMappings": [
@@ -10281,7 +10281,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "interactionTable",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   "name": "sourceId"
@@ -10295,7 +10295,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "interactionTable",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   "name": "targetId"
@@ -10313,7 +10313,7 @@
                           "schema": "default",
                           "_type": "table",
                           "table": "interactionTable",
-                          "database": "meta::relational::tests::db"
+                          "database": "meta::external::store::relational::tests::db"
                         }
                       }
                     ]
@@ -10323,7 +10323,7 @@
               ],
               "filter": {
                 "filter": {
-                  "db": "meta::relational::tests::db",
+                  "db": "meta::external::store::relational::tests::db",
                   "name": "PositiveInteractionTimeFilter"
                 }
               },
@@ -10339,7 +10339,7 @@
                     "schema": "default",
                     "_type": "table",
                     "table": "tradeEventTable",
-                    "database": "meta::relational::tests::db"
+                    "database": "meta::external::store::relational::tests::db"
                   }
                 }
               ],
@@ -10347,7 +10347,7 @@
                 "schema": "default",
                 "_type": "Table",
                 "table": "tradeEventTable",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               },
               "name": "tradeEventViewMaxTradeEventDate",
               "columnMappings": [
@@ -10360,7 +10360,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "tradeEventTable",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   "name": "trade_id"
@@ -10378,7 +10378,7 @@
                           "schema": "default",
                           "_type": "table",
                           "table": "tradeEventTable",
-                          "database": "meta::relational::tests::db"
+                          "database": "meta::external::store::relational::tests::db"
                         }
                       }
                     ]
@@ -10393,7 +10393,7 @@
                 "schema": "default",
                 "_type": "Table",
                 "table": "orderPnlTable",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               },
               "primaryKey": [
                 "ORDER_ID"
@@ -10409,7 +10409,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "orderPnlTable",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   "name": "ORDER_ID"
@@ -10423,7 +10423,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "orderPnlTable",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   "name": "pnl"
@@ -10439,16 +10439,16 @@
                         "schema": "default",
                         "_type": "table",
                         "table": "accountTable",
-                        "database": "meta::relational::tests::db"
+                        "database": "meta::external::store::relational::tests::db"
                       }
                     },
                     "joins": [
                       {
-                        "db": "meta::relational::tests::db",
+                        "db": "meta::external::store::relational::tests::db",
                         "name": "OrderPnlTable_Order"
                       },
                       {
-                        "db": "meta::relational::tests::db",
+                        "db": "meta::external::store::relational::tests::db",
                         "name": "Order_Account"
                       }
                     ]
@@ -10466,16 +10466,16 @@
                         "schema": "default",
                         "_type": "table",
                         "table": "salesPersonTable",
-                        "database": "meta::relational::tests::db"
+                        "database": "meta::external::store::relational::tests::db"
                       }
                     },
                     "joins": [
                       {
-                        "db": "meta::relational::tests::db",
+                        "db": "meta::external::store::relational::tests::db",
                         "name": "OrderPnlTable_Order"
                       },
                       {
-                        "db": "meta::relational::tests::db",
+                        "db": "meta::external::store::relational::tests::db",
                         "name": "Order_SalesPerson"
                       }
                     ]
@@ -10493,16 +10493,16 @@
                         "schema": "default",
                         "_type": "table",
                         "table": "salesPersonTable",
-                        "database": "meta::relational::tests::db"
+                        "database": "meta::external::store::relational::tests::db"
                       }
                     },
                     "joins": [
                       {
-                        "db": "meta::relational::tests::db",
+                        "db": "meta::external::store::relational::tests::db",
                         "name": "OrderPnlTable_Order"
                       },
                       {
-                        "db": "meta::relational::tests::db",
+                        "db": "meta::external::store::relational::tests::db",
                         "name": "Order_SalesPerson"
                       }
                     ]
@@ -10512,7 +10512,7 @@
               ],
               "filter": {
                 "filter": {
-                  "db": "meta::relational::tests::db",
+                  "db": "meta::external::store::relational::tests::db",
                   "name": "NonNegativePnlFilter"
                 }
               },
@@ -10523,7 +10523,7 @@
                 "schema": "default",
                 "_type": "Table",
                 "table": "orderPnlView",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               },
               "primaryKey": [
                 "ORDER_ID"
@@ -10539,7 +10539,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "orderPnlView",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   "name": "ORDER_ID"
@@ -10553,7 +10553,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "orderPnlView",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   "name": "pnl"
@@ -10566,7 +10566,7 @@
                 "schema": "default",
                 "_type": "Table",
                 "table": "orderPnlTable",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               },
               "primaryKey": [
                 "ORDER_ID"
@@ -10582,7 +10582,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "orderPnlTable",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   "name": "ORDER_ID"
@@ -10596,7 +10596,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "orderPnlTable",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   "name": "pnl"
@@ -10612,16 +10612,16 @@
                         "schema": "default",
                         "_type": "table",
                         "table": "accountTable",
-                        "database": "meta::relational::tests::db"
+                        "database": "meta::external::store::relational::tests::db"
                       }
                     },
                     "joins": [
                       {
-                        "db": "meta::relational::tests::db",
+                        "db": "meta::external::store::relational::tests::db",
                         "name": "OrderPnlTable_Order"
                       },
                       {
-                        "db": "meta::relational::tests::db",
+                        "db": "meta::external::store::relational::tests::db",
                         "name": "Order_Account"
                       }
                     ]
@@ -10639,16 +10639,16 @@
                         "schema": "default",
                         "_type": "table",
                         "table": "salesPersonTable",
-                        "database": "meta::relational::tests::db"
+                        "database": "meta::external::store::relational::tests::db"
                       }
                     },
                     "joins": [
                       {
-                        "db": "meta::relational::tests::db",
+                        "db": "meta::external::store::relational::tests::db",
                         "name": "OrderPnlTable_Order"
                       },
                       {
-                        "db": "meta::relational::tests::db",
+                        "db": "meta::external::store::relational::tests::db",
                         "name": "Order_SalesPerson"
                       }
                     ]
@@ -10666,16 +10666,16 @@
                         "schema": "default",
                         "_type": "table",
                         "table": "salesPersonTable",
-                        "database": "meta::relational::tests::db"
+                        "database": "meta::external::store::relational::tests::db"
                       }
                     },
                     "joins": [
                       {
-                        "db": "meta::relational::tests::db",
+                        "db": "meta::external::store::relational::tests::db",
                         "name": "OrderPnlTable_Order"
                       },
                       {
-                        "db": "meta::relational::tests::db",
+                        "db": "meta::external::store::relational::tests::db",
                         "name": "Order_SalesPerson"
                       }
                     ]
@@ -10685,7 +10685,7 @@
               ],
               "filter": {
                 "filter": {
-                  "db": "meta::relational::tests::db",
+                  "db": "meta::external::store::relational::tests::db",
                   "name": "LessThanEqualZeroPnlFilter"
                 }
               },
@@ -10696,7 +10696,7 @@
                 "schema": "default",
                 "_type": "Table",
                 "table": "orderNegativePnlView",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               },
               "primaryKey": [
                 "ORDER_ID"
@@ -10712,7 +10712,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "orderNegativePnlView",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   "name": "ORDER_ID"
@@ -10726,7 +10726,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "orderNegativePnlView",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   "name": "pnl"
@@ -10744,7 +10744,7 @@
                     "schema": "default",
                     "_type": "table",
                     "table": "orderTable",
-                    "database": "meta::relational::tests::db"
+                    "database": "meta::external::store::relational::tests::db"
                   }
                 }
               ],
@@ -10752,7 +10752,7 @@
                 "schema": "default",
                 "_type": "Table",
                 "table": "orderTable",
-                "database": "meta::relational::tests::db"
+                "database": "meta::external::store::relational::tests::db"
               },
               "primaryKey": [
                 "accountId"
@@ -10768,7 +10768,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "orderTable",
-                      "database": "meta::relational::tests::db"
+                      "database": "meta::external::store::relational::tests::db"
                     }
                   },
                   "name": "accountId"
@@ -10788,12 +10788,12 @@
                             "schema": "default",
                             "_type": "table",
                             "table": "orderPnlTable",
-                            "database": "meta::relational::tests::db"
+                            "database": "meta::external::store::relational::tests::db"
                           }
                         },
                         "joins": [
                           {
-                            "db": "meta::relational::tests::db",
+                            "db": "meta::external::store::relational::tests::db",
                             "name": "OrderPnlTable_Order"
                           }
                         ]
@@ -10810,7 +10810,7 @@
         }
       ],
       "name": "db",
-      "package": "meta::relational::tests",
+      "package": "meta::external::store::relational::tests",
       "filters": [
         {
           "operation": {
@@ -10825,7 +10825,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "interactionTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -10850,7 +10850,7 @@
                   "schema": "productSchema",
                   "_type": "table",
                   "table": "synonymTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -10875,7 +10875,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderPnlTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -10900,7 +10900,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "orderPnlTable",
-                  "database": "meta::relational::tests::db"
+                  "database": "meta::external::store::relational::tests::db"
                 }
               },
               {
@@ -10914,7 +10914,7 @@
         }
       ],
       "includedStores": [
-        "meta::relational::tests::dbInc"
+        "meta::external::store::relational::tests::dbInc"
       ]
     },
     {
@@ -10933,7 +10933,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "firmTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               {
@@ -10944,7 +10944,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "PersonViewWithDistinct",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -10968,7 +10968,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "personTable",
-                      "database": "meta::relational::tests::dbInc"
+                      "database": "meta::external::store::relational::tests::dbInc"
                     }
                   },
                   {
@@ -10979,7 +10979,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "personViewWithGroupBy",
-                      "database": "meta::relational::tests::dbInc"
+                      "database": "meta::external::store::relational::tests::dbInc"
                     }
                   }
                 ]
@@ -10996,7 +10996,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "personTable",
-                      "database": "meta::relational::tests::dbInc"
+                      "database": "meta::external::store::relational::tests::dbInc"
                     }
                   },
                   {
@@ -11007,7 +11007,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "personViewWithGroupBy",
-                      "database": "meta::relational::tests::dbInc"
+                      "database": "meta::external::store::relational::tests::dbInc"
                     }
                   }
                 ]
@@ -11029,7 +11029,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "addressTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               {
@@ -11040,7 +11040,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "firmTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -11060,7 +11060,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "addressTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               {
@@ -11071,7 +11071,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -11091,7 +11091,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "firmTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               {
@@ -11102,7 +11102,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -11122,7 +11122,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "firmTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               {
@@ -11133,7 +11133,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -11153,7 +11153,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               {
@@ -11164,7 +11164,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "locationTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -11184,7 +11184,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               {
@@ -11195,7 +11195,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -11216,7 +11216,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "locationTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               {
@@ -11227,7 +11227,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "placeOfInterestTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -11247,7 +11247,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "personTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               {
@@ -11258,7 +11258,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "otherFirmTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               }
             ]
@@ -11603,7 +11603,7 @@
                 "schema": "default",
                 "_type": "Table",
                 "table": "personTable",
-                "database": "meta::relational::tests::dbInc"
+                "database": "meta::external::store::relational::tests::dbInc"
               },
               "primaryKey": [
                 "PERSON_ID"
@@ -11619,7 +11619,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "personTable",
-                      "database": "meta::relational::tests::dbInc"
+                      "database": "meta::external::store::relational::tests::dbInc"
                     }
                   },
                   "name": "PERSON_ID"
@@ -11633,7 +11633,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "personTable",
-                      "database": "meta::relational::tests::dbInc"
+                      "database": "meta::external::store::relational::tests::dbInc"
                     }
                   },
                   "name": "lastName"
@@ -11649,12 +11649,12 @@
                         "schema": "default",
                         "_type": "table",
                         "table": "firmTable",
-                        "database": "meta::relational::tests::dbInc"
+                        "database": "meta::external::store::relational::tests::dbInc"
                       }
                     },
                     "joins": [
                       {
-                        "db": "meta::relational::tests::dbInc",
+                        "db": "meta::external::store::relational::tests::dbInc",
                         "name": "Firm_Person"
                       }
                     ]
@@ -11674,7 +11674,7 @@
                     "schema": "default",
                     "_type": "table",
                     "table": "personTable",
-                    "database": "meta::relational::tests::dbInc"
+                    "database": "meta::external::store::relational::tests::dbInc"
                   }
                 }
               ],
@@ -11682,7 +11682,7 @@
                 "schema": "default",
                 "_type": "Table",
                 "table": "personTable",
-                "database": "meta::relational::tests::dbInc"
+                "database": "meta::external::store::relational::tests::dbInc"
               },
               "primaryKey": [
                 "id"
@@ -11698,7 +11698,7 @@
                       "schema": "default",
                       "_type": "table",
                       "table": "personTable",
-                      "database": "meta::relational::tests::dbInc"
+                      "database": "meta::external::store::relational::tests::dbInc"
                     }
                   },
                   "name": "id"
@@ -11716,7 +11716,7 @@
                           "schema": "default",
                           "_type": "table",
                           "table": "personTable",
-                          "database": "meta::relational::tests::dbInc"
+                          "database": "meta::external::store::relational::tests::dbInc"
                         }
                       }
                     ]
@@ -11731,7 +11731,7 @@
                 "schema": "default",
                 "_type": "Table",
                 "table": "personViewWithGroupBy",
-                "database": "meta::relational::tests::dbInc"
+                "database": "meta::external::store::relational::tests::dbInc"
               },
               "primaryKey": [
                 "id"
@@ -11749,12 +11749,12 @@
                         "schema": "default",
                         "_type": "table",
                         "table": "personTable",
-                        "database": "meta::relational::tests::dbInc"
+                        "database": "meta::external::store::relational::tests::dbInc"
                       }
                     },
                     "joins": [
                       {
-                        "db": "meta::relational::tests::dbInc",
+                        "db": "meta::external::store::relational::tests::dbInc",
                         "name": "PersonWithPersonView"
                       }
                     ]
@@ -11772,12 +11772,12 @@
                         "schema": "default",
                         "_type": "table",
                         "table": "personTable",
-                        "database": "meta::relational::tests::dbInc"
+                        "database": "meta::external::store::relational::tests::dbInc"
                       }
                     },
                     "joins": [
                       {
-                        "db": "meta::relational::tests::dbInc",
+                        "db": "meta::external::store::relational::tests::dbInc",
                         "name": "PersonWithPersonView"
                       }
                     ]
@@ -11795,12 +11795,12 @@
                         "schema": "default",
                         "_type": "table",
                         "table": "personTable",
-                        "database": "meta::relational::tests::dbInc"
+                        "database": "meta::external::store::relational::tests::dbInc"
                       }
                     },
                     "joins": [
                       {
-                        "db": "meta::relational::tests::dbInc",
+                        "db": "meta::external::store::relational::tests::dbInc",
                         "name": "PersonWithPersonView"
                       }
                     ]
@@ -11818,12 +11818,12 @@
                         "schema": "default",
                         "_type": "table",
                         "table": "personTable",
-                        "database": "meta::relational::tests::dbInc"
+                        "database": "meta::external::store::relational::tests::dbInc"
                       }
                     },
                     "joins": [
                       {
-                        "db": "meta::relational::tests::dbInc",
+                        "db": "meta::external::store::relational::tests::dbInc",
                         "name": "PersonWithPersonView"
                       }
                     ]
@@ -11838,7 +11838,7 @@
         }
       ],
       "name": "dbInc",
-      "package": "meta::relational::tests",
+      "package": "meta::external::store::relational::tests",
       "filters": [
         {
           "operation": {
@@ -11853,7 +11853,7 @@
                   "schema": "default",
                   "_type": "table",
                   "table": "firmTable",
-                  "database": "meta::relational::tests::dbInc"
+                  "database": "meta::external::store::relational::tests::dbInc"
                 }
               },
               {

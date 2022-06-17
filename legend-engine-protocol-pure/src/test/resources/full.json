@@ -1748,7 +1748,7 @@
       {
         "_type": "profile",
         "name": "transform",
-        "package": "ui::meta::relational::transform",
+        "package": "ui::meta::external::store::relational::transform",
         "stereotypes": [
           "tinyInteger",
           "bigInteger"
@@ -1997,7 +1997,7 @@
       {
         "_type": "Enumeration",
         "name": "MiddleProductType",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "values": [
           {
             "value": "MP1"
@@ -2013,7 +2013,7 @@
       {
         "_type": "Enumeration",
         "name": "MiddleProductType2",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "values": [
           {
             "value": "MP21"
@@ -2029,7 +2029,7 @@
       {
         "_type": "Enumeration",
         "name": "MiddleTradeType",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "values": [
           {
             "value": "MT1"
@@ -2045,7 +2045,7 @@
       {
         "_type": "Enumeration",
         "name": "MiddleTradeType2",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "values": [
           {
             "value": "MT21"
@@ -2061,7 +2061,7 @@
       {
         "_type": "Enumeration",
         "name": "TargetProductType",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "values": [
           {
             "value": "TP1"
@@ -2080,7 +2080,7 @@
       {
         "_type": "Enumeration",
         "name": "TargetTradeType",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "values": [
           {
             "value": "TT1"
@@ -2099,7 +2099,7 @@
       {
         "_type": "Enumeration",
         "name": "ProductType",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::primitiveTypeToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::primitiveTypeToEnum::model",
         "values": [
           {
             "value": "A"
@@ -2115,7 +2115,7 @@
       {
         "_type": "Enumeration",
         "name": "TradeType",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::primitiveTypeToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::primitiveTypeToEnum::model",
         "values": [
           {
             "value": "P"
@@ -2131,7 +2131,7 @@
       {
         "_type": "Enumeration",
         "name": "Region",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::dest",
+        "package": "ui::meta::external::store::model::test::shared::dest",
         "values": [
           {
             "value": "NewYork"
@@ -2144,7 +2144,7 @@
       {
         "_type": "Enumeration",
         "name": "Side",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::dest",
+        "package": "ui::meta::external::store::model::test::shared::dest",
         "values": [
           {
             "value": "Buy"
@@ -3487,7 +3487,7 @@
           }
         ],
         "name": "_S_Person",
-        "package": "ui::meta::pure::mapping::modelToModel::test::constraints::src",
+        "package": "ui::meta::external::store::model::test::constraints::src",
         "properties": [
           {
             "multiplicity": {
@@ -3502,7 +3502,7 @@
       {
         "_type": "class",
         "name": "SourceType",
-        "package": "ui::meta::pure::mapping::modelToModel::test::constraintsManager",
+        "package": "ui::meta::external::store::model::test::constraintsManager",
         "properties": [
           {
             "multiplicity": {
@@ -3605,7 +3605,7 @@
           }
         ],
         "name": "TargetType",
-        "package": "ui::meta::pure::mapping::modelToModel::test::constraintsManager",
+        "package": "ui::meta::external::store::model::test::constraintsManager",
         "properties": [
           {
             "multiplicity": {
@@ -3617,13 +3617,13 @@
           }
         ],
         "superTypes": [
-          "ui::meta::pure::mapping::modelToModel::test::constraintsManager::Top"
+          "ui::meta::external::store::model::test::constraintsManager::Top"
         ]
       },
       {
         "_type": "class",
         "name": "Top",
-        "package": "ui::meta::pure::mapping::modelToModel::test::constraintsManager",
+        "package": "ui::meta::external::store::model::test::constraintsManager",
         "properties": [
           {
             "multiplicity": {
@@ -3637,7 +3637,7 @@
       {
         "_type": "class",
         "name": "Address",
-        "package": "ui::meta::pure::mapping::modelToModel::test::delta::v1",
+        "package": "ui::meta::external::store::model::test::delta::v1",
         "properties": [
           {
             "multiplicity": {
@@ -3652,7 +3652,7 @@
       {
         "_type": "class",
         "name": "Firm",
-        "package": "ui::meta::pure::mapping::modelToModel::test::delta::v1",
+        "package": "ui::meta::external::store::model::test::delta::v1",
         "properties": [
           {
             "multiplicity": {
@@ -3667,7 +3667,7 @@
               "lowerBound": 0
             },
             "name": "employees",
-            "type": "ui::meta::pure::mapping::modelToModel::test::delta::v1::Person"
+            "type": "ui::meta::external::store::model::test::delta::v1::Person"
           },
           {
             "multiplicity": {
@@ -3682,7 +3682,7 @@
       {
         "_type": "class",
         "name": "More",
-        "package": "ui::meta::pure::mapping::modelToModel::test::delta::v1",
+        "package": "ui::meta::external::store::model::test::delta::v1",
         "properties": [
           {
             "multiplicity": {
@@ -3697,7 +3697,7 @@
       {
         "_type": "class",
         "name": "Person",
-        "package": "ui::meta::pure::mapping::modelToModel::test::delta::v1",
+        "package": "ui::meta::external::store::model::test::delta::v1",
         "properties": [
           {
             "multiplicity": {
@@ -3713,7 +3713,7 @@
               "upperBound": 1
             },
             "name": "address",
-            "type": "ui::meta::pure::mapping::modelToModel::test::delta::v1::Address"
+            "type": "ui::meta::external::store::model::test::delta::v1::Address"
           },
           {
             "multiplicity": {
@@ -3721,14 +3721,14 @@
               "upperBound": 1
             },
             "name": "more",
-            "type": "ui::meta::pure::mapping::modelToModel::test::delta::v1::More"
+            "type": "ui::meta::external::store::model::test::delta::v1::More"
           }
         ]
       },
       {
         "_type": "class",
         "name": "Address",
-        "package": "ui::meta::pure::mapping::modelToModel::test::delta::v2",
+        "package": "ui::meta::external::store::model::test::delta::v2",
         "properties": [
           {
             "multiplicity": {
@@ -3744,14 +3744,14 @@
               "upperBound": 1
             },
             "name": "useless",
-            "type": "ui::meta::pure::mapping::modelToModel::test::delta::v2::Useless"
+            "type": "ui::meta::external::store::model::test::delta::v2::Useless"
           }
         ]
       },
       {
         "_type": "class",
         "name": "Firm",
-        "package": "ui::meta::pure::mapping::modelToModel::test::delta::v2",
+        "package": "ui::meta::external::store::model::test::delta::v2",
         "properties": [
           {
             "multiplicity": {
@@ -3766,7 +3766,7 @@
               "lowerBound": 0
             },
             "name": "employees",
-            "type": "ui::meta::pure::mapping::modelToModel::test::delta::v2::Person"
+            "type": "ui::meta::external::store::model::test::delta::v2::Person"
           },
           {
             "multiplicity": {
@@ -3790,14 +3790,14 @@
               "upperBound": 1
             },
             "name": "useless",
-            "type": "ui::meta::pure::mapping::modelToModel::test::delta::v2::Useless"
+            "type": "ui::meta::external::store::model::test::delta::v2::Useless"
           }
         ]
       },
       {
         "_type": "class",
         "name": "More",
-        "package": "ui::meta::pure::mapping::modelToModel::test::delta::v2",
+        "package": "ui::meta::external::store::model::test::delta::v2",
         "properties": [
           {
             "multiplicity": {
@@ -3812,7 +3812,7 @@
       {
         "_type": "class",
         "name": "Person",
-        "package": "ui::meta::pure::mapping::modelToModel::test::delta::v2",
+        "package": "ui::meta::external::store::model::test::delta::v2",
         "properties": [
           {
             "multiplicity": {
@@ -3828,7 +3828,7 @@
               "upperBound": 1
             },
             "name": "address",
-            "type": "ui::meta::pure::mapping::modelToModel::test::delta::v2::Address"
+            "type": "ui::meta::external::store::model::test::delta::v2::Address"
           },
           {
             "multiplicity": {
@@ -3836,7 +3836,7 @@
               "upperBound": 1
             },
             "name": "more",
-            "type": "ui::meta::pure::mapping::modelToModel::test::delta::v2::More"
+            "type": "ui::meta::external::store::model::test::delta::v2::More"
           },
           {
             "multiplicity": {
@@ -3844,19 +3844,19 @@
               "upperBound": 1
             },
             "name": "useless",
-            "type": "ui::meta::pure::mapping::modelToModel::test::delta::v2::Useless"
+            "type": "ui::meta::external::store::model::test::delta::v2::Useless"
           }
         ]
       },
       {
         "_type": "class",
         "name": "Useless",
-        "package": "ui::meta::pure::mapping::modelToModel::test::delta::v2"
+        "package": "ui::meta::external::store::model::test::delta::v2"
       },
       {
         "_type": "class",
         "name": "Source",
-        "package": "ui::meta::pure::mapping::modelToModel::test::distinct",
+        "package": "ui::meta::external::store::model::test::distinct",
         "properties": [
           {
             "multiplicity": {
@@ -3871,7 +3871,7 @@
       {
         "_type": "class",
         "name": "Target",
-        "package": "ui::meta::pure::mapping::modelToModel::test::distinct",
+        "package": "ui::meta::external::store::model::test::distinct",
         "properties": [
           {
             "multiplicity": {
@@ -3886,7 +3886,7 @@
       {
         "_type": "class",
         "name": "Firm",
-        "package": "ui::meta::pure::mapping::modelToModel::test::embedded::dest",
+        "package": "ui::meta::external::store::model::test::embedded::dest",
         "properties": [
           {
             "multiplicity": {
@@ -3901,7 +3901,7 @@
       {
         "_type": "class",
         "name": "Person",
-        "package": "ui::meta::pure::mapping::modelToModel::test::embedded::dest",
+        "package": "ui::meta::external::store::model::test::embedded::dest",
         "properties": [
           {
             "multiplicity": {
@@ -3916,7 +3916,7 @@
       {
         "_type": "class",
         "name": "EmploymentRecord",
-        "package": "ui::meta::pure::mapping::modelToModel::test::embedded::source",
+        "package": "ui::meta::external::store::model::test::embedded::source",
         "properties": [
           {
             "multiplicity": {
@@ -3939,7 +3939,7 @@
       {
         "_type": "class",
         "name": "MiddleProduct",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -3955,14 +3955,14 @@
               "upperBound": 1
             },
             "name": "type",
-            "type": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model::MiddleProductType"
+            "type": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model::MiddleProductType"
           }
         ]
       },
       {
         "_type": "class",
         "name": "MiddleProduct2",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -3978,14 +3978,14 @@
               "upperBound": 1
             },
             "name": "type",
-            "type": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model::MiddleProductType2"
+            "type": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model::MiddleProductType2"
           }
         ]
       },
       {
         "_type": "class",
         "name": "MiddleTrade",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -4001,14 +4001,14 @@
               "upperBound": 1
             },
             "name": "type",
-            "type": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model::MiddleTradeType"
+            "type": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model::MiddleTradeType"
           }
         ]
       },
       {
         "_type": "class",
         "name": "MiddleTrade2",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -4024,14 +4024,14 @@
               "upperBound": 1
             },
             "name": "type",
-            "type": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model::MiddleTradeType2"
+            "type": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model::MiddleTradeType2"
           }
         ]
       },
       {
         "_type": "class",
         "name": "SourceProduct",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -4054,7 +4054,7 @@
       {
         "_type": "class",
         "name": "SourceProduct2",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -4077,7 +4077,7 @@
       {
         "_type": "class",
         "name": "SourceTrade",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -4100,7 +4100,7 @@
       {
         "_type": "class",
         "name": "SourceTrade2",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -4123,7 +4123,7 @@
       {
         "_type": "class",
         "name": "TargetProduct",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -4139,14 +4139,14 @@
               "upperBound": 1
             },
             "name": "type",
-            "type": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model::TargetProductType"
+            "type": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model::TargetProductType"
           }
         ]
       },
       {
         "_type": "class",
         "name": "TargetTrade",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -4162,14 +4162,14 @@
               "upperBound": 1
             },
             "name": "type",
-            "type": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::enumToEnum::model::TargetTradeType"
+            "type": "ui::meta::external::store::model::test::enumerationMapping::enumToEnum::model::TargetTradeType"
           }
         ]
       },
       {
         "_type": "class",
         "name": "SourceProduct",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::primitiveTypeToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::primitiveTypeToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -4192,7 +4192,7 @@
       {
         "_type": "class",
         "name": "SourceProduct2",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::primitiveTypeToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::primitiveTypeToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -4215,7 +4215,7 @@
       {
         "_type": "class",
         "name": "SourceTrade",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::primitiveTypeToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::primitiveTypeToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -4238,7 +4238,7 @@
       {
         "_type": "class",
         "name": "SourceTrade2",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::primitiveTypeToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::primitiveTypeToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -4261,7 +4261,7 @@
       {
         "_type": "class",
         "name": "TargetProduct",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::primitiveTypeToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::primitiveTypeToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -4277,14 +4277,14 @@
               "upperBound": 1
             },
             "name": "type",
-            "type": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::primitiveTypeToEnum::model::ProductType"
+            "type": "ui::meta::external::store::model::test::enumerationMapping::primitiveTypeToEnum::model::ProductType"
           }
         ]
       },
       {
         "_type": "class",
         "name": "TargetTrade",
-        "package": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::primitiveTypeToEnum::model",
+        "package": "ui::meta::external::store::model::test::enumerationMapping::primitiveTypeToEnum::model",
         "properties": [
           {
             "multiplicity": {
@@ -4300,14 +4300,14 @@
               "upperBound": 1
             },
             "name": "type",
-            "type": "ui::meta::pure::mapping::modelToModel::test::enumerationMapping::primitiveTypeToEnum::model::TradeType"
+            "type": "ui::meta::external::store::model::test::enumerationMapping::primitiveTypeToEnum::model::TradeType"
           }
         ]
       },
       {
         "_type": "class",
         "name": "Product",
-        "package": "ui::meta::pure::mapping::modelToModel::test::groupBy",
+        "package": "ui::meta::external::store::model::test::groupBy",
         "properties": [
           {
             "multiplicity": {
@@ -4330,7 +4330,7 @@
       {
         "_type": "class",
         "name": "Related",
-        "package": "ui::meta::pure::mapping::modelToModel::test::milestoning",
+        "package": "ui::meta::external::store::model::test::milestoning",
         "properties": [
           {
             "multiplicity": {
@@ -4345,7 +4345,7 @@
       {
         "_type": "class",
         "name": "TargetProdWithRelated",
-        "package": "ui::meta::pure::mapping::modelToModel::test::milestoning",
+        "package": "ui::meta::external::store::model::test::milestoning",
         "properties": [
           {
             "multiplicity": {
@@ -4360,14 +4360,14 @@
               "lowerBound": 0
             },
             "name": "related",
-            "type": "ui::meta::pure::mapping::modelToModel::test::milestoning::Related"
+            "type": "ui::meta::external::store::model::test::milestoning::Related"
           }
         ]
       },
       {
         "_type": "class",
         "name": "TestProduct",
-        "package": "ui::meta::pure::mapping::modelToModel::test::milestoning",
+        "package": "ui::meta::external::store::model::test::milestoning",
         "properties": [
           {
             "multiplicity": {
@@ -4404,7 +4404,7 @@
       {
         "_type": "class",
         "name": "Address",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::dest",
+        "package": "ui::meta::external::store::model::test::shared::dest",
         "properties": [
           {
             "multiplicity": {
@@ -4420,14 +4420,14 @@
               "upperBound": 1
             },
             "name": "extension",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::dest::AddressExtension"
+            "type": "ui::meta::external::store::model::test::shared::dest::AddressExtension"
           }
         ]
       },
       {
         "_type": "class",
         "name": "AddressExtension",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::dest",
+        "package": "ui::meta::external::store::model::test::shared::dest",
         "properties": [
           {
             "multiplicity": {
@@ -4442,7 +4442,7 @@
       {
         "_type": "class",
         "name": "Firm",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::dest",
+        "package": "ui::meta::external::store::model::test::shared::dest",
         "properties": [
           {
             "multiplicity": {
@@ -4453,7 +4453,7 @@
             "taggedValues": [
               {
                 "tag": {
-                  "profile": "ui::meta::relational::transform::transform",
+                  "profile": "ui::meta::external::store::relational::transform::transform",
                   "value": "varCharLength"
                 },
                 "value": "500"
@@ -4466,14 +4466,14 @@
               "lowerBound": 0
             },
             "name": "employees",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::dest::Person"
+            "type": "ui::meta::external::store::model::test::shared::dest::Person"
           },
           {
             "multiplicity": {
               "lowerBound": 0
             },
             "name": "addresses",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::dest::Address"
+            "type": "ui::meta::external::store::model::test::shared::dest::Address"
           },
           {
             "multiplicity": {
@@ -4488,7 +4488,7 @@
       {
         "_type": "class",
         "name": "FirmEmployee",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::dest",
+        "package": "ui::meta::external::store::model::test::shared::dest",
         "properties": [
           {
             "multiplicity": {
@@ -4511,7 +4511,7 @@
       {
         "_type": "class",
         "name": "Person",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::dest",
+        "package": "ui::meta::external::store::model::test::shared::dest",
         "properties": [
           {
             "multiplicity": {
@@ -4534,7 +4534,7 @@
               "lowerBound": 0
             },
             "name": "addresses",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::dest::Address"
+            "type": "ui::meta::external::store::model::test::shared::dest::Address"
           },
           {
             "multiplicity": {
@@ -4542,14 +4542,14 @@
               "upperBound": 1
             },
             "name": "firm",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::dest::Firm"
+            "type": "ui::meta::external::store::model::test::shared::dest::Firm"
           }
         ]
       },
       {
         "_type": "class",
         "name": "Product",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::dest",
+        "package": "ui::meta::external::store::model::test::shared::dest",
         "properties": [
           {
             "multiplicity": {
@@ -4588,7 +4588,7 @@
       {
         "_type": "class",
         "name": "Product2Simple",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::dest",
+        "package": "ui::meta::external::store::model::test::shared::dest",
         "properties": [
           {
             "multiplicity": {
@@ -4604,14 +4604,14 @@
               "upperBound": 1
             },
             "name": "region",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::dest::Region"
+            "type": "ui::meta::external::store::model::test::shared::dest::Region"
           }
         ]
       },
       {
         "_type": "class",
         "name": "Trade",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::dest",
+        "package": "ui::meta::external::store::model::test::shared::dest",
         "properties": [
           {
             "multiplicity": {
@@ -4619,7 +4619,7 @@
               "upperBound": 1
             },
             "name": "side",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::dest::Side"
+            "type": "ui::meta::external::store::model::test::shared::dest::Side"
           },
           {
             "multiplicity": {
@@ -4630,7 +4630,7 @@
             "taggedValues": [
               {
                 "tag": {
-                  "profile": "ui::meta::relational::transform::transform",
+                  "profile": "ui::meta::external::store::relational::transform::transform",
                   "value": "varCharLength"
                 },
                 "value": "50"
@@ -4651,7 +4651,7 @@
       {
         "_type": "class",
         "name": "Vehicle",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::dest",
+        "package": "ui::meta::external::store::model::test::shared::dest",
         "properties": [
           {
             "multiplicity": {
@@ -4682,7 +4682,7 @@
       {
         "_type": "class",
         "name": "Address",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -4721,7 +4721,7 @@
       {
         "_type": "class",
         "name": "Applicant",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -4737,17 +4737,17 @@
               "upperBound": 1
             },
             "name": "previousApplication",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::src::Application"
+            "type": "ui::meta::external::store::model::test::shared::src::Application"
           }
         ],
         "superTypes": [
-          "ui::meta::pure::mapping::modelToModel::test::shared::src::User"
+          "ui::meta::external::store::model::test::shared::src::User"
         ]
       },
       {
         "_type": "class",
         "name": "Application",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -4755,7 +4755,7 @@
               "upperBound": 1
             },
             "name": "applicant",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::src::Applicant"
+            "type": "ui::meta::external::store::model::test::shared::src::Applicant"
           },
           {
             "multiplicity": {
@@ -4763,7 +4763,7 @@
               "upperBound": 1
             },
             "name": "employee",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::src::Employee"
+            "type": "ui::meta::external::store::model::test::shared::src::Employee"
           },
           {
             "multiplicity": {
@@ -4771,14 +4771,14 @@
               "upperBound": 1
             },
             "name": "previousEmployeer",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::src::Employer"
+            "type": "ui::meta::external::store::model::test::shared::src::Employer"
           }
         ]
       },
       {
         "_type": "class",
         "name": "Employee",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -4790,13 +4790,13 @@
           }
         ],
         "superTypes": [
-          "ui::meta::pure::mapping::modelToModel::test::shared::src::User"
+          "ui::meta::external::store::model::test::shared::src::User"
         ]
       },
       {
         "_type": "class",
         "name": "Employer",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -4812,14 +4812,14 @@
               "upperBound": 1
             },
             "name": "address",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::src::Address"
+            "type": "ui::meta::external::store::model::test::shared::src::Address"
           }
         ]
       },
       {
         "_type": "class",
         "name": "Member",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -4831,13 +4831,13 @@
           }
         ],
         "superTypes": [
-          "ui::meta::pure::mapping::modelToModel::test::shared::src::User"
+          "ui::meta::external::store::model::test::shared::src::User"
         ]
       },
       {
         "_type": "class",
         "name": "Membership",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -4845,7 +4845,7 @@
               "upperBound": 1
             },
             "name": "products",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::src::Product"
+            "type": "ui::meta::external::store::model::test::shared::src::Product"
           },
           {
             "multiplicity": {
@@ -4853,7 +4853,7 @@
               "upperBound": 1
             },
             "name": "member",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::src::Member"
+            "type": "ui::meta::external::store::model::test::shared::src::Member"
           },
           {
             "multiplicity": {
@@ -4868,7 +4868,7 @@
       {
         "_type": "class",
         "name": "Product",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -4876,21 +4876,21 @@
               "upperBound": 1
             },
             "name": "instructor",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::src::Employee"
+            "type": "ui::meta::external::store::model::test::shared::src::Employee"
           },
           {
             "multiplicity": {
               "lowerBound": 0
             },
             "name": "sessions",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::src::Session"
+            "type": "ui::meta::external::store::model::test::shared::src::Session"
           }
         ]
       },
       {
         "_type": "class",
         "name": "ProductWithRegion",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -4905,7 +4905,7 @@
       {
         "_type": "class",
         "name": "Session",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -4913,7 +4913,7 @@
               "upperBound": 1
             },
             "name": "location",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::src::Address"
+            "type": "ui::meta::external::store::model::test::shared::src::Address"
           },
           {
             "multiplicity": {
@@ -4936,7 +4936,7 @@
       {
         "_type": "class",
         "name": "User",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -4992,14 +4992,14 @@
               "upperBound": 1
             },
             "name": "address",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::src::Address"
+            "type": "ui::meta::external::store::model::test::shared::src::Address"
           }
         ]
       },
       {
         "_type": "class",
         "name": "_Bicycle",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -5011,13 +5011,13 @@
           }
         ],
         "superTypes": [
-          "ui::meta::pure::mapping::modelToModel::test::shared::src::_RoadVehicle"
+          "ui::meta::external::store::model::test::shared::src::_RoadVehicle"
         ]
       },
       {
         "_type": "class",
         "name": "_Car",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -5029,13 +5029,13 @@
           }
         ],
         "superTypes": [
-          "ui::meta::pure::mapping::modelToModel::test::shared::src::_RoadVehicle"
+          "ui::meta::external::store::model::test::shared::src::_RoadVehicle"
         ]
       },
       {
         "_type": "class",
         "name": "_Firm",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -5050,7 +5050,7 @@
       {
         "_type": "class",
         "name": "_FirmX",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -5065,21 +5065,21 @@
               "lowerBound": 0
             },
             "name": "pathToEmployeesSet1",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::src::_PersonSrc1"
+            "type": "ui::meta::external::store::model::test::shared::src::_PersonSrc1"
           },
           {
             "multiplicity": {
               "lowerBound": 0
             },
             "name": "pathToEmployeesSet2",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::src::_PersonSrc2"
+            "type": "ui::meta::external::store::model::test::shared::src::_PersonSrc2"
           }
         ]
       },
       {
         "_type": "class",
         "name": "_Person",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -5094,14 +5094,14 @@
               "lowerBound": 0
             },
             "name": "addresses",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::dest::Address"
+            "type": "ui::meta::external::store::model::test::shared::dest::Address"
           }
         ]
       },
       {
         "_type": "class",
         "name": "_PersonSrc1",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -5116,7 +5116,7 @@
       {
         "_type": "class",
         "name": "_PersonSrc2",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -5131,7 +5131,7 @@
       {
         "_type": "class",
         "name": "_Person_Address",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -5154,7 +5154,7 @@
       {
         "_type": "class",
         "name": "_Product",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -5182,13 +5182,13 @@
           }
         ],
         "superTypes": [
-          "ui::meta::pure::mapping::modelToModel::test::shared::src::ProductWithRegion"
+          "ui::meta::external::store::model::test::shared::src::ProductWithRegion"
         ]
       },
       {
         "_type": "class",
         "name": "_Product2",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -5220,14 +5220,14 @@
               "upperBound": 1
             },
             "name": "region",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::dest::Region"
+            "type": "ui::meta::external::store::model::test::shared::dest::Region"
           }
         ]
       },
       {
         "_type": "class",
         "name": "_RoadVehicle",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -5242,7 +5242,7 @@
       {
         "_type": "class",
         "name": "_S_Person",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -5257,7 +5257,7 @@
       {
         "_type": "class",
         "name": "_Trade",
-        "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+        "package": "ui::meta::external::store::model::test::shared::src",
         "properties": [
           {
             "multiplicity": {
@@ -5273,7 +5273,7 @@
               "upperBound": 1
             },
             "name": "product",
-            "type": "ui::meta::pure::mapping::modelToModel::test::shared::src::_Product"
+            "type": "ui::meta::external::store::model::test::shared::src::_Product"
           }
         ]
       }
@@ -5604,13 +5604,13 @@
       "classMappings": [
         {
           "_type": "pureInstance",
-          "class": "ui::meta::pure::mapping::modelToModel::test::constraintsManager::TargetType",
+          "class": "ui::meta::external::store::model::test::constraintsManager::TargetType",
           "id": "ui_meta_pure_mapping_modelToModel_test_constraintsManager_TargetType",
           "propertyMappings": [
             {
               "_type": "purePropertyMapping",
               "property": {
-                "class": "ui::meta::pure::mapping::modelToModel::test::constraintsManager::TargetType",
+                "class": "ui::meta::external::store::model::test::constraintsManager::TargetType",
                 "property": "name"
               },
               "source": "ui_meta_pure_mapping_modelToModel_test_constraintsManager_TargetType",
@@ -5634,12 +5634,12 @@
             }
           ],
           "root": true,
-          "srcClass": "ui::meta::pure::mapping::modelToModel::test::constraintsManager::SourceType"
+          "srcClass": "ui::meta::external::store::model::test::constraintsManager::SourceType"
         }
       ],
       "enumerationMappings": [],
       "name": "m2m",
-      "package": "ui::meta::pure::mapping::modelToModel::test::constraintsManager",
+      "package": "ui::meta::external::store::model::test::constraintsManager",
       "tests": []
     },
     {
@@ -5647,13 +5647,13 @@
       "classMappings": [
         {
           "_type": "pureInstance",
-          "class": "ui::meta::pure::mapping::modelToModel::test::shared::src::_Bicycle",
+          "class": "ui::meta::external::store::model::test::shared::src::_Bicycle",
           "id": "ui_meta_pure_mapping_modelToModel_test_shared_src__Bicycle",
           "propertyMappings": [
             {
               "_type": "purePropertyMapping",
               "property": {
-                "class": "ui::meta::pure::mapping::modelToModel::test::shared::src::_Bicycle",
+                "class": "ui::meta::external::store::model::test::shared::src::_Bicycle",
                 "property": "roadster"
               },
               "source": "ui_meta_pure_mapping_modelToModel_test_shared_src__Bicycle",
@@ -5677,12 +5677,12 @@
             }
           ],
           "root": true,
-          "srcClass": "ui::meta::pure::mapping::modelToModel::test::shared::src::Application"
+          "srcClass": "ui::meta::external::store::model::test::shared::src::Application"
         }
       ],
       "enumerationMappings": [],
       "name": "bobby",
-      "package": "ui::meta::pure::mapping::modelToModel::test::shared::src",
+      "package": "ui::meta::external::store::model::test::shared::src",
       "tests": []
     }
   ],

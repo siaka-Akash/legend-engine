@@ -22,16 +22,16 @@ import meta::pure::graphFetch::routing::*;
 import meta::pure::metamodel::path::*;
 
 import meta::pure::mapping::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::executionContext::*;
-import meta::pure::mapping::modelToModel::graphFetch::executionPlan::*;
+import meta::external::store::model::*;
+import meta::external::store::model::executionContext::*;
+import meta::external::store::model::graphFetch::executionPlan::*;
 import meta::pure::mapping::xStore::*;
 
 import meta::pure::router::extension::*;
 
 import meta::pure::runtime::*;
 
-import meta::pure::store::*;
+import meta::pure::store::metamodel::*;
 
 import meta::external::shared::format::executionPlan::*;
 import meta::external::shared::format::router::extension::*;

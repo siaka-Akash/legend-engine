@@ -12,6 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-Class meta::pure::store::platform::metamodel::PlatformStore extends meta::pure::store::Store
+Class meta::external::store::platform::metamodel::PlatformStore extends meta::pure::store::metamodel::Store
 {
 }

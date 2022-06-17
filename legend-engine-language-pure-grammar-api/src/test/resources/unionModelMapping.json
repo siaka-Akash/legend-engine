@@ -1,5 +1,5 @@
 {
-  "package": "meta::pure::mapping::modelToModel::test::union",
+  "package": "meta::external::store::model::test::union",
   "_type": "mapping",
   "name": "unionModelMapping",
   "classMappings": [
@@ -8,7 +8,7 @@
       "_type": "operation",
       "id": "meta_pure_mapping_modelToModel_test_shared_dest_Person",
       "operation": "STORE_UNION",
-      "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person",
+      "class": "meta::external::store::model::test::shared::dest::Person",
       "parameters": [
         "p1",
         "p2"
@@ -19,14 +19,14 @@
       "_type": "operation",
       "id": "meta_pure_mapping_modelToModel_test_shared_dest_Firm",
       "operation": "STORE_UNION",
-      "class": "meta::pure::mapping::modelToModel::test::shared::dest::Firm",
+      "class": "meta::external::store::model::test::shared::dest::Firm",
       "parameters": [
         "f1",
         "f2"
       ]
     },
     {
-      "srcClass": "meta::pure::mapping::modelToModel::test::shared::src::_Firm",
+      "srcClass": "meta::external::store::model::test::shared::src::_Firm",
       "root": false,
       "_type": "pureInstance",
       "propertyMappings": [
@@ -79,24 +79,24 @@
                 },
                 "_type": "var",
                 "name": "src",
-                "class": "meta::pure::mapping::modelToModel::test::shared::src::_Firm"
+                "class": "meta::external::store::model::test::shared::src::_Firm"
               }
             ]
           },
           "_type": "purePropertyMapping",
           "property": {
             "property": "legalName",
-            "class": "meta::pure::mapping::modelToModel::test::shared::dest::Firm"
+            "class": "meta::external::store::model::test::shared::dest::Firm"
           },
           "source": "meta_pure_mapping_modelToModel_test_shared_dest_Firm",
           "target": ""
         }
       ],
       "id": "f1",
-      "class": "meta::pure::mapping::modelToModel::test::shared::dest::Firm"
+      "class": "meta::external::store::model::test::shared::dest::Firm"
     },
     {
-      "srcClass": "meta::pure::mapping::modelToModel::test::shared::src::_Firm",
+      "srcClass": "meta::external::store::model::test::shared::src::_Firm",
       "root": false,
       "_type": "pureInstance",
       "propertyMappings": [
@@ -149,21 +149,21 @@
                 },
                 "_type": "var",
                 "name": "src",
-                "class": "meta::pure::mapping::modelToModel::test::shared::src::_Firm"
+                "class": "meta::external::store::model::test::shared::src::_Firm"
               }
             ]
           },
           "_type": "purePropertyMapping",
           "property": {
             "property": "legalName",
-            "class": "meta::pure::mapping::modelToModel::test::shared::dest::Firm"
+            "class": "meta::external::store::model::test::shared::dest::Firm"
           },
           "source": "meta_pure_mapping_modelToModel_test_shared_dest_Firm",
           "target": ""
         }
       ],
       "id": "f2",
-      "class": "meta::pure::mapping::modelToModel::test::shared::dest::Firm"
+      "class": "meta::external::store::model::test::shared::dest::Firm"
     },
     {
       "root": true,
@@ -188,14 +188,14 @@
           "_type": "purePropertyMapping",
           "property": {
             "property": "street",
-            "class": "meta::pure::mapping::modelToModel::test::shared::dest::Address"
+            "class": "meta::external::store::model::test::shared::dest::Address"
           },
           "source": "meta_pure_mapping_modelToModel_test_shared_dest_Address",
           "target": ""
         }
       ],
       "id": "meta_pure_mapping_modelToModel_test_shared_dest_Address",
-      "class": "meta::pure::mapping::modelToModel::test::shared::dest::Address"
+      "class": "meta::external::store::model::test::shared::dest::Address"
     },
     {
       "filter": {
@@ -237,11 +237,11 @@
             },
             "_type": "var",
             "name": "src",
-            "class": "meta::pure::mapping::modelToModel::test::shared::src::_Person"
+            "class": "meta::external::store::model::test::shared::src::_Person"
           }
         ]
       },
-      "srcClass": "meta::pure::mapping::modelToModel::test::shared::src::_Person",
+      "srcClass": "meta::external::store::model::test::shared::src::_Person",
       "root": false,
       "_type": "pureInstance",
       "propertyMappings": [
@@ -312,14 +312,14 @@
                 },
                 "_type": "var",
                 "name": "src",
-                "class": "meta::pure::mapping::modelToModel::test::shared::src::_Person"
+                "class": "meta::external::store::model::test::shared::src::_Person"
               }
             ]
           },
           "_type": "purePropertyMapping",
           "property": {
             "property": "firstName",
-            "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person"
+            "class": "meta::external::store::model::test::shared::dest::Person"
           },
           "source": "meta_pure_mapping_modelToModel_test_shared_dest_Person",
           "target": ""
@@ -424,14 +424,14 @@
                 },
                 "_type": "var",
                 "name": "src",
-                "class": "meta::pure::mapping::modelToModel::test::shared::src::_Person"
+                "class": "meta::external::store::model::test::shared::src::_Person"
               }
             ]
           },
           "_type": "purePropertyMapping",
           "property": {
             "property": "lastName",
-            "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person"
+            "class": "meta::external::store::model::test::shared::dest::Person"
           },
           "source": "meta_pure_mapping_modelToModel_test_shared_dest_Person",
           "target": ""
@@ -459,14 +459,14 @@
                 },
                 "_type": "var",
                 "name": "src",
-                "class": "meta::pure::mapping::modelToModel::test::shared::src::_Person"
+                "class": "meta::external::store::model::test::shared::src::_Person"
               }
             ]
           },
           "_type": "purePropertyMapping",
           "property": {
             "property": "addresses",
-            "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person"
+            "class": "meta::external::store::model::test::shared::dest::Person"
           },
           "source": "meta_pure_mapping_modelToModel_test_shared_dest_Person",
           "target": "meta_pure_mapping_modelToModel_test_shared_dest_Address"
@@ -494,21 +494,21 @@
                 },
                 "_type": "var",
                 "name": "src",
-                "class": "meta::pure::mapping::modelToModel::test::shared::src::_Person"
+                "class": "meta::external::store::model::test::shared::src::_Person"
               }
             ]
           },
           "_type": "purePropertyMapping",
           "property": {
             "property": "firm",
-            "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person"
+            "class": "meta::external::store::model::test::shared::dest::Person"
           },
           "source": "meta_pure_mapping_modelToModel_test_shared_dest_Person",
           "target": "f1"
         }
       ],
       "id": "p1",
-      "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person"
+      "class": "meta::external::store::model::test::shared::dest::Person"
     },
     {
       "filter": {
@@ -550,11 +550,11 @@
             },
             "_type": "var",
             "name": "src",
-            "class": "meta::pure::mapping::modelToModel::test::shared::src::_Person"
+            "class": "meta::external::store::model::test::shared::src::_Person"
           }
         ]
       },
-      "srcClass": "meta::pure::mapping::modelToModel::test::shared::src::_Person",
+      "srcClass": "meta::external::store::model::test::shared::src::_Person",
       "root": false,
       "_type": "pureInstance",
       "propertyMappings": [
@@ -581,14 +581,14 @@
                 },
                 "_type": "var",
                 "name": "src",
-                "class": "meta::pure::mapping::modelToModel::test::shared::src::_Person"
+                "class": "meta::external::store::model::test::shared::src::_Person"
               }
             ]
           },
           "_type": "purePropertyMapping",
           "property": {
             "property": "firstName",
-            "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person"
+            "class": "meta::external::store::model::test::shared::dest::Person"
           },
           "source": "meta_pure_mapping_modelToModel_test_shared_dest_Person",
           "target": ""
@@ -616,14 +616,14 @@
                 },
                 "_type": "var",
                 "name": "src",
-                "class": "meta::pure::mapping::modelToModel::test::shared::src::_Person"
+                "class": "meta::external::store::model::test::shared::src::_Person"
               }
             ]
           },
           "_type": "purePropertyMapping",
           "property": {
             "property": "lastName",
-            "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person"
+            "class": "meta::external::store::model::test::shared::dest::Person"
           },
           "source": "meta_pure_mapping_modelToModel_test_shared_dest_Person",
           "target": ""
@@ -651,21 +651,21 @@
                 },
                 "_type": "var",
                 "name": "src",
-                "class": "meta::pure::mapping::modelToModel::test::shared::src::_Person"
+                "class": "meta::external::store::model::test::shared::src::_Person"
               }
             ]
           },
           "_type": "purePropertyMapping",
           "property": {
             "property": "firm",
-            "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person"
+            "class": "meta::external::store::model::test::shared::dest::Person"
           },
           "source": "meta_pure_mapping_modelToModel_test_shared_dest_Person",
           "target": "f2"
         }
       ],
       "id": "p2",
-      "class": "meta::pure::mapping::modelToModel::test::shared::dest::Person"
+      "class": "meta::external::store::model::test::shared::dest::Person"
     }
   ]
 }

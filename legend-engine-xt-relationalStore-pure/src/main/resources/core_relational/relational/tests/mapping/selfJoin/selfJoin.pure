@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::mapping::selfJoin::model::domain::*;
-import meta::relational::tests::mapping::selfJoin::model::store::*;
-import meta::relational::tests::mapping::selfJoin::model::mapping::*;
-import meta::relational::runtime::*;
-import meta::relational::runtime::authentication::*;
+import meta::external::store::relational::tests::mapping::selfJoin::model::domain::*;
+import meta::external::store::relational::tests::mapping::selfJoin::model::store::*;
+import meta::external::store::relational::tests::mapping::selfJoin::model::mapping::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::runtime::authentication::*;
 import meta::pure::profiles::*;
 import meta::pure::runtime::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::mapping::*;
 
 
-function <<test.Test>> meta::relational::tests::mapping::selfJoin::testSelfJoinPropertyMapping():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::selfJoin::testSelfJoinPropertyMapping():Boolean[1]
 {
-   let result = execute(|Org.all()->project([#/Org/name#, #/Org/parent/name!parentName#]), meta::relational::tests::mapping::selfJoin::model::mapping::orgTestMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
+   let result = execute(|Org.all()->project([#/Org/name#, #/Org/parent/name!parentName#]), meta::external::store::relational::tests::mapping::selfJoin::model::mapping::orgTestMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    let tds = $result.values->at(0);
    assertSameElements(['name','parentName'], $tds.columns.name);
    assertEquals(9, $tds.rows->size());
@@ -42,9 +42,9 @@ function <<test.Test>> meta::relational::tests::mapping::selfJoin::testSelfJoinP
                       ],$tds.rows->map(r|pair($r.values->at(0),$r.values->at(1))));
 }
 
-function <<test.Test>> meta::relational::tests::mapping::selfJoin::testSelfJoinPropertyMappingOverlap():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::selfJoin::testSelfJoinPropertyMappingOverlap():Boolean[1]
 {
-   let result = execute(|Org.all()->project([#/Org/name#, #/Org/parent/name!p_name#, #/Org/parent/parent/name!p_p_name#]), meta::relational::tests::mapping::selfJoin::model::mapping::orgTestMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
+   let result = execute(|Org.all()->project([#/Org/name#, #/Org/parent/name!p_name#, #/Org/parent/parent/name!p_p_name#]), meta::external::store::relational::tests::mapping::selfJoin::model::mapping::orgTestMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    let tds = $result.values->at(0);
    assertSameElements(['name', 'p_name', 'p_p_name'], $tds.columns.name);
    assertEquals(9, $tds.rows->size());
@@ -60,7 +60,7 @@ function <<test.Test>> meta::relational::tests::mapping::selfJoin::testSelfJoinP
    assertEquals('select "root".name as "name", "orgtable_1".name as "p_name", "orgtable_2".name as "p_p_name" from orgTable as "root" left outer join orgTable as "orgtable_1" on ("root".parentId = "orgtable_1".id) left outer join orgTable as "orgtable_2" on ("orgtable_1".parentId = "orgtable_2".id)', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::mapping::selfJoin::testSelfJoinPropertyMappingWithDynaFunction():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::mapping::selfJoin::testSelfJoinPropertyMappingWithDynaFunction():Boolean[1]
 {
    let result = execute(|Org.all()->project([o | $o.name,
                                              o | $o.parent.parent.parent.name,
@@ -69,7 +69,7 @@ function <<test.Test>> meta::relational::tests::mapping::selfJoin::testSelfJoinP
                                             ['orgName',
                                              '3rd parent',
                                              '4th parent',
-                                             'dyna operation']), meta::relational::tests::mapping::selfJoin::model::mapping::orgTestMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions(), debug());
+                                             'dyna operation']), meta::external::store::relational::tests::mapping::selfJoin::model::mapping::orgTestMapping, testDataTypeMappingRuntime(), meta::pure::router::extension::defaultRelationalExtensions(), debug());
    let tds = $result.values->at(0);
    
    assertEquals('select "root".name as "orgName", "orgtable_3".name as "3rd parent", "orgtable_4".name as "4th parent", ("orgtable_4".name is null and "orgtable_3".name is null) as "dyna operation" from orgTable as "root" left outer join orgTable as "orgtable_1" on ("root".parentId = "orgtable_1".id) left outer join orgTable as "orgtable_2" on ("orgtable_1".parentId = "orgtable_2".id) left outer join orgTable as "orgtable_3" on ("orgtable_2".parentId = "orgtable_3".id) left outer join orgTable as "orgtable_4" on ("orgtable_3".parentId = "orgtable_4".id)', $result->sqlRemoveFormatting());
@@ -86,25 +86,25 @@ function <<test.Test>> meta::relational::tests::mapping::selfJoin::testSelfJoinP
    assertEquals(['Banking_c1_c1','Firm X', 'ROOT', false], $result.values.rows->at(8).values);
 }
 
-function <<test.BeforePackage>> meta::relational::tests::mapping::selfJoin::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::mapping::selfJoin::setUp():Boolean[1]
 {
     createTablesAndFillDb();
 }
 
-Class meta::relational::tests::mapping::selfJoin::model::domain::Org
+Class meta::external::store::relational::tests::mapping::selfJoin::model::domain::Org
 {
     name : String[1];
     parent: Org[0..1];
     children: Org[*];
 }
 
-function meta::relational::tests::mapping::selfJoin::model::store::testDataTypeMappingRuntime():Runtime[1]
+function meta::external::store::relational::tests::mapping::selfJoin::model::store::testDataTypeMappingRuntime():Runtime[1]
 {
-   meta::relational::tests::testRuntime(myDB);
+   meta::external::store::relational::tests::testRuntime(myDB);
 }
 
 
-function meta::relational::tests::mapping::selfJoin::model::store::createTablesAndFillDb():Boolean[1]
+function meta::external::store::relational::tests::mapping::selfJoin::model::store::createTablesAndFillDb():Boolean[1]
 {
    let connection = testDataTypeMappingRuntime().connectionByElement(myDB)->cast(@TestDatabaseConnection);
 
@@ -125,7 +125,7 @@ function meta::relational::tests::mapping::selfJoin::model::store::createTablesA
 
 ###Relational
 
-Database meta::relational::tests::mapping::selfJoin::model::store::myDB
+Database meta::external::store::relational::tests::mapping::selfJoin::model::store::myDB
 (
     Table orgTable
     (
@@ -146,10 +146,10 @@ Database meta::relational::tests::mapping::selfJoin::model::store::myDB
 )
 
 ###Mapping
-import meta::relational::tests::mapping::selfJoin::model::domain::*;
-import meta::relational::tests::mapping::selfJoin::model::store::*;
+import meta::external::store::relational::tests::mapping::selfJoin::model::domain::*;
+import meta::external::store::relational::tests::mapping::selfJoin::model::store::*;
 
-Mapping meta::relational::tests::mapping::selfJoin::model::mapping::orgTestMapping
+Mapping meta::external::store::relational::tests::mapping::selfJoin::model::mapping::orgTestMapping
 (
     Org: Relational
     {

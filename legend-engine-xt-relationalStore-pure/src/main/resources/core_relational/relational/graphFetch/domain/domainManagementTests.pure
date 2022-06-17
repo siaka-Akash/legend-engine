@@ -1,13 +1,13 @@
 import meta::pure::graphFetch::domain::*;
 import meta::pure::graphFetch::domain::tests::*;
-import meta::relational::graphFetch::domain::tests::*;
+import meta::external::store::relational::graphFetch::domain::tests::*;
 
 
 //---------------------------------------------------------------------------------
 // Would need to add this to a project that depends both on graphQL and Relational
 //---------------------------------------------------------------------------------
 
-// function <<test.Test>> meta::relational::graphFetch::tests::domain::testGraphQLQuery():Boolean[1]
+// function <<test.Test>> meta::external::store::relational::graphFetch::tests::domain::testGraphQLQuery():Boolean[1]
 // {
 //   let graphQLQuery = ^meta::external::query::graphQL::metamodel::ExecutableDocument (
 //                         definitions = ^meta::external::query::graphQL::metamodel::executable::OperationDefinition (
@@ -50,7 +50,7 @@ import meta::relational::graphFetch::domain::tests::*;
 // }
 
 
-function <<test.Test>> meta::relational::graphFetch::domain::tests::testGraphFetch():Boolean[1]
+function <<test.Test>> meta::external::store::relational::graphFetch::domain::tests::testGraphFetch():Boolean[1]
 {
   let res = extractDomainTypeClassFromFunction(|Domain.all()->meta::pure::graphFetch::execution::graphFetch(
                                                                 #{
@@ -85,7 +85,7 @@ function <<test.Test>> meta::relational::graphFetch::domain::tests::testGraphFet
   checkPlans($plans);
 }
 
-function <<access.private>> meta::relational::graphFetch::domain::tests::checkPlans(plans:meta::pure::executionPlan::ExecutionPlan[*]):Boolean[1]
+function <<access.private>> meta::external::store::relational::graphFetch::domain::tests::checkPlans(plans:meta::pure::executionPlan::ExecutionPlan[*]):Boolean[1]
 {
     assertEquals(
       'PureExp\n' +
@@ -97,7 +97,7 @@ function <<access.private>> meta::relational::graphFetch::domain::tests::checkPl
       '    (\n' +
       '      type = PartialClass[impls=[(meta::pure::graphFetch::domain::tests::Firm | TestMapping.meta_pure_graphFetch_domain_tests_Firm)], propertiesWithParameters = [legalName, employees]]\n' +
       '      resultSizeRange = 0..1\n' +
-      '      store = meta::relational::graphFetch::domain::tests::TestStore\n' +
+      '      store = meta::external::store::relational::graphFetch::domain::tests::TestStore\n' +
       '      localGraphFetchExecutionNode = \n' +
       '         RelationalGraphFetch\n' +
       '         (\n' +
@@ -148,7 +148,7 @@ function <<access.private>> meta::relational::graphFetch::domain::tests::checkPl
       '    (\n' +
       '      type = PartialClass[impls=[(meta::pure::graphFetch::domain::tests::Person | TestMapping.meta_pure_graphFetch_domain_tests_Person)], propertiesWithParameters = [firstName]]\n' +
       '      resultSizeRange = 0..1\n' +
-      '      store = meta::relational::graphFetch::domain::tests::TestStore\n' +
+      '      store = meta::external::store::relational::graphFetch::domain::tests::TestStore\n' +
       '      localGraphFetchExecutionNode = \n' +
       '         RelationalGraphFetch\n' +
       '         (\n' +
@@ -174,12 +174,12 @@ function <<access.private>> meta::relational::graphFetch::domain::tests::checkPl
       ')\n', $plans->at(1)->meta::pure::executionPlan::toString::planToString(meta::pure::router::extension::defaultRelationalExtensions()));
 }
 
-function meta::relational::graphFetch::domain::tests::testRuntime():meta::pure::runtime::Runtime[1]
+function meta::external::store::relational::graphFetch::domain::tests::testRuntime():meta::pure::runtime::Runtime[1]
 {
    ^meta::pure::runtime::Runtime(
-     connections = ^meta::relational::runtime::TestDatabaseConnection(
+     connections = ^meta::external::store::relational::runtime::TestDatabaseConnection(
                       element = TestStore,
-                      type = meta::relational::runtime::DatabaseType.H2,
+                      type = meta::external::store::relational::runtime::DatabaseType.H2,
                       timeZone = 'GMT',
                       testDataSetupSqls =
                           'drop table if exists Firm;\n'+
@@ -196,7 +196,7 @@ function meta::relational::graphFetch::domain::tests::testRuntime():meta::pure::
 }
 
 ###Relational
-Database meta::relational::graphFetch::domain::tests::TestStore
+Database meta::external::store::relational::graphFetch::domain::tests::TestStore
 (
   Table FirmTable
   (
@@ -220,9 +220,9 @@ Database meta::relational::graphFetch::domain::tests::TestStore
 
 ###Mapping
 import meta::pure::graphFetch::domain::tests::*;
-import meta::relational::graphFetch::domain::tests::*;
+import meta::external::store::relational::graphFetch::domain::tests::*;
 
-Mapping meta::relational::graphFetch::domain::tests::TestMapping
+Mapping meta::external::store::relational::graphFetch::domain::tests::TestMapping
 (
   Domain : Relational
            {

@@ -39,9 +39,9 @@ public class TestModelManagerPureModelCaching
     {
         ModelManager manager = new ModelManager(DeploymentMode.TEST, new MockModelLoader());
         Protocol protocol = new Protocol("pure", "v1_17_0");
-        PackageableElementPointer element0 = new PackageableElementPointer(PackageableElementType.MAPPING,"meta::relational::tests::milestoning::milestoningmap");
-        PackageableElementPointer element1 = new PackageableElementPointer(PackageableElementType.STORE,"meta::relational::tests::dbInc");
-        PackageableElementPointer element2 = new PackageableElementPointer(PackageableElementType.STORE,"meta::relational::tests::db");
+        PackageableElementPointer element0 = new PackageableElementPointer(PackageableElementType.MAPPING,"meta::external::store::relational::tests::milestoning::milestoningmap");
+        PackageableElementPointer element1 = new PackageableElementPointer(PackageableElementType.STORE,"meta::external::store::relational::tests::dbInc");
+        PackageableElementPointer element2 = new PackageableElementPointer(PackageableElementType.STORE,"meta::external::store::relational::tests::db");
         List<PackageableElementPointer> list = new ArrayList<>();
         list.add(element0);
         list.add(element1);

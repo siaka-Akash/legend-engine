@@ -15,8 +15,8 @@
 import meta::pure::alloy::connections::*;
 import meta::pure::runtime::*;
 import meta::pure::mapping::*;
-import meta::relational::metamodel::*;
-import meta::relational::mapping::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::mapping::*;
 import meta::pure::alloy::connections::alloy::*;
 import meta::pure::alloy::connections::alloy::specification::*;
 import meta::pure::alloy::connections::alloy::authentication::*;
@@ -25,7 +25,7 @@ import meta::pure::alloy::connections::alloy::authentication::*;
 All connection types here are only supported in Legend Engine.
 */
 
-Class meta::pure::alloy::connections::RelationalDatabaseConnection extends meta::relational::runtime::DatabaseConnection
+Class meta::pure::alloy::connections::RelationalDatabaseConnection extends meta::external::store::relational::runtime::DatabaseConnection
 {
     datasourceSpecification: meta::pure::alloy::connections::alloy::specification::DatasourceSpecification[1];
     authenticationStrategy: meta::pure::alloy::connections::alloy::authentication::AuthenticationStrategy[1];

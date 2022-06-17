@@ -16,11 +16,11 @@ import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
 import meta::pure::mapping::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::multiStep::*;
-import meta::pure::mapping::modelToModel::test::multiStep::src::*;
-import meta::pure::mapping::modelToModel::test::multiStep::bridge::*;
-import meta::pure::mapping::modelToModel::test::multiStep::dest::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::multiStep::*;
+import meta::external::store::model::test::multiStep::src::*;
+import meta::external::store::model::test::multiStep::bridge::*;
+import meta::external::store::model::test::multiStep::dest::*;
 import meta::pure::runtime::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly>> 
@@ -30,7 +30,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the function is executed',
    doc.doc='Then:  mappings are applied and the result of the mapping is serialized.'
 }
-meta::pure::mapping::modelToModel::test::alloy::multiStep::testMultiLevelModelToModelTransformation():Boolean[1]
+meta::external::store::model::test::alloy::multiStep::testMultiLevelModelToModelTransformation():Boolean[1]
 {
    let sourceData = '[{"sName": "S1", "sEmployees": [{"sFirstName": "F1", "sLastName": "L1"}, {"sFirstName": "F2", "sLastName": "L2"}]},' +
                     '{"sName": "S2", "sEmployees": [{"sFirstName": "F3", "sLastName": "L3"}, {"sFirstName": "F4", "sLastName": "L4"}]}]';
@@ -82,7 +82,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  the function is executed',
    doc.doc='Then:  mappings are applied and the result of the mapping is serialized.'
 }
-meta::pure::mapping::modelToModel::test::alloy::multiStep::testMultiLevelModelToModelTransformationChecked():Boolean[1]
+meta::external::store::model::test::alloy::multiStep::testMultiLevelModelToModelTransformationChecked():Boolean[1]
 {
    let sourceData = '[{"sName": "S1", "sEmployees": [{"sFirstName": "F1", "sLastName": "L1"}, {"sFirstName": "F2", "sLastName": "L2"}]},' +
                     '{"sName": "S2", "sEmployees": [{"sFirstName": "F3", "sLastName": "L3"}, {"sFirstName": "F4", "sLastName": "L4"}]}]';
@@ -127,52 +127,52 @@ meta::pure::mapping::modelToModel::test::alloy::multiStep::testMultiLevelModelTo
 }
 
 ###Pure
-import meta::pure::mapping::modelToModel::test::multiStep::src::*;
-import meta::pure::mapping::modelToModel::test::multiStep::bridge::*;
-import meta::pure::mapping::modelToModel::test::multiStep::dest::*;
+import meta::external::store::model::test::multiStep::src::*;
+import meta::external::store::model::test::multiStep::bridge::*;
+import meta::external::store::model::test::multiStep::dest::*;
 
-Class meta::pure::mapping::modelToModel::test::multiStep::src::SourceFirm
+Class meta::external::store::model::test::multiStep::src::SourceFirm
 {
    sName      : String[1];
    sEmployees : SourcePerson[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::multiStep::src::SourcePerson
+Class meta::external::store::model::test::multiStep::src::SourcePerson
 {
    sFirstName : String[1];
    sLastName  : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::multiStep::src::BridgeFirm
+Class meta::external::store::model::test::multiStep::src::BridgeFirm
 {
    bName      : String[1];
    bEmployees : BridgePerson[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::multiStep::src::BridgePerson
+Class meta::external::store::model::test::multiStep::src::BridgePerson
 {
    bFirstName : String[1];
    bLastName  : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::multiStep::src::DestFirm
+Class meta::external::store::model::test::multiStep::src::DestFirm
 {
    dName      : String[1];
    dEmployees : DestPerson[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::multiStep::src::DestPerson
+Class meta::external::store::model::test::multiStep::src::DestPerson
 {
    dFirstName : String[1];
    dLastName  : String[1];
 }
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::multiStep::src::*;
-import meta::pure::mapping::modelToModel::test::multiStep::bridge::*;
-import meta::pure::mapping::modelToModel::test::multiStep::dest::*;
+import meta::external::store::model::test::multiStep::src::*;
+import meta::external::store::model::test::multiStep::bridge::*;
+import meta::external::store::model::test::multiStep::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::multiStep::SourceToBridgeMapping
+Mapping meta::external::store::model::test::multiStep::SourceToBridgeMapping
 (
    BridgeFirm : Pure {
       ~src SourceFirm
@@ -187,7 +187,7 @@ Mapping meta::pure::mapping::modelToModel::test::multiStep::SourceToBridgeMappin
    }
 )
 
-Mapping meta::pure::mapping::modelToModel::test::multiStep::BridgeToDestMapping
+Mapping meta::external::store::model::test::multiStep::BridgeToDestMapping
 (
    DestFirm : Pure {
       ~src BridgeFirm

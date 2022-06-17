@@ -1,18 +1,18 @@
-import meta::relational::functions::sqlQueryToString::postgres::*;
-import meta::relational::functions::sqlQueryToString::default::*;
-import meta::relational::functions::sqlQueryToString::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::functions::sqlQueryToString::postgres::*;
+import meta::external::store::relational::functions::sqlQueryToString::default::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::router::extension::*;
 
-function <<db.ExtensionLoader>> meta::relational::functions::sqlQueryToString::postgres::dbExtensionLoaderForPostgres():DbExtensionLoader[1]
+function <<db.ExtensionLoader>> meta::external::store::relational::functions::sqlQueryToString::postgres::dbExtensionLoaderForPostgres():DbExtensionLoader[1]
 {
   ^DbExtensionLoader(dbType = DatabaseType.Postgres, loader = createDbExtensionForPostgres__DbExtension_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::postgres::createDbExtensionForPostgres():DbExtension[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::postgres::createDbExtensionForPostgres():DbExtension[1]
 {
    let reservedWords = postgresReservedWords();
    let literalProcessors = getDefaultLiteralProcessors()->putAll(getLiteralProcessorsForPostgres());
@@ -32,12 +32,12 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::postg
    );
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::postgres::postgresReservedWords():String[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::postgres::postgresReservedWords():String[*]
 {
   [];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::postgres::getLiteralProcessorsForPostgres():Map<Type,LiteralProcessor>[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::postgres::getLiteralProcessorsForPostgres():Map<Type,LiteralProcessor>[1]
 {
    newMap([
       pair(Enum,           ^LiteralProcessor(format = 'Text%s',          transform = toString_Any_1__String_1_->literalTransform())),
@@ -49,7 +49,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::postg
    ])
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::postgres::getDynaFunctionToSqlForPostgres(): DynaFunctionToSql[*]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::postgres::getDynaFunctionToSqlForPostgres(): DynaFunctionToSql[*]
 {
   let allStates = allGenerationStates();
 
@@ -79,7 +79,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::postg
   ];
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::postgres::generateDateDiffExpressionForPostgres(params:String[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::postgres::generateDateDiffExpressionForPostgres(params:String[*]):String[1]
 {
   let enumList = [DurationUnit.YEARS,DurationUnit.MONTHS,DurationUnit.WEEKS,DurationUnit.DAYS,DurationUnit.HOURS,DurationUnit.MINUTES,DurationUnit.SECONDS,DurationUnit.MILLISECONDS]->map(e|$e->toString());
 
@@ -121,17 +121,17 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::postg
   format($dbSpecificUnits->at($indexOfDiff)->eval(), [$params->at(0), $params->at(1)]);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::postgres::processJoinStringsOperationForPostgres(js:JoinStrings[1], sgc:SqlGenerationContext[1]): String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::postgres::processJoinStringsOperationForPostgres(js:JoinStrings[1], sgc:SqlGenerationContext[1]): String[1]
 {
    processJoinStringsOperation($js, $sgc, [], {strs, sep| $strs->joinStrings('concat(', if('Text\'\'' == $sep, |', ', |',' + $sep + ',') , ')')});
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::postgres::processSelectSQLQueryForPostgres(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::postgres::processSelectSQLQueryForPostgres(s:SelectSQLQuery[1], sgc:SqlGenerationContext[1], isSubSelect:Boolean[1]):String[1]
 {
    $s->processSelectSQLQueryForPostgres($sgc.dbConfig, $sgc.format, $sgc.config, $isSubSelect, $sgc.extensions);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::postgres::processSelectSQLQueryForPostgres(s:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::postgres::processSelectSQLQueryForPostgres(s:SelectSQLQuery[1], dbConfig : DbConfig[1], format:Format[1], config:Config[1], isSubSelect : Boolean[1], extensions:RouterExtension[*]):String[1]
 {
   let opStr = if($s.filteringOperation->isEmpty(), |'', |$s.filteringOperation->map(s|$s->processOperation($dbConfig, $format->indent(), ^$config(callingFromFilter = true), $extensions))->filter(s|$s != '')->joinStrings(' <||> '));
   let havingStr = if($s.havingOperation->isEmpty(), |'', |$s.havingOperation->map(s|$s->processOperation($dbConfig, $format->indent(), $config, $extensions))->filter(s|$s != '')->joinStrings(' <||> '));
@@ -146,7 +146,7 @@ function <<access.private>> meta::relational::functions::sqlQueryToString::postg
   + processLimit($s, $format, processTakeDefault_SelectSQLQuery_1__Format_1__String_1_, processSliceOrDropForPostgres_SelectSQLQuery_1__Format_1__Any_1__String_1_);
 }
 
-function <<access.private>> meta::relational::functions::sqlQueryToString::postgres::processSliceOrDropForPostgres(s:SelectSQLQuery[1], format:Format[1], size:Any[1]):String[1]
+function <<access.private>> meta::external::store::relational::functions::sqlQueryToString::postgres::processSliceOrDropForPostgres(s:SelectSQLQuery[1], format:Format[1], size:Any[1]):String[1]
 {
    '%s offset %s'->format([$format.separator, $s.fromRow->toOne()->getValueForTake()]) + if ($size == -1, | '', | ' limit %s'->format($size));
 }

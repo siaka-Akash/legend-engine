@@ -16,10 +16,10 @@ import meta::pure::executionPlan::engine::java::roadmap::*;
 import meta::json::*;
 import meta::pure::executionPlan::profiles::*;
 import meta::pure::graphFetch::execution::*;
-import meta::pure::mapping::modelToModel::*;
-import meta::pure::mapping::modelToModel::test::alloy::simple::graphWithoutAssociations::*;
-import meta::pure::mapping::modelToModel::test::alloy::simple::graphWithoutAssociations::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::simple::graphWithoutAssociations::dest::*;
+import meta::external::store::model::*;
+import meta::external::store::model::test::alloy::simple::graphWithoutAssociations::*;
+import meta::external::store::model::test::alloy::simple::graphWithoutAssociations::src::*;
+import meta::external::store::model::test::alloy::simple::graphWithoutAssociations::dest::*;
 import meta::pure::runtime::*;
 
 function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly, feature.M2MBasics>> 
@@ -28,7 +28,7 @@ function <<meta::pure::profiles::test.Test, meta::pure::profiles::test.AlloyOnly
    doc.doc='When:  a mapping is executed using graphFetch and serialize.',
    doc.doc='Then:  the mapping is applied and the result of the mapping is serialized demonstrating the translated graph.'
 } 
-meta::pure::mapping::modelToModel::test::alloy::simple::serializeGraphWithoutAssociations() : Boolean[1]
+meta::external::store::model::test::alloy::simple::serializeGraphWithoutAssociations() : Boolean[1]
 {
    let tree = #{Firm {name, employees {fullName}} }#;
 
@@ -49,37 +49,37 @@ meta::pure::mapping::modelToModel::test::alloy::simple::serializeGraphWithoutAss
 
 
 ###Pure
-import meta::pure::mapping::modelToModel::test::alloy::simple::graphWithoutAssociations::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::simple::graphWithoutAssociations::dest::*;
+import meta::external::store::model::test::alloy::simple::graphWithoutAssociations::src::*;
+import meta::external::store::model::test::alloy::simple::graphWithoutAssociations::dest::*;
 
-Class meta::pure::mapping::modelToModel::test::alloy::simple::graphWithoutAssociations::src::_Firm
+Class meta::external::store::model::test::alloy::simple::graphWithoutAssociations::src::_Firm
 {
    name      : String[1];
    employees : _Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::simple::graphWithoutAssociations::src::_Person
+Class meta::external::store::model::test::alloy::simple::graphWithoutAssociations::src::_Person
 {
    firstName : String[1];
    lastName  : String[1];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::simple::graphWithoutAssociations::dest::Firm
+Class meta::external::store::model::test::alloy::simple::graphWithoutAssociations::dest::Firm
 {
    name      : String[1];
    employees : Person[*];
 }
 
-Class meta::pure::mapping::modelToModel::test::alloy::simple::graphWithoutAssociations::dest::Person
+Class meta::external::store::model::test::alloy::simple::graphWithoutAssociations::dest::Person
 {
    fullName : String[1];
 }
 
 ###Mapping
-import meta::pure::mapping::modelToModel::test::alloy::simple::graphWithoutAssociations::src::*;
-import meta::pure::mapping::modelToModel::test::alloy::simple::graphWithoutAssociations::dest::*;
+import meta::external::store::model::test::alloy::simple::graphWithoutAssociations::src::*;
+import meta::external::store::model::test::alloy::simple::graphWithoutAssociations::dest::*;
 
-Mapping meta::pure::mapping::modelToModel::test::alloy::simple::graphWithoutAssociations::firmMappings
+Mapping meta::external::store::model::test::alloy::simple::graphWithoutAssociations::firmMappings
 (
    Firm : Pure
             {

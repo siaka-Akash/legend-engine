@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::metamodel::relation::*;
-import meta::pure::store::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::pure::store::metamodel::*;
 import meta::pure::runtime::*;
-import meta::relational::metamodel::*;
-import meta::relational::runtime::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::functions::typeInference::*;
+import meta::external::store::relational::metamodel::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::functions::typeInference::*;
 
-Class meta::relational::runtime::RelationalExecutionContext extends ExecutionContext
+Class meta::external::store::relational::runtime::RelationalExecutionContext extends ExecutionContext
 {
    addDriverTablePkForProject : Boolean[0..1];
    insertDriverTablePkInTempTable : String[0..1];

@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::model::simple::*;
-import meta::relational::mapping::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::*;
 import meta::pure::mapping::*;
 import meta::pure::metamodel::path::*;
-import meta::relational::tests::projection::simple::*;
+import meta::external::store::relational::tests::projection::simple::*;
 
-function <<test.BeforePackage>> meta::relational::tests::projection::setUp():Boolean[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::projection::setUp():Boolean[1]
 {
-    meta::relational::tests::mapping::join::model::store::createTablesAndFillDb();
+    meta::external::store::relational::tests::mapping::join::model::store::createTablesAndFillDb();
     createTablesAndFillDb();
 }
 
-function <<test.Test>> meta::relational::tests::projection::simple::testAllOneSimpleProperty():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::simple::testAllOneSimpleProperty():Boolean[1]
 {
    let result = execute(|Person.all()->project(p|$p.firstName, 'firstName'), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 7 );
@@ -33,7 +33,7 @@ function <<test.Test>> meta::relational::tests::projection::simple::testAllOneSi
    assertEquals('select "root".FIRSTNAME as "firstName" from personTable as "root"', $result->sqlRemoveFormatting());
 }
 
-function <<test.Test>> meta::relational::tests::projection::simple::testAllOneSimplePropertyUsingVariable():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::simple::testAllOneSimplePropertyUsingVariable():Boolean[1]
 {
    let p = [#/Person/firstName#];
    let result = execute(|Person.all()->project($p), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
@@ -43,7 +43,7 @@ function <<test.Test>> meta::relational::tests::projection::simple::testAllOneSi
 }
 
 
-function <<test.Test>> meta::relational::tests::projection::simple::testAllOneSimplePropertyUsingVariables():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::simple::testAllOneSimplePropertyUsingVariables():Boolean[1]
 {
    let p = [#/Person/firstName#];
    let n = ['First Name'];
@@ -54,7 +54,7 @@ function <<test.Test>> meta::relational::tests::projection::simple::testAllOneSi
 }
 
 // Alloy exclusion reason: 10. Tricky usage of variables
-function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::projection::simple::testAllOneSimplePropertyUsingVariables2():Boolean[1]
+function <<test.Test, test.ExcludeAlloy>> meta::external::store::relational::tests::projection::simple::testAllOneSimplePropertyUsingVariables2():Boolean[1]
 {
    let result = execute({|
          let p = [#/Person/firstName#];
@@ -67,7 +67,7 @@ function <<test.Test, test.ExcludeAlloy>> meta::relational::tests::projection::s
    assertEquals('select "root".FIRSTNAME as "First Name" from personTable as "root"', $result->sqlRemoveFormatting());
 }
 
-function <<test.ToFix>> meta::relational::tests::projection::simple::testAllOneSimplePropertyUsingVariables3():Boolean[1]
+function <<test.ToFix>> meta::external::store::relational::tests::projection::simple::testAllOneSimplePropertyUsingVariables3():Boolean[1]
 {
    let result = execute({|
          let n = 'First Name';
@@ -82,7 +82,7 @@ function <<test.ToFix>> meta::relational::tests::projection::simple::testAllOneS
 
 
 
-function <<test.Test>> meta::relational::tests::projection::simple::testAllOneSimplePropertyUsingOpenVariables():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::simple::testAllOneSimplePropertyUsingOpenVariables():Boolean[1]
 {
    let p = [#/Person/firstName#];
    let result = runQuery($p);
@@ -91,12 +91,12 @@ function <<test.Test>> meta::relational::tests::projection::simple::testAllOneSi
    assertEquals('select "root".FIRSTNAME as "firstName" from personTable as "root"', $result->sqlRemoveFormatting());
 }
 
-function meta::relational::tests::projection::simple::runQuery(path:Path<Person, String|1>[1]):Result<TabularDataSet|1>[1]
+function meta::external::store::relational::tests::projection::simple::runQuery(path:Path<Person, String|1>[1]):Result<TabularDataSet|1>[1]
 {
    execute(|Person.all()->project($path), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
 }
 
-function <<test.Test>> meta::relational::tests::projection::simple::testAllTwoSimpleProperties():Boolean[1]
+function <<test.Test>> meta::external::store::relational::tests::projection::simple::testAllTwoSimpleProperties():Boolean[1]
 {
    let result = execute(|Person.all()->project([p|$p.firstName, p|$p.lastName], ['firstName', 'lastName']), simpleRelationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSize($result.values.rows, 7);

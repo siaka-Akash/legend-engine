@@ -12,32 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::model::simple::*;
-import meta::relational::tests::model::simple::projection::*;
+import meta::external::store::relational::tests::model::simple::*;
+import meta::external::store::relational::tests::model::simple::projection::*;
 
-Class meta::relational::tests::model::simple::projection::EntityWithAddressProjection projects
+Class meta::external::store::relational::tests::model::simple::projection::EntityWithAddressProjection projects
 EntityWithAddress
 {
     > address [$this.address.name]
 }
 
-Class meta::relational::tests::model::simple::projection::FirmProjection projects
-meta::relational::tests::model::simple::Firm
+Class meta::external::store::relational::tests::model::simple::projection::FirmProjection projects
+meta::external::store::relational::tests::model::simple::Firm
 {
    +[legalName]
 }
 
-Class meta::relational::tests::model::simple::projection::PersonProjection projects
-meta::relational::tests::model::simple::Person
+Class meta::external::store::relational::tests::model::simple::projection::PersonProjection projects
+meta::external::store::relational::tests::model::simple::Person
 {
    +[firstName, lastName, age]
 }
 
-Class meta::relational::tests::model::simple::projection::AddressProjection projects
+Class meta::external::store::relational::tests::model::simple::projection::AddressProjection projects
 Address
 {
    *
 }
 
-Association meta::relational::tests::model::simple::projection::EmploymentProjection projects Employment<FirmProjection, PersonProjection>
+Association meta::external::store::relational::tests::model::simple::projection::EmploymentProjection projects Employment<FirmProjection, PersonProjection>
 

@@ -13,56 +13,56 @@
 // limitations under the License.
 
 ###Pure
-import meta::relational::tests::mapping::union::partialForeignKeyUsage::model::*;
+import meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::model::*;
 
-Class meta::relational::tests::mapping::union::partialForeignKeyUsage::model::A
+Class meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::model::A
 {
    pk  : Integer[1];
    fk1 : Integer[1];
    fk2 : Integer[1];
 }
 
-Class meta::relational::tests::mapping::union::partialForeignKeyUsage::model::B
+Class meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::model::B
 {
    pk  : Integer[1];
    fk1 : Integer[1];
    fk2 : Integer[1];
 }
 
-Class meta::relational::tests::mapping::union::partialForeignKeyUsage::model::C
+Class meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::model::C
 {
    pk  : Integer[1];
    fk1 : Integer[1];
    fk2 : Integer[1];
 }
 
-Class meta::relational::tests::mapping::union::partialForeignKeyUsage::model::D
+Class meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::model::D
 {
    pk  : Integer[1];
    fk1 : Integer[1];
    fk2 : Integer[1];
 }
 
-Association meta::relational::tests::mapping::union::partialForeignKeyUsage::model::AB
+Association meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::model::AB
 {
    a : A[*];
    b : B[*];
 }
 
-Association meta::relational::tests::mapping::union::partialForeignKeyUsage::model::BC
+Association meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::model::BC
 {
    b : B[*];
    c : C[*];
 }
 
-Association meta::relational::tests::mapping::union::partialForeignKeyUsage::model::CD
+Association meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::model::CD
 {
    c : C[*];
    d : D[*];
 }
 
 ###Relational
-Database meta::relational::tests::mapping::union::partialForeignKeyUsage::store::relationalStore
+Database meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::store::relationalStore
 (
    Table A1(pk INTEGER PRIMARY KEY, fk1 INTEGER, fk2 INTEGER)
    Table B1(pk INTEGER PRIMARY KEY, fk1 INTEGER, fk2 INTEGER)
@@ -83,10 +83,10 @@ Database meta::relational::tests::mapping::union::partialForeignKeyUsage::store:
 )
 
 ###Mapping
-import meta::relational::tests::mapping::union::partialForeignKeyUsage::model::*;
-import meta::relational::tests::mapping::union::partialForeignKeyUsage::store::*;
+import meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::model::*;
+import meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::store::*;
 
-Mapping meta::relational::tests::mapping::union::partialForeignKeyUsage::mapping::relationalMapping
+Mapping meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::mapping::relationalMapping
 (  
    *A : Operation
    {
@@ -202,14 +202,14 @@ Mapping meta::relational::tests::mapping::union::partialForeignKeyUsage::mapping
 )
 
 ###Pure
-import meta::relational::metamodel::execute::*;
-import meta::relational::tests::mapping::union::partialForeignKeyUsage::store::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::store::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::runtime::*;
 
-function <<test.BeforePackage>> meta::relational::tests::mapping::union::partialForeignKeyUsage::initDatabase():Runtime[1]
+function <<test.BeforePackage>> meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::initDatabase():Runtime[1]
 {
-   let connection = meta::relational::tests::testRuntime(relationalStore).connections->toOne()->cast(@TestDatabaseConnection);
+   let connection = meta::external::store::relational::tests::testRuntime(relationalStore).connections->toOne()->cast(@TestDatabaseConnection);
   
    executeInDb('drop table if exists A1;', $connection);
    executeInDb('create table A1 (pk INTEGER PRIMARY KEY, fk1 INTEGER, fk2 INTEGER)', $connection);
@@ -247,12 +247,12 @@ function <<test.BeforePackage>> meta::relational::tests::mapping::union::partial
 }
 
 ###Pure
-import meta::relational::functions::asserts::*;
-import meta::relational::tests::mapping::union::partialForeignKeyUsage::model::*;
-import meta::relational::tests::mapping::union::partialForeignKeyUsage::mapping::*;
-import meta::relational::tests::*;
+import meta::external::store::relational::functions::asserts::*;
+import meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::model::*;
+import meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::mapping::*;
+import meta::external::store::relational::tests::*;
 
-function <<test.Test, test.ToFix>> meta::relational::tests::mapping::union::partialForeignKeyUsage::testUnionWithPartialForeignKeyUsage1():Any[*]
+function <<test.Test, test.ToFix>> meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::testUnionWithPartialForeignKeyUsage1():Any[*]
 {
    let result = execute(|A.all()->project([a|$a.pk, a|$a.b.pk, a|$a.b.c.pk],['a_pk', 'b_pk', 'c_pk']), relationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSameSQL('', $result);
@@ -261,7 +261,7 @@ function <<test.Test, test.ToFix>> meta::relational::tests::mapping::union::part
    assertEquals([], $result.values.rows.get('c_pk'));
 }
 
-function <<test.Test, test.ToFix>> meta::relational::tests::mapping::union::partialForeignKeyUsage::testUnionWithPartialForeignKeyUsage2():Any[*]
+function <<test.Test, test.ToFix>> meta::external::store::relational::tests::mapping::union::partialForeignKeyUsage::testUnionWithPartialForeignKeyUsage2():Any[*]
 {
    let result = execute(|B.all()->project([b|$b.pk, b|$b.c.pk, b|$b.c.d.pk],['b_pk', 'c_pk', 'd_pk']), relationalMapping, testRuntime(), meta::pure::router::extension::defaultRelationalExtensions());
    assertSameSQL('', $result);

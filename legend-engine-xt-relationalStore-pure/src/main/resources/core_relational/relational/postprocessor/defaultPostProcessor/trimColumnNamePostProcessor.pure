@@ -13,24 +13,24 @@
 // limitations under the License.
 
 import meta::pure::runtime::*;
-import meta::relational::runtime::*;
-import meta::relational::metamodel::join::*;
-import meta::relational::functions::pureToSqlQuery::*;
-import meta::relational::functions::pureToSqlQuery::metamodel::*;
+import meta::external::store::relational::runtime::*;
+import meta::external::store::relational::metamodel::join::*;
+import meta::external::store::relational::functions::pureToSqlQuery::*;
+import meta::external::store::relational::functions::pureToSqlQuery::metamodel::*;
 import meta::pure::mapping::*;
-import meta::relational::metamodel::operation::*;
-import meta::relational::postProcessor::reAliasColumnName::*;
-import meta::relational::metamodel::relation::*;
-import meta::relational::metamodel::*;
+import meta::external::store::relational::metamodel::operation::*;
+import meta::external::store::relational::postProcessor::reAliasColumnName::*;
+import meta::external::store::relational::metamodel::relation::*;
+import meta::external::store::relational::metamodel::*;
 import meta::pure::functions::collection::*;
-import meta::relational::functions::sqlQueryToString::*;
+import meta::external::store::relational::functions::sqlQueryToString::*;
 
-function meta::relational::postProcessor::reAliasColumnName::trimColumnName(query:SelectSQLQuery[1],connection:DatabaseConnection[1]):Result<SelectSQLQuery|1>[1]
+function meta::external::store::relational::postProcessor::reAliasColumnName::trimColumnName(query:SelectSQLQuery[1],connection:DatabaseConnection[1]):Result<SelectSQLQuery|1>[1]
 {
    trimColumnName($query, ^Runtime(connections = $connection));
 }
 
-function meta::relational::postProcessor::reAliasColumnName::trimColumnName(query:SelectSQLQuery[1],runtime:Runtime[1]):Result<SelectSQLQuery|1>[1]
+function meta::external::store::relational::postProcessor::reAliasColumnName::trimColumnName(query:SelectSQLQuery[1],runtime:Runtime[1]):Result<SelectSQLQuery|1>[1]
 {
   let tableNames = $query->search($runtime);
    let result =if($tableNames->size()>0,
@@ -48,7 +48,7 @@ function meta::relational::postProcessor::reAliasColumnName::trimColumnName(quer
    ^Result<SelectSQLQuery|1>(values= $result);
 }
 
-function meta::relational::postProcessor::reAliasColumnName::lengthConfig(runtime: Runtime[1]):Integer[1]
+function meta::external::store::relational::postProcessor::reAliasColumnName::lengthConfig(runtime: Runtime[1]):Integer[1]
 {
   let type =  $runtime.connections->filter(c|$c->instanceOf(DatabaseConnection))->cast(@DatabaseConnection).type;
 
@@ -59,7 +59,7 @@ function meta::relational::postProcessor::reAliasColumnName::lengthConfig(runtim
   )->toOne();
 }
 
-function  meta::relational::postProcessor::reAliasColumnName::search(q:RelationalOperationElement[*],runtime:Runtime[1] ): Pair<String,String>[*]
+function  meta::external::store::relational::postProcessor::reAliasColumnName::search(q:RelationalOperationElement[*],runtime:Runtime[1] ): Pair<String,String>[*]
 {
    $q->map(r| $r->match([
                     v:ViewSelectSQLQuery[1]|$v.selectSQLQuery->search($runtime);,
@@ -92,7 +92,7 @@ function  meta::relational::postProcessor::reAliasColumnName::search(q:Relationa
             );
 }
 
-function  meta::relational::postProcessor::reAliasColumnName::search(q:RelationalTreeNode[*],runtime:Runtime[1]): Pair<String,String>[*]
+function  meta::external::store::relational::postProcessor::reAliasColumnName::search(q:RelationalTreeNode[*],runtime:Runtime[1]): Pair<String,String>[*]
 {
     $q->map(a|
               let alias =  $a.alias;
@@ -108,7 +108,7 @@ function  meta::relational::postProcessor::reAliasColumnName::search(q:Relationa
 
 
 
-function meta::relational::postProcessor::reAliasColumnName::replace(r:RelationalOperationElement[1], m:Map<String,String>[1]):RelationalOperationElement[1]
+function meta::external::store::relational::postProcessor::reAliasColumnName::replace(r:RelationalOperationElement[1], m:Map<String,String>[1]):RelationalOperationElement[1]
 {
    $r->match([
                v:VarSetPlaceHolder[1] | $v;,  
@@ -120,7 +120,7 @@ function meta::relational::postProcessor::reAliasColumnName::replace(r:Relationa
                                                        havingOperation=$s.havingOperation->map(ho|$ho->replace($m)),
                                                        orderBy = $s.orderBy->map(ob|$ob->replace($m)),  
                                                        filteringOperation= $s.filteringOperation->map(fo | $fo->replace($m)));
-                                       if(!$newS.leftSideOfFilter->isEmpty(),| ^$newS(leftSideOfFilter=$s.leftSideOfFilter->toOne()->meta::relational::functions::pureToSqlQuery::findOneNode($s.data->toOne(), $newS.data->toOne())),|$newS);,
+                                       if(!$newS.leftSideOfFilter->isEmpty(),| ^$newS(leftSideOfFilter=$s.leftSideOfFilter->toOne()->meta::external::store::relational::functions::pureToSqlQuery::findOneNode($s.data->toOne(), $newS.data->toOne())),|$newS);,
       
                 v:ViewSelectSQLQuery[1] | ^$v(selectSQLQuery=$v.selectSQLQuery->replace($m)->cast(@SelectSQLQuery));,
                 u:Union[1] |  ^$u(queries = $u.queries->map(q|$q->replace($m);)->cast(@SelectSQLQuery));,
@@ -133,8 +133,8 @@ function meta::relational::postProcessor::reAliasColumnName::replace(r:Relationa
                 roj: RelationalOperationElementWithJoin[1]| ^$roj(relationalOperationElement=$roj.relationalOperationElement->map(r|$r->replace($m)),joinTreeNode=$roj.joinTreeNode->map(j|$j->replace($m))->cast(@JoinTreeNode));, 
                 va:VariableArityOperation[1] | ^$va(args=$va.args->map(e | $e->replace($m)));,
                 d:DynaFunction[1] |  ^$d(parameters=$d.parameters->map(p | $p->replace($m)));,
-                wc:WindowColumn[1] |^$wc(window = $wc.window->replace($m)->cast(@meta::relational::metamodel::Window),func=$wc.func->replace($m)->cast(@DynaFunction));,
-                w:meta::relational::metamodel::Window[1]|^$w(partition=$w.partition->map(p|$p->replace($m)), sortBy=$w.sortBy->map(p|$p->replace($m)));,
+                wc:WindowColumn[1] |^$wc(window = $wc.window->replace($m)->cast(@meta::external::store::relational::metamodel::Window),func=$wc.func->replace($m)->cast(@DynaFunction));,
+                w:meta::external::store::relational::metamodel::Window[1]|^$w(partition=$w.partition->map(p|$p->replace($m)), sortBy=$w.sortBy->map(p|$p->replace($m)));,
                 j:JoinStrings[1] |  ^$j(strings=$j.strings->map(v | $v->replace($m)), 
                                          prefix=if($j.prefix->isEmpty(), | [], | $j.prefix->toOne()->replace($m)),
                                          separator=if($j.separator->isEmpty(), | [], | $j.separator->toOne()->replace($m)),
@@ -149,12 +149,12 @@ function meta::relational::postProcessor::reAliasColumnName::replace(r:Relationa
 }
 
 
-function meta::relational::postProcessor::reAliasColumnName::replace(o:OrderBy[1],m:Map<String,String>[1]):OrderBy[1]
+function meta::external::store::relational::postProcessor::reAliasColumnName::replace(o:OrderBy[1],m:Map<String,String>[1]):OrderBy[1]
 {
      ^$o(column= $o.column->map(c| $c->replace($m)))
 }
 
-function meta::relational::postProcessor::reAliasColumnName::replace(r:RelationalTreeNode[1], m:Map<String,String>[1]):RelationalTreeNode[1]
+function meta::external::store::relational::postProcessor::reAliasColumnName::replace(r:RelationalTreeNode[1], m:Map<String,String>[1]):RelationalTreeNode[1]
 {
      $r->match([
                  j:JoinTreeNode[1] |  let join = $j.join;

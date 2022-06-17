@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import meta::relational::tests::advanced::forcedselfjoin::*;
+import meta::external::store::relational::tests::advanced::forcedselfjoin::*;
 
-Class meta::relational::tests::advanced::forcedselfjoin::Firm
+Class meta::external::store::relational::tests::advanced::forcedselfjoin::Firm
 {
    legalName: String[1];
 }
 
-Class meta::relational::tests::advanced::forcedselfjoin::Organization
+Class meta::external::store::relational::tests::advanced::forcedselfjoin::Organization
 {
    name: String[1];
    children: Organization[*];
 }
 
-Class meta::relational::tests::advanced::forcedselfjoin::Person
+Class meta::external::store::relational::tests::advanced::forcedselfjoin::Person
 {
    firstName: String[1];
    lastName: String[1];
@@ -33,49 +33,49 @@ Class meta::relational::tests::advanced::forcedselfjoin::Person
 
 }
 
-Class meta::relational::tests::advanced::forcedselfjoin::CoveredProduct
+Class meta::external::store::relational::tests::advanced::forcedselfjoin::CoveredProduct
 {
    name: String[1];
 }
 
-Association meta::relational::tests::advanced::forcedselfjoin::personProduct
+Association meta::external::store::relational::tests::advanced::forcedselfjoin::personProduct
 {
    owner: Person[1];
    product: CoveredProduct[1];
 }
 
-Association meta::relational::tests::advanced::forcedselfjoin::Firm_Person
+Association meta::external::store::relational::tests::advanced::forcedselfjoin::Firm_Person
 {
    firm: Firm[1];
    employees: Person[1];
 }
 
-Association meta::relational::tests::advanced::forcedselfjoin::OrgProduct
+Association meta::external::store::relational::tests::advanced::forcedselfjoin::OrgProduct
 {
    managedBy: Organization[1];
    coveredProduct: CoveredProduct[1];
 }
 
-Association meta::relational::tests::advanced::forcedselfjoin::OrgPerson
+Association meta::external::store::relational::tests::advanced::forcedselfjoin::OrgPerson
 {
    group: Organization[1];
    member: Person[1];
 }
 
 ###Pure
-import meta::relational::mapping::*;
-import meta::csv::*;
-import meta::relational::metamodel::execute::*;
-import meta::relational::runtime::*;
+import meta::external::store::relational::mapping::*;
+import meta::external::store::relational::tests::csv::*;
+import meta::external::store::relational::metamodel::execute::*;
+import meta::external::store::relational::runtime::*;
 import meta::pure::runtime::*;
-import meta::relational::tests::advanced::forcedselfjoin::*;
+import meta::external::store::relational::tests::advanced::forcedselfjoin::*;
 
-function meta::relational::tests::advanced::forcedselfjoin::testRuntime():Runtime[1]
+function meta::external::store::relational::tests::advanced::forcedselfjoin::testRuntime():Runtime[1]
 {
-   meta::relational::tests::testRuntime(meta::relational::tests::advanced::forcedselfjoin::IsolationTestDb);
+   meta::external::store::relational::tests::testRuntime(meta::external::store::relational::tests::advanced::forcedselfjoin::IsolationTestDb);
 }
 
-function <<test.BeforePackage>> meta::relational::tests::advanced::forcedselfjoin::setUp(): Any[*]
+function <<test.BeforePackage>> meta::external::store::relational::tests::advanced::forcedselfjoin::setUp(): Any[*]
 {
    let connection = testRuntime().connectionByElement(IsolationTestDb)->cast(@TestDatabaseConnection);
    executeInDb('Drop table if exists PersonTable;',$connection);
@@ -107,7 +107,7 @@ function <<test.BeforePackage>> meta::relational::tests::advanced::forcedselfjoi
    true;
 }
 
-function <<test.AfterPackage>> meta::relational::tests::advanced::forcedselfjoin::TearDown(): Any[*]
+function <<test.AfterPackage>> meta::external::store::relational::tests::advanced::forcedselfjoin::TearDown(): Any[*]
 {
    let connection = testRuntime().connectionByElement(IsolationTestDb)->cast(@TestDatabaseConnection);
    executeInDb('Drop table if exists PersonTable;',$connection);
@@ -117,7 +117,7 @@ function <<test.AfterPackage>> meta::relational::tests::advanced::forcedselfjoin
 
 }
 
-function <<test.Test>> meta::relational::tests::advanced::forcedselfjoin::isolationTest(): Boolean[*]
+function <<test.Test>> meta::external::store::relational::tests::advanced::forcedselfjoin::isolationTest(): Boolean[*]
 {
    let result = execute(|Firm.all()
                           ->project([
@@ -138,8 +138,8 @@ function <<test.Test>> meta::relational::tests::advanced::forcedselfjoin::isolat
 }
 
 ###Mapping
-import meta::relational::tests::advanced::forcedselfjoin::*;
-Mapping meta::relational::tests::advanced::forcedselfjoin::IsolationTestMapping
+import meta::external::store::relational::tests::advanced::forcedselfjoin::*;
+Mapping meta::external::store::relational::tests::advanced::forcedselfjoin::IsolationTestMapping
 (
    
    Person: Relational
@@ -185,7 +185,7 @@ Mapping meta::relational::tests::advanced::forcedselfjoin::IsolationTestMapping
 )
 
 ###Relational
-Database meta::relational::tests::advanced::forcedselfjoin::IsolationTestDb
+Database meta::external::store::relational::tests::advanced::forcedselfjoin::IsolationTestDb
 (
    Table personTable (ID INT PRIMARY KEY, firstName VARCHAR(200), lastName VARCHAR(200), orgId INT, ADDRESSID INT, FIRMID INT, MANAGERID INT)
    Table firmTable(ID INT PRIMARY KEY, legalName VARCHAR(200), ADDRESSID INT, CEOID INT)

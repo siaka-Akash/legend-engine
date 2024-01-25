@@ -253,8 +253,12 @@ functionArg
 
 table
     : qname                                                                          #tableName
-    | qname OPEN_ROUND_BRACKET
-        functionArg? (COMMA functionArg)* CLOSE_ROUND_BRACKET                       #tableFunction
+    | argumentedFunctionCall                                                         #tableFunction
+    ;
+
+argumentedFunctionCall
+    : qname OPEN_ROUND_BRACKET
+        functionArg? (COMMA functionArg)* CLOSE_ROUND_BRACKET
     ;
 
 aliasedColumns
@@ -307,6 +311,7 @@ valueExpression
     | left=valueExpression operator=(ASTERISK | SLASH | PERCENT | CARET)
         right=valueExpression                                                        #arithmeticBinary
     | left=valueExpression operator=(PLUS | MINUS) right=valueExpression             #arithmeticBinary
+    | left=valueExpression operator = JSON_EXTRACT right = valueExpression           #jsonExtractBinary
     | left=valueExpression operator=(BITWISE_AND | BITWISE_OR | BITWISE_XOR)
         right=valueExpression                                                        #bitwiseBinary
     | left=valueExpression CONCAT right=valueExpression                              #concatenation
@@ -321,6 +326,7 @@ primaryExpression
     | qname OPEN_ROUND_BRACKET (setQuant? expr (COMMA expr)*)? (ORDER BY sortItem (COMMA sortItem)*)? CLOSE_ROUND_BRACKET within? filter?
         ((IGNORE|RESPECT) NULLS)? over?                                              #functionCall
     | subqueryExpression                                                             #subqueryExpressionDefault
+    | argumentedFunctionCall                                                         #functionCallWithArguments
     | OPEN_ROUND_BRACKET base=primaryExpression CLOSE_ROUND_BRACKET
         DOT fieldName=ident                                                          #recordSubscript
     | OPEN_ROUND_BRACKET expr CLOSE_ROUND_BRACKET                                    #nestedExpression

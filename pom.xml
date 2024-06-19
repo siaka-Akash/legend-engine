@@ -1,1860 +1,1041 @@
-<!--
- Copyright 2020 Goldman Sachs
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <parent>
-        <groupId>org.finos</groupId>
-        <artifactId>finos</artifactId>
-        <version>4</version>
-    </parent>
-
-    <name>Legend Engine</name>
-    <groupId>org.finos.legend.engine</groupId>
-    <artifactId>legend-engine</artifactId>
-    <version>3.1.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>legend-engine-xt-graphQL-grammar</module>
-        <module>legend-engine-xt-graphQL-compiler</module>
-        <module>legend-engine-xt-graphQL-protocol</module>
-        <module>legend-engine-xt-graphQL-query</module>
-        <module>legend-engine-xt-graphQL-pure</module>
-
-        <module>legend-engine-xt-protobuf</module>
-        <module>legend-engine-xt-protobuf-pure</module>
-
-        <module>legend-engine-xt-persistence-grammar</module>
-        <module>legend-engine-xt-persistence-protocol</module>
-        <module>legend-engine-xt-persistence-pure</module>
-
-        <module>legend-engine-xt-serviceStore-executionPlan</module>
-        <module>legend-engine-xt-serviceStore-protocol</module>
-        <module>legend-engine-xt-serviceStore-grammar</module>
-        <module>legend-engine-xt-serviceStore-pure</module>
-
-        <module>legend-engine-xt-xml-model</module>
-        <module>legend-engine-xt-xml-runtime</module>
-        <module>legend-engine-xt-xml-shared</module>
-        <module>legend-engine-xt-xml-pure</module>
-        <module>legend-engine-xt-xml-protocol</module>
-
-        <module>legend-engine-xt-flatdata-model</module>
-        <module>legend-engine-xt-flatdata-shared</module>
-        <module>legend-engine-xt-flatdata-runtime</module>
-        <module>legend-engine-xt-flatdata-protocol</module>
-        <module>legend-engine-xt-flatdata-pure</module>
-
-        <module>legend-engine-xt-json-model</module>
-        <module>legend-engine-xt-json-runtime</module>
-        <module>legend-engine-external-format-jsonSchema</module>
-        <module>legend-engine-xt-json-protocol</module>
-        <module>legend-engine-xt-json-pure</module>
-
-        <module>legend-engine-xt-relationalStore-executionPlan</module>
-        <module>legend-engine-xt-relationalStore-executionPlan-connection</module>
-        <module>legend-engine-xt-relationalStore-executionPlan-connection-tests</module>
-        <module>legend-engine-xt-relationalStore-executionPlan-connection-api</module>
-        <module>legend-engine-xt-relationalStore-executionPlan-connection-tests-api</module>
-        <module>legend-engine-xt-relationalStore-pure</module>
-        <module>legend-engine-xt-relationalStore-api</module>
-        <module>legend-engine-xt-relationalStore-grammar</module>
-        <module>legend-engine-xt-relationalStore-protocol</module>
-
-        <module>legend-engine-pure-ide-light</module>
-        <module>legend-engine-pure-ide-light-metadata-pure</module>
-
-        <module>legend-engine-executionPlan-generation</module>
-        <module>legend-engine-executionPlan-dependencies</module>
-        <module>legend-engine-executionPlan-execution</module>
-        <module>legend-engine-executionPlan-execution-api</module>
-        <module>legend-engine-xt-relationalStore-executionPlan-connection-authentication</module>
-        <module>legend-engine-executionPlan-execution-store-inMemory</module>
-        <module>legend-engine-external-shared</module>
-        <module>legend-engine-external-shared-format-model</module>
-        <module>legend-engine-external-shared-format-runtime</module>
-        <module>legend-engine-external-format-avro</module>
-        <module>legend-engine-external-format-rosetta</module>
-        <module>legend-engine-external-language-java</module>
-        <module>legend-engine-external-language-morphir</module>
-        <module>legend-engine-language-pure-modelManager</module>
-        <module>legend-engine-language-pure-modelManager-sdlc</module>
-        <module>legend-engine-language-pure-compiler</module>
-        <module>legend-engine-language-pure-compiler-api</module>
-        <module>legend-engine-language-pure-grammar</module>
-        <module>legend-engine-language-pure-grammar-api</module>
-        <module>legend-engine-language-pure-dsl-diagram</module>
-        <module>legend-engine-language-pure-dsl-text</module>
-        <module>legend-engine-language-pure-dsl-data-space</module>
-        <module>legend-engine-language-pure-dsl-generation</module>
-        <module>legend-engine-language-pure-dsl-service</module>
-        <module>legend-engine-language-pure-dsl-service-generation</module>
-        <module>legend-engine-language-pure-dsl-service-execution</module>
-        <module>legend-engine-test-runner-shared</module>
-        <module>legend-engine-test-runner-mapping</module>
-        <module>legend-engine-test-runner-service</module>
-        <module>legend-engine-configuration</module>
-        <module>legend-engine-protocol</module>
-        <module>legend-engine-protocol-generation</module>
-        <module>legend-engine-protocol-external-shared-format</module>
-        <module>legend-engine-protocol-pure</module>
-        <module>legend-engine-application-query</module>
-        <module>legend-engine-query-pure</module>
-        <module>legend-engine-shared-core</module>
-        <module>legend-engine-shared-javaCompiler</module>
-        <module>legend-engine-services-model</module>
-        <module>legend-engine-services-model-api</module>
-        <module>legend-engine-server</module>
-        <module>legend-engine-test-reports</module>
-        <module>legend-engine-extensions-collection-execution</module>
-        <module>legend-engine-extensions-collection-generation</module>
-        <module>legend-engine-testable</module>
-    </modules>
-
-    <properties>
-        <!-- Legend -->
-        <legend.pure.version>2.1.1</legend.pure.version>
-        <legend.shared.version>0.21.0</legend.shared.version>
-
-        <!-- SONAR -->
-        <sonar.projectKey>legend-engine</sonar.projectKey>
-        <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
-        <sonar.organization>finos</sonar.organization>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-
-        <!-- Overridden by sub-modules without Java code -->
-        <javadoc.skip>false</javadoc.skip>
-
-        <!-- work around bug where maven.build.timestamp doesn't get propagated to filtering -->
-        <timestamp>${maven.build.timestamp}</timestamp>
-
-        <!-- Build Variables -->
-        <dependencies.failOnWarning>true</dependencies.failOnWarning>
-        <encoding>UTF-8</encoding>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.release>8</maven.compiler.release>
-
-        <!-- Databases -->
-        <hikaricp.version>4.0.3</hikaricp.version>
-        <h2.version>1.4.200</h2.version>
-        <snowflake.version>3.13.5</snowflake.version>
-        <redshiftJDBC.version>2.0.0.3</redshiftJDBC.version>
-
-        <!-- Dependency versions -->
-        <junit.version>4.13.1</junit.version>
-        <mockito-core.version>2.28.2</mockito-core.version>
-        <eclipsecollections.version>10.2.0</eclipsecollections.version>
-        <jackson.version>2.10.5</jackson.version>
-        <jackson.databind.version>2.10.5.1</jackson.databind.version>
-        <mongodb.version>3.12.8</mongodb.version>
-        <test.mongodb.version>1.38.0</test.mongodb.version>
-        <hibernate-validator.version>5.4.3.Final</hibernate-validator.version>
-        <log4j.version>1.2.17</log4j.version>
-        <slf4j.version>1.7.25</slf4j.version>
-        <jaxrs.version>2.0.1</jaxrs.version>
-        <commons-codec.version>1.15</commons-codec.version>
-        <commons-compress.version>1.21</commons-compress.version>
-        <commons-lang3.version>3.7</commons-lang3.version>
-        <commons-lang.version>2.6</commons-lang.version>
-        <commons-csv.version>1.5</commons-csv.version>
-        <commons-io.version>2.7</commons-io.version>
-        <commons-text.version>1.8</commons-text.version>
-        <freemarker.version>2.3.30</freemarker.version>
-        <opentracing.version>0.32.0</opentracing.version>
-        <prometheus.version>0.8.1</prometheus.version>
-        <httpclient.version>4.5.13</httpclient.version>
-        <httpcore.version>4.4.13</httpcore.version>
-        <janino.version>3.1.0</janino.version>
-        <github.classgraph.version>4.8.25</github.classgraph.version>
-        <pac4j.version>3.7.0</pac4j.version>
-        <pac4j.jaxrs.version>3.0.0</pac4j.jaxrs.version>
-        <pac4j.jersey.version>3.0.0</pac4j.jersey.version>
-        <antlr.version>4.8-1</antlr.version>
-        <jetty.version>9.4.44.v20210927</jetty.version>
-        <jersey.version>2.25.1</jersey.version>
-        <javax.servlet.version>3.1.0</javax.servlet.version>
-        <javax.inject.version>1</javax.inject.version>
-        <swagger.annotation.version>1.5.20</swagger.annotation.version>
-        <joda.time.version>2.10.6</joda.time.version>
-        <zipkin.reporter.version>2.15.0</zipkin.reporter.version>
-        <dropwizard.version>1.3.29</dropwizard.version>
-        <dropwizard-swagger.version>1.3.17-1</dropwizard-swagger.version>
-        <dropwizard.metrics.version>4.1.16</dropwizard.metrics.version>
-        <guava.version>30.0-jre</guava.version>
-        <jsonunit.version>2.17.0</jsonunit.version>
-        <janino.version>3.1.0</janino.version>
-        <hamcrest.core.version>1.3</hamcrest.core.version>
-        <openjdk.jol.version>0.9</openjdk.jol.version>
-        <json-smart.version>2.4.7</json-smart.version>
-        <byte-buddy.version>1.11.20</byte-buddy.version>
-        <wiremock.version>2.27.2</wiremock.version>
-
-        <!-- Plugin versions -->
-        <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
-        <maven.source.plugin.version>3.2.0</maven.source.plugin.version>
-        <maven.resources.plugin.version>3.2.0</maven.resources.plugin.version>
-        <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
-        <maven.dependency.plugin.version>2.10</maven.dependency.plugin.version>
-        <maven.shade.plugin.version>3.2.1</maven.shade.plugin.version>
-        <maven.plugin.plugin.version>3.6.0</maven.plugin.plugin.version>
-        <maven.enforcer.plugin.version>3.0.0-M1</maven.enforcer.plugin.version>
-        <maven.jar.plugin.version>3.1.2</maven.jar.plugin.version>
-        <maven.javadoc.plugin.version>3.3.1</maven.javadoc.plugin.version>
-        <maven.checkstyle.plugin.version>3.1.1</maven.checkstyle.plugin.version>
-        <versions.maven.plugin.version>2.7</versions.maven.plugin.version>
-        <nexus.staging.maven.plugin.version>1.6.8</nexus.staging.maven.plugin.version>
-        <jacoco.maven.plugin.version>0.8.5</jacoco.maven.plugin.version>
-        <exec.maven.plugin.version>3.0.0</exec.maven.plugin.version>
-        <build-helper.maven.plugin.version>3.2.0</build-helper.maven.plugin.version>
-        <dockerfile.maven.plugin.version>1.4.13</dockerfile.maven.plugin.version>
-    </properties>
-
-    <scm>
-        <developerConnection>scm:git:https://github.com/finos/legend-engine</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>io.github.git-commit-id</groupId>
-                    <artifactId>git-commit-id-maven-plugin</artifactId>
-                    <version>5.0.0</version>
-                    <executions>
-                        <execution>
-                            <id>get-the-git-infos</id>
-                            <goals>
-                                <goal>revision</goal>
-                            </goals>
-                            <phase>initialize</phase>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                        <generateGitPropertiesFilename>src/main/resources/legendExecutionVersion.json</generateGitPropertiesFilename>
-                        <format>json</format>
-                        <includeOnlyProperties>
-                            <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>
-                            <includeOnlyProperty>^git.commit.id.(abbrev|full)$</includeOnlyProperty>
-                            <includeOnlyProperty>^git.commit.id$</includeOnlyProperty>
-                            <includeOnlyProperty>^git.(total.commit.count|branch|tags)$</includeOnlyProperty>
-                            <includeOnlyProperty>^git.(commit.time|closest.tag.name|branch|tags)$</includeOnlyProperty>
-                            <includeOnlyProperty>^git.(commit.time|branch|tags)$</includeOnlyProperty>
-                        </includeOnlyProperties>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>${maven.javadoc.plugin.version}</version>
-                    <configuration>
-                        <skip>${javadoc.skip}</skip>
-                        <source>8</source>
-                        <doclint>none</doclint>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>${nexus.staging.maven.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven.compiler.plugin.version}</version>
-                    <configuration>
-                        <source>${maven.compiler.source}</source>
-                        <target>${maven.compiler.target}</target>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>${maven.resources.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${maven.surefire.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>${maven.dependency.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-shade-plugin</artifactId>
-                    <version>${maven.shade.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>${maven.enforcer.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>versions-maven-plugin</artifactId>
-                    <version>${versions.maven.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>${maven.jar.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>${jacoco.maven.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>${maven.checkstyle.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.antlr</groupId>
-                    <artifactId>antlr4-maven-plugin</artifactId>
-                    <version>${antlr.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>exec-maven-plugin</artifactId>
-                    <version>${exec.maven.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>${build-helper.maven.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>com.spotify</groupId>
-                    <artifactId>dockerfile-maven-plugin</artifactId>
-                    <version>${dockerfile.maven.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.finos.legend.pure</groupId>
-                    <artifactId>legend-pure-maven-compilation-par</artifactId>
-                    <version>${legend.pure.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.finos.legend.pure</groupId>
-                    <artifactId>legend-pure-maven-java-compiled</artifactId>
-                    <version>${legend.pure.version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-            <plugin>
-                <!-- Used to copy test results into test reports module -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <useSystemClassLoader>true</useSystemClassLoader>
-                    <useManifestOnlyJar>false</useManifestOnlyJar>
-                    <reportsDirectory>
-                        ${project.parent.basedir}/legend-engine-test-reports/surefire-reports-aggregate
-                    </reportsDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>pre-unit-test</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <excludes>
-                        <exclude>org/finos/legend/engine/language/pure/grammar/from/antlr4/**/*</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <configuration>
-                    <failOnWarning>true</failOnWarning>
-                    <ignoreNonCompile>true</ignoreNonCompile>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>dependency-analyze</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>analyze-only</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>enforce</id>
-                        <configuration>
-                            <rules>
-                                <requireJavaVersion>
-                                    <version>[11.0.10,12)</version>
-                                </requireJavaVersion>
-                                <dependencyConvergence />
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>log4j</exclude>
-                                        <exclude>org.slf4j</exclude>
-                                        <exclude>commons-logging</exclude>
-                                        <exclude>javax.mail</exclude>
-                                    </excludes>
-                                    <includes>
-                                        <!--only the specific included logging jars are allowed -->
-                                        <include>org.slf4j:jul-to-slf4j:${slf4j.version}</include>
-                                        <include>org.slf4j:slf4j-api:${slf4j.version}</include>
-                                        <include>org.slf4j:jcl-over-slf4j:${slf4j.version}</include>
-                                        <include>org.slf4j:slf4j-jdk14:${slf4j.version}</include>
-                                        <include>org.slf4j:slf4j-log4j12:${slf4j.version}</include>
-                                        <include>org.slf4j:slf4j-ext:${slf4j.version}</include>
-                                        <include>log4j:log4j:${log4j.version}</include>
-                                        <include>log4j:apache-log4j-extras:${log4j.version}</include>
-                                    </includes>
-                                </bannedDependencies>
-                            </rules>
-                        </configuration>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
-    <dependencyManagement>
-        <dependencies>
-            <!-- Duplicative of legend-shared-pac4j dep
-                (via jackson-dataformat-yaml). If not set,
-                snakeyaml version shown in the build is 1.24
-                Could be caused by a mvn conflict resolution,
-                the safest approach is to force version here.
-            -->
-            <dependency>
-                <groupId>org.yaml</groupId>
-                <artifactId>snakeyaml</artifactId>
-                <version>1.26</version>
-            </dependency>
-
-            <!-- ENGINE -->
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-graphQL-query</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-graphQL-compiler</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-graphQL-grammar</artifactId>
-                <version>${project.version}</version>
-                <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-graphQL-grammar</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-graphQL-protocol</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-graphQL-pure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-relationalStore-executionPlan-connection-tests-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-relationalStore-executionPlan</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-relationalStore-executionPlan-connection</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-relationalStore-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-relationalStore-executionPlan-connection-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-relationalStore-protocol</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-relationalStore-grammar</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-relationalStore-pure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-serviceStore-grammar</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-serviceStore-pure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-serviceStore-executionPlan</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-serviceStore-protocol</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-persistence-protocol</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-persistence-grammar</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-persistence-pure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-flatdata-protocol</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-flatdata-model</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-flatdata-runtime</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-flatdata-shared</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-flatdata-pure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-xml-protocol</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-xml-model</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-xml-runtime</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-xml-shared</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-xml-pure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-json-protocol</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-json-pure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-json-model</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-json-runtime</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-protobuf-pure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-protobuf</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-query-pure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-executionPlan-execution</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-executionPlan-execution-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-xt-relationalStore-executionPlan-connection-authentication</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-executionPlan-execution-store-inMemory</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-executionPlan-generation</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-executionPlan-dependencies</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-compiler</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-compiler</artifactId>
-                <version>${project.version}</version>
-                <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-compiler-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-grammar</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-grammar</artifactId>
-                <version>${project.version}</version>
-                <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-grammar-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-modelManager</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-modelManager-sdlc</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-protocol</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-protocol-generation</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-protocol-pure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-protocol-external-shared-format</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-shared-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-shared-core</artifactId>
-                <type>test-jar</type>
-                <scope>test</scope>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-shared-javaCompiler</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-server</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-dsl-diagram</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-dsl-text</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-dsl-data-space</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-dsl-generation</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-dsl-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-test-runner-shared</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-test-runner-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-test-runner-mapping</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-configuration</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-dsl-service-generation</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-language-pure-dsl-service-execution</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-external-shared</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-external-shared-format-model</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-external-shared-format-model</artifactId>
-                <version>${project.version}</version>
-                <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-external-shared-format-runtime</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-external-shared-format-runtime</artifactId>
-                <version>${project.version}</version>
-                <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-external-format-avro</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-external-format-jsonSchema</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-external-format-rosetta</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-external-language-java</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-external-language-morphir</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-application-query</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-services-model</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-services-model-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.engine</groupId>
-                <artifactId>legend-engine-testable</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <!-- ENGINE -->
-
-            <!-- PURE -->
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-m4</artifactId>
-                <version>${legend.pure.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr4</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr-runtime</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-configuration-external</artifactId>
-                <version>${legend.pure.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-m3-core</artifactId>
-                <version>${legend.pure.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr4</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr-runtime</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>io.opentracing.contrib</groupId>
-                        <artifactId>opentracing-jaxrs2</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.jgit</groupId>
-                        <artifactId>org.eclipse.jgit</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>io.prometheus</groupId>
-                        <artifactId>simpleclient_hotspot</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>io.prometheus</groupId>
-                        <artifactId>simpleclient_httpserver</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-runtime-java-engine-shared</artifactId>
-                <version>${legend.pure.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-runtime-java-engine-compiled</artifactId>
-                <version>${legend.pure.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr4</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr-runtime</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.hadoop</groupId>
-                        <artifactId>hadoop-common</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>jdk.tools</groupId>
-                        <artifactId>jdk.tools</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.hive</groupId>
-                        <artifactId>hive-jdbc</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.hive</groupId>
-                        <artifactId>hive-shims</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.hbase</groupId>
-                        <artifactId>hbase-client</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.bouncycastle</groupId>
-                        <artifactId>bcpg-jdk15on</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>log4j</groupId>
-                        <artifactId>log4j</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>io.opentracing.contrib</groupId>
-                        <artifactId>opentracing-jaxrs2</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-runtime-java-extension-external-json</artifactId>
-                <version>${legend.pure.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-m3-platform</artifactId>
-                <version>${legend.pure.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-m3-dsl-path</artifactId>
-                <version>${legend.pure.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr4</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr-runtime</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-m2-dsl-mapping</artifactId>
-                <version>${legend.pure.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr4</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr-runtime</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-m2-dsl-diagram</artifactId>
-                <version>${legend.pure.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr4</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr-runtime</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-runtime-java-extension-dsl-mapping</artifactId>
-                <version>${legend.pure.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr4</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr-runtime</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-m3-dsl-graph</artifactId>
-                <version>${legend.pure.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr4</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr-runtime</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-m2-store-relational</artifactId>
-                <version>${legend.pure.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr4</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr-runtime</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-runtime-java-extension-store-relational</artifactId>
-                <version>${legend.pure.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-code-compiled-core</artifactId>
-                <version>${legend.pure.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr4</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr-runtime</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.code.findbugs</groupId>
-                        <artifactId>jsr305</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>commons-configuration</groupId>
-                        <artifactId>commons-configuration</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>commons-collections</groupId>
-                        <artifactId>commons-collections</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>commons-codec</groupId>
-                        <artifactId>commons-codec</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>log4j</groupId>
-                        <artifactId>log4j</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.yaml</groupId>
-                        <artifactId>snakeyaml</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-code-compiled-core-external-shared</artifactId>
-                <version>${legend.pure.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-m2-external-json</artifactId>
-                <version>${legend.pure.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-code-compiled-platform-java</artifactId>
-                <version>${legend.pure.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-code-compiled-tests</artifactId>
-                <version>${legend.pure.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.pure</groupId>
-                <artifactId>legend-pure-ide-light</artifactId>
-                <version>${legend.pure.version}</version>
-            </dependency>
-            <!-- PURE -->
-
-            <!-- LEGEND SHARED -->
-            <dependency>
-                <groupId>org.finos.legend.shared</groupId>
-                <artifactId>legend-shared-server</artifactId>
-                <version>${legend.shared.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>javax.xml.bind</groupId>
-                        <artifactId>jaxb-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.shared</groupId>
-                <artifactId>legend-shared-pac4j</artifactId>
-                <version>${legend.shared.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-lang</groupId>
-                        <artifactId>commons-lang</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.shared</groupId>
-                <artifactId>legend-shared-pac4j-kerberos</artifactId>
-                <version>${legend.shared.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.finos.legend.shared</groupId>
-                <artifactId>legend-shared-pac4j-gitlab</artifactId>
-                <version>${legend.shared.version}</version>
-            </dependency>
-            <!-- LEGEND SHARED -->
-
-            <!-- ECLIPSE COLLECTIONS -->
-            <dependency>
-                <groupId>org.eclipse.collections</groupId>
-                <artifactId>eclipse-collections-api</artifactId>
-                <version>${eclipsecollections.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.collections</groupId>
-                <artifactId>eclipse-collections</artifactId>
-                <version>${eclipsecollections.version}</version>
-            </dependency>
-            <!-- ECLIPSE COLLECTIONS -->
-
-            <!-- JACKSON -->
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.databind.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.dataformat</groupId>
-                <artifactId>jackson-dataformat-csv</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.dataformat</groupId>
-                <artifactId>jackson-dataformat-xml</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <!-- Needed to resolve dependency divergence issue in `legend-engine-server` -->
-                <groupId>com.fasterxml.jackson.dataformat</groupId>
-                <artifactId>jackson-dataformat-yaml</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <!-- Needed to resolve dependency divergence issue in `legend-engine-test-reports` -->
-                <groupId>com.fasterxml.jackson.jaxrs</groupId>
-                <artifactId>jackson-jaxrs-json-provider</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <!-- JACKSON -->
-
-            <!-- OPEN JDK -->
-            <dependency>
-                <groupId>org.openjdk.jol</groupId>
-                <artifactId>jol-core</artifactId>
-                <version>${openjdk.jol.version}</version>
-            </dependency>
-            <!-- OPEN JDK -->
-
-            <!-- JUNIT -->
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito-core.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <!-- JUNIT -->
-
-            <!-- concurrency testing -->
-            <dependency>
-                <groupId>net.bytebuddy</groupId>
-                <artifactId>byte-buddy</artifactId>
-                <version>${byte-buddy.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>net.bytebuddy</groupId>
-                <artifactId>byte-buddy-agent</artifactId>
-                <version>${byte-buddy.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <!-- concurrency testing -->
-
-            <!-- ANTLR -->
-            <dependency>
-                <groupId>org.antlr</groupId>
-                <artifactId>antlr4-runtime</artifactId>
-                <version>${antlr.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <!-- ANTLR -->
-
-            <!-- LOGGING -->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jcl-over-slf4j</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jul-to-slf4j</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${log4j.version}</version>
-            </dependency>
-            <!-- LOGGING -->
-
-            <!-- OPEN TRACING -->
-            <dependency>
-                <groupId>io.opentracing</groupId>
-                <artifactId>opentracing-api</artifactId>
-                <version>${opentracing.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.opentracing</groupId>
-                <artifactId>opentracing-util</artifactId>
-                <version>${opentracing.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.opentracing</groupId>
-                <artifactId>opentracing-noop</artifactId>
-                <version>${opentracing.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.reporter2</groupId>
-                <artifactId>zipkin-reporter</artifactId>
-                <version>${zipkin.reporter.version}</version>
-            </dependency>
-            <!-- OPEN TRACING -->
-
-            <!-- ANNOTATIONS -->
-            <dependency>
-                <groupId>org.pac4j.jax-rs</groupId>
-                <artifactId>core</artifactId>
-                <version>${pac4j.jaxrs.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.pac4j</groupId>
-                <artifactId>pac4j-core</artifactId>
-                <version>${pac4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.pac4j</groupId>
-                <artifactId>jersey-pac4j</artifactId>
-                <scope>test</scope>
-                <version>${pac4j.jersey.version}</version>
-            </dependency>
-            <!-- ANNOTATIONS -->
-
-            <!-- COMMONS -->
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons-io.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-compress</artifactId>
-                <version>${commons-compress.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-                <version>${commons-lang.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-text</artifactId>
-                <version>${commons-text.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>${commons-codec.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-csv</artifactId>
-                <version>${commons-csv.version}</version>
-            </dependency>
-            <!-- COMMONS -->
-
-            <!-- DROPWIZARD -->
-            <dependency>
-                <groupId>io.dropwizard</groupId>
-                <artifactId>dropwizard-core</artifactId>
-                <version>${dropwizard.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>log4j-over-slf4j</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>joda-time</groupId>
-                        <artifactId>joda-time</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard</groupId>
-                <artifactId>dropwizard-forms</artifactId>
-                <version>${dropwizard.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-core</artifactId>
-                <version>${dropwizard.metrics.version}</version>
-            </dependency>
-            <dependency>
-                <!-- Needed this exclusion to resolve dependency divergence issue in `legend-engine-server` -->
-                <groupId>io.dropwizard</groupId>
-                <artifactId>dropwizard-util</artifactId>
-                <version>${dropwizard.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.google.code.findbugs</groupId>
-                        <artifactId>jsr305</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard</groupId>
-                <artifactId>dropwizard-assets</artifactId>
-                <version>${dropwizard.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard</groupId>
-                <artifactId>dropwizard-jetty</artifactId>
-                <version>${dropwizard.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard</groupId>
-                <artifactId>dropwizard-jersey</artifactId>
-                <version>${dropwizard.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.javassist</groupId>
-                        <artifactId>javassist</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.smoketurner</groupId>
-                <artifactId>dropwizard-swagger</artifactId>
-                <version>${dropwizard-swagger.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.javassist</groupId>
-                        <artifactId>javassist</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.hk2</groupId>
-                <artifactId>hk2-locator</artifactId>
-                <version>2.5.0-b32</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.javassist</groupId>
-                        <artifactId>javassist</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <!-- DROPWIZARD -->
-
-            <!-- JSON-UNIT -->
-            <dependency>
-                <groupId>net.javacrumbs.json-unit</groupId>
-                <artifactId>json-unit-core</artifactId>
-                <version>${jsonunit.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>net.javacrumbs.json-unit</groupId>
-                <artifactId>json-unit</artifactId>
-                <version>${jsonunit.version}</version>
-                <scope>test</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.hamcrest</groupId>
-                        <artifactId>hamcrest-core</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <!-- JSON-UNIT -->
-
-            <dependency>
-                <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest-core</artifactId>
-                <version>${hamcrest.core.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mongodb</groupId>
-                <artifactId>bson</artifactId>
-                <version>${mongodb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mongodb</groupId>
-                <artifactId>mongo-java-driver</artifactId>
-                <version>${mongodb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.bwaldvogel</groupId>
-                <artifactId>mongo-java-server</artifactId>
-                <version>${test.mongodb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.bwaldvogel</groupId>
-                <artifactId>mongo-java-server-core</artifactId>
-                <version>${test.mongodb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.bwaldvogel</groupId>
-                <artifactId>mongo-java-server-memory-backend</artifactId>
-                <version>${test.mongodb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-validator</artifactId>
-                <version>${hibernate-validator.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.ws.rs</groupId>
-                <artifactId>javax.ws.rs-api</artifactId>
-                <version>${jaxrs.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-annotations</artifactId>
-                <version>${swagger.annotation.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>${javax.servlet.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.inject</groupId>
-                <artifactId>javax.inject</artifactId>
-                <version>${javax.inject.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.prometheus</groupId>
-                <artifactId>simpleclient</artifactId>
-                <version>${prometheus.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>${httpclient.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpcore</artifactId>
-                <version>${httpcore.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.freemarker</groupId>
-                <artifactId>freemarker</artifactId>
-                <version>${freemarker.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.janino</groupId>
-                <artifactId>janino</artifactId>
-                <version>${janino.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.janino</groupId>
-                <artifactId>commons-compiler</artifactId>
-                <version>${janino.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.classgraph</groupId>
-                <artifactId>classgraph</artifactId>
-                <version>${github.classgraph.version}</version>
-            </dependency>
-
-
-            <!-- Jetty -->
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-servlet</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-servlets</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-server</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-http</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-security</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-util-ajax</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-webapp</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-xml</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-continuation</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-util</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <!-- Jetty -->
-
-
-            <!-- Database -->
-            <dependency>
-                <groupId>com.zaxxer</groupId>
-                <artifactId>HikariCP</artifactId>
-                <version>${hikaricp.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.h2database</groupId>
-                <artifactId>h2</artifactId>
-                <version>${h2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.snowflake</groupId>
-                <artifactId>snowflake-jdbc</artifactId>
-                <version>${snowflake.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.sqlserver</groupId>
-                <artifactId>mssql-jdbc</artifactId>
-                <version>6.2.1.jre7</version>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.amazon.redshift</groupId>
-                 <artifactId>redshift-jdbc42</artifactId>
-                <scope>runtime</scope>
-                <version>${redshiftJDBC.version}</version>
-            </dependency>
-
-            <!-- Database -->
-
-            <!-- Test Containers -->
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>testcontainers</artifactId>
-                <version>1.16.3</version>
-            </dependency>
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>mssqlserver</artifactId>
-                <version>1.16.3</version>
-            </dependency>
-            <!-- Test Containers -->
-
-            <dependency>
-                <groupId>net.minidev</groupId>
-                <artifactId>json-smart</artifactId>
-                <version>${json-smart.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.jersey.core</groupId>
-                <artifactId>jersey-common</artifactId>
-                <version>${jersey.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>${joda.time.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi-ooxml</artifactId>
-                <version>4.1.1</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.tomakehurst</groupId>
-                <artifactId>wiremock-jre8</artifactId>
-                <version>${wiremock.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-io</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.conscrypt</groupId>
-                        <artifactId>conscrypt-openjdk-uber</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>javax.xml.bind</groupId>
-                        <artifactId>jaxb-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-        </dependencies>
-
-    </dependencyManagement>
-
-    <repositories>
-        <repository>
-            <id>ossrh</id>
-            <name>OSSRH Public Group</name>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>ossrh-releases</id>
-            <name>OSSRH Public Releases Group</name>
-            <url>https://s01.oss.sonatype.org/content/repositories/releases/</url>
-        </repository>
-    </repositories>
-
-    <profiles>
-        <profile>
-            <id>docker</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.spotify</groupId>
-                        <artifactId>dockerfile-maven-plugin</artifactId>
-                        <inherited>false</inherited>
-                        <configuration>
-                            <skip>true</skip>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-</project>
+graphfetchjson
+
+// Copyright 2020 Goldman Sachs
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import meta::pure::executionPlan::platformBinding::legendJava::shared::*;
+import meta::external::language::java::factory::*;
+import meta::external::language::java::factory::project::*;
+import meta::external::language::java::metamodel::*;
+import meta::external::language::java::metamodel::project::*;
+import meta::external::language::java::serialization::*;
+import meta::external::language::java::transform::*;
+import meta::json::*;
+import meta::pure::dataQuality::*;
+import meta::pure::executionPlan::platformBinding::legendJava::*;
+import meta::pure::executionPlan::platformBinding::legendJava::library::jackson::*;
+import meta::pure::executionPlan::platformBinding::legendJava::shared::dataQuality::*;
+import meta::pure::executionPlan::platformBinding::legendJava::shared::naming::*;
+import meta::pure::executionPlan::platformBinding::legendJava::shared::units::*;
+import meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::*;
+import meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::*;
+import meta::pure::executionPlan::platformBinding::typeInfo::*;
+import meta::pure::graphFetch::execution::*;
+import meta::external::store::model::*;
+import meta::pure::metamodel::serialization::grammar::*;
+
+function meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::jsonReaderClass(conventions:Conventions[1], path:String[1], srcTreeClass:meta::pure::metamodel::type::Class<Any>[1]): meta::external::language::java::metamodel::Class[1]
+{
+   $conventions->planNodeClass('public', $path, 'JsonDataReader_' + $conventions->identifier($srcTreeClass->elementToPath('_')));
+}
+
+function meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::createJsonReading(pureClass:meta::pure::metamodel::type::Class<Any>[1], javaInterface:meta::external::language::java::metamodel::Class[1], path:String[1], readableClasses:meta::pure::metamodel::type::Class<Any>[*], readableEnums:meta::pure::metamodel::type::Enumeration<Any>[*], context:GenerationContext[1], debug:DebugContext[1]): Project[1]
+{
+   createJsonReading($pureClass, $javaInterface, $path, [], $readableClasses, $readableEnums, $context, $debug);
+}
+
+function meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::createJsonReading(pureClass:meta::pure::metamodel::type::Class<Any>[1], javaInterface:meta::external::language::java::metamodel::Class[1], path:String[1], pathOffset:String[0..1], readableClasses:meta::pure::metamodel::type::Class<Any>[*], readableEnums:meta::pure::metamodel::type::Enumeration<Any>[*], context:GenerationContext[1], debug:DebugContext[1]): Project[1]
+{
+   newProject()
+      ->addClasses(createJsonReadingClass($pureClass, $javaInterface, $path, $pathOffset, $readableClasses, $readableEnums, $context, $debug))
+      ->addMavenDependency('com.fasterxml.jackson.core', 'jackson-core', '2.10.3');
+}
+
+function meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::hasDecimal(typeInfos:TypeInfoSet[1]):Boolean[1]
+{
+  $typeInfos.typeInfos->filter(ti | $ti->instanceOf(ClassTypeInfo))->cast(@ClassTypeInfo)->exists(cti| $cti.properties->exists(p | $p.genericType.rawType == Decimal));
+}
+
+function meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::createJsonReadingClass(pureClass:meta::pure::metamodel::type::Class<Any>[1], javaInterface:meta::external::language::java::metamodel::Class[1], path:String[1], pathOffset:String[0..1], readableClasses:meta::pure::metamodel::type::Class<Any>[*], readableEnums:meta::pure::metamodel::type::Enumeration<Any>[*], context:GenerationContext[1], debug:DebugContext[1]): meta::external::language::java::metamodel::Class[1]
+{
+   let proto = $context.conventions->jsonReaderClass($path, $pureClass)
+      ->implements($context.conventions->className(StoreStreamReader))
+      ->usingKnownPackages($context.conventions->knownPackages())
+      ->imports($context.conventions->constrainedImports())
+      ->imports($context.conventions->standardImports())
+      ->imports($context.conventions->defectClass())
+      ->imports($readableClasses->map(c| $context.conventions->className($c)))
+      ->imports($readableEnums->map(c| $context.conventions->className($c)))
+      ->imports($context.conventions->className(Checked))
+      ->imports($context->unitImplementationClasses())
+      ->imports(javaPackage('java.io'))
+      ->imports(javaPackage('java.net'))
+      ->imports(jsonFactory())
+      ->imports(jsonParser())
+      ->imports(jsonNode())
+      ->imports(jsonNodeType())
+      ->imports(jsonToken())
+      ->imports(objectMapper())
+      ->imports(javaReflectMethod())
+      ->imports(javaInvocationTargetException()); //'JsonDataReader_' + $context.conventions->identifier($pureClass->elementToPath('_'))
+
+   let conventions = $context.conventions;
+   let jsonToken   = javaClass('com.fasterxml.jackson.core.JsonToken')->typeToString($proto);
+   let baos        = javaClass('java.io.ByteArrayOutputStream');
+   let recordType  = $context.conventions->className(meta::pure::mapping::modelToModel::JsonDataRecord);
+   let unitTypes   = $context.typeInfos->allUnitInfos()->map(uti | $uti.unit());
+
+   $proto
+      ->addClassMethodsCache()
+      ->addField(javaField('private', javaBoolean(), 'finishedReading', 'false'))
+      ->addField(javaField('private', javaStack(javaObject()), 'stack', javaStack(javaObject())->j_new([])->codeToString($proto)))
+      ->addField(javaField('private', jsonParser(), 'parser'))
+      ->addField(javaField('private', objectMapper(), 'objectMapper'))
+      ->addField(javaField('private', javaBoolean(), 'inArray', 'false'))
+      ->addField(javaField('private', javaLong(), 'recordCount', '0'))
+      ->addField(javaField('private', javaInputStream(), 'in'))
+      ->addConstructor()
+      ->addInitReading($context.typeInfos->hasDecimal(), $pathOffset)
+      ->addMethodExist()
+      ->addMethodInvoke()
+      ->addMethod(
+         javaMethod(['public'], javaVoid(), 'destroyReading', [],
+             'if (this.parser.isClosed())\n' +
+             '{\n' +
+             '   return;\n' +
+             '}\n' +
+             'try\n' +
+             '{\n' +
+             '    this.parser.close();\n' +
+             '}\n' +
+             'catch (IOException e)\n' +
+             '{\n' +
+             '    throw new RuntimeException(e);\n' +
+             '}'
+         )
+      )
+      ->addMethod(
+         javaMethod(['public'], javaBoolean(), 'isFinished',
+                    [],
+             'nextToken();\n' +
+             'if (!this.finishedReading && getCurrentToken() == ' +$jsonToken+'.START_ARRAY && !inArray)\n' +
+             '{\n' +
+             '    nextToken();\n' +
+             '    inArray = true;\n'+
+             '}\n' +
+             'if (!this.finishedReading && getCurrentToken() == '+$jsonToken+'.END_ARRAY && inArray)\n' +
+             '{\n' +
+             '    nextToken();\n' +
+             '    inArray = false;\n' +
+             '    this.finishedReading = true;\n' +
+             '}\n' +
+             'this.finishedReading |= getCurrentToken() == null;\n' +
+
+             'return this.finishedReading ;'
+         )
+      )
+      ->addMethod(
+         javaMethod(['public'], javaVoid(), 'nextToken', [],
+             '    try\n' +
+             '    {\n' +
+             '        this.parser.nextToken();\n' +
+             '    }\n' +
+             '    catch (IOException e)\n' +
+             '    {\n' +
+             '        throw new RuntimeException(e);\n' +
+             '    }'
+         )
+      )
+      ->addMethods($readableClasses->map(c|$c->createClassReadMethod($proto, $path, ^$context(conventions=$conventions), $readableClasses)))
+      ->addMethods($unitTypes->map(t|$t->createUnitAcceptMethod($conventions)))
+      ->addMethods($readableEnums->map(c|$c->createEnumReadMethod(^$context(conventions=$conventions))))
+      ->addMethod(createAcceptMethod(String, $proto, $conventions))
+      ->addMethod(createAcceptMethod(Boolean, $proto, $conventions))
+      ->addMethod(createAcceptMethod(Integer, $proto, $conventions))
+      ->addMethod(createAcceptMethod(Float, $proto, $conventions))
+      ->addMethod(createAcceptMethod(Decimal, $proto, $conventions))
+      ->addMethod(createAcceptMethod(Number, $proto, $conventions))
+      ->addMethod(createAcceptMethod(StrictDate, $proto, $conventions))
+      ->addMethod(createAcceptMethod(DateTime, $proto, $conventions))
+      ->addMethod(createAcceptMethod(Date, $proto, $conventions))
+      ->addMethod(acceptManyMethod($conventions))
+      ->addMethod(
+         javaMethod('private', javaClass('com.fasterxml.jackson.core.JsonToken'), 'getCurrentToken', [],
+             'return parser.getCurrentToken();'
+         )
+      )
+
+      ->addMethod(
+         javaMethod('private', javaVoid(), 'check', [javaParam(jsonNodeType(), 'expectedNode'), javaParam(jsonNodeType(), 'currentNode')],
+             'check(expectedNode, currentNode, "Failed to parse JSON, expected \'" + expectedNode + "\', Found " + currentNode);'
+         )
+      )
+      ->addMethod(
+         javaMethod('private', javaVoid(), 'check',
+                    [
+                       javaParam(jsonNodeType(), 'expectedNode'),
+                       javaParam(jsonNodeType(), 'currentNode'),
+                       javaParam(javaString(), 'errorMessage')
+                    ],
+             'check(Collections.singletonList(expectedNode), currentNode, errorMessage);'
+         )
+      )
+      ->addMethod(
+         javaMethod('private', javaVoid(), 'check',
+                    [
+                       javaParam(javaList(jsonNodeType()), 'expectedNodes'),
+                       javaParam(jsonNodeType(), 'currentNode'),
+                       javaParam(javaString(), 'errorMessage')
+                    ],
+             'if (!expectedNodes.contains(currentNode))\n' +
+             '{\n' +
+             '    throw new '+$conventions->codeType($conventions->className(DataParsingException))->codeToString($proto)+'(errorMessage);\n' +
+             '}'
+         )
+      )
+      ->addReadCheckedObjects($pureClass, $javaInterface, $path, $context);
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::acceptManyMethod(conventions:Conventions[1]): meta::external::language::java::metamodel::Method[1]
+{
+   let jsonNode = j_parameter(jsonNode(), 'node');
+   let result   = j_variable(javaList(javaTypeVar('T')), 'result');
+   let itrNode  = j_parameter(jsonNode(), 'n');
+
+   let acceptor       = j_parameter(javaFunction(jsonNode(), javaTypeVar('T')), 'acceptor');
+   let defectRecorder = j_parameter(javaConsumer(javaString()), 'defectRecorder');
+   let exception      = j_parameter($conventions->className(DataParsingException), 'ex');
+
+
+   javaMethod('private', javaTypeVar('T'), javaList(javaTypeVar('T')), 'acceptMany',
+              [$jsonNode, $acceptor, $defectRecorder],
+              [
+                 $result->j_declare(javaArrayList(javaTypeVar('T'))->j_new([])),
+
+                 j_if ($jsonNode->j_invoke('isNull', [], javaBoolean()), $result->j_return()),
+                 j_if ($jsonNode->j_invoke('isArray', [], javaBoolean()),
+                         j_for($itrNode, $jsonNode,
+                                 $result->j_invoke('add', $acceptor->j_invoke('apply', $itrNode, javaTypeVar('T')), javaList(javaTypeVar('T')))->j_try(j_catch($exception, $defectRecorder->j_invoke('accept', $exception->j_invoke('getMessage', [], javaString()), javaVoid())))
+                              ),
+                         [
+                         $result->j_invoke('add', $acceptor->j_invoke('apply', $jsonNode, javaTypeVar('T')), javaList(javaTypeVar('T')))->j_try(j_catch($exception, $defectRecorder->j_invoke('accept', $exception->j_invoke('getMessage', [], javaString()), javaVoid())))
+                         ]
+                       ),
+                $result->j_return()
+              ]
+            );
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::createClassReadMethod(class:meta::pure::metamodel::type::Class<Any>[1], proto:meta::external::language::java::metamodel::Class[1], path:String[1], context:GenerationContext[1], readableClasses:meta::pure::metamodel::type::Class<Any>[*]): meta::external::language::java::metamodel::Method[1]
+{
+   let conventions   = $context.conventions;
+   let javaClass     = $conventions->className($class);
+   let properties    = $context.typeInfos->valueProperties($class);
+   let checked       = $conventions->className(Checked);
+   let checkedResult = javaParameterizedType($checked, $javaClass);
+
+   let jsonToken   = $conventions->codeType(javaClass('com.fasterxml.jackson.core.JsonToken'))->codeToString($proto);
+
+   let specializations = $class->meta::pure::functions::meta::findAllSpecializations()->filter(x|$x->in($readableClasses));
+   let nodeValueVariable = j_variable(javaString(), 'nodeValue');
+   let defectsVariable = j_variable(javaList($conventions->defectClass()), 'defects');
+   let specializationByName = $specializations->groupBy(x| $x.name->toOne());
+   let specializationsCode = if($specializations->isEmpty(), |'', |$specializationByName->keys()->toOneMany()->map(className|pair(
+                                   $className->j_string()->j_invoke('equals', $nodeValueVariable),
+                                   $specializationByName->get($className).values->match([
+                                       { specializationClass: meta::pure::metamodel::type::Class<Any>[1] |$nodeValueVariable->j_assign(j_string($specializationClass->elementToPath('::'))) },
+                                       { specializationClasses: meta::pure::metamodel::type::Class<Any>[*] |
+                                           let defectMsg = j_string('multiple class matches [' + $specializationClasses->map(c|$c->elementToPath('::'))->sort()->joinStrings(', ') + '] for ' + $className);
+                                           $defectsVariable->j_invoke('add', j_invoke($conventions->className(DataQualityBasicDefectClass), 'newInvalidInputCriticalDefect', [$defectMsg, j_string($class->elementToPath())]));
+                                       }
+                                   ])
+                                ))->list()->j_if()->codeToString($proto));
+
+   javaMethod(['public'], $checkedResult, $class->readMethodName($conventions), [j_parameter(jsonNode(), 'node')],
+
+      $conventions->codeType(javaList($conventions->defectClass()))->codeToString($proto)+' defects = new '+$conventions->codeType(javaType('java.util.ArrayList'))->codeToString($proto)+'<>();\n' +
+      '\n' +
+      'if (!node.path("'+defaultAlloyConfig().typeKeyName+'").getNodeType().equals(JsonNodeType.MISSING)){\n' +
+      ' String nodeValue = node.path("'+defaultAlloyConfig().typeKeyName+'").textValue();\n' +
+      $specializationsCode + '\n' +
+      ' if (!nodeValue.equals("' +$class->elementToPath()+'")) {\n' +
+      '   String methodName = "read_" + nodeValue.replace("::", "_");\n' +
+      '   if (readMethodExists(methodName)){\n' +
+      '      return (IChecked) readMethodInvoke(methodName, node);\n' +
+      '   }\n' +
+      '}}\n'+
+      defineClassPreParseVariables($class, $proto, $context)+
+      '\n'+
+      createObject($class, $proto, $path, $context)+
+      '\n'+
+      acceptProperties($class, $proto, $context)+
+      '\n'+
+      validateMultiplicities($class, $context)+
+      '\n'+
+      returnCheckedObject($class, $proto, $path, $context)
+   );
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::defineClassPreParseVariables(class:meta::pure::metamodel::type::Class<Any>[1], proto:meta::external::language::java::metamodel::Class[1], context:GenerationContext[1]): String[1]
+{
+   let conventions = $context.conventions;
+   $context.typeInfos->allProperties($class)->map({p|
+      let javaType = $conventions->pureTypeToJavaType($p);
+      let listType = if(isJavaList($javaType), |$javaType, |javaList($javaType));
+      let variable = '_'+$conventions->fieldName($p);
+
+      let declare = $conventions->codeType($listType)->codeToString($proto)+' '+$variable+' = new '+$conventions->codeType(javaClass('java.util.ArrayList'))->codeToString($proto)+'<>();\n';
+      if($p.owner->instanceOf(Association),
+         {|
+            let elementType = $conventions->codeType($listType->cast(@meta::external::language::java::metamodel::ParameterizedType).typeArguments->at(0))->codeToString($proto);
+            $declare+
+            'if (!this.stack.empty() && this.stack.peek() instanceof '+$elementType+')\n' +
+            '{\n' +
+            '    '+$variable+'.add(('+$elementType+') this.stack.peek());\n' +
+            '}\n';
+         },
+         | $declare
+      );
+   })->joinStrings('');
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::acceptProperties(class:meta::pure::metamodel::type::Class<Any>[1], proto:meta::external::language::java::metamodel::Class[1], context:GenerationContext[1]): String[1]
+{
+   let conventions     = $context.conventions;
+   let jsonToken       = $conventions->codeType(javaClass('com.fasterxml.jackson.core.JsonToken'))->codeToString($proto);
+
+   let propertyClauses   = $context.typeInfos->allProperties($class)->map({p|
+      let variable       = '_'+$conventions->fieldName($p);
+      let javaType       = $conventions->pureTypeToJavaType($p);
+      let propertyType   = $p.genericType.rawType->toOne();
+      let defectRecorder = 'm -> defects.add('+$conventions->codeType($conventions->className(DataQualityBasicDefectClass))->codeToString($proto)+'.newInvalidInputErrorDefect('+escapedString($p.name->toOne())+'+": "+m,'+escapedString($class->elementToPath())+'))';
+
+      'if (node.path('+escapedString($p.name->toOne())+').getNodeType() != JsonNodeType.MISSING){\n' +
+      $propertyType->match([
+         {c: meta::pure::metamodel::type::Class<Any>[1] |
+            let checked     = $conventions->className(Checked);
+            let elementType = if(isJavaList($javaType), |elementTypeOfJavaList($javaType), |$javaType);
+            let checkedType = javaParameterizedType($checked, $elementType);
+
+            $conventions->codeType(javaList($checkedType))->codeToString($proto)+' checked = acceptMany(node.path('+escapedString($p.name->toOne())+'), this::'+$c->readMethodName($conventions)+','+$defectRecorder+');\n' +
+            '        for (int i=0; i<checked.size(); i++)\n' +
+            '        {\n' +
+            '            '+$conventions->codeType(javaList($conventions->defectClass()))->codeToString($proto)+' propertyDefects = '++$conventions->accessCheckedDefects('checked.get(i)')+';\n' +
+            if($p.multiplicity->isToOne() || $p.multiplicity->isZeroOne(),
+               {|
+                  '            '+$conventions->codeType($conventions->relativePathNodeClass())->codeToString($proto)+' pathNode = i == 0\n'+
+                  '                    ? '+$conventions->codeType($conventions->className(DataQualityBasicRelativePathNodeClass))->codeToString($proto)+'.newRelativePathNode('+escapedString($p.name->toOne())+')\n' +
+                  '                    : '+$conventions->codeType($conventions->className(DataQualityBasicRelativePathNodeClass))->codeToString($proto)+'.newRelativePathNode('+escapedString($p.name->toOne())+', i);\n'
+               },
+               {|
+                  '            '+$conventions->codeType($conventions->relativePathNodeClass())->codeToString($proto)+' pathNode = '+$conventions->codeType($conventions->className(DataQualityBasicRelativePathNodeClass))->codeToString($proto)+'.newRelativePathNode('+escapedString($p.name->toOne())+', i);\n'
+               }
+            )+
+            '            defects.addAll(propertyDefects.stream().map(d -> '+$conventions->codeType($conventions->className(DataQualityBasicDefectClass))->codeToString($proto)+'.prefixPath(d, pathNode)).collect('+$conventions->codeType(javaClass('java.util.stream.Collectors'))->codeToString($proto)+'.toList()));\n' +
+            '        }\n' +
+            $variable+' = checked.stream().map(c -> '+$conventions->accessCheckedValue('c')+').filter(v -> v != null).collect('+$conventions->codeType(javaType('java.util.stream.Collectors'))->codeToString($proto)+'.toList());\n';
+         },
+         {e: meta::pure::metamodel::type::Enumeration<Any>[1] |
+            $variable+' = acceptMany(node.path('+escapedString($p.name->toOne())+'), this::'+$e->readMethodName($conventions)+','+$defectRecorder+');\n';
+         },
+         {u: Unit[1] |
+            $variable+' = acceptMany(node.path('+escapedString($p.name->toOne())+'), this::accept'+$conventions->identifier($propertyType.name->toOne())+','+$defectRecorder+');\n';
+         },
+         {a: Any[1] |
+            $variable+' = acceptMany(node.path('+escapedString($p.name->toOne())+'), this::accept'+$propertyType.name->toOne()+','+$defectRecorder+');\n';
+         }
+      ]) + '}';
+
+   });
+
+   $propertyClauses->joinStrings('\n');
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::validateMultiplicities(class:meta::pure::metamodel::type::Class<Any>[1], context:GenerationContext[1]): String[1]
+{
+   $context.typeInfos->allProperties($class)->map({p|
+      let variable = '_'+$context.conventions->fieldName($p);
+      let expected = $p.multiplicity->printMultiplicity();
+
+      if($p.multiplicity->isToOne(),
+         {|
+            'if ('+$variable+'.size() != 1)\n'+
+            '{\n'+
+            '  defects.add('+$context.conventions->newClassStructureDefect('"Invalid multiplicity for '+$p.name->toOne()+': expected ['+$expected+'] found [" + '+$variable+'.size() + "]"', escapedString($class->elementToPath()))+');\n' +
+            '}\n'
+         },
+         |
+      if($p.multiplicity->hasLowerBound() && $p.multiplicity->hasUpperBound(),
+         {|
+            'if ('+$variable+'.size() < '+$p.multiplicity->getLowerBound()->toString()+' || '+$variable+'.size() > '+$p.multiplicity->getUpperBound()->toString()+')\n'+
+            '{\n'+
+            '  defects.add('+$context.conventions->newClassStructureDefect('"Invalid multiplicity for '+$p.name->toOne()+': expected ['+$expected+'] found [" + '+$variable+'.size() + "]"', escapedString($class->elementToPath()))+');\n' +
+            '}\n'
+         },
+         |
+      if($p.multiplicity->hasLowerBound(),
+         {|
+            'if ('+$variable+'.size() < '+$p.multiplicity->getLowerBound()->toString()+')\n'+
+            '{\n'+
+            '  defects.add('+$context.conventions->newClassStructureDefect('"Invalid multiplicity for '+$p.name->toOne()+': expected ['+$expected+'] found [" + '+$variable+'.size() + "]"', escapedString($class->elementToPath()))+');\n' +
+            '}\n'
+         },
+         |
+      if($p.multiplicity->hasUpperBound(),
+         {|
+            'if ('+$variable+'.size() > '+$p.multiplicity->getUpperBound()->toString()+')\n'+
+            '{\n'+
+            '  defects.add('+$context.conventions->newClassStructureDefect('"Invalid multiplicity for '+$p.name->toOne()+': expected ['+$expected+'] found [" + '+$variable+'.size() + "]"', escapedString($class->elementToPath()))+');\n' +
+            '}\n'
+         },
+         {|
+            ''
+         }
+      ))));
+   })->joinStrings('');
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::createObject(class:meta::pure::metamodel::type::Class<Any>[1], proto:meta::external::language::java::metamodel::Class[1], path:String[1], context:GenerationContext[1]): String[1]
+{
+   'this.stack.push(new '+$context.conventions->codeType($class->streamReadingDataClass($path, $context.conventions))->codeToString($proto)+'());\n'
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::returnCheckedObject(class:meta::pure::metamodel::type::Class<Any>[1], proto:meta::external::language::java::metamodel::Class[1], path:String[1], context:GenerationContext[1]): String[1]
+{
+   let conventions            = $context.conventions;
+   let dataClass              = $class->streamReadingDataClass($path, $conventions);
+   let objectAccess           = '(('+$conventions->codeType($dataClass)->codeToString($proto)+') this.stack.peek())';
+   let javaClass              = $conventions->className($class);
+   let checked                = $conventions->className(Checked);
+   let checkedResult          = javaParameterizedType($checked, $javaClass);
+
+   let declaresAndGetters = $context.typeInfos->allProperties($class)->map({p|
+      let variable = $conventions->fieldName($p);
+      let value    = if($p.multiplicity->isToOne(),
+                        | '_'+$variable+'.get(0)',
+                        |
+                     if($p.multiplicity->isZeroOne(),
+                        | '_'+$variable+'.isEmpty() ? null : _'+$variable+'.get(0)',
+                        | $conventions->codeType(javaType('java.util.Collections'))->codeToString($proto)+'.unmodifiableList(_'+$variable+')'
+                     ));
+
+         $objectAccess+'.'+$variable+' = '+$value+';\n';
+   })->joinStrings('');
+
+   'if (defects.stream().anyMatch(d -> '+$conventions->accessDefectEnforcementLevel('d')+' == '+$conventions->elCritical()->codeToString($proto)+'))\n'+
+   '{\n'+
+   '    return '+$conventions->dynamicChecked($javaClass, 'defects', 'null', 'null')+';\n'+
+   '}\n'+
+   'else\n'+
+   '{\n'+
+   $declaresAndGetters+
+   '    '+$conventions->codeType($javaClass)->codeToString($proto)+' value = ('+$conventions->codeType($javaClass)->codeToString($proto)+') this.stack.pop();\n' +
+   '    return '+$conventions->dynamicChecked($javaClass, 'defects', 'null', 'value')+';\n'+
+   '}';
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::createAcceptMethod(type:meta::pure::metamodel::type::Type[1], proto:meta::external::language::java::metamodel::Class[1], conventions:Conventions[1]): meta::external::language::java::metamodel::Method[1]
+{
+   let javaType         = $conventions->pureTypeToJavaType($type, PureOne);
+   let acceptableNodes  = $conventions->jsonNodeTypesFor($type);
+   let errorMessage     = j_variable(javaString(), 'errorMessage');
+   let nodeParameter    = j_parameter(jsonNode(), 'node');
+   let jThis            = j_this($proto);
+   let exception        = j_parameter(javaIllegalArgumentException(), 'ex');
+
+   javaMethod('private', $javaType, 'accept'+$type.name->toOne(), $nodeParameter,
+      [
+        $errorMessage->j_declare(j_string('Unexpected node type:')->j_plus($nodeParameter->j_invoke('getNodeType', [], jsonNodeType())->j_plus(j_string(' for PURE ' + $type.name->toOne())))),
+        $jThis->j_invoke('check', [javaArrays()->j_invoke('asList', $acceptableNodes, javaList(jsonNodeType())), $nodeParameter->j_invoke('getNodeType', [], jsonNodeType()), $errorMessage], javaVoid()),
+
+        j_return($conventions->jsonNodeGetter($nodeParameter, $type))
+      ]->j_try(j_catch($exception, $conventions->className(DataParsingException)->j_new($exception->j_invoke('getMessage', [], javaString()))->j_throw()))
+   );
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::createEnumReadMethod(enum:meta::pure::metamodel::type::Enumeration<Any>[1], context:GenerationContext[1]): meta::external::language::java::metamodel::Method[1]
+{
+   let conventions    = $context.conventions;
+   let javaClass      = $conventions->className($enum);
+   let qualifier      = $enum->elementToPath()+'.';
+   let nodeParameter  = j_parameter(jsonNode(), 'node');
+
+   javaMethod(['public'], $javaClass, $enum->readMethodName($conventions), $nodeParameter,
+      $conventions->codeType(javaString())->codeToString()+' text  = acceptString(node);\n' +
+      $conventions->codeType(javaString())->codeToString()+' value = text.startsWith('+escapedString($qualifier)+') ? text.substring('+$qualifier->length()->toString()+') : text;\n' +
+      'return '+$conventions->codeType($javaClass)->codeToString()+'.getEnumFromPureName(value);'
+   );
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::createUnitAcceptMethod(type:meta::pure::metamodel::type::Type[1], conventions:Conventions[1]): meta::external::language::java::metamodel::Method[1]
+{
+    let javaType                = $conventions->pureTypeToJavaType($type, PureOne);
+    let simpleJavaName          = $conventions->identifier($type.name->toOne());
+    let fullJavaName            = $conventions->identifier($javaType->meta::external::language::java::serialization::typeToString());
+    let acceptibleTokens        = $conventions->jacksonTokenTypesFor($type);
+    let getCurrentTokenErrorMsg = '"Unexpected " + parser.getCurrentToken() + " for PURE '+ $type.name->toOne()+'"';
+    let getNextTokenErrorMsg    = '"Unexpected " + parser.nextToken() + " for PURE '+ $type.name->toOne()+'"';
+    let appendToRecord          = '    this.appendToRecord();\n';
+    let nodeParameter           = j_parameter(jsonNode(), 'node');
+
+    javaMethod('private', $javaType, 'accept' + $simpleJavaName, $nodeParameter,
+       '    check(JsonNodeType.OBJECT, node.getNodeType(), "Unexpected " + node.getNodeType() + " for PURE '+ $type.name->toOne()+'");\n' +
+       '    check(JsonNodeType.ARRAY, node.path("unit").getNodeType(), "Unexpected unit" + node.path("unit").getNodeType() + " for PURE '+ $type.name->toOne()+'");\n' +
+       '    check(JsonNodeType.STRING, node.path("unit").path(0).path("unitId").getNodeType(), "Unexpected unitId" + node.path("unit").path(0).path("unitId").getNodeType() + " for PURE '+ $type.name->toOne()+'");\n' +
+       '    check(JsonNodeType.NUMBER, node.path("unit").path(0).path("exponentValue").getNodeType(), "Unexpected exponentValue" + node.path("unit").path(0).path("exponentValue").getNodeType() + " for PURE '+ $type.name->toOne()+'");\n' +
+
+
+       '    check(JsonNodeType.NUMBER, node.path("value").getNodeType(), "Unexpected value" + node.path("value").getNodeType() + " for PURE '+ $type.name->toOne()+'");\n' +
+       '    Double unitValue = node.path("value").doubleValue();\n' +
+       '    ' +$fullJavaName+' value = new ' + $simpleJavaName +'_Impl(unitValue);\n' +
+
+       '    return value;\n'
+    );
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::addReadCheckedObjects(proto:meta::external::language::java::metamodel::Class[1], pureClass:meta::pure::metamodel::type::Class<Any>[1], javaInterface:meta::external::language::java::metamodel::Class[1], path:String[1], context:GenerationContext[1]): meta::external::language::java::metamodel::Class[1]
+{
+   let conv            = $context.conventions;
+   let checkedClass    = $context.baseProject->toOne()->resolve($conv->className(Checked));
+   let checkedSource   = javaParameterizedType($checkedClass, $javaInterface);
+   let checked         = j_variable($checkedSource, 'object');
+   let sourceRead      = $pureClass->readMethodName($conv);
+   let ioEx            = j_parameter(javaIOException(), 'e');
+   let jThis           = j_this($proto);
+   let recordType      = $conv->className(meta::pure::mapping::modelToModel::JsonDataRecord);
+   let json            = j_variable(javaString(), 'json');
+   let recordNumber    = j_variable(javaLong(), 'recordNumber');
+   let source          = j_variable($recordType, 'source');
+   let node            = j_variable(jsonNode(), 'node');
+
+   $proto->addMethod(
+      javaMethod('public', javaCollection($checkedSource), 'readCheckedObjects', [],
+         [
+            $jThis->j_field('recordCount')->j_inc(),
+
+            $node->j_declare($jThis->j_field('objectMapper', objectMapper())->j_invoke('readValue', [$jThis->j_field('parser', jsonParser()), jsonNode()->j_field('class', javaClassType())], jsonNode())),
+            $checked->j_declare($jThis->j_invoke($sourceRead, [$node], $checkedSource)),
+
+            $recordNumber->j_declare($jThis->j_field('recordCount')),
+            $json->j_declare($node->j_invoke('toString', [])),
+
+            $source->j_declare($recordType->j_newAnon([], [
+               j_method('public', javaLong(), $conv->getterName('number'), [], $recordNumber->j_return()),
+               j_method('public', javaString(), $conv->getterName('record'), [], $json->j_return())
+            ])),
+
+            javaCollections()->j_invoke('singleton', $conv->dynamicChecked($conv->checkedGetDefects($checked), $source, $conv->checkedGetValue($checked)), javaCollection($checkedSource))->j_return()
+         ]->j_ioExTryCatch()
+      )
+   );
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::addConstructor(class:meta::external::language::java::metamodel::Class[1]): meta::external::language::java::metamodel::Class[1]
+{
+   let in = j_parameter(javaInputStream(),'in');
+
+   $class->addConstructor(
+      javaConstructor([], [$in]->cast(@meta::external::language::java::metamodel::Parameter),
+         [
+            j_this($class)->j_field('in')->j_assign($in)
+         ]
+      )
+   );
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::addInitReading(class:meta::external::language::java::metamodel::Class[1], useBigDecimalForFloats:Boolean[0..1], pathOffset:String[0..1]): meta::external::language::java::metamodel::Class[1]
+{
+   let jThis  = j_this($class);
+   let parser = $jThis->j_field('parser');
+   let objectMapper = $jThis->j_field('objectMapper');
+   let objectMapperInstantiation = if($useBigDecimalForFloats->isTrue(),
+                                      | $objectMapper->j_assign(objectMapper()->j_new([])->j_invoke('configure', [deserializationFeatureBigDecimalForFloats()->j_field('USE_BIG_DECIMAL_FOR_FLOATS', deserializationFeatureBigDecimalForFloats()), j_true()] , objectMapper())),
+                                      | $objectMapper->j_assign(objectMapper()->j_new([]))
+                                    );
+
+   $class->imports(javaClass('com.fasterxml.jackson.core.filter.FilteringParserDelegate'))
+         ->imports(javaClass('com.fasterxml.jackson.core.filter.JsonPointerBasedFilter'))
+         ->addMethod(javaMethod('public', javaVoid(), 'initReading', [],
+                     if($pathOffset->isEmpty(),
+                       |[
+                           $parser->j_assign(jsonFactory()->j_new([])->j_invoke('createParser', $jThis->j_field('in'), jsonParser())),
+                           $objectMapperInstantiation
+                        ],
+                       |let baseParserVar = j_variable(jsonParser(), 'baseParser');
+                        [
+                           $baseParserVar->j_declare(jsonFactory()->j_new([])->j_invoke('createParser', $jThis->j_field('in'), jsonParser())),
+                           $parser->j_assign(jsonFilteringParserDelegate()->j_new([$baseParserVar, jsonPointerBasedFilter()->j_new(j_string($pathOffset->toOne())), j_boolean(false), j_boolean(false)])),
+                           $objectMapperInstantiation
+                        ];
+                     )->j_ioExTryCatch()
+           ));
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::addMethodExist(class:meta::external::language::java::metamodel::Class[1]): meta::external::language::java::metamodel::Class[1]
+{
+   let methodName = j_parameter(javaString(), 'name');
+
+   $class->addMethod(javaMethod('private', javaBoolean(), 'readMethodExists', $methodName,
+      'return classMethodsCache.get(name) != null;'
+   ));
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::addMethodInvoke(class:meta::external::language::java::metamodel::Class[1]): meta::external::language::java::metamodel::Class[1]
+{
+   let methodName = j_parameter(javaString(), 'name');
+   let jsonNode   = j_parameter(jsonNode(), 'node');
+
+   $class->addMethod(javaMethod('private', javaObject(), 'readMethodInvoke', [$methodName, $jsonNode],
+      'Method m = classMethodsCache.get(name);\n' +
+      'try{\n' +
+      '   return m.invoke(this, node);\n' +
+      '}\n' +
+      'catch (IllegalAccessException e){throw new RuntimeException(e.getMessage());}catch (InvocationTargetException e){throw new RuntimeException(e.getMessage());}'
+   ));
+}
+
+function <<access.private>> meta::pure::mapping::modelToModel::executionPlan::platformBinding::legendJava::graphFetch::storeStreamReading::json::nextToken(parser:Code[1]): Code[1] { $parser->j_invoke('nextToken', [], jsonToken()); }
+
+
+
+
+ commom.pure
+
+ // Copyright 2020 Goldman Sachs
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import meta::external::language::java::factory::*;
+import meta::external::language::java::factory::project::*;
+import meta::external::language::java::metamodel::*;
+import meta::external::language::java::metamodel::project::*;
+import meta::external::language::java::serialization::*;
+import meta::external::language::java::transform::*;
+import meta::pure::dataQuality::*;
+import meta::pure::executionPlan::*;
+import meta::pure::executionPlan::platformBinding::legendJava::*;
+import meta::pure::executionPlan::platformBinding::legendJava::graphFetch::common::*;
+import meta::pure::executionPlan::platformBinding::legendJava::shared::*;
+import meta::pure::executionPlan::platformBinding::legendJava::shared::naming::*;
+import meta::pure::executionPlan::platformBinding::legendJava::shared::units::*;
+import meta::pure::executionPlan::platformBinding::typeInfo::*;
+import meta::pure::graphFetch::execution::*;
+import meta::pure::graphFetch::executionPlan::*;
+import meta::pure::graphFetch::routing::*;
+import meta::pure::metamodel::constraint::*;
+import meta::pure::graphFetch::*;
+import meta::pure::mapping::*;
+import meta::external::store::model::*;
+import meta::pure::mapping::modelToModel::inMemory::*;
+import meta::pure::milestoning::*;
+
+// ----------------------------------------------------------------------------------------------------------
+// --- Alloy platform dependencies (non-generated)
+// ----------------------------------------------------------------------------------------------------------
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::iExecutionNodeContextParam(conventions: Conventions[1]):Code[1]
+{
+   j_parameter($conventions->className(IExecutionNodeContext), 'context');
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::iStoreStreamReadingExecutionNodeContextParam(conventions: Conventions[1]):Code[1]
+{
+   j_parameter($conventions->className(IStoreStreamReadingExecutionNodeContext), 'context');
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::graphFetchM2MContextParam(conventions: Conventions[1]): Code[1]
+{
+   j_parameter($conventions->className(IGraphFetchM2MExecutionNodeContext), 'context');
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::buildExecuteClass(body:Code[1], param:Code[1], path:String[1], conventions:Conventions[1]):meta::external::language::java::metamodel::Class[1]
+{
+   let ex       = j_parameter(javaException(), 'e');
+   let fullBody = j_try(
+                     $body,
+                     j_catch($ex,
+                        javaRuntimeException()->j_new([j_string('Failed in node: '+$path), $ex])->j_throw()
+                     )
+                  );
+
+   let classesUsed = $param.type->cast(@meta::external::language::java::metamodel::Class)->concatenate($fullBody->classesUsed())->removeDuplicates();
+   let withImports = $conventions->planNodeClass('public', $path, 'Execute')->imports($classesUsed);
+
+   $withImports->addMethod(javaMethod(['public', 'static'], $body.type, 'execute', $param->cast(@meta::external::language::java::metamodel::Parameter), $fullBody));
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::graphInstanceOf(elementType:meta::external::language::java::metamodel::Type[1], conventions:Conventions[1]):meta::external::language::java::metamodel::ParameterizedType[1]
+{
+   javaParameterizedType($conventions->className(GraphInstance), $elementType);
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::castExpressionToReturnType(expression:Code[1], returnType:meta::external::language::java::metamodel::Type[1]): Code[1]
+{
+  if($expression.type == $returnType,
+    |
+      $expression,
+    |
+  if($returnType->isJavaList(),
+    |
+      $expression->j_listOf($returnType),
+    |
+      $expression->j_cast($returnType)
+  ));
+}
+
+// ----------------------------------------------------------------------------------------------------------
+// --- Implementation
+// ----------------------------------------------------------------------------------------------------------
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::generateTypes(context:GenerationContext[1], debug:DebugContext[1]) : Project[1]
+{
+   print(if($debug.debug,|$debug.space+'generateTypes\n', |''));
+
+   mergeProjects
+   ([
+      generateInterfacesAndEnums($context, $debug->indent()),
+      createUnitClasses($context, $debug->indent())
+   ]);
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::generateInterfacesAndEnums(context:GenerationContext[1], debug:DebugContext[1]) : Project[1]
+{
+    generateInterfacesAndEnums($context.conventions, $context.typeInfos, $debug);
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::generateInterfacesAndEnums(conventions:Conventions[1], typeInfos:TypeInfoSet[1], debug:DebugContext[1]) : Project[1]
+{
+   print(if($debug.debug,|$debug.space+'generateInterfacesAndEnums\n', |''));
+
+   let classes     = $typeInfos->allClassInfos()      ->filter(ti| !$conventions->isProvidedType($ti.type))->map(cti | $cti->generateInterfaceForClass($conventions, $debug->indent()));
+   let enums       = $typeInfos->allEnumerationInfos()->filter(ti| !$conventions->isProvidedType($ti.type))->map(eti | $conventions->codeClass($eti.type, ClassPurpose.ENUMERATION, $debug->indent()));
+
+   let unitInfos   = $typeInfos->allUnitInfos();
+   assert($unitInfos->forAll(ti| !$conventions->isProvidedType($ti.type)), 'Units cannot be provided until the Unit interface is a provded type');
+
+   let units = if($unitInfos->isEmpty(),
+                  | [],
+                  {|
+                     let iface = $conventions->meta::pure::executionPlan::platformBinding::legendJava::library::unit::unitInterface();
+                     $unitInfos->map(uti | $uti->generateInterfaceForUnit($iface, $conventions, $debug->indent()))->concatenate($iface);
+                  }
+               );
+
+   $classes->concatenate($enums)->concatenate($units->removeDuplicates())->fold({class,project| $project->addClass($class)}, newProject());
+
+}
+
+//TODO: remove and refactor to use the one using conventions directly below
+function meta::pure::executionPlan::platformBinding::legendJava::shared::createQualifiedPropertiesForClass(class: meta::external::language::java::metamodel::Class[1], qualifiedProperties:QualifiedProperty<Any>[*], context:GenerationContext[1], debug:DebugContext[1]) : Project[1]
+{
+   createQualifiedPropertiesForClass($class, $qualifiedProperties, $context.conventions, $debug);
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::createQualifiedPropertiesForClass(class: meta::external::language::java::metamodel::Class[1], qualifiedProperties:QualifiedProperty<Any>[*], conventions:Conventions[1], debug:DebugContext[1]) : Project[1]
+{
+   print(if($debug.debug,|$debug.space+'createQualifiedPropertiesForClass: \''+$class->typeToString()+'\'\n',|''));
+
+   let qualifiedClass = $qualifiedProperties->fold(
+      {qp, project|
+         let params     = $qp->functionType().parameters->evaluateAndDeactivate()->tail()->map(p | javaParam($conventions->pureTypeToJavaType($p.genericType.rawType->toOne(), $p.multiplicity), $p.name));
+         let body       = $qp.expressionSequence->evaluateAndDeactivate()->generateJavaMethodBody($conventions, $debug);
+         let newProject = newProject()->addClass($class->addMethod(
+            javaMethod('public', $conventions->pureTypeToJavaType($qp), $conventions->getterName($qp), $params, $body)
+         ));
+
+         mergeProjects($project->concatenate($newProject)->concatenate($body->dependencies()->resolveAndGetProjects())->toOneMany());
+      },
+      newProject()
+   );
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::createGeneratedMilestonedPropertiesForClass(class: meta::external::language::java::metamodel::Class[1], milestonedProperties:QualifiedProperty<Any>[*], varName: String[1], set: PureInstanceSetImplementation[1], context:GenerationContext[1], extensions : meta::pure::extension::Extension[*], debug:DebugContext[1]) : Project[1]
+{
+   print(if($debug.debug,|$debug.space+'createGeneratedMilestonedPropertiesForClass: \''+$class->typeToString()+'\'\n',|''));
+
+   let conventions    = $context.conventions;
+
+   let milestonedClass = $milestonedProperties->fold(
+      {mp, project|
+         let returnType     = $conventions->pureTypeToJavaType($mp);
+         let srcMp          = $mp->meta::pure::milestoning::getSourceMilestonedProperty($set);
+         let childSetImpl   = $set.parent->rootClassMappingByClass($mp->functionReturnType().rawType->cast(@meta::pure::metamodel::type::Class<Any>)->toOne());
+         let mapperClass    = $conventions->mapperClassName($childSetImpl->toOne(), $extensions);
+
+         let params         = $mp->functionType().parameters->evaluateAndDeactivate()->tail()->map(p | j_parameter($conventions->pureTypeToJavaType($p.genericType.rawType->toOne(), $p.multiplicity), $p.name));
+         let body           = j_invoke($mapperClass,
+                                       if($srcMp.multiplicity == PureOne, | 'mapOne', | 'mapMany'),
+                                       j_variable($class, $varName->toOne())->j_invoke($conventions->getterName($srcMp),
+                                                                                       $params,
+                                                                                       $conventions->pureTypeToJavaType($srcMp)
+                                                                                      ),
+                                       $conventions->pureTypeToJavaType($mp)
+                                      )->j_return();
+
+         let propertyMultiplicity     = $mp.multiplicity;
+         let bodyWithMultiplicityCast = if($propertyMultiplicity->isToOne(),
+                                           | $conventions->className(Library)->j_invoke('toOne', $body, $returnType),
+                                           |
+                                           if($propertyMultiplicity->isZeroOne(),
+                                              | $conventions->className(Library)->j_invoke('first', $body, $returnType),
+                                              | $body));
+
+         let newProject = newProject()->addClass($class->addMethod(
+            javaMethod('public', $returnType, $conventions->getterName($mp), $params->cast(@meta::external::language::java::metamodel::Parameter), $bodyWithMultiplicityCast)
+         ));
+
+         mergeProjects($project->concatenate($newProject)->concatenate($bodyWithMultiplicityCast->dependencies()->resolveAndGetProjects())->toOneMany());
+      },
+      newProject()
+   );
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::createAlloyStoreObjectReferenceMethodsForClass(class:meta::external::language::java::metamodel::Class[1], context:GenerationContext[1], debug:DebugContext[1]) : Project[1]
+{
+   print(if($debug.debug,|$debug.space+'createAlloyStoreObjectReferenceMethodsForClass: \''+$class->typeToString()+'\'\n',|''));
+   let newProject = newProject()->addClass($class->addAlloyStoreObjectReferenceMethodsForClass($context));
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::addAlloyStoreObjectReferenceMethodsForClass(class:meta::external::language::java::metamodel::Class[1], context:GenerationContext[1]) : meta::external::language::java::metamodel::Class[1]
+{
+   let iface      = $context.conventions->className(IReferencedObject);
+   let methodName = $iface.methods->toOne().name;
+
+   $class
+      ->implements($iface)
+      ->addMethod(javaMethod('public', javaString(), $methodName, [], j_null()->j_return()));
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::referencedObjectReference(conventions:Conventions[1]):String[1]
+{
+   let methodName = $conventions->className(IReferencedObject).methods->toOne().name;
+   let identifier = $methodName->substring(3, 4)->toLower()+$methodName->substring(4);
+   assert($methodName == $conventions->getterName($identifier), 'Getter name assumptions violated');
+   $identifier;
+}
+
+Class meta::pure::executionPlan::platformBinding::legendJava::LegendJavaDataRecordClassesExtension extends LegendJavaPlatformBindingAdhocExtension
+{
+   {doc.doc = 'Data record classes (which should not extend IReferencedObject interface)'}
+   dataRecordClasses: meta::pure::metamodel::type::Class<Any>[*];
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::generateInterfaceForClass(typeInfo: ClassTypeInfo[1], conventions: Conventions[1], debug: DebugContext[1]): meta::external::language::java::metamodel::Class[1]
+{
+   print(if($debug.debug,|$debug.space+'generateInterfaceForClass: \''+$typeInfo.type.name->toOne()+'\'\n', |''));
+   let pkg   = $conventions->className($typeInfo.type).package;
+   let proto = $conventions->className($typeInfo.type)
+      ->addModifiers(['public', 'interface'])
+      ->implements($typeInfo.supertypes->map(c|$conventions->className($c)))
+      ->imports($conventions->standardDataTypeImports())
+      ->imports($typeInfo.supertypes->map(st|$conventions->className($st))->filter(c| $c.package != $pkg));
+
+   let withTypeNameAndPath = $proto->addMethod(javaMethod(['default'], javaString(), typeNameMethod(), [], [j_return(j_string($typeInfo.class.name->toOne()))]))
+                                   ->addMethod(javaMethod(['default'], javaString(), typePathMethod(), [], [j_return(j_string($typeInfo.class->elementToPath()))]));
+
+   let withPropertyGetters = $typeInfo.properties->fold(
+      {p, c|
+         $c->addMethod($p->generateInterfacePropertyGetter($conventions))
+      },
+      $withTypeNameAndPath
+   );
+
+   let withQualifiedPropertyGetters = $typeInfo.qualifiedProperties->fold(
+      {q, c|
+         $c->addMethod($q->generateInterfaceQualifiedPropertyGetter($conventions))
+      },
+      $withPropertyGetters
+   );
+
+   let dataRecordClass   = $conventions.extensions->extractLegendJavaAdhocExtensionsOfType(LegendJavaDataRecordClassesExtension).dataRecordClasses;
+   let iReferencedObject = $conventions->className(IReferencedObject);
+   if($typeInfo.class->in($dataRecordClass),
+      |$withQualifiedPropertyGetters,
+      |$withQualifiedPropertyGetters->implements($iReferencedObject)->addMethod(javaMethod(javaString(), $iReferencedObject.methods->toOne().name, [])));
+}
+
+function <<access.private>> meta::pure::executionPlan::platformBinding::legendJava::shared::generateInterfacePropertyGetter(p: AbstractProperty<Any>[1], conventions: Conventions[1]): meta::external::language::java::metamodel::Method[1]
+{
+   javaMethod($conventions->pureTypeToJavaType($p), $conventions->getterName($p), []);
+}
+
+function <<access.private>> meta::pure::executionPlan::platformBinding::legendJava::shared::generateInterfaceQualifiedPropertyGetter(q: QualifiedProperty<Any>[1], conventions: Conventions[1]): meta::external::language::java::metamodel::Method[1]
+{
+   javaMethod(
+      $conventions->pureTypeToJavaType($q),
+      $conventions->getterName($q),
+      $q->functionType().parameters->evaluateAndDeactivate()->tail()->map(p | javaParam($conventions->pureTypeToJavaType($p.genericType.rawType->toOne(), $p.multiplicity), $p.name))
+   );
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::generateAndAddGetterMethods(class:meta::external::language::java::metamodel::Class[1], typeInfo:ClassTypeInfo[1], context:GenerationContext[1],  varName:String[1]):meta::external::language::java::metamodel::Class[1]
+{
+   let class1 = $typeInfo.properties->fold(
+      {p,c|
+         $c->addMethod(javaMethod('public', $context.conventions->pureTypeToJavaType($p), $context.conventions->getterName($p), [], 'return '+$varName+'.'+$context.conventions->getterName($p)+'();'));
+      },
+      $class
+   );
+
+   $typeInfo.supertypes->fold({p,c | generateAndAddGetterMethods($c,$context.typeInfos->forClass($p), $context, $varName) }, $class1);
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::updateImplementationClassWithInstanceSizeMethods(implClass: meta::external::language::java::metamodel::Class[1], context: GenerationContext[1]): Project[1]
+{
+   let conventions = $context.conventions;
+
+   let typePathToSizeMap = newMap([
+      pair($conventions->pureTypeToJavaType(String, ZeroOne)->typeToString(), 24),
+      pair($conventions->pureTypeToJavaType(Integer, PureOne)->typeToString(), 8),
+      pair($conventions->pureTypeToJavaType(Integer, ZeroOne)->typeToString(), 24),
+      pair($conventions->pureTypeToJavaType(Float, PureOne)->typeToString(), 8),
+      pair($conventions->pureTypeToJavaType(Float, ZeroOne)->typeToString(), 24),
+      pair($conventions->pureTypeToJavaType(Boolean, PureOne)->typeToString(), 1),
+      pair($conventions->pureTypeToJavaType(Boolean, ZeroOne)->typeToString(), 17),
+      pair($conventions->pureTypeToJavaType(Decimal, ZeroOne)->typeToString(), 92),
+      pair($conventions->pureTypeToJavaType(Date, ZeroOne)->typeToString(), 64)
+   ]);
+
+   let jThis = j_this($implClass);
+   let size  = javaLong()->j_variable('size');
+
+   let classSizeMethod = javaMethod(
+      ['private', 'static'], javaLong(), $conventions->getterName(classSizeIdentifier()), [],
+      j_long(
+         $implClass.fields
+            ->filter(x | !$x.modifiers->contains(meta::external::language::java::metamodel::Modifier.Static))
+            ->map(x | let size = $typePathToSizeMap->get($x.type->typeToString());if($size->isEmpty(), | 24, | $size->toOne());)
+            ->sum() + 12
+      )->j_return()
+   );
+
+   let instanceSizeMethod = javaMethod(
+      ['public'], javaLong(), $conventions->getterName(instanceSizeIdentifier()), [],
+      $size->j_declare($implClass->j_invoke($conventions->getterName(classSizeIdentifier()), [], javaLong()))->concatenate(
+         $implClass.fields
+            ->filter(x | !$x.modifiers->contains(meta::external::language::java::metamodel::Modifier.Static))
+            ->filter(x | $x.type->typeToString() ==  $conventions->pureTypeToJavaType(String, ZeroOne)->typeToString())
+            ->map(x | j_if($jThis->j_field($x.name, javaString())->j_ne(j_null()), $size->j_assign($size->j_plus($jThis->j_field($x.name, javaString())->j_invoke('length', [], javaLong())))))
+      )->concatenate(
+         $implClass.fields
+            ->filter(x | !$x.modifiers->contains(meta::external::language::java::metamodel::Modifier.Static))
+            ->filter(x | $x.type->isJavaList())
+            ->map(x |
+               let elType = $x.type->elementTypeOfJavaList();
+               j_if($jThis->j_field($x.name, javaString())->j_ne(j_null()),
+                  j_for(j_parameter($elType, 'i'), $jThis->j_field($x.name),
+                     j_if(j_parameter($elType, 'i')->j_ne(j_null()),
+                        $size->j_assign($size->j_plus(if($typePathToSizeMap->get($elType->typeToString())->isEmpty(), | j_long(20), | j_long($typePathToSizeMap->get($elType->typeToString())->toOne() - 4))))->concatenate(
+                           if ($elType->typeToString() == $conventions->pureTypeToJavaType(String, ZeroOne)->typeToString(),
+                               | $size->j_assign($size->j_plus(j_parameter($elType, 'i')->j_invoke('length', [], javaLong()))),
+                               | []
+                           )
+                        )->toOneMany()
+                     )->j_block()
+                  )->j_block()
+               );
+            )
+      )->concatenate(
+         $size->j_return()
+      )
+   );
+
+   newProject()->addClasses($implClass->addMethods([$classSizeMethod, $instanceSizeMethod]));
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::addClassMethodsCache(class:meta::external::language::java::metamodel::Class[1]): meta::external::language::java::metamodel::Class[1]
+{
+  let classMethodsCache  = javaHashMap(javaString(), javaReflectMethod());
+  let cacheEntryForEachMethod   =  j_for(
+                                        j_parameter(javaReflectMethod(), 'method'),
+                                        j_invoke(j_variable($classMethodsCache,    + $class.simpleName + '.class'), 'getDeclaredMethods',[] , $classMethodsCache),
+                                        j_invoke(j_variable($classMethodsCache, 'methodMap'), 'put', [j_invoke(j_variable(javaReflectMethod(), 'method'), 'getName',[],javaString()), j_variable(javaReflectMethod(), 'method')])
+                                      );
+
+  let methodsCacheBuilderCode =  j_block(j_variable($classMethodsCache, 'methodMap')->j_declare( $classMethodsCache->j_new([]))->concatenate($cacheEntryForEachMethod)->concatenate(j_variable($classMethodsCache, 'methodMap')->j_return()));
+
+  $class->addField(javaField(['private', 'static', 'final'], $classMethodsCache, 'classMethodsCache', 'buildClassMethodsCache()'))
+        ->addMethod(javaMethod(['private', 'static'], $classMethodsCache, 'buildClassMethodsCache', [], $methodsCacheBuilderCode));
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::typeNameMethod():String[1]
+{
+   'typeName$'
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::typePathMethod():String[1]
+{
+   'typePath$'
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::classSizeIdentifier():String[1]
+{
+   'classSize$'
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::instanceSizeIdentifier():String[1]
+{
+   'instanceSize$'
+}
+
+function meta::pure::executionPlan::platformBinding::legendJava::shared::dataClass(conventions:Conventions[1], class:meta::pure::metamodel::type::Class<Any>[1], path:String[1]): meta::external::language::java::metamodel::Class[1]
+{
+   $conventions->planNodeClass([], $path, $conventions->identifier($class->elementToPath('_')) + '_Impl');
+}
+
+
+
+ tests.pjure
+// Copyright 2024 Goldman Sachs
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import meta::pure::executionPlan::platformBinding::legendJava::shared::*;
+import meta::external::language::java::factory::*;
+import meta::external::language::java::serialization::tests::*;
+
+function <<test.Test>> meta::pure::executionPlan::platformBinding::legendJava::shared::tests::testAddClassMethodsCache():Boolean[1]
+{
+  test( 'package org.finos.test;\n' + 
+        '\n' + 
+        'import java.lang.reflect.Method;\n' + 
+        'import java.util.HashMap;\n' + 
+        '\n' + 
+        'class Test\n' + 
+        '{\n' + 
+        '    private static final HashMap<String, Method> classMethodsCache = buildClassMethodsCache();\n' + 
+        '\n' + 
+        '    private static HashMap<String, Method> buildClassMethodsCache()\n' + 
+        '    {\n' + 
+        '        HashMap<String, Method> methodMap = new HashMap<String, Method>();\n' + 
+        '        for (Method method: Test.class.getDeclaredMethods())\n' + 
+        '        {\n' + 
+        '            methodMap.put(method.getName(), method);\n' + 
+        '        }\n' + 
+        '        return methodMap;\n' + 
+        '    }\n' + 
+        '}',
+        javaClass('org.finos.test.Test')->addClassMethodsCache()->inferImports()
+  );
+}
